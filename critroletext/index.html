@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>Critical Role Text-Based RPG</title>
+    <style type="text/css">
+      body {
+        font-family: monospace;
+        color: #9f9;
+        background-color: #020;
+      }
+      #map {
+        white-space: pre;
+        width: 100%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      #console {
+        white-space: pre;
+        width: 100%;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+      td {
+        vertical-align: top;
+      }
+    </style>
+    <script type="text/javascript">
+      var config = {
+        tabSize:4,
+        map:[
+          "          ",
+          "          ",
+          "        ^ ",
+          "\\       /=",
+          "~\\  /=#=/ ",
+          "~~==/     ",
+          "~\\        ",
+          "~~~~\\     ",
+          "~~~~~~\\   "
+        ],
+        mapKey:{
+          "^":"House",
+          "#":"Bridge",
+          "~=\\/":"Water"
+        },
+        party:[
+          "Percy",
+          "Vex",
+          "Keyleth",
+          "Scanlan",
+          "Grog",
+          "Pike",
+          "Vax"
+        ],
+        foes:[
+          "Orc A",
+          "Orc B",
+          "Orc C"
+        ],
+        locs:{
+          "Percy":"A3",
+          "Vex":"B4",
+          "Keyleth":"C3",
+          "Scanlan":"E2",
+          "Grog":"E4",
+          "Pike":"H6",
+          "Vax":"G7",
+          "Orc A":"G3",
+          "Orc B":"F2",
+          "Orc C":"J6"
+        }
+      }
+    </script>
+    <script src="roguelike.js"></script>
+    <script src="interface.js"></script>
+    <script src="gamedemo.js"></script>
+    <script>
+      window.game = new Game("map","console",config);
+    </script>
+  </head>
+  <body onload="game.init();">
+    <table>
+      <tr>
+        <td>
+          <div id="map">
+         </div>
+        </td>
+        <td>
+          <div id="console"></div>
+        </td>
+      </tr>
+    </table>
+    <div id="monitor">
+    </div>
+  </body>
+</html>
