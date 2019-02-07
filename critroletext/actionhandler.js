@@ -165,7 +165,7 @@
         resolveUpdate(ui,ctx,opts[opt]);
       } else {
         [("'" + opt + "' is not a valid response to the prompt."),
-        ("Please type one of '" + optNames.join("','") + "'")].forEach(printTpl(ui,ctx);
+        ("Please type one of '" + optNames.join("','") + "'")].forEach(printTpl(ui,ctx));
       }
     }
   }
