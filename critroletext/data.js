@@ -96,7 +96,7 @@
       maxHealth:134,
       loc:"E4"
     },{
-      name: "Pike"
+      name: "Pike",
       attackName:"Mace Of Disruption",
       attack:5,
       damage:"2d6 + 1",
