@@ -36,7 +36,7 @@
       try {
         var result = update(ui,ctx,value);
         applyToContext(ctx,result);
-      } catch e {
+      } catch(e) {
         printTpl(ui,ctx)(e);
       }
     } else {
