@@ -1,4 +1,13 @@
 (function(){
+  var mockRandom = function() {
+    var values = Array.from(arguments);
+    Math.random = function() {
+      var value = values.shift();
+      values.push(value);
+      return value;
+    }
+    return values;
+  }
   var buildMockUI = function() {
     var data = [];
     return {
@@ -23,10 +32,14 @@
       console:buildMockUI()
     }
     var actionHandler = buildActionHandler(mockUI);
+    var mockedRandoms = mockRandom(0.5);
     return {
-        "Test 1":function() {
-          assert(false);
-        }
+      "This_test_will_fail":function() {
+        assert(false);
+      },
+      "Test_random":function() {
+        assertEquals(Math.random(),"0.5");
+      }
     };
   })()
 })();
