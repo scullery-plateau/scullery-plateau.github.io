@@ -1,0 +1,13 @@
+body {
+  background-color:darkgrey;
+}
+table, td {
+  border: 1px solid white;
+  padding: 0.2em;
+}
+.fail{
+  color:red;
+}
+.success{
+  color:green;
+}
