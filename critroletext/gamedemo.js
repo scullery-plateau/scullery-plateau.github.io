@@ -6,7 +6,18 @@
       this.init = function() {
         map.init();
         ui.output.after(function(){
-          ["Your adventure starts here....",
+          ["The Adventures Of Vox Machina: Chapter Zero - On The Road To Kraghammer",
+          "",
+          "Upon reuniting at the newly-constructed Greyskull Keep, the much celebrated",
+          "heroes of Emon, Vox Machina, are hired by their good friend Arcanist Allura",
+          "Vysoren of the Tal'Dorei council to aid her dear friend, Lady Kima of Vord,",
+          "paladin of Bahamut The Platinum Dragon, in her vision quest which has taken",
+          "her to the subterranean Dwarvish city of Kraghammer days prior.",
+          "",
+          "However, our heroes, on the road to Kraghammer, find themselves somewhat worse",
+          "for wear after a less than ideal family reunion for our goliath barbarian,",
+          "down one Dragonborn Sorcerer, and ambushed by an Orcish war council...",
+          "",
           "Type 'START' and hit 'ENTER' to begin."
           ].forEach(ui.console.println);
         });
