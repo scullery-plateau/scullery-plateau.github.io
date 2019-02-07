@@ -25,7 +25,7 @@
       
       var roll = function(side,count){
         if (!count){count = 1;}
-        return (side + "").repeat(count).reduce(function(a,b){
+        return (side + "").repeat(count).split("").reduce(function(a,b){
           return a + 1 + Math.floor(Math.random() * b);
         },0);
       }
