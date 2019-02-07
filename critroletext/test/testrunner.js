@@ -20,7 +20,7 @@
   }
   window.TestRunner = function(testObj,outputId){
     this.run = function() {
-      document.getElementById().innerHTML = "<table>" + runTests(testObj,"").join("") + "</table>";
+      document.getElementById(outputId).innerHTML = "<table>" + runTests(testObj,"").join("") + "</table>";
     }
   }
 })();
