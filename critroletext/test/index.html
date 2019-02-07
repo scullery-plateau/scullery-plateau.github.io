@@ -1,0 +1,16 @@
+<html>
+  <head>
+    <title>Test Critical Role Code</title>
+    <script src="../actionhandler.js"></script>
+    <script src="../data.js"></script>
+    <script src="../roguelike2.js"></script>
+    <script src="tests.js"></script>
+    <script src="testrunner.js"></script>
+    <script>
+      var tester = new TestRunner(window.allTests,"output");
+    </script>
+  </head>
+  <body onload="tester.run">
+    <div id="output"></div>
+  </body>
+</html>
