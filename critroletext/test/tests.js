@@ -25,8 +25,6 @@
   }
   window.allTests = (function(){
     var buildActionHandler = new ActionHandlerFactory(GameData);
-    var outputData = []
-    var consoleData = [];
     var mockUI = {
       output:buildMockUI(),
       console:buildMockUI()
@@ -39,6 +37,11 @@
       },
       "Test_random":function() {
         assertEquals(Math.random(),"0.5");
+      },
+      "test_init":function() {
+        actionHandler.init();
+        console.log(mockUI.output.data);
+        console.log(mockUI.console.data);
       }
     };
   })()
