@@ -5,6 +5,9 @@
       var row = parseInt(loc.slice(1)) - 1;
       return {col:col,row:row};
     }
+    var distance = function(a,b) {
+      return Math.max(Math.abs(a.col,b.col),Math.abs(a.row,b.row));
+    }
     var stringArrayMaxLength = function(strArray) {
       return Math.max.apply(null,strArray.map(function(c){
         return c.length;
@@ -98,6 +101,21 @@
     }
     this.init = function() {
       draw();
+    }
+    this.getNearest = function(origin,targets) {
+      origin = decodeLoc(origin);
+      targets = targets.map(decodeLoc).map(function(loc,index){
+        return {
+          index:index,
+          dist:distance(origin,loc)
+        };
+      });
+      var min = Math.min.apply(null,targets.map(function(t){return t.dist;}));
+      return targets.filter(function(t){
+        return t.dist == min;
+      }).map(function(t){
+        return t.index;
+      });
     }
   }
 })();
