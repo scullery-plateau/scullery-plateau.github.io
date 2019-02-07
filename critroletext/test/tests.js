@@ -4,7 +4,7 @@
     return {
         data:data,
         println:function(str) {
-          data.push(str + "\n);
+          data.push(str + "\n");
         },
         clearOutput:function(){
           data.splice(0,data.length);
