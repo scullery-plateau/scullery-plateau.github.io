@@ -1,11 +1,10 @@
 (function(){
   window.assert = function(pred,message) {
     if(!pred) {
-      if(message) {
-        throw message;
-      } else {
-        throw "Predicate failed"
+      if(!message) {
+        message = "Predicate failed";
       }
+      throw new Error(message);
     }
   }
   window.assertEquals = function(actual,expected,message) {
@@ -17,7 +16,7 @@
       if(message) {
         diff.message = message
       }
-      throw diff;
+      throw new Error(JSON.stringify(diff));
     }
   }
 })();

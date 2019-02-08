@@ -15,24 +15,24 @@
     }
     var buildRow = function(indexMaxWidth,maxWidth,between,after,keyFn) {
       return function(member,index){
-        var postBuffer = maxWidth - member.name.length;
+        var postBuffer = maxWidth - member.length;
         var coord = keyFn(index);
         var width = coord.length;
         var buffer = indexMaxWidth - width;
-        var row = " ".repeat(config.tabSize + buffer);
+        var row = " ".repeat(config.map.tabSize + buffer);
         row += coord;
         row += between;
-        row += member.name;
+        row += member;
         row += " ".repeat(postBuffer);
         row += after;
-        row += " ".repeat(config.tabSize);
+        row += " ".repeat(config.map.tabSize);
         ui.output.println(row);
       }
     }
     var draw = function() {
-      var rows = config.map.length;
-      var cols = stringArrayMaxLength(config.map);
-      var drawMap = config.map.map(function(row){
+      var rows = config.map.rows.length;
+      var cols = stringArrayMaxLength(config.map.rows);
+      var drawMap = config.map.rows.map(function(row){
         return (row + " ".repeat(cols - row.length)).split("");
       });
       var sprites = {};
@@ -49,43 +49,43 @@
         var loc = decodeLoc(entry[0]);
         drawMap[loc.row][loc.col] = sprite;
       });
-      console.log(drawMap);
       drawMap = drawMap.map(function(row){
         return row.join("");
-      });
-      drawMap.forEach(function(row){
-        console.log(row);
       });
       var rowDigitMax = String.valueOf(rows.length).length;
       var colHeader = "A".repeat(cols).split("").map(function(c,i){
         return String.fromCharCode(c.charCodeAt(0) + i);
       }).join("");
       ui.output.clearOutput();
-      ui.output.println(" ".repeat(config.tabSize + rowDigitMax + 1) + colHeader);
-      ui.output.println(" ".repeat(config.tabSize + rowDigitMax) + "+" + "-".repeat(cols) + "+" + " ".repeat(config.tabSize));
+      ui.output.println(" ".repeat(config.map.tabSize + rowDigitMax + 1) + colHeader);
+      ui.output.println(" ".repeat(config.map.tabSize + rowDigitMax) + "+" + "-".repeat(cols) + "+" + " ".repeat(config.map.tabSize));
       drawMap.forEach(buildRow(rowDigitMax,cols,"|","|",function(index){
         return (index + 1) + "";
       }));
-      ui.output.println(" ".repeat(config.tabSize + rowDigitMax) + "+" + "-".repeat(cols) + "+" + " ".repeat(config.tabSize));
+      ui.output.println(" ".repeat(config.map.tabSize + rowDigitMax) + "+" + "-".repeat(cols) + "+" + " ".repeat(config.map.tabSize));
       ui.output.println("");
       var partyIndexMaxWidth = String.valueOf(config.party.length).length;
       var partyMaxLength = stringArrayMaxLength(config.party);
-      config.party.forEach(buildRow(partyIndexMaxWidth,partyMaxLength," - ","",function(index){
+      config.party.map(function(member){
+        return member.name;
+      }).forEach(buildRow(partyIndexMaxWidth,partyMaxLength," - ","",function(index){
         return (index + 1) + "";
       }));
       ui.output.println("");
       var foesIndexMaxWidth = String.valueOf(config.foes.length).length;
       var foesMaxLength = stringArrayMaxLength(config.party);
-      config.foes.forEach(buildRow(foesIndexMaxWidth,foesMaxLength," - ","",function(index){
+      config.foes.map(function(member){
+        return member.name;
+      }).forEach(buildRow(foesIndexMaxWidth,foesMaxLength," - ","",function(index){
         return String.fromCharCode("a".charCodeAt(0) + index);
       }));
       ui.output.println("");
-      var mapKeyIndexMaxWidth = stringArrayMaxLength(Object.keys(config.mapKey));
-      var mapKeyMaxWidth = stringArrayMaxLength(Object.values(config.mapKey));
+      var mapKeyIndexMaxWidth = stringArrayMaxLength(Object.keys(config.map.legend));
+      var mapKeyMaxWidth = stringArrayMaxLength(Object.values(config.map.legend));
       var mapKeyRowFn = buildRow(mapKeyIndexMaxWidth,mapKeyMaxWidth," - ","",function(index){
         return index;
       });
-      Object.entries(config.mapKey).forEach(function(entry){
+      Object.entries(config.map.legend).forEach(function(entry){
         mapKeyRowFn(entry[1],entry[0]);
       });
     }

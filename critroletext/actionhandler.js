@@ -1,9 +1,22 @@
 (function() {
   var roll = function(side,count){
-    if (!count){count = 1;}
-    return (side + "").repeat(count).reduce(function(a,b){
-      return a + 1 + Math.floor(Math.random() * b);
+    if (!count || isNaN(parseInt(count))) {count = 1;}
+    return String.fromCharCode("A".charCodeAt(0) + side).repeat(count).split("").reduce(function(a,b){
+      return a + 1 + Math.floor(Math.random() * (b.charCodeAt(0) - "A".charCodeAt(0)));
     },0);
+  }
+  var rollCheck = function(bonus,target,success,failure) {
+    return (((roll(20) + bonus) > target) ? success : failure);
+  }
+  var rollExpression = function(expression) {
+    return expression.split("+").reduce(function(sum,d) {
+      var values = d.trim().split("d").reverse().map(parseInt);
+      if (values.length > 1) {
+        return sum + roll.apply(null,values);
+      } else {
+        return sum + values[0];
+      }
+    }, 0);
   }
   var resolveTemplate = function(tpl,state) {
     if ((tpl + "").indexOf("${") >= 0) {
@@ -11,9 +24,6 @@
     } else {
       return tpl;
     }
-  }
-  var rollCheck = function(bonus,target,success,failure) {
-    return (((roll(20) + bonus) > target) ? success : failure);
   }
   var delayedUpdate = function(ui,ctx,update) {
     return function(){
@@ -45,7 +55,8 @@
   }
   var rollInitiative = function(ctx) {
     return function(member) {
-      member.order = roll(20) + member.initiative;
+      var result = roll(20);
+      member.order = result + member.initiative;
       ctx.order.push(member);
     }
   }
@@ -56,32 +67,40 @@
     ctx.order.sort(function(a,b){
       return b.order - a.order;
     });
-    ctx.turn = ctx.order.shift();
     ctx.order.filter(function(member){
       return member.player == "player";
     }).map(function(member){
       return member.name + " - " + member.order;
     }).forEach(ui.console.println);
+    ctx.turn = ctx.order.shift();
     ui.console.after(delayedUpdate(ui,ctx,{
       state:"turn"
     }));
     return {};
+  }
+  var calcDamage = function(ui,ctx) {
+    var damage = "?".repeat(ctx.successes).split("").reduce(function(sum){
+      return sum + rollExpression(ctx.turn.damage);
+    }, 0);
+    ctx.target.health = ctx.target.health - damage;
+    delete ctx.successes;
+    return {state:"damage",damage:damage};
   }
   var npcTurn = function(ui,ctx) {
 
   }
   var interaction = {
     "init":{
-      "prompt":["Your adventure starts here....","Type 'START' and hit 'ENTER' to begin."],
-      "opts":{"START":{state:"initiative"}}
-    },
-    "prologue":{
       "prompt":[],
       "auto":function(ui,ctx){
-        ctx.prologue.forEach()
-        ui.console.after(delayedUpdate(ui,ctx,{state:"initiative"}));
+        ctx.prologue.forEach(ui.console.println);
+        ui.console.after(delayedUpdate(ui,ctx,{state:"start"}));
         return {};
       }
+    },
+    "start":{
+      "prompt":["Type 'START' and hit 'ENTER' to begin."],
+      "opts":{"START":{state:"initiative"}}
     },
     "initiative":{
       "prompt":["Roll for initiative!"],
@@ -91,6 +110,7 @@
       "prompt":["","It is ${turn.name}'s turn!"],
       "auto":function(ui,ctx) {
         if (ctx.turn.player == "player") {
+          ctx.actions = ["Move","Attack","End Turn"]
           return {state:"combat"};
         } else {
           return {state:"npc-combat"};
@@ -99,8 +119,18 @@
     },
     "npc-combat":{"prompt":[],"auto":npcTurn},
     "combat":{
-      "prompt":["What do you wish to do?","1 - Move","2 - Attack"],
-      "opts":{"1":{state:"move"},"2":{state:"target"}}
+      "prompt":["What do you wish to do?","${actions.join(', ')}"],
+      "input":function(ui,ctx,value) {
+        var index = ctx.actions.indexOf(value);
+        if (index < 0) {
+          throw "'" + value + "' is not a valid input; must be one of " + ctx.actions.join(", ");
+        }
+        var option = ctx.actions.splice(index,1);
+        var states = {"Move":"move","Attack":"target"};
+        var state = states[option];
+        if (!state) {state = "nextTurn"}
+        return {state:state};
+      }
     },
     "move":{
       "prompt":["You have chosen to move.","Where would you like to move?"],
@@ -108,7 +138,7 @@
         ui.console.after(function(){
           map.moveCharacter(ctx.turn,value);
           ui.output.after(delayedUpdate(ui,ctx,{
-            state:"combat"
+            state:"nextTurn"
           }));
         });
         return {};
@@ -117,20 +147,37 @@
     "target":{
       "prompt":["You have chosen to attack.","Choose a foe to attack."],
       "input":function(ui,ctx,value){
-        return {state:"attack",target:value};
+        var index = value.charCodeAt(0) - "a".charCodeAt(0);
+        return {state:"attack",target:ctx.foes[index]};
       }
     },
     "attack":{
-      "prompt":["You have chosen to attack ${target.name}","Rolling for attack..."],
-      "roll":{bonus:"${turn.attack}",target:"${target.armor}",
-        success:{state:"hit"},fail:{state:"miss"}}
+      "prompt":["You have chosen to attack ${target.name}",
+      "You make ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
+      "Rolling for attack..."],
+      "auto":function(ui,ctx) {
+        var successes = "?".repeat(ctx.turn.attacksPerTurn).split("").filter(function(a){
+          return roll(20) + ctx.turn.attack > ctx.target.armor;
+        }).length;
+        if (successes > 0) {
+          ctx.successes = successes;
+          if (successes > 1) {
+            return {state:"hits"}
+          } else {
+            return {state:"hit"};
+          }
+        } else {
+          return {state:"miss"};
+        }
+      }
     },
     "hit":{
-      "prompt":["${turn.name} hits ${target.name}"],
-      "auto":function() {
-        var damage = roll(6,4) + 3;
-        return {state:"damage",damage:damage};
-      }
+      "prompt":["${turn.name} hits ${target.name}!"],
+      "auto":calcDamage
+    },
+    "hits":{
+      "prompt":["${turn.name} hits ${target.name} ${successes} times!"],
+      "auto":calcDamage
     },
     "miss":{
       "prompt":["${turn.name} misses ${target.name}."],
@@ -143,6 +190,10 @@
     "nextTurn":{
       "prompt":[],
       "auto":function(ui,ctx){
+        delete ctx.damage;
+        if (ctx.actions.length > 1 && ctx.actions.indexOf("End Turn") >= 0) {
+          return {state:"combat"};
+        }
         ctx.order.push(ctx.turn);
         ctx.turn = ctx.order.shift();
         return {state:"turn"};
@@ -151,12 +202,12 @@
   };
   var steps = {
     auto:resolveUpdate,
-    roll:function(ui,ctx,roll) {
+    roll:function(ui,ctx,rollObj) {
       applyToContext(ctx,
-        rollCheck(parseInt(resolveTemplate(roll.bonus,ctx)),
-          parseInt(resolveTemplate(roll.target,ctx)),
-          roll.success,
-          roll.failure));
+        rollCheck(parseInt(resolveTemplate(rollObj.bonus,ctx)),
+          parseInt(resolveTemplate(rollObj.target,ctx)),
+          rollObj.success,
+          rollObj.failure));
     },
     input:resolveUpdate,
     opts:function(ui,ctx,opts,opt) {
@@ -176,8 +227,8 @@
       throw ("no state exists: " + currentState);
     }
     state.prompt.forEach(printTpl(ui,ctx));
-    var event = ["auto","roll"].filter(function(item) {
-      return [item];
+    var event = ["auto"].filter(function(item) {
+      return state[item];
     });
     if (event.length > 1) {
       throw ("Invalid construct of state " + ctx.state + ": multiple events - [" + event.join() + "]");
@@ -194,10 +245,15 @@
   window.ActionHandlerFactory = function(config) {
     return function(ui) {
       var ctx = {
+        map:config.map,
+        prologue:config.prologue,
         state:"init",
         party:JSON.parse(JSON.stringify(config.characterSheets)).map(function(member){
           member.health = member.maxHealth;
           member.player = "player";
+          if (!member.attacksPerTurn) {
+            member.attacksPerTurn = 1;
+          }
           return member;
         }),
         foes:(function(){
@@ -217,7 +273,10 @@
       };
       ui.map = new RogueLikeMap(ui,ctx);
       this.init = function() {
-        proceed(ui,ctx);
+        ui.map.init();
+        ui.console.after(function(){
+          proceed(ui,ctx);
+        });
       }
       this.handle = function(action) {
         var state = interaction[ctx.state];
@@ -225,7 +284,7 @@
           throw ("no state exists: " + ctx.state);
         }
         var event = ["opts","input"].filter(function(item) {
-          return [item];
+          return state[item];
         });
         if (event.length != 1) {
           throw ("Invalid construct of state " + ctx.state + ": multiple events - [" + event.join() + "]");

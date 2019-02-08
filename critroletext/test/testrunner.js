@@ -10,7 +10,7 @@
           test[1]();
           out.push(formatResult({name:name}));
         } catch(e) {
-          out.push(formatResult({name:name,error:e}))
+          out.push(formatResult({name:name,error:e.message}))
         }
       } else {
         return out.concat(runTests(test[1],name + "."))
