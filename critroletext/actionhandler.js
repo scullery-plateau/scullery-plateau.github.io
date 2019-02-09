@@ -376,7 +376,7 @@
       ui.map = new RogueLikeMap(ui,ctx);
       this.init = function() {
         ui.map.init();
-        ui.console.after(function(){
+        ui.output.after(function(){
           proceed(ui,ctx);
         });
       }
