@@ -138,10 +138,12 @@
       size:"medium",
       attack:6,
       attacksPerTurn:2,
+      attackName:"Warpike",
       damage:"2d8 + 4",
       armor:16,
       movement:60,
-      initiative:1
+      initiative:1,
+      strategy:"direction, armor, health"
     }]
   };
 })();

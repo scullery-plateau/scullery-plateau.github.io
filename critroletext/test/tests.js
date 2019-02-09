@@ -52,8 +52,7 @@
   "",
   "It is Percy's turn!",
   "What do you wish to do?",
-  "1 - Move",
-  "2 - Attack"
+  "Move, Attack, End Turn"
 ];
   var mockRandom = function() {
     var values = Array.from(arguments);
@@ -75,7 +74,7 @@
         data.splice(0,data.length);
       },
       after:function(fn) {
-        setTimeout(fn,50);
+        setTimeout(fn,25);
       }
     }
   }
@@ -87,7 +86,7 @@
         buildTestPath(actionHandler,steps,finalFN);
       }
     }
-    setTimeout(go,200);
+    setTimeout(go,1000);
   }
   window.allTests = (function(){
     console.log(GameData);
@@ -97,15 +96,29 @@
       console:buildMockUI()
     }
     var actionHandler = new ActionHandler(mockUI);
-    var mockedRandoms = mockRandom(0.8, 0.4, 0.65, 0.9, 1, 0.45, 0.5, 0.35, 0.2, 0.25, 0.95, 0.55, 0.75, 0.15, 0.1, 0.6, 0.85, 0.05, 0.7, 0.3);
+    var mockedRandoms = mockRandom(0.35, 0.45, 0.3, 0.05, 0.4, 0.7, 0, 0.1, 0.6, 0.65, 0.1, 0.85, 0.75, 0.7, 0.95, 0.5, 0.1, 0.7, 0.95, 0.9);
     return {
       "test_init_start":function() {
         actionHandler.init();
         buildTestPath(actionHandler,[
-          "START","Attack","b","End Turn"
+          "START",
+          "Attack",
+          "b",
+          "End Turn",
+          "Attack",
+          "c",
+          "End Turn",
+          "Move",
+          "I6",
+          "Attack",
+          "c",
+          "Move",
+          "F3",
+          "Attack",
+          "a"
         ],function(){
-          console.log(mockUI.output.data);
-          console.log(mockUI.console.data);
+          console.log(mockUI.output.data.join("\n"));
+          console.log(mockUI.console.data.join("\n"));
           assertEquals(JSON.stringify(mockUI.output.data),JSON.stringify(initOutput),"Map output does not match.");
           assertEquals(JSON.stringify(mockUI.console.data),JSON.stringify(initConsole),"Console output does not match.");
         });
