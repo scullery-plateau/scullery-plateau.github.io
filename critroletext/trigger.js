@@ -1,6 +1,7 @@
 (function(){
-  window.Trigger = function(dom,label) {
+  window.Trigger = function(label) {
     var subscribers = [];
+    var dom = document.createElement("span");
     this.fire = function(dataMap) {
       dom.dispatchEvent(new CustomEvent(label,{detail:dataMap}));
     }

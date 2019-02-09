@@ -16,7 +16,7 @@
   }
   var buildPrinter = function(dom,delay) {
     var chars = [];
-    var trigger = new Trigger(dom,"bufferClear");
+    var trigger = new Trigger("bufferClear");
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
       println:function(str) {
@@ -33,6 +33,11 @@
       },
       after:function(fn) {
         trigger.onNextFire(fn);
+      },
+      flush:function() {
+        dom.innerHTML += chars.splice(0,chars.length).join("");
+        dom.scrollTop = dom.scrollHeight;
+        trigger.fire();
       },
       dom:dom
     };
@@ -57,10 +62,14 @@
           actionHandler(action);
           action = "";
         } else if (code == 8 && action.length > 0) {
-          ui.console.dom.innerHTML = ui.console.innerHTML.slice(0,-1);
+          ui.console.dom.innerHTML = ui.console.dom.innerHTML.slice(0,-1);
           action = action.slice(0,-1);
         }
         ui.console.dom.scrollTop = ui.console.dom.scrollHeight;
+      } else if (!ui.console.isBufferClear()) {
+        ui.console.flush();
+      } else if (!ui.output.isBufferClear()) {
+        ui.output.flush();
       }
     }
   }

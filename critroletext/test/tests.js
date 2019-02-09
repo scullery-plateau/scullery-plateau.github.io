@@ -21,7 +21,7 @@
         data.splice(0,data.length);
       },
       after:function(fn) {
-        setTimeout(fn,25);
+        setTimeout(fn,50);
       }
     }
   }
@@ -29,15 +29,17 @@
     var go = finalFN;
     if (steps.length > 0) {
       go = function() {
-        actionHandler.handle(steps.shift());
+        var step = steps.shift();
+        console.log(step);
+        actionHandler.handle(step);
         buildTestPath(actionHandler,steps,finalFN);
       }
     }
-    setTimeout(go,1000);
+    setTimeout(go,2000);
   }
   window.allTests = (function(){
     console.log(GameData);
-    var ActionHandler = ActionHandlerFactory(GameData);
+    var ActionHandler = ActionHandlerFactory(GameData,GameStates);
     var mockUI = {
       output:buildMockUI(),
       console:buildMockUI()

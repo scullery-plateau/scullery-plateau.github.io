@@ -15,7 +15,7 @@
     },
     applyToContext:function(ctx,update) {
       Object.entries(update).forEach(function(entry){
-        ctx[entry[0]] = resolveTemplate(entry[1],ctx);
+        ctx[entry[0]] = resolve(entry[1],ctx);
       });
     }
   }

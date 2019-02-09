@@ -68,7 +68,7 @@
     var partyIndexMaxWidth = String.valueOf(context.party.length).length;
     var partyMaxLength = stringArrayMaxLength(context.party);
     context.party.map(function(member){
-      return member.name;
+      return member.name + " (" + member.health + ")";
     }).forEach(buildRow(ui,context,partyIndexMaxWidth,partyMaxLength," - ","",function(index){
       return (index + 1) + "";
     }));
@@ -76,7 +76,8 @@
     var foesIndexMaxWidth = String.valueOf(context.foes.length).length;
     var foesMaxLength = stringArrayMaxLength(context.party);
     context.foes.map(function(member){
-      return member.name;
+      var damage = member.health - member.maxHealth;
+      return member.name + " (" + damage + ")";
     }).forEach(buildRow(ui,context,foesIndexMaxWidth,foesMaxLength," - ","",function(index){
       return String.fromCharCode("a".charCodeAt(0) + index);
     }));
@@ -122,6 +123,9 @@
     };
     var moveChar = function(character,loc) {
       character.loc = loc;
+      draw(ui,context);
+    }
+    this.draw = function() {
       draw(ui,context);
     }
     this.moveCharacter = function(index,loc){
