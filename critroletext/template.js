@@ -7,17 +7,16 @@
     }
   }
   window.Template = {
-    resolveTemplate:function(tpl,state) {
-      if ((tpl + "").indexOf("${") >= 0) {
-        return eval("`" + tpl.split("${").join("${state.") + "`");
-      } else {
-        return tpl;
-      }
-    },
+    resolveTemplate:resolve,
     buildTemplatePrinter:function(state,printer) {
       return function(tpl) {
         printer.println(resolve(tpl,state));
       }
+    },
+    applyToContext:function(ctx,update) {
+      Object.entries(update).forEach(function(entry){
+        ctx[entry[0]] = resolveTemplate(entry[1],ctx);
+      });
     }
   }
 })()

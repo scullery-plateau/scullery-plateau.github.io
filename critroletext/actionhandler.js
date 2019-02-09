@@ -1,38 +1,20 @@
 (function() {
   var sizes = ["tiny","small","medium","large","huge","gargantuan"];
-  var resolveTemplate = function(tpl,state) {
-    if ((tpl + "").indexOf("${") >= 0) {
-      return eval("`" + tpl.split("${").join("${state.") + "`");
-    } else {
-      return tpl;
-    }
-  }
-  var delayedUpdate = function(ui,ctx,update) {
+  var delayedUpdate = function(ui,ctx) {
     return function(){
-      applyToContext(ctx,update);
       proceed(ui,ctx);
     }
-  }
-  var printTpl = function(ui,ctx) {
-    return function(line) {
-      ui.console.println(Template.resolveTemplate(line,ctx));
-    }
-  }
-  var applyToContext = function(ctx,update) {
-    Object.entries(update).forEach(function(entry){
-      ctx[entry[0]] = Template.resolveTemplate(entry[1],ctx);
-    });
   }
   var resolveUpdate = function(ui,ctx,update,value) {
     if ((typeof update) == "function") {
       try {
         var result = update(ui,ctx,value);
-        applyToContext(ctx,result);
+        Template.applyToContext(ctx,result);
       } catch(e) {
-        printTpl(ui,ctx)(e.stack);
+        Template.buildTemplatePrinter(ui,ctx)(e.stack);
       }
     } else {
-      applyToContext(ctx,update);
+      Template.applyToContext(ctx,update);
     }
   }
   var rollInitiative = function(ctx) {
@@ -42,34 +24,7 @@
       ctx.order.push(member);
     }
   }
-  var rollForInitiative = function(ui,ctx) {
-    ctx.order = [];
-    ctx.party.forEach(rollInitiative(ctx));
-    ctx.party.forEach(function(member) {
-      console.log(member.name + " - " + member.order);
-    })
-    ctx.foes.forEach(rollInitiative(ctx));
-    ctx.foes.forEach(function(foe) {
-      console.log(foe.name + " - " + foe.order);
-    })
-    ctx.order.sort(function(a,b){
-      return b.order - a.order;
-    });
-    ctx.order.filter(function(member){
-      return member.player == "player";
-    }).map(function(member){
-      return member.name + " - " + member.order;
-    }).forEach(ui.console.println);
-    ctx.turn = ctx.order.shift();
-    ui.console.after(delayedUpdate(ui,ctx,{
-      state:"turn"
-    }));
-    console.log("full initiative order");
-    ctx.order.forEach(function(member) {
-      console.log(member.name + " - " + member.order);
-    })
-    return {};
-  }
+  var rollForInitiative =
   var calcDamage = function(ui,ctx) {
     var damage = Roller.rollDamage(ctx.turn.damage,ctx.successes);
     ctx.target.health = ctx.target.health - damage;
@@ -116,64 +71,13 @@
           "${turn.name} does ${damage} of damage to ${target.name}"],
     "miss":["${turn.name} misses ${target.name}."]
   }
-  var npcTurn = function(ui,ctx) {
-    var npc = ctx.turn;
-    var priorities = ctx.party.map(function(m) {
-      return {
-        attack:m.attack,
-        armor:m.armor,
-        speed:m.movement,
-        size:sizes.indexOf(m.size),
-        health:m.health,
-        maxHealth:m.maxHealth,
-        maxDamage:(Roller.maxExpression(m.damage) * (m.attacksPerTurn?m.attacksPerTurn:1)),
-        avgDamage:(Roller.avgExpression(m.damage) * (20 - (npc.armor - m.attack)))
-      };
-    });
-    console.log(priorities)
-    var available = ui.map.openAdjacentWithinRangeOfFoe().map(function(o) {
-      var obj = JSON.parse(JSON.stringify(priorities[o.index]));
-      obj.index = o.index;
-      obj.open = o.open;
-      obj.distance = o.distance;
-      return obj;
-    });
-    available.sort(buildSorter(npc.strategy));
-    var move = available[0];
-    var newPos = move.open;
-    ctx.target = ctx.party[move.index];
-    ctx.successes = Roller.rollAttacks(npc.attacksPerTurn,npc.attack,ctx.target.armor);
-    ctx.damage = Roller.rollDamage(npc.damage,ctx.successes);
-    var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
-    var result = "miss";
-    if (ctx.successes > 0) {
-      if (ctx.successes > 1) {
-        result = "hits";
-      } else {
-        result = "hit";
-      }
-    }
-    ["","It is ${turn.name}'s turn!",
-    ("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
-    ui.console.after(function(){
-      ui.map.moveFoe(npc.mapListing,newPos);
-      ui.output.after(function(){
-        ["${turn.name} has chosen to attack ${target.name}.",
-        "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
-        "Rolling for attack..."].concat(attackResults[result]).forEach(tplPrinter);
-        delete ctx.successes;
-        delete ctx.damage;
-        ui.console.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
-      })
-    })
-    return {};
-  }
   var interaction = {
     "init":{
       "prompt":[],
       "auto":function(ui,ctx){
         ctx.prologue.forEach(ui.console.println);
-        ui.console.after(delayedUpdate(ui,ctx,{state:"start"}));
+        Template.applyToContext(ctx,{state:"start"})
+        ui.console.after(delayedUpdate(ui,ctx));
         return {};
       }
     },
@@ -183,7 +87,35 @@
     },
     "initiative":{
       "prompt":["Roll for initiative!"],
-      "auto":rollForInitiative
+      "auto":function(ui,ctx) {
+        ctx.order = [];
+        ctx.party.forEach(rollInitiative(ctx));
+        ctx.party.forEach(function(member) {
+          console.log(member.name + " - " + member.order);
+        })
+        ctx.foes.forEach(rollInitiative(ctx));
+        ctx.foes.forEach(function(foe) {
+          console.log(foe.name + " - " + foe.order);
+        })
+        ctx.order.sort(function(a,b){
+          return b.order - a.order;
+        });
+        ctx.order.filter(function(member){
+          return member.player == "player";
+        }).map(function(member){
+          return member.name + " - " + member.order;
+        }).forEach(ui.console.println);
+        ctx.turn = ctx.order.shift();
+        Template.applyToContext(ctx,update,{
+          state:"turn"
+        });
+        ui.console.after(delayedUpdate(ui,ctx));
+        console.log("full initiative order");
+        ctx.order.forEach(function(member) {
+          console.log(member.name + " - " + member.order);
+        })
+        return {};
+      }
     },
     "turn":{
       "prompt":["","It is ${turn.name}'s turn!"],
@@ -196,7 +128,62 @@
         }
       }
     },
-    "npc-combat":{"prompt":[],"auto":npcTurn},
+    "npc-combat":{
+      "prompt":[],
+      "auto":function(ui,ctx) {
+        var npc = ctx.turn;
+        var priorities = ctx.party.map(function(m) {
+          return {
+            attack:m.attack,
+            armor:m.armor,
+            speed:m.movement,
+            size:sizes.indexOf(m.size),
+            health:m.health,
+            maxHealth:m.maxHealth,
+            maxDamage:(Roller.maxExpression(m.damage) * (m.attacksPerTurn?m.attacksPerTurn:1)),
+            avgDamage:(Roller.avgExpression(m.damage) * (20 - (npc.armor - m.attack)))
+          };
+        });
+        console.log(priorities)
+        var available = ui.map.openAdjacentWithinRangeOfFoe().map(function(o) {
+          var obj = JSON.parse(JSON.stringify(priorities[o.index]));
+          obj.index = o.index;
+          obj.open = o.open;
+          obj.distance = o.distance;
+          return obj;
+        });
+        available.sort(buildSorter(npc.strategy));
+        var move = available[0];
+        var newPos = move.open;
+        ctx.target = ctx.party[move.index];
+        ctx.successes = Roller.rollAttacks(npc.attacksPerTurn,npc.attack,ctx.target.armor);
+        ctx.damage = Roller.rollDamage(npc.damage,ctx.successes);
+        var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
+        var result = "miss";
+        if (ctx.successes > 0) {
+          if (ctx.successes > 1) {
+            result = "hits";
+          } else {
+            result = "hit";
+          }
+        }
+        ["","It is ${turn.name}'s turn!",
+        ("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
+        ui.console.after(function(){
+          ui.map.moveFoe(npc.mapListing,newPos);
+          ui.output.after(function(){
+            ["${turn.name} has chosen to attack ${target.name}.",
+            "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
+            "Rolling for attack..."].concat(attackResults[result]).forEach(tplPrinter);
+            delete ctx.successes;
+            delete ctx.damage;
+            Template.applyToContext(ctx,{state:"nextTurn"})
+            ui.console.after(delayedUpdate(ui,ctx));
+          })
+        })
+        return {};
+      }
+    },
     "combat":{
       "prompt":["What do you wish to do?","${actions.join(', ')}"],
       "input":function(ui,ctx,value) {
@@ -228,9 +215,8 @@
         ui.console.after(function(){
           ui.map.moveCharacter(ctx.turn.mapListing,ctx.dest);
           delete ctx.dest;
-          ui.output.after(delayedUpdate(ui,ctx,{
-            state:"nextTurn"
-          }));
+          Template.applyToContext(ctx,{state:"nextTurn"});
+          ui.output.after(delayedUpdate(ui,ctx));
         });
         return {};
       }
@@ -303,7 +289,7 @@
   var steps = {
     auto:resolveUpdate,
     roll:function(ui,ctx,rollObj) {
-      applyToContext(ctx,
+      Template.applyToContext(ctx,
         Roller.rollCheck(parseInt(Template.resolveTemplate(rollObj.bonus,ctx)),
           parseInt(Template.resolveTemplate(rollObj.target,ctx)),
           rollObj.success,
@@ -316,7 +302,7 @@
         resolveUpdate(ui,ctx,opts[opt]);
       } else {
         [("'" + opt + "' is not a valid response to the prompt."),
-        ("Please type one of '" + optNames.join("','") + "'")].forEach(printTpl(ui,ctx));
+        ("Please type one of '" + optNames.join("','") + "'")].forEach(Template.buildTemplatePrinter(ui,ctx));
       }
     }
   }
@@ -326,7 +312,7 @@
     if (!state) {
       throw ("no state exists: " + currentState);
     }
-    state.prompt.forEach(printTpl(ui,ctx));
+    state.prompt.forEach(Template.buildTemplatePrinter(ui,ctx));
     var event = ["auto"].filter(function(item) {
       return state[item];
     });
@@ -342,6 +328,16 @@
       }
     }
   };
+  var buildTrigger = function(ui,ctx) {
+    var publisher = document.createElement("span");
+    var trigger = new Trigger(publisher,"transition-to-next-state");
+    trigger.subscribe(function() {
+      proceed(ui,ctx);
+    })
+    return function() {
+      trigger.fire();
+    }
+  }
   window.ActionHandlerFactory = function(config) {
     return function(ui) {
       var ctx = {
