@@ -53,8 +53,24 @@
       }
     }
   };
+  var buildFoes = function(config){
+    var monsterMap = config.monsters.reduce(function(out,monster){
+      out[monster.type] = monster;
+      return out;
+    },{});
+    return JSON.parse(JSON.stringify(config.foes)).map(function(member,i){
+      var base = JSON.parse(JSON.stringify(monsterMap[member.type]));
+      base.health = base.maxHealth;
+      base.name = member.name;
+      base.loc = member.loc;
+      base.player = "NPC";
+      base.mapListing = String.fromCharCode(i + "a".codePointAt(0));
+      return base;
+    });
+  }
   window.ActionHandlerFactory = function(config,gameStates) {
     return function(ui) {
+      var foes = buildFoes(config);
       var ctx = {
         map:config.map,
         prologue:config.prologue,
@@ -68,21 +84,11 @@
           }
           return member;
         }),
-        foes:(function(){
-          var monsterMap = config.monsters.reduce(function(out,monster){
-            out[monster.type] = monster;
-            return out;
-          },{});
-          return JSON.parse(JSON.stringify(config.foes)).map(function(member,i){
-            var base = JSON.parse(JSON.stringify(monsterMap[member.type]));
-            base.health = base.maxHealth;
-            base.name = member.name;
-            base.loc = member.loc;
-            base.player = "NPC";
-            base.mapListing = String.fromCharCode(i + "a".codePointAt(0));
-            return base;
-          });
-        })()
+        foes:foes,
+        foeKeys:foes.reduce(function(out){
+          out[f.mapListing] = i;
+          return out;
+        },{})
       };
       ctx.trigger = new Trigger("transition-to-next-state");
       ctx.trigger.subscribe(function(update) {

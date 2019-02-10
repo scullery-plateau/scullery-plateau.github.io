@@ -204,8 +204,10 @@
     "target":{
       "prompt":["You have chosen to attack.","Choose a foe to attack."],
       "input":function(ui,ctx,value){
-        var index = value.charCodeAt(0) - "a".charCodeAt(0);
-        return {state:"attack",target:ctx.foes[index]};
+        if (!ctx.foeKeys[value]) {
+          throw new Error("'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".");
+        }
+        return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
       }
     },
     "attack":{
