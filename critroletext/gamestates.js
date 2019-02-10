@@ -104,11 +104,60 @@
       "prompt":["","It is ${turn.name}'s turn!"],
       "auto":function(ui,ctx) {
         if (ctx.turn.player == "player") {
-          ctx.actions = ["Move","Attack","End Turn"]
-          return {state:"combat"};
+          if (ctx.turn.deathsaves) {
+            return {state:"deathsaves"};
+          } else if (ctx.target.unconscious) {
+            return {state:"unconscious"}
+          } else {
+            ctx.actions = ["Move","Attack","End Turn"]
+            return {state:"combat"};
+          }
         } else {
           return {state:"npc-combat"};
         }
+      }
+    },
+    "unconscious":{
+      "prompt":["${target.name} is still unconscious.",
+                "Skipping their turn."],
+      "auto":{state:"nextTurn"}
+    },
+    "deathsaves":{
+      "prompt":["${target.name} is dying.",
+                "Rolling death saving throw..."],
+      "auto":function() {
+        var deathsave = {value:Roller.roll(20)};
+        if (deathsave.value == 20) {
+          delete ctx.target.deathsaves
+          ctx.target.health = 1;
+          deathsave.action = "has regained one point of health!"
+        } else if (deathsave.value == 1) {
+          ctx.target.deathsaves.fail = ctx.target.deathsaves.fail + 2;
+        } else if (deathsave.values >= 10) {
+          ctx.target.deathsaves.success = ctx.target.deathsaves.success + 2;
+        } else {
+          ctx.target.deathsaves.fail = ctx.target.deathsaves.fail + 1;
+        }
+        deathsave.nextState = "nextTurn";
+        if (ctx.target.deathsaves.fail >= 3) {
+          deathsave.nextState = "deadhero";
+          deathsave.action = "was unable to recover!"
+          delete ctx.target.deathsaves;
+        } else if (ctx.target.deathsaves.success >= 3) {
+          deathsave.action = "has stablized! They are still unconscious, but are no longer dying."
+          delete ctx.target.deathsaves;
+          ctx.target.unconscious = true;
+        }
+        return {state:"deathsavesresult",deathsave:deathsave};
+      }
+    },
+    "deathsavesresult":{
+      "prompt":["${target.name} has rolled a ${deathsave.value} for their death save.",
+                "${target.name} ${deathsave.action}"],
+      "auto":function() {
+        var state = ctx.deathsave.nextState;
+        delete ctx.deathsave;
+        return {state:state};
       }
     },
     "npc-combat":{
@@ -151,15 +200,25 @@
           }
         }
         [("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
+        var afterMap = ["${turn.name} has chosen to attack ${target.name}.",
+        "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
+        "Rolling for attack..."].concat(attackResults[result]);
+        ctx.target.health = ctx.target.health - damage;
+        var update = {state:"nextTurn"};
+        if (ctx.target.health < 0) {
+          if (Math.abs(ctx.target.health) > ctx.target.maxHealth) {
+            update.state = "deadhero";
+          } else {
+            ctx.target.deathsaves = {"success":0,"fail":0};
+          }
+        }
         ui.console.after(function(){
           ui.map.moveFoe(npc.mapListing,newPos);
-          ui.output.after(function(){
-            ["${turn.name} has chosen to attack ${target.name}.",
-            "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
-            "Rolling for attack..."].concat(attackResults[result]).forEach(tplPrinter);
+          ui.map.after(function(){
+            afterMap.forEach(tplPrinter);
             delete ctx.successes;
             delete ctx.damage;
-            ui.console.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
+            ui.console.after(delayedUpdate(ui,ctx,update));
           })
         })
         return {};
@@ -196,7 +255,7 @@
         ui.console.after(function(){
           ui.map.moveCharacter(ctx.turn.mapListing,ctx.dest);
           delete ctx.dest;
-          ui.output.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
+          ui.map.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
         });
         return {};
       }
@@ -205,6 +264,12 @@
       "prompt":["You have chosen to attack.","Choose a foe to attack."],
       "input":function(ui,ctx,value){
         if (!ctx.foeKeys[value]) {
+          if (value.length == 1) {
+            var index = value.charCodeAt(0) - "a".charCodeAt(0);
+            if (index >= 0 && index < ctx.foes.length) {
+              throw new Error("Enemy '" + ctx.foes[index].name + "' is already dead.")
+            }
+          }
           throw new Error("'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".");
         }
         return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
@@ -242,18 +307,40 @@
       "prompt":["${turn.name} does ${damage} of damage to ${target.name}"],
       "auto":function(ui,ctx) {
         var nextState = (ctx.target.health <= 0)?"kill":"nextTurn";
-        ui.map.draw()
-        ui.output.after(function(){
-          ui.console.after(delayedUpdate(ui,ctx,{state:nextState}))
+        ui.console.after(function() {
+          ui.map.draw()
+          ui.map.after(delayedUpdate(ui,ctx,{state:nextState}))
         })
+        return {};
       }
     },
+    "deadhero":{
+      "prompt":["${target.name} is dead!"],
+      "auto":function() {
+        var order = ctx.order.map(function(o) {return o.mapListing;}).indexOf(ctx.target.mapListing);
+        ctx.order.splice(order,1);
+        ctx.target.dead = true;
+        if (ctx.party.length == ctx.party.filter(function(h) {return h.dead;}).length) {
+          return {state:"TPK"};
+        } else {
+          return {state:"nextTurn"};
+        }
+      }
+    }
     "kill":{
       "prompt":["${target.name} is dead!",
                 "How do you want to do this?"],
       "input":function() {
-        // todo
-        return {state:"nextTurn"};
+        var order = ctx.order.map(function(o) {return o.mapListing;}).indexOf(ctx.target.mapListing);
+        ctx.order.splice(order,1);
+        delete ctx.foeKeys[ctx.target.mapListing];
+        if (Object.keys(foeKeys).length < 1)
+        var nextState = (Object.keys(foeKeys).length < 1)?"victory":"nextTurn";
+        ui.console.after(function() {
+          ui.map.draw()
+          ui.map.after(delayedUpdate(ui,ctx,{state:nextState}))
+        })
+        return {};
       }
     },
     "nextTurn":{
@@ -266,6 +353,27 @@
         ctx.order.push(ctx.turn);
         ctx.turn = ctx.order.shift();
         return {state:"turn"};
+      }
+    },
+    "TPK":{
+      "prompt":[
+        "All the members of your party have died.",
+        "You have failed."
+      ],
+      "auto":{state:"gameover"}
+    },
+    "victory":{
+      "prompt":[
+        "The enemies have all been defeated!",
+        "You are victorious!"
+      ],
+      "auto":{state:"gameover"}
+    },
+    "gameover":{
+      "prompt":["GAME OVER"],
+      "auto":function(ui,ctx){
+        ui.disallowEntry();
+        return {};
       }
     }
   }

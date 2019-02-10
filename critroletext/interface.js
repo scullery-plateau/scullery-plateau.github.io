@@ -42,10 +42,10 @@
       dom:dom
     };
   }
-  var consoleInputAction = function(ui,actionHandler) {
+  var consoleInputAction = function(ui,actionHandler,allowKeyEntryFn) {
     var action = "";
     return function(e) {
-      if (ui.console.isBufferClear() && ui.output.isBufferClear()) {
+      if (ui.console.isBufferClear() && ui.output.isBufferClear() && allowKeyEntryFn()) {
         var code = e.keyCode;
         var key = e.key;
         if (code == 13 && e.shiftKey) {
@@ -81,7 +81,17 @@
       var console = document.getElementById(consoleId);
       ui.output = buildPrinter(output,outputDelay);
       ui.console = buildPrinter(console,consoleDelay);
-      var keyPressListener = consoleInputAction(ui,actionHandler.handle);
+      var values = {allowKeyEntry:true}
+      ui.toggleEntry = function() {
+        values.allowKeyEntry = !values.allowKeyEntry;
+      }
+      ui.allowEntry = function() {
+        values.allowKeyEntry = true;
+      }
+      ui.disallowEntry = function() {
+        values.allowKeyEntry = false;
+      }
+      var keyPressListener = consoleInputAction(ui,actionHandler.handle,function() {return values.allowKeyEntry;});
       actionHandler.init();
       document.getElementsByTagName("body")[0].onkeydown =keyPressListener;
       output.onkeydown = keyPressListener;

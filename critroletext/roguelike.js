@@ -102,6 +102,9 @@
     this.init = function() {
       draw();
     }
+    this.after = function(fn) {
+      ui.output.after(fn);
+    }
     this.getNearest = function(origin,targets) {
       origin = decodeLoc(origin);
       targets = targets.map(decodeLoc).map(function(loc,index){
