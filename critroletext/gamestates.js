@@ -68,8 +68,8 @@
       }
     },
     "start":{
-      "prompt":["Type 'START' and hit 'ENTER' to begin."],
-      "opts":{"START":{state:"initiative"}}
+      "prompt":["Type 'Start' and hit 'ENTER' to begin."],
+      "opts":{"Start":{state:"initiative"}}
     },
     "initiative":{
       "prompt":["Roll for initiative!"],
@@ -106,7 +106,7 @@
         if (ctx.turn.player == "player") {
           if (ctx.turn.deathsaves) {
             return {state:"deathsaves"};
-          } else if (ctx.target.unconscious) {
+          } else if (ctx.turn.unconscious) {
             return {state:"unconscious"}
           } else {
             ctx.actions = ["Move","Attack","End Turn"]
@@ -203,7 +203,7 @@
         var afterMap = ["${turn.name} has chosen to attack ${target.name}.",
         "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
         "Rolling for attack..."].concat(attackResults[result]);
-        ctx.target.health = ctx.target.health - damage;
+        ctx.target.health = ctx.target.health - ctx.damage;
         var update = {state:"nextTurn"};
         if (ctx.target.health < 0) {
           if (Math.abs(ctx.target.health) > ctx.target.maxHealth) {
@@ -239,7 +239,11 @@
       }
     },
     "move":{
-      "prompt":["You have chosen to move.","Where would you like to move?"],
+      "prompt":["You have chosen to move.",
+                "${turn.name} can move up to ${turn.movement} feet (${turn.movement/5} spaces).",
+                "Where would you like to move?",
+                "Choose where to move by entering the coordinates of the space to move to,",
+                "letter then number, no separator."],
       "input":function(ui,ctx,value){
         var open = ui.map.openWithinRangeOfHero();
         if (open.indexOf(value) < 0) {
@@ -261,18 +265,21 @@
       }
     },
     "target":{
-      "prompt":["You have chosen to attack.","Choose a foe to attack."],
+      "prompt":["You have chosen to attack.",
+                "Choose a foe to attack by entering the letter on the map",
+                "which corresponds to them."],
       "input":function(ui,ctx,value){
-        if (!ctx.foeKeys[value]) {
-          if (value.length == 1) {
-            var index = value.charCodeAt(0) - "a".charCodeAt(0);
-            if (index >= 0 && index < ctx.foes.length) {
-              throw new Error("Enemy '" + ctx.foes[index].name + "' is already dead.")
-            }
-          }
-          throw new Error("'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".");
+        console.log(ctx.foeKeys);
+        if ((typeof ctx.foeKeys[value]) == "number") {
+          return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
         }
-        return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
+        if (value.length == 1) {
+          var index = value.charCodeAt(0) - "a".charCodeAt(0);
+          if (index >= 0 && index < ctx.foes.length) {
+            throw "Enemy '" + ctx.foes[index].name + "' is already dead."
+          }
+        }
+        throw "'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".";
       }
     },
     "attack":{
@@ -326,11 +333,11 @@
           return {state:"nextTurn"};
         }
       }
-    }
+    },
     "kill":{
       "prompt":["${target.name} is dead!",
                 "How do you want to do this?"],
-      "input":function() {
+      "input":function(ui,ctx) {
         var order = ctx.order.map(function(o) {return o.mapListing;}).indexOf(ctx.target.mapListing);
         ctx.order.splice(order,1);
         delete ctx.foeKeys[ctx.target.mapListing];
@@ -347,9 +354,10 @@
       "prompt":[],
       "auto":function(ui,ctx){
         delete ctx.damage;
-        if (ctx.actions.length > 1 && ctx.actions.indexOf("End Turn") >= 0) {
+        if (ctx.actions && ctx.actions.length > 1 && ctx.actions.indexOf("End Turn") >= 0) {
           return {state:"combat"};
         }
+        delete ctx.actions;
         ctx.order.push(ctx.turn);
         ctx.turn = ctx.order.shift();
         return {state:"turn"};

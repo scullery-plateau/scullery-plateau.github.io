@@ -35,7 +35,7 @@
         buildTestPath(actionHandler,steps,finalFN);
       }
     }
-    setTimeout(go,2000);
+    setTimeout(go,100*steps.length);
   }
   window.allTests = (function(){
     console.log(GameData);
@@ -50,7 +50,7 @@
       "test_init_start":function() {
         actionHandler.init();
         buildTestPath(actionHandler,[
-          "START",
+          "Start",
           "Attack",
           "b",
           "End Turn",

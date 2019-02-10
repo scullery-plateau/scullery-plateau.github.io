@@ -85,7 +85,7 @@
           return member;
         }),
         foes:foes,
-        foeKeys:foes.reduce(function(out){
+        foeKeys:foes.reduce(function(out,f,i){
           out[f.mapListing] = i;
           return out;
         },{})

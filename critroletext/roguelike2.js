@@ -137,6 +137,9 @@
     this.init = function() {
       draw(ui,context);
     }
+    this.after = function(fn) {
+      ui.output.after(fn);
+    }
     this.openWithinRangeOfHero = function() {
       var hero = context.turn;
       return openWithinRange(hero.loc,

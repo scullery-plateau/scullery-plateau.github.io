@@ -18,6 +18,9 @@
       return a + 1 + Math.floor(Math.random() * (b.charCodeAt(0) - "A".charCodeAt(0)));
     },0);
   }
+  var roll20 = function(opts) {
+    return roll(20);
+  }
   window.Roller = {
     roll:roll,
     max:function(side,count) {
@@ -26,12 +29,12 @@
     avg:function(side,count) {
       return (side + 1) * 0.5 * defaultCount(count);
     },
-    rollCheck:function(bonus,target,success,failure) {
-      return (((roll(20) + bonus) > target) ? success : failure);
+    rollCheck:function(bonus,target,success,failure,opts) {
+      return (((roll20(opts) + bonus) > target) ? success : failure);
     },
-    rollAttacks:function(attacksPerTurn,attack,armor) {
+    rollAttacks:function(attacksPerTurn,attack,armor,opts) {
       return "?".repeat(attacksPerTurn).split("").filter(function(a){
-        return roll(20) + attack > armor;
+        return roll20(opts) + attack > armor;
       }).length;
     },
     rollDamage:function(damage,successes) {
