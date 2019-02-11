@@ -10,7 +10,7 @@
     }
     return values;
   }
-  var buildMockUI = function() {
+  var buildMockUI = function(trigger) {
     var data = [];
     return {
       data:data,
@@ -21,21 +21,24 @@
         data.splice(0,data.length);
       },
       after:function(fn) {
-        setTimeout(fn,50);
+        setTimeout(function() {
+          fn();
+        },10);
       }
     }
   }
-  var buildTestPath = function(actionHandler,steps,finalFN) {
+  var buildTestPath = function(ui,actionHandler,steps,finalFN) {
     var go = finalFN;
     if (steps.length > 0) {
       go = function() {
         var step = steps.shift();
         console.log(step);
+        ui.console.println(step);
         actionHandler.handle(step);
         buildTestPath(actionHandler,steps,finalFN);
       }
     }
-    setTimeout(go,100*steps.length);
+    setTimeout(go,700);
   }
   window.allTests = (function(){
     console.log(GameData);
@@ -49,28 +52,28 @@
     return {
       "test_init_start":function() {
         actionHandler.init();
-        buildTestPath(actionHandler,[
+        buildTestPath(mockUI,actionHandler,[
           "Start",
-          "Attack",
-          "b",
-          "End Turn",
-          "Attack",
-          "c",
-          "End Turn",
-          "Move",
-          "I6",
-          "Attack",
-          "c",
-          "Move",
-          "F3",
-          "Attack",
-          "a",
-          "Attack"
+          "Attack","b","End Turn", // Percy - 16
+          "Attack","c","End Turn", // Vex - 15
+          "Move","I6","Attack","c", // Pike - 15
+          "Move","F3","Attack","a", // Grog - 11
+          "Attack","b","End Turn", // Keyleth - 9
+          "Move","H3","Attack","a", // Vax - 6
+          "Attack","b","End Turn", // Scanlan - 4
+          "Attack","b","End Turn", // Percy - 16
+          "Attack","a","End Turn", // Vex - 15
+          "Attack","c","End Turn", // Pike - 15
+          "Attack","a","End Turn", // Grog - 11
+          "Attack","b","End Turn", // Keyleth - 9
+          "Attack","c","End Turn", // Vax - 6
+          "Attack","a","End Turn", // Scanlan - 4
+          "Attack","a","End Turn", // Percy - 16
         ],function(){
-          var expectedOutput = mockUI.output.data.join("\n");
           var expectedConsole = mockUI.console.data.join("\n")
-          console.log(expectedOutput);
+          var expectedOutput = mockUI.output.data.join("\n");
           console.log(expectedConsole);
+          console.log(expectedOutput);
           assertEquals(expectedOutput,initOutput,"Map output does not match.");
           assertEquals(expectedConsole,initConsole,"Console output does not match.");
         });
@@ -78,5 +81,3 @@
     };
   })();
 })();
-/*
-*/

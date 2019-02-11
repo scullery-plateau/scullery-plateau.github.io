@@ -143,7 +143,7 @@
       armor:16,
       movement:60,
       initiative:1,
-      strategy:"direction, armor, health"
+      strategy:"distance, armor, health"
     }]
   };
 })();

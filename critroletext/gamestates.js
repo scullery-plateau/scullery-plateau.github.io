@@ -76,13 +76,7 @@
       "auto":function(ui,ctx) {
         ctx.order = [];
         ctx.party.forEach(rollInitiative(ctx));
-        ctx.party.forEach(function(member) {
-          console.log(member.name + " - " + member.order);
-        })
         ctx.foes.forEach(rollInitiative(ctx));
-        ctx.foes.forEach(function(foe) {
-          console.log(foe.name + " - " + foe.order);
-        })
         ctx.order.sort(function(a,b){
           return b.order - a.order;
         });
@@ -176,7 +170,6 @@
             avgDamage:(Roller.avgExpression(m.damage) * (20 - (npc.armor - m.attack)))
           };
         });
-        console.log(priorities)
         var available = ui.map.openAdjacentWithinRangeOfFoe().map(function(o) {
           var obj = JSON.parse(JSON.stringify(priorities[o.index]));
           obj.index = o.index;
@@ -269,7 +262,6 @@
                 "Choose a foe to attack by entering the letter on the map",
                 "which corresponds to them."],
       "input":function(ui,ctx,value){
-        console.log(ctx.foeKeys);
         if ((typeof ctx.foeKeys[value]) == "number") {
           return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
         }
@@ -315,8 +307,8 @@
       "auto":function(ui,ctx) {
         var nextState = (ctx.target.health <= 0)?"kill":"nextTurn";
         ui.console.after(function() {
-          ui.map.draw()
-          ui.map.after(delayedUpdate(ui,ctx,{state:nextState}))
+          ui.map.draw();
+          ui.output.after(delayedUpdate(ui,ctx,{state:nextState}))
         })
         return {};
       }
@@ -341,8 +333,7 @@
         var order = ctx.order.map(function(o) {return o.mapListing;}).indexOf(ctx.target.mapListing);
         ctx.order.splice(order,1);
         delete ctx.foeKeys[ctx.target.mapListing];
-        if (Object.keys(foeKeys).length < 1)
-        var nextState = (Object.keys(foeKeys).length < 1)?"victory":"nextTurn";
+        var nextState = (Object.keys(ctx.foeKeys).length < 1)?"victory":"nextTurn";
         ui.console.after(function() {
           ui.map.draw()
           ui.map.after(delayedUpdate(ui,ctx,{state:nextState}))

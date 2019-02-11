@@ -9,7 +9,7 @@
     return String.fromCharCode("A".codePointAt(0) + col) + rowLabel;
   }
   var distance = function(a,b) {
-    return Math.max(Math.abs(a.col,b.col),Math.abs(a.row,b.row));
+    return Math.max(Math.abs(a.col-b.col),Math.abs(a.row-b.row));
   }
   var stringArrayMaxLength = function(strArray) {
     return Math.max.apply(null,strArray.map(function(c){
@@ -164,10 +164,13 @@
           occupied).filter(function(o){
             return open.indexOf(o) >= 0;
           }).reduce(function(list,o) {
+            var a = decodeLoc(foe.loc);
+            var b = decodeLoc(o);
+            var dist = distance(a,b);
             list.push({
               index:i,
               open:o,
-              distance:distance(decodeLoc(foe.loc),decodeLoc(o)),
+              distance:dist,
             });
             return list;
           }, out);
