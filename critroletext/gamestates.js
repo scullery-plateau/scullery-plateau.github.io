@@ -103,7 +103,8 @@
           } else if (ctx.turn.unconscious) {
             return {state:"unconscious"}
           } else {
-            ctx.actions = ["Move","Attack","End Turn"]
+            ctx.actions = {"move":"Move","attack":"Attack","info":"Info","end turn":"End Turn"};
+            ctx.actionLabels = Object.values(ctx.actions).join(", ");
             return {state:"combat"};
           }
         } else {
@@ -218,18 +219,32 @@
       }
     },
     "combat":{
-      "prompt":["What do you wish to do?","${actions.join(', ')}"],
+      "prompt":["What do you wish to do?","${actionLabels}"],
       "input":function(ui,ctx,value) {
-        var index = ctx.actions.indexOf(value);
-        if (index < 0) {
-          throw "'" + value + "' is not a valid input; must be one of " + ctx.actions.join(", ");
+        var option = ctx.actions[value.toLowerCase()];
+        if (!option) {
+          throw "'" + value + "' is not a valid input; must be one of " + ctx.actionLabels;
         }
-        var option = ctx.actions.splice(index,1);
-        var states = {"Move":"move","Attack":"target"};
+        if (value.toLowerCase() != "info") {
+            delete ctx.actions[value.toLowerCase()];
+        }
+        ctx.actionLabels = Object.values(ctx.actions).join(", ");
+        var states = {"Move":"move","Attack":"target","Info":"info"};
         var state = states[option];
         if (!state) {state = "nextTurn";}
         return {state:state};
       }
+    },
+    "info":{
+      "prompt":["${turn.name}",
+                "Health: ${turn.health}",
+                "Max Health: ${turn.maxHealth}",
+                "Speed: ${turn.movement}",
+                "Armor: ${turn.armor}",
+                "Weapon Of Choice: ${turn.attackName}",
+                "Attack Bonus: ${turn.attack}",
+                "Damage: ${turn.damage}"],
+      "auto":{state:"next"}
     },
     "move":{
       "prompt":["You have chosen to move.",
@@ -345,7 +360,7 @@
       "prompt":[],
       "auto":function(ui,ctx){
         delete ctx.damage;
-        if (ctx.actions && ctx.actions.length > 1 && ctx.actions.indexOf("End Turn") >= 0) {
+        if (ctx.actions && Object.keys(ctx.actions).length > 2 && ctx.actions["end turn"]) {
           return {state:"combat"};
         }
         delete ctx.actions;
