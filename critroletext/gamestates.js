@@ -58,6 +58,18 @@
           "${turn.name} does ${damage} of damage to ${target.name}"],
     "miss":["${turn.name} misses ${target.name}."]
   }
+  var validateOneOf = function(returnVal,options) {
+    return function(ui,ctx,value) {
+      if ((typeof options) == "function") {
+        options = options(ui,ctx);
+      }
+      var index = options.map(function(o){return o.toLowerCase();}).indexOf(value.toLowerCase());
+      if (index < 0) {
+        throw "'" + value + "' is not valid. Must be one of '" + options.join("','") + "'";
+      }
+      return returnVal;
+    }
+  }
   window.GameStates = {
     "init":{
       "prompt":[],
@@ -69,7 +81,7 @@
     },
     "start":{
       "prompt":["Type 'Start' and hit 'ENTER' to begin."],
-      "opts":{"Start":{state:"initiative"}}
+      "input":validateOneOf({state:"initiative"},["Start"])
     },
     "initiative":{
       "prompt":["Roll for initiative!"],
@@ -85,12 +97,12 @@
         }).map(function(member){
           return member.name + " - " + member.order;
         }).forEach(ui.console.println);
-        ctx.turn = ctx.order.shift();
-        ui.console.after(delayedUpdate(ui,ctx,{state:"turn"}));
         console.log("full initiative order");
         ctx.order.forEach(function(member) {
           console.log(member.name + " - " + member.order);
         })
+        ctx.turn = ctx.order.shift();
+        ui.console.after(delayedUpdate(ui,ctx,{state:"turn"}));
         return {};
       }
     },
@@ -244,7 +256,7 @@
                 "Weapon Of Choice: ${turn.attackName}",
                 "Attack Bonus: ${turn.attack}",
                 "Damage: ${turn.damage}"],
-      "auto":{state:"next"}
+      "auto":{state:"combat"}
     },
     "move":{
       "prompt":["You have chosen to move.",
@@ -252,13 +264,13 @@
                 "Where would you like to move?",
                 "Choose where to move by entering the coordinates of the space to move to,",
                 "letter then number, no separator."],
-      "input":function(ui,ctx,value){
+      "input":
+      function(ui,ctx,value){
         var open = ui.map.openWithinRangeOfHero();
         if (open.indexOf(value) < 0) {
           throw "'" + value + "' is occupied or out of range."
         }
-        ctx.dest = value;
-        return {state:"moveTo"};
+        return {state:"moveTo",dest:value};
       }
     },
     "moveTo":{
@@ -342,18 +354,24 @@
       }
     },
     "kill":{
-      "prompt":["${target.name} is dead!",
-                "How do you want to do this?"],
-      "input":function(ui,ctx) {
+      "prompt":["${target.name} is dead!"],
+      "auto":function(ui,ctx) {
         var order = ctx.order.map(function(o) {return o.mapListing;}).indexOf(ctx.target.mapListing);
         ctx.order.splice(order,1);
+        delete ctx.target.loc;
         delete ctx.foeKeys[ctx.target.mapListing];
-        var nextState = (Object.keys(ctx.foeKeys).length < 1)?"victory":"nextTurn";
         ui.console.after(function() {
           ui.map.draw()
-          ui.map.after(delayedUpdate(ui,ctx,{state:nextState}))
-        })
+          ui.map.after(delayedUpdate(ui,ctx,{state:"hdywtdt"}))
+        });
         return {};
+      }
+    },
+    "hdywtdt":{
+      "prompt":["How do you want to do this?"],
+      "input":function(ui,ctx){
+        var nextState = (Object.keys(ctx.foeKeys).length < 1)?"victory":"nextTurn";
+        return {state:nextState};
       }
     },
     "nextTurn":{

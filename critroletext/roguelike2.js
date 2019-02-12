@@ -42,7 +42,9 @@
       return out;
     },sprites);
     sprites = context.foes.reduce(function(out,member,index){
-      out[member.loc] = String.fromCharCode("a".charCodeAt(0) + index);
+      if (member.loc) {
+        out[member.loc] = String.fromCharCode("a".charCodeAt(0) + index);
+      }
       return out;
     },sprites);
     Object.entries(sprites).forEach(function(entry){

@@ -1,35 +1,19 @@
 (function() {
   var resolveUpdate = function(ui,ctx,update,value) {
+    if (value != undefined) {
+      ctx.input = value;
+    }
     if ((typeof update) == "function") {
       try {
         var result = update(ui,ctx,value);
         Template.applyToContext(ctx,result);
       } catch(e) {
-        Template.buildTemplatePrinter(ctx,ui.console)(e.stack);
+        Template.buildTemplatePrinter(ctx,ui.console)(e);
       }
     } else {
       Template.applyToContext(ctx,update);
     }
-  }
-  var steps = {
-    auto:resolveUpdate,
-    roll:function(ui,ctx,rollObj) {
-      Template.applyToContext(ctx,
-        Roller.rollCheck(parseInt(Template.resolveTemplate(rollObj.bonus,ctx)),
-          parseInt(Template.resolveTemplate(rollObj.target,ctx)),
-          rollObj.success,
-          rollObj.failure));
-    },
-    input:resolveUpdate,
-    opts:function(ui,ctx,opts,opt) {
-      var optNames = Object.keys(opts);
-      if (optNames.indexOf(opt) >= 0) {
-        resolveUpdate(ui,ctx,opts[opt]);
-      } else {
-        [("'" + opt + "' is not a valid response to the prompt."),
-        ("Please type one of '" + optNames.join("','") + "'")].forEach(Template.buildTemplatePrinter(ctx,ui.console));
-      }
-    }
+    delete ctx.input;
   }
   var proceed = function(ui,ctx,gameStates) {
     var currentState = ctx.state;
@@ -38,16 +22,8 @@
       throw ("no state exists: " + currentState);
     }
     state.prompt.forEach(Template.buildTemplatePrinter(ctx,ui.console));
-    var event = ["auto"].filter(function(item) {
-      return state[item];
-    });
-    if (event.length > 1) {
-      throw ("Invalid construct of state " + ctx.state + ": multiple events - [" + event.join() + "]");
-    } else if (event.length == 1) {
-      event = event[0];
-      var opts = state[event];
-      var step = steps[event];
-      step(ui,ctx,opts);
+    if (state.auto) {
+      resolveUpdate(ui,ctx,state.auto);
       if (currentState != ctx.state) {
         proceed(ui,ctx,gameStates);
       }
@@ -107,16 +83,10 @@
         if (!state) {
           throw ("no state exists: " + ctx.state);
         }
-        var event = ["opts","input"].filter(function(item) {
-          return state[item];
-        });
-        if (event.length != 1) {
-          throw ("Invalid construct of state " + ctx.state + ": multiple events - [" + event.join() + "]");
+        if (!state.input) {
+          throw ("Invalid construct of state " + ctx.state + ": not a user input state");
         }
-        event = event[0];
-        var opts = state[event];
-        var step = steps[event];
-        step(ui,ctx,opts,action);
+        resolveUpdate(ui,ctx,state.input,action);
         proceed(ui,ctx,gameStates);
       }
     }

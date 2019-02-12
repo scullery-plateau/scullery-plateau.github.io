@@ -131,6 +131,14 @@
       name:"Thrall",
       type:"Orc War Chief",
       loc:"J6"
+    },{
+      name:"Xaakt",
+      type:"Orc War Chief",
+      loc:"I9"
+    },{
+      name:"Paghorim",
+      type:"Orc War Chief",
+      loc:"C1"
     }],
     monsters:[{
       type:"Orc War Chief",
