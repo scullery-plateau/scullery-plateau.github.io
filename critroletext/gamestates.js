@@ -13,7 +13,7 @@
     }
   }
   var calcDamage = function(ui,ctx) {
-    var damage = Roller.rollDamage(ctx.turn.damage,ctx.successes);
+    var damage = Roller.rollDamage(ctx.turn.attack.damage,ctx.successes);
     ctx.target.health = ctx.target.health - damage;
     delete ctx.successes;
     return {state:"damage",damage:damage};
@@ -172,16 +172,17 @@
       "auto":function(ui,ctx) {
         var npc = ctx.turn;
         var priorities = ctx.party.map(function(m) {
-          return {
-            attack:m.attack,
+          var out = {
+            attack:m.attack.bonus,
             armor:m.armor,
             speed:m.movement,
             size:sizes.indexOf(m.size),
             health:m.health,
             maxHealth:m.maxHealth,
-            maxDamage:(Roller.maxExpression(m.damage) * (m.attacksPerTurn?m.attacksPerTurn:1)),
-            avgDamage:(Roller.avgExpression(m.damage) * (20 - (npc.armor - m.attack)))
+            maxDamage:(Roller.maxExpression(m.attack.damage) * (m.attack.perTurn?m.attack.perTurn:1)),
+            avgDamage:(Roller.avgExpression(m.attack.damage) * (20 - (npc.armor - m.attack.bonus)))
           };
+          return out;
         });
         var available = ui.map.openAdjacentWithinRangeOfFoe().map(function(o) {
           var obj = JSON.parse(JSON.stringify(priorities[o.index]));
@@ -194,8 +195,8 @@
         var move = available[0];
         var newPos = move.open;
         ctx.target = ctx.party[move.index];
-        ctx.successes = Roller.rollAttacks(npc.attacksPerTurn,npc.attack,ctx.target.armor);
-        ctx.damage = Roller.rollDamage(npc.damage,ctx.successes);
+        ctx.successes = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
+        ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes);
         var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
         var result = "miss";
         if (ctx.successes > 0) {
@@ -205,10 +206,6 @@
             result = "hit";
           }
         }
-        [("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
-        var afterMap = ["${turn.name} has chosen to attack ${target.name}.",
-        "${turn.name} makes ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.",
-        "Rolling for attack..."].concat(attackResults[result]);
         ctx.target.health = ctx.target.health - ctx.damage;
         var update = {state:"nextTurn"};
         if (ctx.target.health < 0) {
@@ -218,13 +215,19 @@
             ctx.target.deathsaves = {"success":0,"fail":0};
           }
         }
+        [("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
+        var afterMap = ["${turn.name} has chosen to attack ${target.name}.",
+        "${turn.name} makes ${turn.attack.perTurn} attack${turn.attack.perTurn>1?'s':''} with ${turn.attack.name}.",
+        "Rolling for attack..."].concat(attackResults[result]);
         ui.console.after(function(){
           ui.map.moveFoe(npc.mapListing,newPos);
           ui.map.after(function(){
             afterMap.forEach(tplPrinter);
-            delete ctx.successes;
-            delete ctx.damage;
-            ui.console.after(delayedUpdate(ui,ctx,update));
+            ui.console.after(function() {
+              delete ctx.successes;
+              delete ctx.damage;
+              delayedUpdate(ui,ctx,update)();
+            })
           })
         })
         return {};
@@ -248,14 +251,16 @@
       }
     },
     "info":{
-      "prompt":["${turn.name}",
-                "Health: ${turn.health}",
-                "Max Health: ${turn.maxHealth}",
-                "Speed: ${turn.movement}",
-                "Armor: ${turn.armor}",
-                "Weapon Of Choice: ${turn.attackName}",
-                "Attack Bonus: ${turn.attack}",
-                "Damage: ${turn.damage}"],
+      "prompt":["",
+                "${turn.name}",
+                "  Health:            ${turn.health}",
+                "  Max Health:        ${turn.maxHealth}",
+                "  Speed:             ${turn.movement}",
+                "  Armor:             ${turn.armor}",
+                "  Weapon Of Choice:  ${turn.attack.name}",
+                "  Attack Bonus:      ${turn.attack.bonus}",
+                "  Damage:            ${turn.attack.damage}",
+                ""],
       "auto":{state:"combat"}
     },
     "move":{
@@ -302,9 +307,9 @@
       }
     },
     "attack":{
-      "prompt":["You have chosen to attack ${target.name}.","You make ${turn.attacksPerTurn} attack${turn.attacksPerTurn>1?'s':''} with ${turn.attackName}.","Rolling for attack..."],
+      "prompt":["You have chosen to attack ${target.name}.","You make ${turn.attack.perTurn} attack${turn.attack.perTurn>1?'s':''} with ${turn.attack.name}.","Rolling for attack..."],
       "auto":function(ui,ctx) {
-        var successes = Roller.rollAttacks(ctx.turn.attacksPerTurn,ctx.turn.attack,ctx.target.armor);
+        var successes = Roller.rollAttacks(ctx.turn.attack.perTurn,ctx.turn.bonus,ctx.target.armor);
         if (successes > 0) {
           ctx.successes = successes;
           if (successes > 1) {

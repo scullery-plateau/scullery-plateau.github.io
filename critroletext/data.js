@@ -36,11 +36,13 @@
     ],
     characterSheets:[{
       name:"Percy",
-      attackName:"Pepperbox",
-      attack:12,
-      range:[80,160],
-      attacksPerTurn:3,
-      damage:"d10 + 6",
+      attack:{
+        name:"Pepperbox",
+        bonus:12,
+        range:[80,160],
+        perTurn:3,
+        damage:"d10 + 6"
+      },
       armor:18,
       movement:30,
       initiative:8,
@@ -49,11 +51,13 @@
       loc:"A3"
     },{
       name: "Vex",
-      attackName:"Longbow",
-      attack:13,
-      range:[80,160],
-      attacksPerTurn:2,
-      damage:"d8 + 7",
+      attack:{
+        name:"Longbow",
+        bonus:13,
+        range:[80,160],
+        perTurn:2,
+        damage:"d8 + 7"
+      },
       armor:19,
       movement:30,
       initiative:5,
@@ -62,10 +66,12 @@
       loc:"B4"
     },{
       name: "Keyleth",
-      attackName:"Thorn Whip",
-      attack:10,
-      range:[30],
-      damage:"2d6",
+      attack:{
+        name:"Thorn Whip",
+        bonus:10,
+        range:[30],
+        damage:"2d6"
+      },
       armor:17,
       movement:30,
       initiative:2,
@@ -74,10 +80,12 @@
       loc:"C3"
     },{
       name: "Scanlan",
-      attackName:"Bigby's Hand",
-      attack:10,
-      range:[30],
-      damage:"4d8",
+      attack:{
+        name:"Bigby's Hand",
+        bonus:10,
+        range:[30],
+        damage:"4d8"
+      },
       armor:17,
       movement:25,
       initiative:2,
@@ -86,9 +94,11 @@
       loc:"E2"
     },{
       name: "Grog",
-      attackName:"Flaming Warhammer",
-      attack:9,
-      damage:"d10 + 8 + d6",
+      attack:{
+        name:"Flaming Warhammer",
+        bonus:9,
+        damage:"d10 + 8 + d6"
+      },
       armor:19,
       movement:50,
       initiative:2,
@@ -97,9 +107,11 @@
       loc:"E4"
     },{
       name: "Pike",
-      attackName:"Mace Of Disruption",
-      attack:5,
-      damage:"2d6 + 1",
+      attack:{
+        name:"Mace Of Disruption",
+        bonus:5,
+        damage:"2d6 + 1"
+      },
       armor:20,
       movement:25,
       initiative:0,
@@ -108,10 +120,12 @@
       loc:"H6"
     },{
       name:"Vax",
-      attackName:"Dagger/Dagger/Dagger",
-      attack:8,
-      attacksPerTurn:3,
-      damage:"1d4 + 6",
+      attack:{
+        name:"Dagger/Dagger/Dagger",
+        bonus:8,
+        perTurn:3,
+        damage:"1d4 + 6"
+      },
       armor:17,
       movement:30,
       initiative:5,
@@ -144,10 +158,12 @@
       type:"Orc War Chief",
       maxHealth:93,
       size:"medium",
-      attack:6,
-      attacksPerTurn:2,
-      attackName:"Warpike",
-      damage:"2d8 + 4",
+      attack:{
+        name:"Warpike",
+        bonus:6,
+        perTurn:2,
+        damage:"2d8 + 4"
+      },
       armor:16,
       movement:60,
       initiative:1,

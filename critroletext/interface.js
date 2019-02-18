@@ -20,6 +20,9 @@
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
       println:function(str) {
+        if (typeof str != "string") {
+          throw str;
+        }
         if (!str) {str = "";}
         chars.push("");
         str.split("").forEach(function(c){chars.push(c);});
