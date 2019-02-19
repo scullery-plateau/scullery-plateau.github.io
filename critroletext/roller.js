@@ -90,6 +90,7 @@
       if (successes < 1) {
         return [0];
       }
+      console.log("I'm here")
       var result = "?".repeat(successes-1).split("").reduce(function(results){
         var singleResult = Roller.rollExpression(damage);
         Object.keys(results).forEach(function(key) {
@@ -97,8 +98,13 @@
         });
         return results;
       }, Roller.rollExpression(damage));
+      console.log("result");
+      console.log(result);
       var logs = formatDamages(result);
+      console.log("logs");
+      console.log(logs);
       logs.push(resolveResistances(result,opts));
+      console.log("logs with total");
       console.log(logs);
       return logs;
     },
