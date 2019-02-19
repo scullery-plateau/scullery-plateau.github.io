@@ -13,7 +13,7 @@
     }
   }
   var calcDamage = function(ui,ctx) {
-    var damage = Roller.rollDamage(ctx.turn.attack.damage,ctx.successes);
+    var damage = Roller.rollDamage(ctx.turn.attack.damage,ctx.successes).pop();
     ctx.target.health = ctx.target.health - damage;
     delete ctx.successes;
     return {state:"damage",damage:damage};
@@ -216,7 +216,7 @@
         ctx.target = ctx.party[move.index];
         var rollLog = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
         ctx.successes = rollLog.pop();
-        ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes);
+        ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes).pop();
         var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
         var result = attackResult(ctx.successes);
         ctx.target.health = ctx.target.health - ctx.damage;
