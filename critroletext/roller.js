@@ -37,7 +37,7 @@
   };
   var resolveResistances = function(result,opts) {
     opts = opts || {};
-    var resolve = Object.keys(resistanceFunctions).reduce(funtion(sum,key) {
+    var resolve = Object.keys(resistanceFunctions).reduce(function(sum,key) {
       var types = opts[key] || [];
       if (types.length > 0) {
         var func = resistanceFunctions[key];
