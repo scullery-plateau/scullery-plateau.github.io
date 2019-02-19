@@ -18,6 +18,44 @@
     console.log([side,count,bonus,result]);
     return result;
   }
+  var formatDamages = function(results) {
+    return Object.entries(results).reduce(function(out,entry) {
+      out.push(entry[1] + " points of " + entry[0] + " damage");
+      return out;
+    },[]);
+  }
+  var resistanceFunctions = {
+    resistances:function(value) {
+      return value / 2;
+    },
+    vulnerabilities:function(value) {
+      return value * 2;
+    },
+    immunitites:function(value) {
+      return 0;
+    }
+  };
+  var resolveResistances = function(result,opts) {
+    opts = opts || {};
+    var resolve = Object.keys(resistanceFunctions).reduce(funtion(sum,key) {
+      var types = opts[key] || [];
+      if (types.length > 0) {
+        var func = resistanceFunctions[key];
+        sum += Object.keys(result).reduce(function(total,type) {
+          if (types.indexOf(type) > -1) {
+            total += func(result[type]);
+          }
+        },0);
+      }
+      return sum;
+    }, 0);
+    return Object.keys(result).filter(function(key){
+      return resolve[key] == undefined;
+    }).reduce(function(out, key) {
+      out += result[key];
+      return out;
+    }, resolve);
+  }
   var roll20 = function(opts) {
     return roll(20);
   }
@@ -46,11 +84,21 @@
       results.push(successes);
       return results;
     },
-    rollDamage:function(damage,successes) {
+    rollDamage:function(damage,successes,opts) {
       console.log(damage);
-      return "?".repeat(successes).split("").reduce(function(sum){
-        return sum + Roller.rollExpression(damage);
-      }, 0);
+      if (successes < 1) {
+        return [0];
+      }
+      var result = "?".repeat(successes-1).split("").reduce(function(results){
+        var singleResult = Roller.rollExpression(damage);
+        Object.keys(results).forEach(function(key) {
+          results[key] = singleResult[key];
+        });
+        return results;
+      }, Roller.rollExpression(damage));
+      var logs = formatDamages(result);
+      logs.push(resolveResistances(result,opts));
+      return logs;
     },
     rollExpression:function(expression) {
       return parseExpression(expression,this.roll,add,0)
