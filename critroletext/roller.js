@@ -98,6 +98,7 @@
       }, Roller.rollExpression(damage));
       var logs = formatDamages(result);
       logs.push(resolveResistances(result,opts));
+      console.log(logs);
       return logs;
     },
     rollExpression:function(expression) {
