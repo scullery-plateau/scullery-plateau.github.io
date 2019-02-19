@@ -86,6 +86,7 @@
     },
     rollDamage:function(damage,successes,opts) {
       console.log(damage);
+      console.log("successes: " + successes);
       if (successes < 1) {
         return [0];
       }
