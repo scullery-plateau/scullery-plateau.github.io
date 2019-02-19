@@ -216,6 +216,7 @@
         ctx.target = ctx.party[move.index];
         var rollLog = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
         ctx.successes = rollLog.pop();
+        console.log("successes: " + ctx.successes);
         ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes).pop();
         var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
         var result = attackResult(ctx.successes);
@@ -326,10 +327,12 @@
       "auto":function(ui,ctx) {
         var rollLog = Roller.rollAttacks(ctx.turn.attack.perTurn,ctx.turn.attack.bonus,ctx.target.armor);
         ctx.successes = rollLog.pop();
-        rollLog.forEach(ui.console.println);
-        ui.console.after(delayedUpdate(ui,ctx,{
+        console.log("successes: " + ctx.successes);
+        var newState = {
           state:attackResult(ctx.successes)
-        }));
+        };
+        rollLog.forEach(ui.console.println);
+        ui.console.after(delayedUpdate(ui,ctx,newState));
         return {};
       }
     },
