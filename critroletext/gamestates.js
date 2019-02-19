@@ -70,6 +70,17 @@
       return returnVal;
     }
   }
+  var attackResult = function(successes) {
+    if (successes > 0) {
+      if (successes > 1) {
+        return "hits"
+      } else {
+        return "hit";
+      }
+    } else {
+      return "miss";
+    }
+  }
   window.GameStates = {
     "init":{
       "prompt":[],
@@ -81,7 +92,15 @@
     },
     "start":{
       "prompt":["Type 'Start' and hit 'ENTER' to begin."],
-      "input":validateOneOf({state:"initiative"},["Start"])
+      "input":validateOneOf({state:"drawMap"},["Start"])
+    },
+    "drawMap":{
+      "prompt":[],
+      "auto":function(ui,ctx){
+        ui.map.draw();
+        ui.map.after(delayedUpdate(ui,ctx,{state:"initiative"}));
+        return {};
+      }
     },
     "initiative":{
       "prompt":["Roll for initiative!"],
@@ -195,17 +214,11 @@
         var move = available[0];
         var newPos = move.open;
         ctx.target = ctx.party[move.index];
-        ctx.successes = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
+        var rollLog = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
+        ctx.successes = rollLog.pop();
         ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes);
         var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
-        var result = "miss";
-        if (ctx.successes > 0) {
-          if (ctx.successes > 1) {
-            result = "hits";
-          } else {
-            result = "hit";
-          }
-        }
+        var result = attackResult(ctx.successes);
         ctx.target.health = ctx.target.health - ctx.damage;
         var update = {state:"nextTurn"};
         if (ctx.target.health < 0) {
@@ -218,7 +231,7 @@
         [("${turn.name} has chosen to move to " + newPos + ".")].forEach(tplPrinter);
         var afterMap = ["${turn.name} has chosen to attack ${target.name}.",
         "${turn.name} makes ${turn.attack.perTurn} attack${turn.attack.perTurn>1?'s':''} with ${turn.attack.name}.",
-        "Rolling for attack..."].concat(attackResults[result]);
+        "Rolling for attack..."].concat(rollLog,attackResults[result]);
         ui.console.after(function(){
           ui.map.moveFoe(npc.mapListing,newPos);
           ui.map.after(function(){
@@ -307,19 +320,17 @@
       }
     },
     "attack":{
-      "prompt":["You have chosen to attack ${target.name}.","You make ${turn.attack.perTurn} attack${turn.attack.perTurn>1?'s':''} with ${turn.attack.name}.","Rolling for attack..."],
+      "prompt":["You have chosen to attack ${target.name}.",
+                "You make ${turn.attack.perTurn} attack${turn.attack.perTurn>1?'s':''} with ${turn.attack.name}.",
+                "Rolling for attack..."],
       "auto":function(ui,ctx) {
-        var successes = Roller.rollAttacks(ctx.turn.attack.perTurn,ctx.turn.bonus,ctx.target.armor);
-        if (successes > 0) {
-          ctx.successes = successes;
-          if (successes > 1) {
-            return {state:"hits"}
-          } else {
-            return {state:"hit"};
-          }
-        } else {
-          return {state:"miss"};
-        }
+        var rollLog = Roller.rollAttacks(ctx.turn.attack.perTurn,ctx.turn.attack.bonus,ctx.target.armor);
+        ctx.successes = rollLog.pop();
+        rollLog.forEach(ui.console.println);
+        ui.console.after(delayedUpdate(ui,ctx,{
+          state:attackResult(ctx.successes)
+        }));
+        return {};
       }
     },
     "hit":{

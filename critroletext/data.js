@@ -41,7 +41,11 @@
         bonus:12,
         range:[80,160],
         perTurn:3,
-        damage:"d10 + 6"
+        damage:[{
+          roll:"d10",
+          bonus:6,
+          type:"piercing"
+        }]
       },
       armor:18,
       movement:30,
@@ -56,7 +60,11 @@
         bonus:13,
         range:[80,160],
         perTurn:2,
-        damage:"d8 + 7"
+        damage:[{
+          roll:"d8",
+          type:"piercing",
+          bonus:7
+        }]
       },
       armor:19,
       movement:30,
@@ -70,7 +78,10 @@
         name:"Thorn Whip",
         bonus:10,
         range:[30],
-        damage:"2d6"
+        damage:[{
+          type:"piercing",
+          roll:"2d6"
+        }]
       },
       armor:17,
       movement:30,
@@ -84,7 +95,10 @@
         name:"Bigby's Hand",
         bonus:10,
         range:[30],
-        damage:"4d8"
+        damage:[{
+          type:"force",
+          roll:"4d8"
+        }]
       },
       armor:17,
       movement:25,
@@ -97,7 +111,14 @@
       attack:{
         name:"Flaming Warhammer",
         bonus:9,
-        damage:"d10 + 8 + d6"
+        damage:[{
+          type:"bludgeoning",
+          roll:"d10",
+          bonus:8
+        },{
+          type:"fire",
+          roll:"d6"
+        }]
       },
       armor:19,
       movement:50,
@@ -110,7 +131,11 @@
       attack:{
         name:"Mace Of Disruption",
         bonus:5,
-        damage:"2d6 + 1"
+        damage:[{
+          type:"bludgeoning",
+          roll:"2d6",
+          bonus:1
+        }]
       },
       armor:20,
       movement:25,
@@ -124,7 +149,11 @@
         name:"Dagger/Dagger/Dagger",
         bonus:8,
         perTurn:3,
-        damage:"1d4 + 6"
+        damage:[{
+          type:"slashing",
+          roll:"1d4",
+          bonus:6
+        }]
       },
       armor:17,
       movement:30,
@@ -162,7 +191,11 @@
         name:"Warpike",
         bonus:6,
         perTurn:2,
-        damage:"2d8 + 4"
+        damage:[{
+          type:"bludgeoning",
+          roll:"2d8",
+          bonus:4
+        }]
       },
       armor:16,
       movement:60,

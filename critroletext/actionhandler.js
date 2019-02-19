@@ -55,8 +55,8 @@
           member.mapListing = (i + 1) + "";
           member.health = member.maxHealth;
           member.player = "player";
-          if (!member.attacksPerTurn) {
-            member.attacksPerTurn = 1;
+          if (!member.attack.perTurn) {
+            member.attack.perTurn = 1;
           }
           return member;
         }),
@@ -73,10 +73,7 @@
       });
       ui.map = new RogueLikeMap(ui,ctx);
       this.init = function() {
-        ui.map.init();
-        ui.output.after(function(){
-          proceed(ui,ctx,gameStates);
-        });
+        proceed(ui,ctx,gameStates);
       }
       this.handle = function(action) {
         var state = gameStates[ctx.state];

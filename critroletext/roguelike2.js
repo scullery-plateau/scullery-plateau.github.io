@@ -136,9 +136,6 @@
     this.moveFoe = function(index,loc) {
       moveChar(context.foes[index.codePointAt(0) - "a".codePointAt(0)],loc);
     }
-    this.init = function() {
-      draw(ui,context);
-    }
     this.after = function(fn) {
       ui.output.after(fn);
     }
