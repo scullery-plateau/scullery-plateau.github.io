@@ -22,17 +22,21 @@
       var coord = keyFn(index);
       var width = coord.length;
       var buffer = indexMaxWidth - width;
-      var row = " ".repeat(context.map.tabSize + buffer);
-      row += coord;
-      row += between;
-      row += member;
-      row += " ".repeat(postBuffer);
-      row += after;
-      row += " ".repeat(context.map.tabSize);
+      var row = " ".repeat(context.map.tabSize + buffer).split("");
+      row = row.concat(coord.split(""));
+      row = row.concat(between.split(""));
+      row = row.concat(member);
+      row = row.concat(" ".repeat(postBuffer).split(""));
+      row = row.concat(after.split(""));
+      row = row.concat(" ".repeat(context.map.tabSize).split(""));
       ui.output.println(row);
     }
   }
-  var draw = function(ui,context) {
+  var draw = function(ui,context,options) {
+    options = options || {};
+    options.open = options.open || {};
+    options.foes = options.foes || {};
+
     var drawMap = context.map.rows.map(function(row){
       return (row + " ".repeat(context.map.size.cols - row.length)).split("");
     });
@@ -44,16 +48,19 @@
     sprites = context.foes.reduce(function(out,member,index){
       if (member.loc) {
         out[member.loc] = String.fromCharCode("a".charCodeAt(0) + index);
+
+        // TODO - add check against options
+
       }
       return out;
     },sprites);
+
+    // TODO - add open spaces to sprites
+
     Object.entries(sprites).forEach(function(entry){
       var sprite = entry[1];
       var loc = decodeLoc(entry[0]);
       drawMap[loc.row][loc.col] = sprite;
-    });
-    drawMap = drawMap.map(function(row){
-      return row.join("");
     });
     var rowDigitMax = String.valueOf(drawMap.length).length;
     var colHeader = "A".repeat(context.map.size.cols).split("").map(function(c,i){
@@ -104,7 +111,7 @@
     var colRange = maxCol - minCol + 1;
     var rows = (new Array(rowRange)).fill(minRow).map(add);
     var cols = (new Array(colRange)).fill(minCol).map(add);
-    var locs = rows.reduce(function(out,row) {
+    return rows.reduce(function(out,row) {
       return cols.reduce(function(list,col) {
         var space = encodeLoc(row,col);
         if (space != loc && occupied.indexOf(space) < 0) {
@@ -113,7 +120,6 @@
         return list;
       }, out);
     }, []);
-    return locs;
   }
   var occupiedSpaces = function(context) {
     return context.order.map(function(c){return c.loc;});
@@ -131,7 +137,20 @@
       draw(ui,context);
     }
     this.drawWithTargets = function() {
-      // TODO
+      draw(ui,context,{
+        foes:context.foes.reduce(function(out,_,i){
+          out[String.fromCharCode("a".charCodeAt(0) + index)] = true;
+          return out;
+        },{})
+      });
+    }
+    this.drawWithOpenSpaces = function() {
+      draw(ui,context,{
+        open:this.openWithinRangeOfHero().reduce(function(out,coord){
+          out[coord] = true;
+          return out;
+        },{})
+      });
     }
     this.moveCharacter = function(index,loc){
       moveChar(context.party[parseInt(index)-1],loc);

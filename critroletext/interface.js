@@ -20,16 +20,16 @@
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
       println:function(str) {
-        if (typeof str != "string") {
+        if (str == undefined) {str = "";}
+        if (typeof str == "string") {
+          str = str.split("");
+        }
+        if (!Array.isArray(str)) {
           throw str;
         }
-        if (!str) {str = "";}
         chars.push("");
-        str.split("").forEach(function(c){chars.push(c);});
+        str.forEach(function(c){chars.push(c);});
         chars.push("\n");
-      },
-      printOptions:function(options) {
-        // TODO
       },
       isBufferClear:function() {
         return chars.length == 0;

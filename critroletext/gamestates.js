@@ -281,7 +281,6 @@
                 "  Armor:             ${turn.armor}",
                 "  Weapon Of Choice:  ${turn.attack.name}",
                 "  Attack Bonus:      ${turn.attack.bonus}",
-                "  Damage:            ${turn.attack.damage}",
                 ""],
       "auto":{state:"combat"}
     },
