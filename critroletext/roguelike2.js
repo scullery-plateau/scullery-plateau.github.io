@@ -61,11 +61,11 @@
     }).join("");
     ui.output.clearOutput();
     ui.output.println(" ".repeat(context.map.tabSize + rowDigitMax + 1) + colHeader);
-    ui.output.println(" ".repeat(context.map.tabSize + rowDigitMax) + "+" + "-".repeat(context.map.size.cols) + "+" + " ".repeat(context.map.tabSize));
-    drawMap.forEach(buildRow(ui,context,rowDigitMax,context.map.size.cols,"|","|",function(index){
+    ui.output.println(" ".repeat(context.map.tabSize + rowDigitMax) + "\u250C" + "\u2500".repeat(context.map.size.cols) + "\u2510" + " ".repeat(context.map.tabSize));
+    drawMap.forEach(buildRow(ui,context,rowDigitMax,context.map.size.cols,"\u2502","\u2502",function(index){
       return (index + 1) + "";
     }));
-    ui.output.println(" ".repeat(context.map.tabSize + rowDigitMax) + "+" + "-".repeat(context.map.size.cols) + "+" + " ".repeat(context.map.tabSize));
+    ui.output.println(" ".repeat(context.map.tabSize + rowDigitMax) + "\u2514" + "\u2500".repeat(context.map.size.cols) + "\u2518" + " ".repeat(context.map.tabSize));
     ui.output.println("");
     var partyIndexMaxWidth = String.valueOf(context.party.length).length;
     var partyMaxLength = stringArrayMaxLength(context.party);
