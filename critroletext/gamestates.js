@@ -13,10 +13,18 @@
     }
   }
   var calcDamage = function(ui,ctx) {
-    var damage = Roller.rollDamage(ctx.turn.attack.damage,ctx.successes).pop();
+    var damageLogs = Roller.rollDamage(ctx.turn.attack.damage,ctx.successes);
+    var damage = damageLogs.pop();
     ctx.target.health = ctx.target.health - damage;
     delete ctx.successes;
-    return {state:"damage",damage:damage};
+    damageLogs.map(function(log){
+      return ctx.turn.attack.name + " does " + log;
+    }).forEach(ui.console.println);
+    ui.console.after(delayedUpdate(ui,ctx,{
+      state:"damage",
+      damage:damage
+    }));
+    return {};
   }
   var sortDirections = {
     "asc":function(a,b) {
@@ -198,8 +206,8 @@
             size:sizes.indexOf(m.size),
             health:m.health,
             maxHealth:m.maxHealth,
-            maxDamage:(Roller.maxExpression(m.attack.damage) * (m.attack.perTurn?m.attack.perTurn:1)),
-            avgDamage:(Roller.avgExpression(m.attack.damage) * (20 - (npc.armor - m.attack.bonus)))
+            maxDamage:(Roller.maxDamage(m.attack.damage) * (m.attack.perTurn?m.attack.perTurn:1)),
+            avgDamage:(Roller.avgDamage(m.attack.damage) * (20 - (npc.armor - m.attack.bonus)))
           };
           return out;
         });
@@ -349,7 +357,7 @@
       "auto":{state:"nextTurn"}
     },
     "damage":{
-      "prompt":["${turn.name} does ${damage} of damage to ${target.name}"],
+      "prompt":["${target.name} takes a total of ${damage} points of damage."],
       "auto":function(ui,ctx) {
         var nextState = (ctx.target.health <= 0)?"kill":"nextTurn";
         ui.console.after(function() {

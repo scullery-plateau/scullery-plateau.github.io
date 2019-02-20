@@ -130,6 +130,9 @@
     this.draw = function() {
       draw(ui,context);
     }
+    this.drawWithTargets = function() {
+      // TODO
+    }
     this.moveCharacter = function(index,loc){
       moveChar(context.party[parseInt(index)-1],loc);
     }

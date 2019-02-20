@@ -3,19 +3,24 @@
     return (!count || isNaN(parseInt(count))) ? 1 : count;
   }
   var parseExpression = function(expression,applyFn,aggFn,init) {
-    return expression.reduce(function(out,d) {
-      var values = d.roll.split("d").reverse().map(parseInt);
-      return aggFn(out,applyFn(values[0],values[1],d.bonus));
+    return expression.split("+").reduce(function(out,d) {
+      var values = d.trim().split("d").reverse().map(parseInt);
+      if (values.length > 1) {
+        return aggFn(out,applyFn.apply(null,values));
+      } else {
+        return aggFn(out,values[0]);
+      }
     }, init);
   }
-  var add = function(a,b) {return a + b;}
+  var add = function(a,b) {
+    return a + b;
+  }
   var roll = function(side,count,bonus){
     count = defaultCount(count);
     bonus = bonus || 0;
     var result = String.fromCharCode("A".charCodeAt(0) + side).repeat(count).split("").reduce(function(a,b){
       return a + 1 + Math.floor(Math.random() * (b.charCodeAt(0) - "A".charCodeAt(0)));
     },bonus);
-    console.log([side,count,bonus,result]);
     return result;
   }
   var formatDamages = function(results) {
@@ -85,28 +90,35 @@
       return results;
     },
     rollDamage:function(damage,successes,opts) {
-      console.log(damage);
-      console.log("successes: " + successes);
       if (successes < 1) {
         return [0];
       }
-      console.log("I'm here")
-      var result = "?".repeat(successes-1).split("").reduce(function(results){
-        var singleResult = Roller.rollExpression(damage);
-        Object.keys(results).forEach(function(key) {
-          results[key] = singleResult[key];
-        });
-        return results;
-      }, Roller.rollExpression(damage));
-      console.log("result");
-      console.log(result);
+      var result = "?".repeat(successes).split("").reduce(function(results){
+        return damage.reduce(function(out,d){
+          out[d.type] += (d.roll?Roller.rollExpression(d.roll):0) + (d.bonus||0);
+          return out;
+        },results);
+      },damage.reduce(function(out,d){
+        out[d.type] = 0;
+        return out;
+      },{}));
       var logs = formatDamages(result);
-      console.log("logs");
-      console.log(logs);
       logs.push(resolveResistances(result,opts));
-      console.log("logs with total");
-      console.log(logs);
       return logs;
+    },
+    maxDamage:function(damage,opts) {
+      var result = damage.reduce(function(out,d){
+        out[d.type] = (d.roll?Roller.maxExpression(d.roll):0) + (d.bonus||0);
+        return out;
+      },{});
+      return resolveResistances(result,opts);
+    },
+    avgDamage:function(damage,opts) {
+      var result = damage.reduce(function(out,d){
+        out[d.type] = (d.roll?Roller.avgExpression(d.roll):0) + (d.bonus||0);
+        return out;
+      },{});
+      return resolveResistances(result,opts);
     },
     rollExpression:function(expression) {
       return parseExpression(expression,this.roll,add,0)

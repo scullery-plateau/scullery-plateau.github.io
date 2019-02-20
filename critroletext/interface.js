@@ -28,6 +28,9 @@
         str.split("").forEach(function(c){chars.push(c);});
         chars.push("\n");
       },
+      printOptions:function(options) {
+        // TODO
+      },
       isBufferClear:function() {
         return chars.length == 0;
       },
