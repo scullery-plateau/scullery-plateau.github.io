@@ -27,6 +27,12 @@
       if (currentState != ctx.state) {
         proceed(ui,ctx,gameStates);
       }
+    } else if (state.opts) {
+      var options = state.opts;
+      if ((typeof options) == "function") {
+        options = options(ui,ctx);
+      }
+      ui.buildOptionsList(options);
     }
   };
   var buildFoes = function(config){

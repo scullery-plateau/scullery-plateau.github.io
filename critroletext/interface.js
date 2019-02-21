@@ -5,7 +5,7 @@
     return function() {
       if (chars.length > 0) {
         var c = chars.shift();
-        dom.innerHTML += c;
+        dom.append(c);
         dom.scrollTop = dom.scrollHeight;
         if (chars.length == 0) {
           trigger.fire();
@@ -20,6 +20,8 @@
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
       println:function(str) {
+        console.log(str);
+        console.log(typeof str);
         if (str == undefined) {str = "";}
         if (typeof str == "string") {
           str = str.split("");
@@ -28,7 +30,9 @@
           throw str;
         }
         chars.push("");
-        str.forEach(function(c){chars.push(c);});
+        str.forEach(function(c){
+          chars.push(c);
+        });
         chars.push("\n");
       },
       isBufferClear:function() {
@@ -39,11 +43,18 @@
       },
       after:function(fn) {
         trigger.onNextFire(fn);
+        if (chars.length == 0) {
+          trigger.fire();
+        }
       },
       flush:function() {
-        dom.innerHTML += chars.splice(0,chars.length).join("");
-        dom.scrollTop = dom.scrollHeight;
-        trigger.fire();
+        if (chars.length > 1) {
+          chars.splice(0,chars.length).forEach(function(c){
+            dom.append(c);
+          });
+          dom.scrollTop = dom.scrollHeight;
+          trigger.fire();
+        }
       },
       dom:dom
     };
@@ -84,9 +95,9 @@
     var actionHandler = new ActionHandler(ui);
     this.init = function() {
       var output = document.getElementById(outputId);
-      var console = document.getElementById(consoleId);
+      var consoleObj = document.getElementById(consoleId);
       ui.output = buildPrinter(output,outputDelay);
-      ui.console = buildPrinter(console,consoleDelay);
+      ui.console = buildPrinter(consoleObj,consoleDelay);
       var values = {allowKeyEntry:true}
       ui.toggleEntry = function() {
         values.allowKeyEntry = !values.allowKeyEntry;
@@ -96,6 +107,59 @@
       }
       ui.disallowEntry = function() {
         values.allowKeyEntry = false;
+      }
+      ui.buildOptionsList = function(options) {
+        if (options) {
+          var menu = document.createElement("span");
+          var domOpts = options.reduce(function(out,entry){
+            var option = document.createElement("a");
+            option.innerHTML = entry;
+            out[entry] = {dom:option};
+            return out;
+          },{})
+          Object.keys(domOpts).forEach(function(key){
+            var eventAction = function() {
+              ui.output.after(function() {
+                ui.console.println(key);
+                ui.console.after(function(){
+                  Object.values(domOpts).forEach(function(value){
+                    value.dom.removeEventListener("click",value.event);
+                  });
+                  actionHandler.handle(key);
+                });
+                ui.console.flush();
+              });
+              ui.output.flush();
+            }
+            domOpts[key].event = eventAction;
+            domOpts[key].dom.addEventListener("click",eventAction);
+          });
+          var items = Object.values(domOpts).map(function(v){return v.dom;});
+          menu.append(items.shift());
+          items.forEach(function(item) {
+            menu.append(",");
+            menu.append(item);
+          })
+          console.log(menu);
+          ui.console.println([menu]);
+        }
+      }
+      ui.buildActiveSprite =  function(label,classLabel,action) {
+        var sprite = document.createElement("a");
+        sprite.innerHTML = label;
+        var eventAction = function(){
+          ui.output.after(function() {
+            ui.console.println(action);
+            ui.console.after(function(){
+              sprite.removeEventListener("click",eventAction);
+              actionHandler.handle(action);
+            });
+            ui.console.flush();
+          });
+          ui.output.flush();
+        }
+        sprite.addEventListener("click",eventAction);
+        return sprite;
       }
       var keyPressListener = consoleInputAction(ui,actionHandler.handle,function() {return values.allowKeyEntry;});
       actionHandler.init();

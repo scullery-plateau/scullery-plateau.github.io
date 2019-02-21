@@ -256,7 +256,10 @@
       }
     },
     "combat":{
-      "prompt":["What do you wish to do?","${actionLabels}"],
+      "prompt":["What do you wish to do?"],
+      "opts":function(ui,ctx){
+        return Object.values(ctx.actions);
+      },
       "input":function(ui,ctx,value) {
         var option = ctx.actions[value.toLowerCase()];
         if (!option) {
@@ -290,13 +293,17 @@
                 "Where would you like to move?",
                 "Choose where to move by entering the coordinates of the space to move to,",
                 "letter then number, no separator."],
-      "input":
-      function(ui,ctx,value){
+      "opts":function(ui,ctx) {
+        ui.map.drawWithOpenSpaces();
+      },
+      "input":function(ui,ctx,value){
         var open = ui.map.openWithinRangeOfHero();
         if (open.indexOf(value) < 0) {
           throw "'" + value + "' is occupied or out of range."
         }
-        return {state:"moveTo",dest:value};
+        ui.map.draw();
+        ui.map.after(delayedUpdate(ui,ctx,{state:"moveTo",dest:value}));
+        return {};
       }
     },
     "moveTo":{
@@ -314,9 +321,17 @@
       "prompt":["You have chosen to attack.",
                 "Choose a foe to attack by entering the letter on the map",
                 "which corresponds to them."],
+      "opts":function(ui,ctx) {
+        ui.map.drawWithTargets();
+      },
       "input":function(ui,ctx,value){
         if ((typeof ctx.foeKeys[value]) == "number") {
-          return {state:"attack",target:ctx.foes[ctx.foeKeys[value]]};
+          ui.map.draw();
+          ui.map.after(delayedUpdate(ui,ctx,{
+            state:"attack",
+            target:ctx.foes[ctx.foeKeys[value]]
+          }));
+          return {};
         }
         if (value.length == 1) {
           var index = value.charCodeAt(0) - "a".charCodeAt(0);

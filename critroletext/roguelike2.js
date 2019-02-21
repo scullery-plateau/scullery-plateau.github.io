@@ -45,17 +45,32 @@
       out[member.loc] = (index + 1) + "";
       return out;
     },sprites);
+
+    console.log("sprites");
+    console.log(sprites);
+
     sprites = context.foes.reduce(function(out,member,index){
       if (member.loc) {
-        out[member.loc] = String.fromCharCode("a".charCodeAt(0) + index);
-
-        // TODO - add check against options
-
+        var sprite = String.fromCharCode("a".charCodeAt(0) + index);
+        if (options.foes[sprite]) {
+          out[member.loc] = ui.buildActiveSprite(sprite,"target",sprite);
+        } else {
+          out[member.loc] = sprite;
+        }
       }
       return out;
     },sprites);
 
-    // TODO - add open spaces to sprites
+    console.log("sprites");
+    console.log(sprites);
+
+    sprites = Object.keys(options.open).reduce(function(out,key){
+      out[key] = ui.buildActiveSprite(".","open",key);
+      return out;
+    },sprites);
+
+    console.log("sprites");
+    console.log(sprites);
 
     Object.entries(sprites).forEach(function(entry){
       var sprite = entry[1];
@@ -139,7 +154,7 @@
     this.drawWithTargets = function() {
       draw(ui,context,{
         foes:context.foes.reduce(function(out,_,i){
-          out[String.fromCharCode("a".charCodeAt(0) + index)] = true;
+          out[String.fromCharCode("a".charCodeAt(0) + i)] = true;
           return out;
         },{})
       });

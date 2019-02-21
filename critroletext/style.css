@@ -18,3 +18,9 @@ body {
 td {
   vertical-align: top;
 }
+a {
+  color: #020;
+  background-color: #9f9;
+  text-decoration: none;
+  cursor: pointer;
+}
