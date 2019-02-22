@@ -53,7 +53,7 @@
       if (member.loc) {
         var sprite = String.fromCharCode("a".charCodeAt(0) + index);
         if (options.foes[sprite]) {
-          out[member.loc] = ui.buildActiveSprite(sprite,"target",sprite);
+          out[member.loc] = ui.buildActiveSprite(sprite,sprite);
         } else {
           out[member.loc] = sprite;
         }
@@ -65,7 +65,7 @@
     console.log(sprites);
 
     sprites = Object.keys(options.open).reduce(function(out,key){
-      out[key] = ui.buildActiveSprite(".","open",key);
+      out[key] = ui.buildActiveSprite(".",key);
       return out;
     },sprites);
 

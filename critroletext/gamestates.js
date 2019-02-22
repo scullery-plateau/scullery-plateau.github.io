@@ -99,7 +99,14 @@
       }
     },
     "start":{
-      "prompt":["Type 'Start' and hit 'ENTER' to begin."],
+      "prompt":[],
+      "opts":function(ui,ctx) {
+        ui.console.println([
+          "Type '",
+          ui.buildActiveSprite("Start","Start"),
+          "' and hit 'ENTER' to begin."
+        ]);
+      },
       "input":validateOneOf({state:"drawMap"},["Start"])
     },
     "drawMap":{

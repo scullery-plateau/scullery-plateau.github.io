@@ -20,8 +20,6 @@
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
       println:function(str) {
-        console.log(str);
-        console.log(typeof str);
         if (str == undefined) {str = "";}
         if (typeof str == "string") {
           str = str.split("");
@@ -119,17 +117,13 @@
           },{})
           Object.keys(domOpts).forEach(function(key){
             var eventAction = function() {
-              ui.output.after(function() {
-                ui.console.println(key);
-                ui.console.after(function(){
-                  Object.values(domOpts).forEach(function(value){
-                    value.dom.removeEventListener("click",value.event);
-                  });
-                  actionHandler.handle(key);
+              ui.console.println(key);
+              ui.console.after(function(){
+                Object.values(domOpts).forEach(function(value){
+                  value.dom.removeEventListener("click",value.event);
                 });
-                ui.console.flush();
+                actionHandler.handle(key);
               });
-              ui.output.flush();
             }
             domOpts[key].event = eventAction;
             domOpts[key].dom.addEventListener("click",eventAction);
@@ -140,32 +134,39 @@
             menu.append(",");
             menu.append(item);
           })
-          console.log(menu);
           ui.console.println([menu]);
         }
       }
-      ui.buildActiveSprite =  function(label,classLabel,action) {
+      ui.buildActiveSprite =  function(label,action) {
         var sprite = document.createElement("a");
         sprite.innerHTML = label;
         var eventAction = function(){
-          ui.output.after(function() {
-            ui.console.println(action);
-            ui.console.after(function(){
+          ui.console.println(action);
+          ui.console.after(function(){
+            ui.output.after(function() {
               sprite.removeEventListener("click",eventAction);
               actionHandler.handle(action);
             });
-            ui.console.flush();
           });
-          ui.output.flush();
         }
         sprite.addEventListener("click",eventAction);
         return sprite;
       }
       var keyPressListener = consoleInputAction(ui,actionHandler.handle,function() {return values.allowKeyEntry;});
       actionHandler.init();
-      document.getElementsByTagName("body")[0].onkeydown =keyPressListener;
-      output.onkeydown = keyPressListener;
-      console.onkeydown = keyPressListener;
+      document.getElementsByTagName("body")[0].addEventListener("keydown",keyPressListener);
+      ui.output.dom.addEventListener("keydown",keyPressListener);
+      ui.console.dom.addEventListener("keydown",keyPressListener);
+      var clickListener = function() {
+        if (!ui.console.isBufferClear()) {
+          ui.console.flush();
+        } else if (!ui.output.isBufferClear()) {
+          ui.output.flush();
+        }
+      }
+      document.getElementsByTagName("body")[0].addEventListener("click",clickListener);
+      ui.output.dom.addEventListener("click",clickListener);
+      ui.console.dom.addEventListener("click",clickListener);
     }
   }
 })();
