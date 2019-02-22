@@ -36,7 +36,6 @@
     options = options || {};
     options.open = options.open || {};
     options.foes = options.foes || {};
-
     var drawMap = context.map.rows.map(function(row){
       return (row + " ".repeat(context.map.size.cols - row.length)).split("");
     });
@@ -45,10 +44,6 @@
       out[member.loc] = (index + 1) + "";
       return out;
     },sprites);
-
-    console.log("sprites");
-    console.log(sprites);
-
     sprites = context.foes.reduce(function(out,member,index){
       if (member.loc) {
         var sprite = String.fromCharCode("a".charCodeAt(0) + index);
@@ -60,18 +55,10 @@
       }
       return out;
     },sprites);
-
-    console.log("sprites");
-    console.log(sprites);
-
     sprites = Object.keys(options.open).reduce(function(out,key){
       out[key] = ui.buildActiveSprite(".",key);
       return out;
     },sprites);
-
-    console.log("sprites");
-    console.log(sprites);
-
     Object.entries(sprites).forEach(function(entry){
       var sprite = entry[1];
       var loc = decodeLoc(entry[0]);
