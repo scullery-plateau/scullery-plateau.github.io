@@ -14,7 +14,7 @@
         Template.buildTemplatePrinter(ctx,ui.console)(e);
       }
     } else {
-      ctx.trigger.fire(result);
+      ctx.trigger.fire(update);
     }
     delete ctx.input;
   }
