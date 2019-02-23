@@ -24,7 +24,6 @@
       state:"damage",
       damage:damage
     }));
-    return {};
   }
   var sortDirections = {
     "asc":function(a,b) {
@@ -95,7 +94,6 @@
       "auto":function(ui,ctx){
         ctx.prologue.forEach(ui.console.println);
         ui.console.after(delayedUpdate(ui,ctx,{state:"start"}));
-        return {};
       }
     },
     "start":{
@@ -114,7 +112,6 @@
       "auto":function(ui,ctx){
         ui.map.draw();
         ui.map.after(delayedUpdate(ui,ctx,{state:"initiative"}));
-        return {};
       }
     },
     "initiative":{
@@ -137,7 +134,6 @@
         })
         ctx.turn = ctx.order.shift();
         ui.console.after(delayedUpdate(ui,ctx,{state:"turn"}));
-        return {};
       }
     },
     "turn":{
@@ -259,7 +255,6 @@
             })
           })
         })
-        return {};
       }
     },
     "combat":{
@@ -308,20 +303,17 @@
         if (open.indexOf(value) < 0) {
           throw "'" + value + "' is occupied or out of range."
         }
-        ui.map.draw();
-        ui.map.after(delayedUpdate(ui,ctx,{state:"moveTo",dest:value}));
-        return {};
+        return {state:"moveTo",dest:value};
       }
     },
     "moveTo":{
       "prompt":["You have chosen to move to ${dest}."],
       "auto":function(ui,ctx){
-        ui.console.after(function(){
-          ui.map.moveCharacter(ctx.turn.mapListing,ctx.dest);
-          delete ctx.dest;
-          ui.map.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
+        ui.map.moveCharacter(ctx.turn.mapListing,ctx.dest);
+        delete ctx.dest;
+        ui.map.after(function(){
+          ui.console.after(delayedUpdate(ui,ctx,{state:"nextTurn"}));
         });
-        return {};
       }
     },
     "target":{
@@ -338,7 +330,6 @@
             state:"attack",
             target:ctx.foes[ctx.foeKeys[value]]
           }));
-          return {};
         }
         if (value.length == 1) {
           var index = value.charCodeAt(0) - "a".charCodeAt(0);
@@ -362,7 +353,6 @@
         };
         rollLog.forEach(ui.console.println);
         ui.console.after(delayedUpdate(ui,ctx,newState));
-        return {};
       }
     },
     "hit":{
@@ -385,7 +375,6 @@
           ui.map.draw();
           ui.output.after(delayedUpdate(ui,ctx,{state:nextState}))
         })
-        return {};
       }
     },
     "deadhero":{
@@ -412,7 +401,6 @@
           ui.map.draw()
           ui.map.after(delayedUpdate(ui,ctx,{state:"hdywtdt"}))
         });
-        return {};
       }
     },
     "hdywtdt":{
@@ -453,7 +441,6 @@
       "prompt":["GAME OVER"],
       "auto":function(ui,ctx){
         ui.disallowEntry();
-        return {};
       }
     }
   }

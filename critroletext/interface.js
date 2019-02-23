@@ -26,21 +26,27 @@
       setTimeout(charByChar(dom,trigger,chars,delay),delay);
     }
   }
-  var flush = function() {
-    var buffer = chars.splice(0,chars.length);
-    if (buffer.length > 2) {
-      buffer.forEach(function(c){
-        dom.append(c);
-      });
-      trigger.fire();
-      dom.scrollTop = dom.scrollHeight;
+  var flush = function(chars,trigger,dom) {
+    return function(){
+      if (chars.length > 2) {
+        var buffer = chars.splice(0,chars.length);
+        buffer.forEach(function(c){
+          dom.append(c);
+        });
+        if (buffer.length > 0) {
+          trigger.fire();
+          dom.scrollTop = dom.scrollHeight;
+        }
+      }
     }
   }
-  var after = function(fn) {
-    var size = chars.length;
-    trigger.onNextFire(fn);
-    if (size <= 0) {
-      trigger.fire();
+  var after = function(chars,trigger,dom) {
+    return function(fn) {
+      var size = chars.length;
+      trigger.onNextFire(fn);
+      if (size <= 0) {
+        trigger.fire();
+      }
     }
   }
   var buildPrinter = function(dom,delay) {
@@ -71,8 +77,8 @@
       clearOutput:function() {
         dom.innerHTML = "";
       },
-      after:after,
-      flush:flush,
+      after:after(chars,trigger,dom),
+      flush:flush(chars,trigger,dom),
       dom:dom
     };
   }
@@ -161,6 +167,8 @@
         sprite.innerHTML = label;
         var eventAction = function(){
           sprite.removeEventListener("click",eventAction);
+          actionHandler.handle(action);
+          /**
           console.log("just clicked on '" + label + "' for action '" + action + "'")
           console.log("redrawing map")
           ui.output.after(function() {
@@ -168,13 +176,13 @@
             ui.console.println(action);
             ui.console.after(function(){
               console.log("handling action")
-              actionHandler.handle(action);
               console.log("action handled")
             });
             console.log("flushing console")
             ui.console.flush();
             console.log("console flushed")
           });
+          **/
         }
         sprite.addEventListener("click",eventAction);
         return sprite;

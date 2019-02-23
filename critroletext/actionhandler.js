@@ -6,12 +6,15 @@
     if ((typeof update) == "function") {
       try {
         var result = update(ui,ctx,value);
-        Template.applyToContext(ctx,result);
+        if (result) {
+          ctx.trigger.fire(result);
+        }
       } catch(e) {
+        console.error(e);
         Template.buildTemplatePrinter(ctx,ui.console)(e);
       }
     } else {
-      Template.applyToContext(ctx,update);
+      ctx.trigger.fire(result);
     }
     delete ctx.input;
   }
@@ -24,9 +27,6 @@
     state.prompt.forEach(Template.buildTemplatePrinter(ctx,ui.console));
     if (state.auto) {
       resolveUpdate(ui,ctx,state.auto);
-      if (currentState != ctx.state) {
-        proceed(ui,ctx,gameStates);
-      }
     } else if (state.opts) {
       var options = state.opts;
       if ((typeof options) == "function") {
@@ -56,7 +56,6 @@
       var ctx = {
         map:config.map,
         prologue:config.prologue,
-        state:"init",
         party:JSON.parse(JSON.stringify(config.characterSheets)).map(function(member,i){
           member.mapListing = (i + 1) + "";
           member.health = member.maxHealth;
@@ -70,16 +69,17 @@
         foeKeys:foes.reduce(function(out,f,i){
           out[f.mapListing] = i;
           return out;
-        },{})
+        },{}),
+        state:"init"
       };
       ctx.trigger = new Trigger("transition-to-next-state");
       ctx.trigger.subscribe(function(update) {
-          Template.applyToContext(ctx,update);
-          proceed(ui,ctx,gameStates);
+        Template.applyToContext(ctx,update);
+        proceed(ui,ctx,gameStates);
       });
       ui.map = new RogueLikeMap(ui,ctx);
       this.init = function() {
-        proceed(ui,ctx,gameStates);
+        ctx.trigger.fire({});
       }
       this.handle = function(action) {
         console.log("handling action '" + action + "'")
@@ -93,7 +93,6 @@
         console.log("resolving update for state '" + ctx.state + "'");
         resolveUpdate(ui,ctx,state.input,action);
         console.log("update to '" + ctx.state + "' resolved");
-        proceed(ui,ctx,gameStates);
         console.log("action '" + action + "' handled")
       }
     }
