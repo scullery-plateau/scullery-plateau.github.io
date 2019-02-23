@@ -7,7 +7,7 @@
       } catch(e) {
         if (e instanceof Error) {
           alert(e.stack);
-        }
+        } else {
           alert(e);
         }
       }
