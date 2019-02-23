@@ -82,6 +82,7 @@
         proceed(ui,ctx,gameStates);
       }
       this.handle = function(action) {
+        console.log("handling action '" + action + "'")
         var state = gameStates[ctx.state];
         if (!state) {
           throw ("no state exists: " + ctx.state);
@@ -89,8 +90,11 @@
         if (!state.input) {
           throw ("Invalid construct of state " + ctx.state + ": not a user input state");
         }
+        console.log("resolving update for state '" + ctx.state + "'");
         resolveUpdate(ui,ctx,state.input,action);
+        console.log("update to '" + ctx.state + "' resolved");
         proceed(ui,ctx,gameStates);
+        console.log("action '" + action + "' handled")
       }
     }
   }

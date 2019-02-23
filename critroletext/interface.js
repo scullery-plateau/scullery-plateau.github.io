@@ -15,15 +15,32 @@
     "y":true,"z":true,"{":true,"|":true,"}":true,"~":true};
   var charByChar = function(dom,trigger,chars,delay) {
     return function() {
-      if (chars.length > 0) {
-        var c = chars.shift();
+      var c = chars.shift();
+      if (c) {
         dom.append(c);
-        dom.scrollTop = dom.scrollHeight;
         if (chars.length == 0) {
           trigger.fire();
         }
+        dom.scrollTop = dom.scrollHeight;
       }
       setTimeout(charByChar(dom,trigger,chars,delay),delay);
+    }
+  }
+  var flush = function() {
+    var buffer = chars.splice(0,chars.length);
+    if (buffer.length > 2) {
+      buffer.forEach(function(c){
+        dom.append(c);
+      });
+      trigger.fire();
+      dom.scrollTop = dom.scrollHeight;
+    }
+  }
+  var after = function(fn) {
+    var size = chars.length;
+    trigger.onNextFire(fn);
+    if (size <= 0) {
+      trigger.fire();
     }
   }
   var buildPrinter = function(dom,delay) {
@@ -31,6 +48,9 @@
     var trigger = new Trigger("bufferClear");
     setTimeout(charByChar(dom,trigger,chars,delay),delay);
     return {
+      logPeek:function() {
+        console.log(chars);
+      },
       println:function(str) {
         if (str == undefined) {str = "";}
         if (typeof str == "string") {
@@ -51,21 +71,8 @@
       clearOutput:function() {
         dom.innerHTML = "";
       },
-      after:function(fn) {
-        trigger.onNextFire(fn);
-        if (chars.length == 0) {
-          trigger.fire();
-        }
-      },
-      flush:function() {
-        if (chars.length > 1) {
-          chars.splice(0,chars.length).forEach(function(c){
-            dom.append(c);
-          });
-          dom.scrollTop = dom.scrollHeight;
-          trigger.fire();
-        }
-      },
+      after:after,
+      flush:flush,
       dom:dom
     };
   }
@@ -79,13 +86,13 @@
           code = 10;
         }
         if (codes[code]) {
-          ui.console.dom.innerHTML += String.fromCharCode(code);
+          ui.console.dom.append(String.fromCharCode(code));
           action += String.fromCharCode(code);
         } else if (keys[key]) {
-          ui.console.dom.innerHTML += key;
+          ui.console.dom.append(key);
           action += key;
         } else if (code == 13) {
-          ui.console.dom.innerHTML += String.fromCharCode(10);
+          ui.console.dom.append(String.fromCharCode(10));
           actionHandler(action);
           action = "";
         } else if (code == 8 && action.length > 0) {
@@ -129,11 +136,11 @@
           },{})
           Object.keys(domOpts).forEach(function(key){
             var eventAction = function() {
+              Object.values(domOpts).forEach(function(value){
+                value.dom.removeEventListener("click",value.event);
+              });
               ui.console.println(key);
               ui.console.after(function(){
-                Object.values(domOpts).forEach(function(value){
-                  value.dom.removeEventListener("click",value.event);
-                });
                 actionHandler.handle(key);
               });
             }
@@ -153,12 +160,20 @@
         var sprite = document.createElement("a");
         sprite.innerHTML = label;
         var eventAction = function(){
-          ui.console.println(action);
-          ui.console.after(function(){
-            ui.output.after(function() {
-              sprite.removeEventListener("click",eventAction);
+          sprite.removeEventListener("click",eventAction);
+          console.log("just clicked on '" + label + "' for action '" + action + "'")
+          console.log("redrawing map")
+          ui.output.after(function() {
+            console.log("map redrawn")
+            ui.console.println(action);
+            ui.console.after(function(){
+              console.log("handling action")
               actionHandler.handle(action);
+              console.log("action handled")
             });
+            console.log("flushing console")
+            ui.console.flush();
+            console.log("console flushed")
           });
         }
         sprite.addEventListener("click",eventAction);
