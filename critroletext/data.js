@@ -443,7 +443,7 @@
     				piercing:"1d8"
     		},
     		properties:{
-    				loading:true
+    				loading:true,
     				Ammunition:[80,320]
     		}
     },{
