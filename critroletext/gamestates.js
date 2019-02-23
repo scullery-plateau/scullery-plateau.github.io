@@ -227,7 +227,6 @@
         ctx.target = ctx.party[move.index];
         var rollLog = Roller.rollAttacks(npc.attack.perTurn,npc.attack.bonus,ctx.target.armor);
         ctx.successes = rollLog.pop();
-        console.log("successes: " + ctx.successes);
         ctx.damage = Roller.rollDamage(npc.attack.damage,ctx.successes).pop();
         var tplPrinter = Template.buildTemplatePrinter(ctx,ui.console)
         var result = attackResult(ctx.successes);
@@ -330,14 +329,14 @@
             state:"attack",
             target:ctx.foes[ctx.foeKeys[value]]
           }));
-        }
-        if (value.length == 1) {
+        } else if (value.length == 1) {
           var index = value.charCodeAt(0) - "a".charCodeAt(0);
           if (index >= 0 && index < ctx.foes.length) {
             throw "Enemy '" + ctx.foes[index].name + "' is already dead."
           }
+        } else {
+          throw "'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".";
         }
-        throw "'" + value + "' is not a valid input. Please choose one of " + Object.keys(ctx.foeKeys) + ".";
       }
     },
     "attack":{
@@ -347,7 +346,6 @@
       "auto":function(ui,ctx) {
         var rollLog = Roller.rollAttacks(ctx.turn.attack.perTurn,ctx.turn.attack.bonus,ctx.target.armor);
         ctx.successes = rollLog.pop();
-        console.log("successes: " + ctx.successes);
         var newState = {
           state:attackResult(ctx.successes)
         };
