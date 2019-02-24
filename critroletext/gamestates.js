@@ -97,15 +97,9 @@
       }
     },
     "start":{
-      "prompt":[],
-      "opts":function(ui,ctx) {
-        ui.console.println([
-          "Type '",
-          ui.buildActiveSprite("Start","Start"),
-          "' and hit 'ENTER' to begin."
-        ]);
-      },
-      "input":validateOneOf({state:"drawMap"},["Start"])
+      "prompt":["Click on, tap on, or type (then hit 'ENTER') the highlighted option of your choice as directed."],
+      "opts":["Start Game"],
+      "input":validateOneOf({state:"drawMap"},["Start Game"])
     },
     "drawMap":{
       "prompt":[],
