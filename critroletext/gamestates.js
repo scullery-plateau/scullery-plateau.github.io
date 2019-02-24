@@ -97,7 +97,8 @@
       }
     },
     "start":{
-      "prompt":["Click on, tap on, or type (then hit 'ENTER') the highlighted option of your choice as directed."],
+      "prompt":["Click on, tap on, or type (then hit 'ENTER') the highlighted option of your choice as directed.",
+                "Press any key or click or tap anywhere to complete text."],
       "opts":["Start Game"],
       "input":validateOneOf({state:"drawMap"},["Start Game"])
     },
