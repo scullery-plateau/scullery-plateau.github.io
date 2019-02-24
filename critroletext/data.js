@@ -3,15 +3,17 @@
     map:{
       tabSize:4,
       rows:[
-        "..........",
-        "..........",
-        "........^.",
-        "\\......./=",
-        "~\\../=#=/.",
-        "~~==/.....",
-        "~\\........",
-        "~~~~\\.....",
-        "~~~~~~\\..."
+        "...............",
+        "...............",
+        "...............",
+        "...............",
+        "........^......",
+        "\\......./======",
+        "~\\../=#=/......",
+        "~~==/..........",
+        "~\\.............",
+        "~~~~\\..........",
+        "~~~~~~\\........"
       ],
       legend:{
         ".":"Open Space",
@@ -53,7 +55,7 @@
       initiative:8,
       size:"medium",
       maxHealth:81,
-      loc:"A3"
+      loc:"A5"
     },{
       name: "Vex",
       attack:{
@@ -72,7 +74,7 @@
       initiative:5,
       size:"medium",
       maxHealth:72,
-      loc:"B4"
+      loc:"B6"
     },{
       name: "Keyleth",
       attack:{
@@ -89,7 +91,7 @@
       initiative:2,
       size:"medium",
       maxHealth:71,
-      loc:"C3"
+      loc:"C5"
     },{
       name: "Scanlan",
       attack:{
@@ -106,7 +108,7 @@
       initiative:2,
       size:"medium",
       maxHealth:59,
-      loc:"E2"
+      loc:"E4"
     },{
       name: "Grog",
       attack:{
@@ -126,7 +128,7 @@
       initiative:2,
       size:"medium",
       maxHealth:134,
-      loc:"E4"
+      loc:"E6"
     },{
       name: "Pike",
       attack:{
@@ -143,7 +145,7 @@
       initiative:0,
       size:"medium",
       maxHealth:73,
-      loc:"H6"
+      loc:"J9"
     },{
       name:"Vax",
       attack:{
@@ -161,28 +163,28 @@
       initiative:5,
       size:"medium",
       maxHealth:66,
-      loc:"G7"
+      loc:"G9"
     }],
     foes:[{
       name:"Ner'zhul",
       type:"Orc War Chief",
-      loc:"G3"
+      loc:"J4"
     },{
       name:"Vol'jin",
       type:"Orc War Chief",
-      loc:"F2"
+      loc:"F4"
     },{
       name:"Thrall",
       type:"Orc War Chief",
-      loc:"J6"
+      loc:"J8"
     },{
       name:"Xaakt",
       type:"Orc War Chief",
-      loc:"I9"
+      loc:"K11"
     },{
       name:"Paghorim",
       type:"Orc War Chief",
-      loc:"C1"
+      loc:"E2"
     }],
     monsters:[{
       type:"Orc War Chief",
@@ -204,412 +206,465 @@
       strategy:"distance, armor, health"
     }],
     item:[{
-    		name:"Leather",
-    		heft:"light",
-    		wear:"armor",
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		effect:{armor:"${dexterity}+11"},
-    		weight:10
+      name:"Leather",
+      heft:"light",
+      wear:"armor",
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      effect:{armor:"${dexterity}+11"},
+      weight:10
     },{
-    		name:"Studded Leather",
-    		heft:"light",
-    		wear:"armor",
-    		cost:{
-    				value:45,
-    				unit:"gold"
-    		},
-    		effect:{armor:"${dexterity}+12"},
-    		weight:13
+      name:"Studded Leather",
+      heft:"light",
+      wear:"armor",
+      cost:{
+        value:45,
+        unit:"gold"
+      },
+      effect:{armor:"${dexterity}+12"},
+      weight:13
     },{
-    		name:"Hide",
-    		heft:"Medium",
-    		wear:"armor",
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		effect:{armor:"(${dexterity}>2?2:${dexterity})+12"},
-    		weight:12
+      name:"Hide",
+      heft:"Medium",
+      wear:"armor",
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      effect:{armor:"(${dexterity}>2?2:${dexterity})+12"},
+      weight:12
     },{
-    		name:"Chain Shirt",
-    		heft:"Medium",
-    		wear:"armor",
-    		cost:{
-    				value:50,
-    				unit:"gold"
-    		},
-    		effect:{armor:"(${dexterity}>2?2:${dexterity})+13"},
-    		weight:20
+      name:"Chain Shirt",
+      heft:"Medium",
+      wear:"armor",
+      cost:{
+        value:50,
+        unit:"gold"
+      },
+      effect:{armor:"(${dexterity}>2?2:${dexterity})+13"},
+      weight:20
     },{
-    		name:"Scale Mail",
-    		heft:"Medium",
-    		wear:"armor",
-    		cost:{
-    				value:50,
-    				unit:"gold"
-    		},
-    		effect:{armor:"(${dexterity}>2?2:${dexterity})+14"},
-    		weight:45
+      name:"Scale Mail",
+      heft:"Medium",
+      wear:"armor",
+      cost:{
+        value:50,
+        unit:"gold"
+      },
+      effect:{armor:"(${dexterity}>2?2:${dexterity})+14"},
+      weight:45
     },{
-    		name:"Breastplate",
-    		heft:"Medium",
-    		wear:"armor",
-    		cost:{
-    				value:400,
-    				unit:"gold"
-    		},
-    		effect:{armor:"(${dexterity}>2?2:${dexterity})+14"},
-    		weight:20
+      name:"Breastplate",
+      heft:"Medium",
+      wear:"armor",
+      cost:{
+        value:400,
+        unit:"gold"
+      },
+      effect:{armor:"(${dexterity}>2?2:${dexterity})+14"},
+      weight:20
     },{
-    		name:"Ring Mail",
-    		heft:"Heavy",
-    		wear:"armor",
-    		cost:{
-    				value:30,
-    				unit:"gold"
-    		},
-    		effect:{armor:"14"},
-    		weight:40
+      name:"Ring Mail",
+      heft:"Heavy",
+      wear:"armor",
+      cost:{
+        value:30,
+        unit:"gold"
+      },
+      effect:{armor:"14"},
+      weight:40
     },{
-    		name:"Chain Mail",
-    		heft:"Heavy",
-    		wear:"armor",
-    		cost:{
-    				value:75,
-    				unit:"gold"
-    		},
-    		effect:{armor:"16"},
-    		weight:55
+      name:"Chain Mail",
+      heft:"Heavy",
+      wear:"armor",
+      cost:{
+        value:75,
+        unit:"gold"
+      },
+      effect:{armor:"16"},
+      weight:55
     },{
-    		name:"Splint",
-    		heft:"Heavy",
-    		wear:"armor",
-    		cost:{
-    				value:200,
-    				unit:"gold"
-    		},
-    		effect:{armor:"17"},
-    		weight:60
+      name:"Splint",
+      heft:"Heavy",
+      wear:"armor",
+      cost:{
+        value:200,
+        unit:"gold"
+      },
+      effect:{armor:"17"},
+      weight:60
     },{
-    		name:"Shield",
-    		equipt:1,
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		effect:{armor:"${armor}+2"},
-    		weight:6
+      name:"Shield",
+      wield:1,
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      effect:{armor:"${armor}+2"},
+      weight:6
     },{
-    		name:"Club",
-    		class:"simple",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:1,
-    				unit:"silver"
-    		},
-    		weight:2,
-    		damage:{
-    				bludgeoning:"1d4"
-    		}
+      name:"Club",
+      class:"simple",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:1,
+        unit:"silver"
+      },
+      weight:2,
+      damage:{
+        bludgeoning:"1d4"
+      }
     },{
-    		name:"Dagger",
-    		class:"simple",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:2,
-    				unit:"gold"
-    		},
-    		weight:1,
-    		damage:{
-    				piercing:"1d4"
-    		},
-    		properties:{
-    				Finesse:true,
-    				Thrown:[20,60]
-    		}
+      name:"Dagger",
+      class:"simple",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:2,
+        unit:"gold"
+      },
+      weight:1,
+      damage:{
+        piercing:"1d4"
+      },
+      properties:{
+        Finesse:true,
+        Thrown:[20,60]
+      }
     },{
-    		name:"Greatclub",
-    		class:"simple",
-    		equipt:2,
-    		cost:{
-    				value:2,
-    				unit:"silver"
-    		},
-    		weight:10,
-    		damage:{
-    				bludgeoning:"1d8"
-    		}
+      name:"Greatclub",
+      class:"simple",
+      wield:2,
+      cost:{
+        value:2,
+        unit:"silver"
+      },
+      weight:10,
+      damage:{
+        bludgeoning:"1d8"
+      }
     },{
-    		name:"Handaxe",
-    		class:"simple",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:5,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				slashing:"1d6"
-    		},
-    		properties:{
-    				Thrown:[20,60]
-    		}
+      name:"Handaxe",
+      class:"simple",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:5,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        slashing:"1d6"
+      },
+      properties:{
+        Thrown:[20,60]
+      }
     },{
-    		name:"Javelin",
-    		class:"simple",
-    		equipt:1,
-    		cost:{
-    				value:5,
-    				unit:"silver"
-    		},
-    		weight:2,
-    		damage:{
-    				piercing:"1d6"
-    		},
-    		properties:{
-    				Thrown:[30,120]
-    		}
+      name:"Javelin",
+      class:"simple",
+      wield:1,
+      cost:{
+        value:5,
+        unit:"silver"
+      },
+      weight:2,
+      damage:{
+        piercing:"1d6"
+      },
+      properties:{
+        Thrown:[30,120]
+      }
     },{
-    		name:"Light Hammer",
-    		class:"simple",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:2,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				bludgeoning:"1d4"
-    		},
-    		properties:{
-    				Thrown:[20,60]
-    		}
+      name:"Light Hammer",
+      class:"simple",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:2,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        bludgeoning:"1d4"
+      },
+      properties:{
+        Thrown:[20,60]
+      }
     },{
-    		name:"Mace",
-    		class:"simple",
-    		equipt:1,
-    		cost:{
-    				value:5,
-    				unit:"gold"
-    		},
-    		weight:4,
-    		damage:{
-    				bludgeoning:"1d6"
-    		}
+      name:"Mace",
+      class:"simple",
+      wield:1,
+      cost:{
+        value:5,
+        unit:"gold"
+      },
+      weight:4,
+      damage:{
+        bludgeoning:"1d6"
+      }
     },{
-    		name:"Quarterstaff",
-    		class:"simple",
-    		equipt:1,
-    		cost:{
-    				value:2,
-    				unit:"silver"
-    		},
-    		weight:4,
-    		damage:{
-    				bludgeoning:["1d6","1d8"]
-    		}
+      name:"Quarterstaff",
+      class:"simple",
+      wield:1,
+      cost:{
+        value:2,
+        unit:"silver"
+      },
+      weight:4,
+      damage:{
+        bludgeoning:["1d6","1d8"]
+      }
     },{
-    		name:"Spear",
-    		class:"simple",
-    		equipt:1,
-    		cost:{
-    				value:1,
-    				unit:"gold"
-    		},
-    		weight:3,
-    		damage:{
-    				piercing:["1d6","1d8"]
-    		},
-    		properties:{
-    				Thrown:[20,60]
-    		}
+      name:"Spear",
+      class:"simple",
+      wield:1,
+      cost:{
+        value:1,
+        unit:"gold"
+      },
+      weight:3,
+      damage:{
+        piercing:["1d6","1d8"]
+      },
+      properties:{
+        Thrown:[20,60]
+      }
     },{
-    		name:"Light Crossbow",
-    		class:"simple",
-    		equipt:2,
-    		cost:{
-    				value:25,
-    				unit:"gold"
-    		},
-    		weight:5,
-    		damage:{
-    				piercing:"1d8"
-    		},
-    		properties:{
-    				loading:true,
-    				Ammunition:[80,320]
-    		}
+      name:"Light Crossbow",
+      class:"simple",
+      wield:2,
+      cost:{
+        value:25,
+        unit:"gold"
+      },
+      weight:5,
+      damage:{
+        piercing:"1d8"
+      },
+      properties:{
+        loading:true,
+        Ammunition:[80,320]
+      }
     },{
-    		name:"Shortbow",
-    		class:"simple",
-    		equipt:2,
-    		cost:{
-    				value:25,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				piercing:"1d6"
-    		},
-    		properties:{
-    				Ammunition:[80,320]
-    		}
+      name:"Shortbow",
+      class:"simple",
+      wield:2,
+      cost:{
+        value:25,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        piercing:"1d6"
+      },
+      properties:{
+        Ammunition:[80,320]
+      }
     },{
-    		name:"Battleaxe",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		weight:4,
-    		damage:{
-    				slashing:["1d8","1d10"]
-    		}
+      name:"Battleaxe",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      weight:4,
+      damage:{
+        slashing:["1d8","1d10"]
+      }
     },{
-    		name:"Greataxe",
-    		class:"martial",
-    		heft:"Heavy",
-    		equipt:2,
-    		cost:{
-    				value:30,
-    				unit:"gold"
-    		},
-    		weight:7,
-    		damage:{
-    				slashing:"1d12"
-    		}
+      name:"Greataxe",
+      class:"martial",
+      heft:"Heavy",
+      wield:2,
+      cost:{
+        value:30,
+        unit:"gold"
+      },
+      weight:7,
+      damage:{
+        slashing:"1d12"
+      }
     },{
-    		name:"Greatsword",
-    		class:"martial",
-    		heft:"Heavy",
-    		equipt:2,
-    		cost:{
-    				value:50,
-    				unit:"gold"
-    		},
-    		weight:6,
-    		damage:{
-    				slashing:"2d6"
-    		}
+      name:"Greatsword",
+      class:"martial",
+      heft:"Heavy",
+      wield:2,
+      cost:{
+        value:50,
+        unit:"gold"
+      },
+      weight:6,
+      damage:{
+        slashing:"2d6"
+      }
     },{
-    		name:"Longsword",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:15,
-    				unit:"gold"
-    		},
-    		weight:3,
-    		damage:{
-    				slashing:["1d8","1d10"]
-    		}
+      name:"Longsword",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:15,
+        unit:"gold"
+      },
+      weight:3,
+      damage:{
+        slashing:["1d8","1d10"]
+      }
     },{
-    		name:"Maul",
-    		class:"martial",
-    		heft:"Heavy",
-    		equipt:2,
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		weight:10,
-    		damage:{
-    				bludgeoning:"2d6"
-    		}
+      name:"Maul",
+      class:"martial",
+      heft:"Heavy",
+      wield:2,
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      weight:10,
+      damage:{
+        bludgeoning:"2d6"
+      }
     },{
-    		name:"Morningstar",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:15,
-    				unit:"gold"
-    		},
-    		weight:4,
-    		damage:{
-    				piercing:"1d8"
-    		}
+      name:"Morningstar",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:15,
+        unit:"gold"
+      },
+      weight:4,
+      damage:{
+        piercing:"1d8"
+      }
     },{
-    		name:"Rapier",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:15,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				piercing:"1d8"
-    		},
-    		properties:{
-    				finesse:true
-    		}
+      name:"Rapier",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:15,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        piercing:"1d8"
+      },
+      properties:{
+        finesse:true
+      }
     },{
-    		name:"Scimitar",
-    		class:"martial",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:25,
-    				unit:"gold"
-    		},
-    		weight:3,
-    		damage:{
-    				piercing:"1d6"
-    		},
-    		properties:{
-    				finesse:true
-    		}
+      name:"Scimitar",
+      class:"martial",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:25,
+        unit:"gold"
+      },
+      weight:3,
+      damage:{
+        piercing:"1d6"
+      },
+      properties:{
+        finesse:true
+      }
     },{
-    		name:"Shortsword",
-    		class:"martial",
-    		heft:"Light",
-    		equipt:1,
-    		cost:{
-    				value:10,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				piercing:"1d6"
-    		},
-    		properties:{
-    				finesse:true
-    		}
+      name:"Shortsword",
+      class:"martial",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:10,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        piercing:"1d6"
+      },
+      properties:{
+        finesse:true
+      }
     },{
-    		name:"Trident",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:5,
-    				unit:"gold"
-    		},
-    		weight:4,
-    		damage:{
-    				piercing:["1d6","1d8"]
-    		},
-    		properties:{
-    				Thrown:[20,60]
-    		}
+      name:"Trident",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:5,
+        unit:"gold"
+      },
+      weight:4,
+      damage:{
+        piercing:["1d6","1d8"]
+      },
+      properties:{
+        Thrown:[20,60]
+      }
     },{
-    		name:"Warhammer",
-    		class:"martial",
-    		equipt:1,
-    		cost:{
-    				value:15,
-    				unit:"gold"
-    		},
-    		weight:2,
-    		damage:{
-    				bludgeoning:["1d8","1d10"]
-    		}
+      name:"Warhammer",
+      class:"martial",
+      wield:1,
+      cost:{
+        value:15,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        bludgeoning:["1d8","1d10"]
+      }
+    },{
+      name:"Hand Crossbow",
+      class:"martial",
+      heft:"Light",
+      wield:1,
+      cost:{
+        value:75,
+        unit:"gold"
+      },
+      weight:3,
+      damage:{
+        piercing:"1d6"
+      },
+      properties:{
+        loading:true,
+        Ammunition:[30,120]
+      }
+    },{
+      name:"Heavy Crossbow",
+      class:"martial",
+      heft:"Heavy",
+      wield:2,
+      cost:{
+        value:50,
+        unit:"gold"
+      },
+      weight:18,
+      damage:{
+        piercing:"1d10"
+      },
+      properties:{
+        loading:true,
+        Ammunition:[100,400]
+      }
+    },{
+      name:"Longbow",
+      class:"martial",
+      heft:"Heavy",
+      wield:2,
+      cost:{
+        value:50,
+        unit:"gold"
+      },
+      weight:2,
+      damage:{
+        piercing:"1d8"
+      },
+      properties:{
+        Ammunition:[150,600]
+      }
+    }],
+    "conditions":[{
+      name:"Prone"
     }]
   };
 })();
