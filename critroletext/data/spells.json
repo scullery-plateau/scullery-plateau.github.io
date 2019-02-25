@@ -1,0 +1,58 @@
+[{
+  "name":"Earth Tremor",
+  "school":"Evocation",
+  "level":1,
+  "castingTime":"action",
+  "components":["V","S"],
+  "range":"self",
+  "duration":"instantaneous",
+  "casterType":["Bard","Druid","Sorcerer","Wizard"],
+  "description":"The ground beneath your feet begins to shake and quake ...",
+  "effect":{
+    "area":{"radius":10},
+    "target":"not self",
+    "save":"DEX",
+    "fail":{
+      "damage":{"bludgeoning":"1d6"},
+      "condition":"prone"
+    },
+    "higherLevels":{"perLevel":{"damage":{"bludgeoning":"1d6"}}},
+  }
+},{
+  "name":"Faerie Fire",
+  "school":"Evocation",
+  "level":1,
+  "castingTime":"action",
+  "components":["V"],
+  "range":60,
+  "duration":{
+    "value":1,
+    "unit":"minute",
+    "concentration":true
+  },
+  "casterType":["Bard","Druid"],
+  "description":"",
+  "effect":{
+    "area":{"cube":20},
+    "target":"any",
+    "save":"DEX",
+    "fail":{
+      "attackAgainst":"Advantage",
+      "lowLight":10
+    }
+  },
+},{
+  "name":"Gust",
+  "school":"Transmutation",
+  "level":0,
+  "castingTime":"action",
+  "components":["V","S"],
+  "range":30,
+  "duration":"instantaneous",
+  "casterType":["Sorcerer","Wizard"],
+  "description":"",
+  "effect":{
+    "target":[{"size":"medium"},{"size":"small"},{"size":"tiny"}],
+    "move":5
+  }
+}]

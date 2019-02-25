@@ -1,0 +1,39 @@
+[{
+  name:"Percy",
+  fullName:"Percival Fredrickstein Von Musel Klossowski De Rolo III",
+  class:{"Gunslinger":10},
+  race:"Human",
+  background:"Noble",
+  alignment:"Neutral Good"
+  proficiency:4,
+  stats:{
+    STR:{
+      value:12,
+      savingThrow:1
+    },
+    DEX:22,
+    CON:{
+      value:14,
+      savingThrow:1
+    },
+    INT:16,
+    WIS:16,
+    CHA:14
+  },
+  abilities:{
+    History:true,
+    Perception:true,
+    Performance:true
+  },
+  proficiencies:[{wear:"armor"},{tag:"shield"},{tag:"firearm"},{class:"simple"},{class:"martial"},{name:"Tinkerer's Kit"}],
+  languages:["Common","Celestial","Elvish"],
+  purse:{},
+  inventory:["Raven Mask","Tinker's Kit","Rapier","Quickness of Action Manual","Bad News","Pepperbox"],
+  feats:["Sharpshooter"],
+  classFeatures:["Fighting Style: Archery","Second Wind","Grit","Extra Attack","Indominable"]
+  armor:18,
+  movement:30,
+  initiative:8,
+  size:"medium",
+  maxHealth:81,
+}]

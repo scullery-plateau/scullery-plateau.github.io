@@ -1,0 +1,19 @@
+[{
+  "type":"Orc War Chief",
+  "maxHealth":93,
+  "size":"medium",
+  "attack":{
+    "name":"Warpike",
+    "bonus":6,
+    "perTurn":2,
+    "damage":[{
+      "type":"bludgeoning",
+      "roll":"2d8",
+      "bonus":4
+    }]
+  },
+  "armor":16,
+  "movement":60,
+  "initiative":1,
+  "strategy":"distance, armor, health"
+}]
