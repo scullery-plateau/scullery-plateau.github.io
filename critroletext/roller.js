@@ -64,7 +64,34 @@
   var roll20 = function(opts) {
     return roll(20);
   }
+  var rollerConfig = function() {
+    var state = 0;
+    this.applyAdvantage = function() {
+      state++;
+    }
+    this.applyDisadvantage = function() {
+      state--;
+    }
+    this.roll = function() {
+      if (state > 0) {
+        return Math.max(roll20(),roll20());
+      } else if (state < 0) {
+        return Math.min(roll20(),roll20());
+      } else {
+        return roll20();
+      }
+    }
+  }
+  var validateConfig = function(config) {
+    if (!(config instanceOf rollerConfig)) {
+      return new rollerConfig();
+    }
+    return config;
+  }
   window.Roller = {
+    buildConfig:function() {
+      return new rollerConfig();
+    },
     roll:roll,
     max:function(side,count,bonus) {
       return (side * defaultCount(count)) + bonus;
@@ -72,12 +99,14 @@
     avg:function(side,count,bonus) {
       return ((side + 1) * 0.5 * defaultCount(count)) + bonus;
     },
-    rollCheck:function(bonus,target,success,failure,opts) {
-      return (((roll20(opts) + bonus) > target) ? success : failure);
+    rollCheck:function(bonus,target,success,failure,config) {
+      config = validateConfig(config);
+      return (((config.roll() + bonus) > target) ? success : failure);
     },
-    rollAttacks:function(attacksPerTurn,attack,armor,opts) {
+    rollAttacks:function(attacksPerTurn,attack,armor,config) {
+      config = validateConfig(config);
       var results = "?".repeat(attacksPerTurn).split("").map(function(){
-        var result = roll20(opts);
+        var result = config.roll();
         var total = result + attack;
         var message = result + "(d20) + " + attack + " = " + total;
         return {message:message,success:(total>armor)};
