@@ -1,0 +1,37 @@
+[
+  {
+    "brick-corner": "a|ab7dcb|abc2d4cbddbd|abc3d3cd|abdc3d2cd|abddc|abd2c2b3dcb|abd2c2d4cd|abd2cbdccd2cd|abbddcbdc|abd2c6b|abd2cd2c2d|abbddcbddcbc|ac4bddcbdccdd|ad3cbddcbdc|abd2cbddcbdcdcc",
+    "brick-wall": "a|bdcb5dcb|ddcbddbd2cbddbd|ddcd6cd||c|b3dcb5dcb|d4cd6cd||c|bdcb5dcb|ddcd6cd|c|d4cd6cd|c",
+    "stair-down": "c|ca9a3c|cadc5d4ac|cadc5da2dac|cad7a2dac||cad3b2da2dac|||cadccdb2da2dac||||cad9ddac|ca9a3c|c",
+    "statue": "b4d5b|bbd2cbaabcd2b|bdaadbbaabbdaadb|bdbdcb5dbbdb|bdcdbbd3bbdcdb|bbdcbda3dbcdb|bddcdaaddaadcddb|dadcdbaddabdcdad|dbd2cbaabcd2bd|dadcb7cdad|daadcbbaabbcdaad|bd3cb3cd|bbdabdc3dbaddb|bdabbcd3cbbadb|bd9d3b",
+    "half-door": "bc5bia|ccb3ccia|cbbaabbcia|cba3bcig|cba3bcigh|cbbaabbcigh|ccb3ccigh|bc5bigh|id5iigh|ie5iighhiihh|i8ghiaaih|fieddeifigiaggai|fieddeifigag3a|fiieeiifig2iigg|i8ggi3g|i",
+    "stone-floor": "bcaabaabbcaaba|abca2cb2ca|aabc2ba2bcaba|aab3a4bcaba|aabba3bacbba|acbaaba2cb2caa|cbaaba2cba2bc|bbaba2cba4b|bbca2cba5cb|aabc2ba3bacba|a2b2a3bacba|a3baababacbba|abaabca3cb2a|aabaabc3baabca|a2baab3a3bc|ca5bba5b"
+  },
+  {
+    "half-door": [
+      "white",
+      "orangered",
+      "maroon",
+      "palegoldenrod",
+      "darkgoldenrod",
+      "saddlebrown",
+      "mediumpurple",
+      "indigo",
+      "black"
+    ],
+    "stone": [
+      "lightgrey",
+      "slategrey",
+      "darkslategrey",
+      "black"
+    ]
+  },
+  {
+    "quarters-ne": [],
+    "quarters-se": [],
+    "quarters-nw": [],
+    "quarters-sw": [],
+    "hall-east": [],
+    "hall-west": []
+  }
+]

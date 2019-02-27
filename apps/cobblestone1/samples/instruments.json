@@ -1,0 +1,25 @@
+[{
+	"flute": "a|a7e2a|a6ecccea|a5ec3ea|a5ececcea|a4ec4ea|a4ececcdea|a3ec4dea|a3eccecddea|a3ec3dea|a3ececddea|a3eccddea|a3edddeea|a4eeedcea|a7eeea|a",
+	"pipes": "a6eea|a5eccea|a4eec2ea|a3eccec2ea|a2eec2ec2ea|aaeccec2ec2ea|aeec2ec2ecceea|eccec2ecce2bbe|ec2ecce2bbe|aecce2bbe3cce|edeebbe3ccedde|edde3ccedde2c|edc2dedde2c2a|ced2e3c4a|ace2c7a|a2c6a",
+	"mandolin": "a9ae3a|a9aebcce|a9eccece|a5e3ce|a4ebbeceea|aae3bececea|aeb3ececceea|ebbebecec2eea|ebeeececce3a|ebebeec3eea|eb2c5ea|ebbccceeccea|eecccedcccea|aeec5eecca|ce8c3a|ecce5c3a",
+	"horn": "a|a4e2a|a2eebcbea|aaebbcdcbea|aaeccdecbeea|aebcdeebcebea|aebcdebcecbeea|ebccebcedccebea|eb3ceccddebe|ae4cdc2ecece|a2eddccd2ede|a2ed2c2dedea|aacced4e2ca|ac2ed3ec4a|ac3e3c5a|aac9cca",
+	"drum": "a9aeeea|a4e5bebea|aaaeeb3ebebcea|aaebbc2ebebcea|aebc3ebebceea|aebc2ebebcecbea|aebccceebceccbea|aeebbcceeecbbeea|aebeeb5eebea|aeebbe6bbeea|aebeeb6eedea|aebbde6ddea|cebddbbdcceedeec|ccedbbddcceddec|c2eeddcce3c|ac3e5c3a",
+	"harp": "aae3a|aebbbea|aebce4a|aecb3dcea|aaecceeedcea|a2eebcbecbea|a3cbcbcedcea|a3cbcbcbedcea|a3cbcbcbcedcea|a3cbcbcbcbedea|a3cbcbcbcbbece|a3cbcbcbcbbede|aaeecececbcbbede|cebdcdcdceceecde|cedde3d3cdec|ae2c3e5ca"
+},
+{
+	"instruments": ["none",
+	"white",
+	"lightgreen",
+	"green",
+	"black"]
+},
+{
+	"all-instruments": [{
+		"horn|instruments": ["a/a"],
+		"harp|instruments": ["b/a"],
+		"drum|instruments": ["c/a"],
+		"pipes|instruments": ["a/b"],
+		"flute|instruments|flip-over": ["b/b"],
+		"mandolin|instruments": ["c/b"]
+	}]
+}]

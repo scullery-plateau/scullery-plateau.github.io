@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CASTLEQUEST!</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="util.js"></script>
+  <script src="ti85.js"></script>
+  <script src="game.js"></script>
+</head>
+<body onload="window.game = new Game(new TI85('canvas','portrait','console','control'))">
+  <table>
+    <tr>
+      <td>
+        <svg width="400px" height="400px" id="canvas"></svg>
+      </td>
+      <td>
+        <div id="portrait"></div>
+      </td>
+    </tr>
+  </table>
+  <div id="console"></div>
+  <br/>
+  <div id="control"></div>
+</body>
+</html>

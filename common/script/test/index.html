@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <title>Testing "common" javascript code</title>
+		<style>
+			.fail {
+				color: red;
+				font-weight: bold;
+			}
+			.success {
+				color: green;
+				text-decoration: italic;
+			}
+		</style>
+		<script type="text/javascript">
+  		var temp = console.log, lines = [];
+			console.log = function(body) {
+			if (typeof body == "object") {
+				body = JSON.stringify(body);
+			}
+  			lines.push(body);
+  			temp.call(console, body);
+			}
+		</script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/render/Mint/format.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/render/Mint/mint.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/testing/Expectable/expecting.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/testing/Expectable/expectable.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/testing/Suitener/suitener.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/testing/Mockabilly/mockabilly.js"></script>
+    <script src="https://cdn.rawgit.com/voltron42/blender/master/runtest.js"></script>
+    <script type="text/javascript">
+			var runner;
+			(function(){
+				runner = new TestRunner();
+				runner.init();
+			})()
+		</script>
+    <script src="../extend/Array.js"></script>
+    <script src="../extend/Array.test.js"></script>
+    <script src="../extend/DOMParser.js"></script>
+    <script src="../extend/XML.js"></script>
+    <script src="../extend/XML.test.js"></script>
+    <script type="text/javascript">
+      function runAllTests() {
+        document.getElementById("output").innerHTML = runner.showTests();
+        document.getElementById("console").innerHTML = lines.join("\n");
+      }
+    </script>
+  </head>
+  <body onload="runAllTests()">
+    <h2>Test Results</h2>
+		<pre>
+      <ul id="output"></ul>
+    </pre>
+		<pre id="console"></pre>
+	</body>
+</html>

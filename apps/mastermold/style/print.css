@@ -1,0 +1,19 @@
+#print {
+  display: none;
+}
+
+@media print {
+  #ctrl, #gallery {
+    display: none;
+  }
+  #print {
+    display: block;
+  }
+  svg {
+    page-break-after: always;
+  }
+  @page {
+    size: portrait;
+    margin: 0.5in 0.75in 0.5in 0.75in;
+  }
+}

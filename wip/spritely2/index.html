@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <title>Spritely: Pixel Art</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../common/style/print.css"/>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <style type="text/css">
+      img {
+        border: 1px solid black;
+      }
+      .modal {
+        display: none;
+      }
+      input[type='number'] {
+        width: 3em;
+      }
+      .paletteBar {
+        padding: 3;
+      }
+    </style>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="../../common/script/bootstrap/popup.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registryName = "registry";
+      window.registry = new Registry();
+    </script>
+    <script src="../../common/script/drawUtil/palettebar.js"></script>
+    <script src="../../common/script/drawUtil/gridtf.js"></script>
+    <script src="../../common/script/drawUtil/pixelcanvas.js"></script>
+    <script src="../../common/script/drawUtil/pixelpainter.js"></script>
+    <script src="../../common/script/drawUtil/point.js"></script>
+    <script src="../../common/script/drawUtil/colorconstants.js"></script>
+    <script src="../../common/script/drawUtil/tileparser.js"></script>
+    <script src="script/app.js"></script>
+    <script type="text/javascript">
+      var Spritely = registry.invoke('Spritely');
+      window.pix = new Spritely('pix','input','widthField','heightField','colorSelect','color','palette','paletteBar','canvas','builder','out','codeOut',16,10);
+      window.popup = new PopupHandler(['loadSave','palettePop','transform','about']);
+    </script>
+  </head>
+  <body onload="pix.init();popup.init();">
+    <div class="container">
+      <div class="row">
+        <h1>Spritely: Pixel Art</h1>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="row">
+            <div class="btn-group">
+              <button onclick="popup.open('loadSave')">Load&nbsp;/&nbsp;Save</button>
+              <button onclick="popup.open('palettePop')">Palette</button>
+              <button onclick="popup.open('transform')">Transform</button>
+              <button onclick="popup.open('about')">About</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <label for="width"> Width:</label>
+              <input type="number" id="widthField" name="width" value="0" onChange="pix.resize()"/>
+            </div>
+            <div class="col-sm">
+              <label for="height"> Height:</label>
+              <input type="number" id="heightField" name="height" value="0" onChange="pix.resize()"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm">
+              <div class="btn-group" id="paletteBar"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-8">
+          <div id="canvas"></div>
+        </div>
+      </div>
+      
+      <div class="modal" id="loadSave">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Load / Save</h4>
+              <button type="button" class="close" onclick="popup.close('loadSave')">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <input type="file" id="input" onchange="pix.loadData('input')"/>
+              <span id="codeOut"></span>
+              <br/>
+              <label for="scale"> Scale:</label>
+              <input type="number" id="scaleField" name="scale" value="1" min="1" onChange="pix.setScale(this.value)"/>
+              <canvas id="builder" style="display: none;"></canvas>
+              <p>Click on the image below to download the image.</p>
+              <div id="out"></div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="popup.close('loadSave')">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="palettePop">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Palette</h4>
+              <button type="button" class="close" onclick="popup.close('palettePop')">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <input type="checkbox" name="transparent" onChange="pix.makeTransparent(this.checked)"/>
+              <label for="transparent">Make Image Transparent?</label>
+              <br/>
+              <div id="palette"></div>
+              <br/>
+              <button onClick="pix.addColor()">Add Color</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="popup.close('palettePop')">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal" id="transform">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">Transform</h4>
+              <button type="button" class="close" onclick="popup.close('transform')">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <button name="transform" onClick="pix.transform('flip-down')">Flip Down</button>
+              <button name="transform" onClick="pix.transform('flip-over')">Flip Over</button>
+              <button name="transform" onClick="pix.transform('turn-right')">Turn Right</button>
+              <button name="transform" onClick="pix.transform('turn-left')">Turn Left</button>
+              <button name="transform" onClick="pix.transform('shift-right')">Shift Right</button>
+              <button name="transform" onClick="pix.transform('shift-left')">Shift Left</button>
+              <button name="transform" onClick="pix.transform('shift-up')">Shift Up</button>
+              <button name="transform" onClick="pix.transform('shift-down')">Shift Down</button>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="popup.close('transform')">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal" id="about">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title">About</h4>
+              <button type="button" class="close" onclick="popup.close('about')">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <p>Select a color from your palette, then click on the pixels you wish to make that color. Changing the value of a color in your palette will change the color of each pixel of the matching color in your image.</p>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger" onclick="popup.close('about')">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </body>
+</html>

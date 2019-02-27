@@ -1,0 +1,168 @@
+<html>
+  <head>
+    <title>Cobblestone: Tile & Map Builder</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    
+    <!-- Local dependencies -->
+    <link rel="stylesheet" href="../../common/style/print.css"/>
+    
+		<script src="../../common/script/extend/Number.js"></script>
+		<script src="../../common/script/extend/Array.js"></script>
+		<script src="../../common/script/extend/Object.js"></script>
+		<script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+		<script src="../../common/script/util/file.js"></script>
+		<script src="../../common/script/util/tabs.js"></script>
+    <script type="text/javascript">
+      window.toptabs = new TabSet('tabMenu',['instructions','tiles','transforms','maps'],1);
+      window.registryName = "registry";
+      window.registry = new Registry();
+    </script>
+    <script src="../../common/script/drawUtil/palettectrl.js"></script>
+    <script src="../../common/script/drawUtil/pixelcanvas.js"></script>
+    <script src="../../common/script/drawUtil/pixelpainter.js"></script>
+    <script src="../../common/script/drawUtil/point.js"></script>
+    <script src="../../common/script/drawUtil/colorconstants.js"></script>
+    <script src="../../common/script/drawUtil/tileparser.js"></script>
+    <script src="../../common/script/drawUtil/gridtf.js"></script>
+    <script src="script/cobblestone.js"></script>
+    <script type="text/javascript">
+      var Cobblestone = registry.invoke('Cobblestone');
+      window.cs = new Cobblestone('cs','codeOut','tileList','canvas','paletteList',
+      'palette','tfTileList','tfPaletteList','tfCanvas','tfWarning','tfLabel',
+      'addTransform','listedTransforms','transformList');
+    </script>
+  </head>
+  <body onload="toptabs.init();cs.init();">
+    <div id="printable"></div>
+    <div class="container">
+      <h2 class="title" style="text-align: center;">Cobblestone: Pixel Tile Maps</h2>
+      <div id="loadsave">
+        <input type="file" onChange="cs.loadData(this)"/>
+        <span id="codeOut"></span>
+      </div>
+      <hr/>
+      <ul id="tabMenu" class="nav nav-tabs">
+        <li><a onclick="toptabs.select('instructions')">Instructions</a></li>
+        <li><a onclick="toptabs.select('tiles')">Tiles & Palettes</a></li>
+        <li><a onclick="toptabs.select('transforms')">Transforms</a></li>
+        <li><a onclick="toptabs.select('maps')">Maps</a></li>
+      </ul>
+      <div class="tab-content">
+        <div id="instructions" class="tab-pane">
+          <div class="row"></div>
+          <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-7">
+              <h3 style="text-align: center;">Build your own Maps and Tilesets!</h3>
+              <p>Cobblestone is a tool for building your own tilesets and maps for tabletop roll playing games by creating single-square tiles of 16 x 16 pixels.</p>
+              <p>Maps and tilesets can be saved as ".png" images, or printed on 8.5" x 11" paper with each square being 1" (maximum printable size is 8" x 10").</p>
+              <p>Cobblestone breaks this process apart into three steps:</p>
+              <ol>
+                <li>Building palettes and single-square tiles.</li>
+                <li>Pairing tiles to palettes and arranging them.</li>
+                <li>Positioning the tiles within the page / image.</li>
+              </ol>
+            </div>
+            <div class="col-sm-4"></div>
+          </div>
+        </div>
+        <div id="tiles" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-3">
+              <h4>Controls</h4>
+              <div>
+                <label for="tileList">Tiles</label>
+                <select id="tileList" onchange="cs.selectTile(this)"></select>
+                <br/>
+                <button onclick="cs.addNewTile()">Add New Tile</button>
+                <button id="removeTile" onclick="cs.removeCurrentTile()">Remove Current Tile</button>
+              </div>
+              <hr/>
+              <h5>Transform</h5>
+              <button name="transform" onClick="cs.transform('flip-down')">Flip Down</button>
+              <button name="transform" onClick="cs.transform('flip-over')">Flip Over</button>
+              <button name="transform" onClick="cs.transform('turn-right')">Turn Right</button>
+              <button name="transform" onClick="cs.transform('turn-left')">Turn Left</button>
+              <button name="transform" onClick="cs.transform('shift-right')">Shift Right</button>
+              <button name="transform" onClick="cs.transform('shift-left')">Shift Left</button>
+              <button name="transform" onClick="cs.transform('shift-up')">Shift Up</button>
+              <button name="transform" onClick="cs.transform('shift-down')">Shift Down</button>
+            </div>
+            <div class="col-sm-6">
+              <h4>Canvas</h4>
+              <p>Select a color from your palette, then click on the pixels you wish to make that color. Changing the value of a color in your palette will change the color of each pixel of the matching color in your image.</p>
+              <div id="canvas"></div>
+            </div>
+            <div class="col-sm-3">
+              <h4>Palette</h4>
+              <select id="paletteList" onchange="cs.selectPalette(this)"></select>
+              <br/>
+              <button onclick="cs.addNewPalette()">Add New Palette</button>
+              <button id="removePalette" onclick="cs.removeCurrentPalette()">Remove Current Palette</button>
+              <br/>
+              <div id="palette"></div>
+              <br/>
+              <button onClick="cs.addColor()">Add Color</button>
+            </div>
+          </div>
+        </div>
+        <div id="transforms" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-4">
+              <h4>Controls</h4>
+              <div>
+                <label for="tfTileList">Tiles</label>
+                <select id="tfTileList" onchange="cs.selectTfTile()"></select>
+                <div id="selectedTile"></div>
+                <br/>
+                <label for="tfPaletteList">Palettes</label>
+                <select id="tfPaletteList" onchange="cs.selectTfPalette()"></select>
+                <div id="selectedPalette"></div>
+              </div>
+              <hr/>
+              <h5>Transform</h5>
+              <ul>
+                <li><input type="checkbox" name="applyTf" onChange="cs.applyTransform()" value="flip-down">Flip Down</input></li>
+                <li><input type="checkbox" name="applyTf" onChange="cs.applyTransform()" value="flip-over">Flip Over</input></li>
+                <li><input type="checkbox" name="applyTf" onChange="cs.applyTransform()" value="turn-left">Turn Left</input></li>
+                <li><input type="checkbox" name="applyTf" onChange="cs.applyTransform()" value="turn-right">Turn Right</input></li>
+              </ul>
+              <hr/>
+              <div>
+                <button on="cs.addTransform()" id="addTransform" disabled>Add Transform</button>
+              </div>
+            </div>
+            <div class="col-sm-8">
+              <h4>Current</h4>
+              <div id="tfLabel"></div>
+              <div id="tfWarning" class="error" style="display:none;">Exists</div>
+              <canvas id="tfCanvas"></canvas>
+              <h4>All Tile Transforms</h4>
+              <ul id="listedTransforms"></ul>
+            </div>
+          </div>
+        </div>
+        <div id="maps" class="tab-pane">
+          <div class="row">
+            <div class="col-sm-3">
+              <h4>Controls</h4>
+                <label for="transformList">Transforms</label>
+              <select id="transformList"  onchange="cs.selectTransform(this)"></select>
+              <div id="displayTransform"></div>
+            </div>
+            <div class="col-sm-6">
+              <h4>Map</h4>
+              <div id="mapCanvas"></div>
+            </div>
+            <div class="col-sm-3">
+              <h4>Out</h4>
+              <div id="gallery"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+@media print {
+	#app {
+		display: none;
+	}
+  svg, img {
+    page-break-after: always;
+    margin: 0.25in 0.5in 0.25in 0.5in;
+  }
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}

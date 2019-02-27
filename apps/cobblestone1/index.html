@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cobblestone</title>
+		<link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <script src="../../common/script/extend/Array.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registryName = "registry";
+      window.registry = new Registry();
+    </script>
+    <script src="../../common/script/drawUtil/point.js"></script>
+    <script src="../../common/script/drawUtil/colorconstants.js"></script>
+    <script src="../../common/script/drawUtil/tileparser.js"></script>
+    <script type="text/javascript">
+      window.Point = registry.invoke("Point");
+      window.Transformer = registry.invoke("Transformer");
+      window.TileParser = registry.invoke("TileParser");
+    </script>
+		<script src="script/buildmap.js"></script>
+	</head>
+	<body onload="window.builder = new Builder('in','builders','display')">
+		<div id="app">
+			<input type="file" id="in" accept=".json" multiple></textarea>
+			<button onclick="builder.buildmap()">Build</button>
+		</div>
+		<div id="builders" style="display: none;"></div>
+		<div id="display"></div>
+	</body>
+</html>

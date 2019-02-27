@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Cobblestone</title>
+		<link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <script src="../../common/script/extend/Array.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registryName = "registry";
+      window.registry = new Registry();
+    </script>
+    <script src="../../common/script/drawUtil/point.js"></script>
+    <script src="../../common/script/drawUtil/colorconstants.js"></script>
+    <script src="../../common/script/drawUtil/pixelpainter.js"></script>
+    <script src="../../common/script/drawUtil/tileparser.js"></script>
+		<script src="script/app.js"></script>
+    <script type="text/javascript">
+      window.Builder = registry.invoke("BuilderProto");
+      window.builder = new Builder('in','builders','display');
+    </script>
+	</head>
+	<body onload="builder.init()">
+		<div id="app">
+			<input type="file" id="in" accept=".json" multiple></textarea>
+			<button onclick="builder.build()">Build</button>
+		</div>
+		<div id="builders" style="display: none;"></div>
+		<div id="display"></div>
+	</body>
+</html>
