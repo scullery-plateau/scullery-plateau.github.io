@@ -279,9 +279,20 @@
                 "  Speed:             ${turn.movement}",
                 "  Armor:             ${turn.armor}",
                 "  Weapon Of Choice:  ${turn.attack.name}",
-                "  Attack Bonus:      ${turn.attack.bonus}",
-                ""],
-      "auto":{state:"combat"}
+                "  Attack Bonus:      ${turn.attack.bonus}"],
+      "auto":function(ui,ctx){
+        var output = [];
+        if (ctx.turn.attack.range) {
+          output.push("  Range:             [" + ctx.turn.range.join(", ") + "]")
+        }
+        output.push(Object.entries(ctx.turn.attack.damage).reduce(function(out,entry){
+          out.push(entry[1] + " (" + entry[0] + ")");
+          return out;
+        },[]).join(" + "));
+        output.push("");
+        output.forEach(ui.console.println);
+        ui.console.after(delayedUpdate(ui,ctx,{state:"combat"}));
+      }
     },
     "move":{
       "prompt":["You have chosen to move.",
