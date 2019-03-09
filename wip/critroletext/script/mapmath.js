@@ -1,5 +1,5 @@
 (function(){
-  registry.apply("MapMath",[],function(){
+  registry.apply("MapMath",[],function() {
     var decodeLoc = function(loc) {
       var col = loc.codePointAt(0) - "A".codePointAt(0);
       var row = parseInt(loc.slice(1)) - 1;
@@ -42,7 +42,7 @@
           return list.concat([{
             index:i,
             open:o,
-            distance:distance(decode(loc),decode(o)))
+            distance:distance(decode(loc),decode(o))
           }])
         },out);
       },[]);
@@ -58,6 +58,6 @@
       distance:distance,
       openWithinRange:openWithinRange,
       openAdjacentWithinRangeOfTarget:openAdjacentWithinRangeOfTarget
-    };
-  });
-})();
+    }
+  })
+})()
