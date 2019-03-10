@@ -1,0 +1,15 @@
+{
+" ":"UNUSED / EMPTY",
+"`":"OUTSIDE",
+"#":"WALL",
+".":"HALLWAY / OPEN SPACE",
+"=":"DOOR",
+"?":"SECRET",
+"^":"STRAIGHT STAIR VERT",
+">":"STRAIGHT STAIR HORIZ",
+"*":"CORNER STAIR",
+"~":"CURTAIN",
+"\"":"FULLY COLLAPSED",
+"'":"PARTIAL COLLAPSED",
+"+":"STAR"
+}
