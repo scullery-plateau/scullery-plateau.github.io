@@ -3,7 +3,9 @@
     if (cond()) {
       onComplete();
     } else {
-      setTimeout(function() { delay(cond,onComplete,interval); }, interval);
+      setTimeout(function() {
+        delay(cond,onComplete,interval);
+      }, interval);
     }
   }
   window.loadFile = function(input,onComplete) {
