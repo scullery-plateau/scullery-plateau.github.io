@@ -3,14 +3,65 @@
 `#### #...~#+###
 `#..###...~....#
 `#........~....#          #####
-`#.#;##=####=###          #...#
-`#?#..#.......*#######    #...#
+`#.#&##=####=###          #...#
+`#?#..#.......\#######    #...#
 >=....=...####.#.....#    #=###
-`###..#...#  #.=....'#    #^#
-`# #######'###.#....;#    #.#
-`#       #*...*#######    #.#
+`###..#...## #.=....,#    #^#
+`# #######,###.#....;#    #.#
+`#       #L.../#######    #.#
 `#       ###=##############.###
 `#        #....=.....''.......#
-`#        #..##############.?.#
+`#        #..##############.!.#
 `#        ####            #...#
 `#                        #####
+
+" ": dead-space, space
+".": floor, floor
+"`": outside, outside
+"#": wall, wall
+"?": secret-wall, wall
+"!": secret-floor, floor
+"&": fully-collapsed-hall, rubble
+"'": partially-collapsed-hall, rubble
+",": partially-collapsed-wall, rubble
+";": collapsed-corner, rubble
+"+": star, star
+"=": door, door
+"~": curtain, floor-w-curtain
+">": stairs, stairs, turn-right
+"^": stairs, stairs
+"\": corner-stairs, stairs
+"/": corner-stairs, stairs, turn-right
+"L": corner-stairs, stairs, flip-down, flip-over
+
+space: none
+floor:
+outside:
+wall:
+rubble:
+star:
+door:
+floor-w-curtain:
+stairs:
+
+floor
+c
+ccb9bbcc
+cb9b3c
+
+
+outside
+wall
+secret-wall
+secret-floor
+fully-collapsed-hall
+partially-collapsed-hall
+partially-collapsed-wall
+collapsed-corner
+stairs
+curtain
+stairs
+corner-stairs
+
+dead-space
+a
