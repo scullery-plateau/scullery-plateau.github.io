@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript">
+      function toggleVisibility(input,id) {
+        if (input.checked) {
+          document.getElementById(id).style.display = "block";
+        } else {
+          document.getElementById(id).style.display = "none";
+        }
+      }
+      function toggleChar(input,id,index) {
+        if (input.checked) {
+          document.getElementById(id).style.display = "block";
+        } else {
+          document.getElementById(id).style.display = "none";
+        }
+      }
+    </script>
+    <style type="text/css">
+      td {
+        vertical-align: top;
+      }
+      #mapCtrl, canvas, print {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="ctrl">
+      <div id="loadsave">
+        <label for="loadfile">File: </label>
+        <input id="loadfile" type="file"/>
+        <button>Load</button>
+        <button>Save</button>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hidePalettes" onClick="toggleVisibility(this,'paletteCtrl')"/><label for="hidePalettes">Show Palettes</label>
+      <div id="paletteCtrl">
+        <button onclick="">Add Palette</button>
+        <br/>
+        <label for="palettes">Palettes: </label>
+        <select id="palettes" onselect=""></select>
+        <br/>
+        <label for="palette">Palette: </label>
+        <input id="palette" onchange=""/>
+        <br/>
+        <ul id="colors"></ul>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hideTiles" onClick="toggleVisibility(this,'tileCtrl')"/><label for="hideTiles">Show Tiles</label>
+      <div id="tileCtrl">
+        <button onclick="">Add Tile</button>
+        <br/>
+        <label for="tiles">Tiles: </label>
+        <select id="tiles" onselect=""></select>
+        <br/>
+        <label for="tile">Tile: </label>
+        <input id="tile" onchange=""/>
+        <br/>
+        <label for="palettes">Palettes: </label>
+        <select id="palettes" onselect=""></select>
+        <br/>
+        <table>
+          <tr>
+            <td>
+              <label for="pixels">Pixels: </label>
+              <br/>
+              <textarea id="pixels" rows="16" cols="20" onchange=""></textarea>
+            </td>
+            <td>
+              <label for="drawTile">Draw Tile: </label>
+              <br/>
+              <div id="drawTile"></div>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </div>
+      <hr/>
+      <input type="checkbox" id="hideMap" onClick="toggleVisibility(this,'mapCtrl')"/><label for="hideMap">Show Map</label>
+      <div id="mapCtrl">
+        <table>
+          <tr>
+            <td>
+              <label for="map">Map: </label>
+              <br/>
+              <textarea id="map" rows="25" cols="40" onchange=""></textarea>
+            </td>
+            <td>
+              <label for="drawMap">Draw Map: </label>
+              <br/>
+              <div id="drawMap"></div>
+            </td>
+          </tr>
+        </table>
+        <label for="chars">Chars: </label><input id="chars"/>
+        <ul id="charmapping">
+          <li>
+            <input type="checkbox" checked id="collapseChar0" onClick="toggleChar(this,'charCtrl0',0)"/><label id="collapseLabel0" for="collapseChar0">Char: "_"</label>
+            <div id="charCtrl0">
+              <p><label for="tileForMap0">Tile: </label><select id="tileForMap0" onselect=""></select></p>
+              <p><label for="paletteForMap0">Palette: </label><select id="paletteForMap0" onselect=""></select></p>
+              <table>
+                <tr>
+                  <td>
+                    <label>Orient:</label>
+                    <ul>
+                      <li><input type="checkbox" id="flipdown0" onclick=""/><label for="flipdown">Flip Down</label></li>
+                      <li><input type="checkbox" id="flipover0" onclick=""/><label for="flipover">Flip Over</label></li>
+                      <li><input type="checkbox" id="turnright0" onclick=""/><label for="turnright">Turn Right</label></li>
+                      <li><input type="checkbox" id="turnleft0" onclick=""/><label for="turnleft">Turn Left</label></li>
+                    </ul>
+                  </td>
+                  <td>
+                    <label for="showTile">Tile: </label>
+                    <br/>
+                    <div id="showTile0"></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="canvas"></div>
+    <div id="print"></div>
+  </body>
+</html>
