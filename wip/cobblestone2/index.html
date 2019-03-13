@@ -13,17 +13,28 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
-    <script src=""></script>
+    <script src="script/tilebuilder.js"></script>
     <script type="text/javascript">
-      window.Builder = registry.invoke('RogueBuilder');
-      window.builder = new Builder('in','display');
+      window.TileBuilder = registry.invoke('TileBuilder');
+      window.builder = new TileBuilder('in','display');
     </script>
   </head>
   <body onload="builder.init();">
-    <h3></h3>
-    <p></p>
-    <input type="file" id="in" accept=".json"/>
-    <button onclick="builder.buildmap()">Build</button>
-    <div id="display"></div>
+    <div id="tileUI">
+      <label for="palette">Palette:</label>
+      <input id="palette"/>
+      <br/>
+      <label for="charindex">Char Index:</label>
+      <input id="charindex"/>
+      <br/>
+      <textarea id="pixels" rows="16" cols="20" onchange="builder.buildtile()"><textarea>
+      <canvas id="tileCanvas"></canvas>
+    </div>
+    <hr/>
+    <div id="buildFromFile">
+      <input type="file" id="in" accept=".json"/>
+      <button onclick="">Build</button>
+      <div id="display"></div>
+    </div>
   </body>
 </html>

@@ -1,8 +1,6 @@
 (function(){
   registry.apply("RogueBuilder",[
-    "FileValidator"
-  ],function(FileValidator){
-    
+  ],function(){
     var Builder = function(inputId, outputId) {
       var ui = {};
       this.init = function() {
@@ -11,6 +9,7 @@
       };
       this.buildmap = function() {
         loadFile(ui.input,function(fileData) {
+          // todo
         });
       };
     }
