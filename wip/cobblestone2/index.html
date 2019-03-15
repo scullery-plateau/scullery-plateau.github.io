@@ -4,6 +4,23 @@
     <title>Cobblestone: Rogue</title>
     <link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
     <link rel="shortcut icon" href="../../favicon.ico">
+    <script type="text/javascript">
+      function toggleVisibility(input,id) {
+        if (input.checked) {
+          document.getElementById(id).style.display = "block";
+        } else {
+          document.getElementById(id).style.display = "none";
+        }
+      }
+    </script>
+    <style type="text/css">
+      td {
+        vertical-align: top;
+      }
+      #mapCtrl, canvas, print {
+        display: none;
+      }
+    </style>
     <script src="../../common/script/extend/Array.js"></script>
     <script src="../../common/script/extend/Object.js"></script>
     <script src="../../common/script/extend/Number.js"></script>
@@ -13,28 +30,99 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
-    <script src="script/tilebuilder.js"></script>
+    <script src="script/rogue.js"></script>
     <script type="text/javascript">
-      window.TileBuilder = registry.invoke('TileBuilder');
-      window.builder = new TileBuilder('in','display');
+    window.RogueController = registry.invoke('RogueController');
+      window.ctrl = new RogueController('ctrl',{
+        saveButton:"savebtn",
+        paletteSelector:"palettes",
+        paletteInput:"palette",
+        paletteDisplay:"colors",
+        tileSelector:"tiles",
+        tilePaletteSelector:"palettesForTile",
+        tileCharIndex:"tile",
+        tilePixelInput:"pixels",
+        tileDisplay:"drawTile",
+        mapInput:"map",
+        mapDisplay:"drawMap",
+        charList:"charmapping"
+      });
     </script>
   </head>
-  <body onload="builder.init();">
-    <div id="tileUI">
-      <label for="palette">Palette:</label>
-      <input id="palette"/>
-      <br/>
-      <label for="charindex">Char Index:</label>
-      <input id="charindex"/>
-      <br/>
-      <textarea id="pixels" rows="16" cols="20" onchange="builder.buildtile()"><textarea>
-      <canvas id="tileCanvas"></canvas>
+  <body onload="ctrl.init();">
+    <div id="ctrl">
+      <div id="loadsave">
+        <label for="loadfile">File: </label>
+        <input id="loadfile" type="file"/>
+        <button onclick="ctrl.loadFile('loadfile')">Load</button>
+        <span id="savebtn"></span>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hidePalettes" onClick="toggleVisibility(this,'paletteCtrl')"/><label for="hidePalettes">Show Palettes</label>
+      <div id="paletteCtrl">
+        <button onclick="ctrl.addPalette('palettes')">Add Palette</button>
+        <br/>
+        <label for="palettes">Palettes: </label>
+        <select id="palettes" onselect="ctrl.selectAndDrawPalette(this,'palette','colors')"></select>
+        <br/>
+        <label for="palette">Palette: </label>
+        <input id="palette" onchange="ctrl.drawPalette(this,'colors')"/>
+        <br/>
+        <ul id="colors"></ul>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hideTiles" onClick="toggleVisibility(this,'tileCtrl')"/><label for="hideTiles">Show Tiles</label>
+      <div id="tileCtrl">
+        <button onclick="ctrl.addTile('tiles')">Add Tile</button>
+        <br/>
+        <label for="tiles">Tiles: </label>
+        <select id="tiles" onselect="ctrl.selectAndDrawTile(this,'tile','pixels','drawTile')"></select>
+        <br/>
+        <label for="palettesForTile">Palettes: </label>
+        <select id="palettesForTile" onselect="ctrl.selectPaletteForTile(this,'pixels','tile','drawTile')"></select>
+        <br/>
+        <label for="tile">Tile Char Index: </label>
+        <input id="tile" onchange="ctrl.updateTileCharIndex(this,'pixels','drawTile')"/>
+        <br/>
+        <table>
+          <tr>
+            <td>
+              <label for="pixels">Pixels: </label>
+              <br/>
+              <textarea id="pixels" rows="16" cols="20" onchange="ctrl.drawTile(this,'tile','palettesForTile','drawTile')"></textarea>
+            </td>
+            <td>
+              <label for="drawTile">Draw Tile: </label>
+              <br/>
+              <div id="drawTile"></div>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </div>
+      <hr/>
+      <input type="checkbox" id="hideMap" onClick="toggleVisibility(this,'mapCtrl')"/><label for="hideMap">Show Map</label>
+      <div id="mapCtrl">
+        <table>
+          <tr>
+            <td>
+              <label for="map">Map: </label>
+              <br/>
+              <textarea id="map" rows="25" cols="40" onchange="ctrl.drawMap(this,'drawMap')"></textarea>
+            </td>
+            <td>
+              <label for="drawMap">Draw Map: </label>
+              <br/>
+              <div id="drawMap"></div>
+            </td>
+          </tr>
+        </table>
+        <label for="chars">Map Char Index: </label><input id="chars" onchange="ctrl.updateMapCharIndex(this,'charmapping')"/>
+        <ul id="charmapping">
+        </ul>
+      </div>
     </div>
-    <hr/>
-    <div id="buildFromFile">
-      <input type="file" id="in" accept=".json"/>
-      <button onclick="">Build</button>
-      <div id="display"></div>
-    </div>
+    <div id="canvas"></div>
+    <div id="print"></div>
   </body>
 </html>
