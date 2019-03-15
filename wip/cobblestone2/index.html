@@ -44,8 +44,7 @@
         tilePixelInput:"pixels",
         tileDisplay:"drawTile",
         mapInput:"map",
-        mapDisplay:"drawMap",
-        charList:"charmapping"
+        mapDisplay:"drawMap"
       });
     </script>
   </head>
@@ -117,9 +116,31 @@
             </td>
           </tr>
         </table>
-        <label for="chars">Map Char Index: </label><input id="chars" onchange="ctrl.updateMapCharIndex(this,'charmapping')"/>
-        <ul id="charmapping">
-        </ul>
+        <p><label for="chars">Map Char Index: </label><input id="chars" onchange="this.updateMapCharIndex(this,'charSelect')"/></p>
+        <p><input type="checkbox" checked id="collapseChar" onClick="toggleVisibility(this,'charCtrl')"/><label id="collapseLabel" for="collapseChar">Char: "_"</label></p>
+        <div id="charCtrl">
+          <p><label for="charSelect">Chars: </label><select id="charSelect" onselect="ctrl.selectAndDrawChar(this,'tileForMap','paletteForMap','flipdown','flipover','turnright','turnleft','showTile')"></select></p>
+          <p><label for="tileForMap">Tile: </label><select id="tileForMap" onselect="ctrl.selectTileForChar(this)"></select></p>
+          <p><label for="paletteForMap">Palette: </label><select id="paletteForMap" onselect="ctrl.selectPaletteForChar(this)"></select></p>
+          <table>
+            <tr>
+              <td>
+                <label>Orient:</label>
+                <ul>
+                  <li><input type="checkbox" id="flipdown" onclick="ctrl.applyTransform(this,'flipdown')"/><label for="flipdown">Flip Down</label></li>
+                  <li><input type="checkbox" id="flipover" onclick="ctrl.applyTransform(this,'flipover')"/><label for="flipover">Flip Over</label></li>
+                  <li><input type="checkbox" id="turnright" onclick="ctrl.applyTransform(this,'turnright')"/><label for="turnright">Turn Right</label></li>
+                  <li><input type="checkbox" id="turnleft" onclick="ctrl.applyTransform(this,'turnleft')"/><label for="turnleft">Turn Left</label></li>
+                </ul>
+              </td>
+              <td>
+                <label for="showTile">Tile: </label>
+                <br/>
+                <div id="showTile"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
       </div>
     </div>
     <div id="canvas"></div>
