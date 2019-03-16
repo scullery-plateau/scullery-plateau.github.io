@@ -9,11 +9,11 @@
         selector.innerHTML = "";
         var opt = document.createElement("option");
         opt.text = first;
+        opt.value = "";
         selector.add(opt);
-        list.forEach(function(item) {
+        list.forEach(function(item,index) {
           var opt = document.createElement("option");
-          opt.text = forEach(item);
-          opt.value = item;
+          forEach(opt,item,index);
           selector.add(opt);
         })
       },
@@ -28,6 +28,9 @@
           }
         }
         selector.selectedIndex = index;
+      },
+      selectLast:function(selector) {
+        selector.selectedIndex = selector.options.length - 1;
       }
     };
   });

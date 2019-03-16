@@ -29,15 +29,17 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
+    <script src="script/palette.js"></script>
     <script src="script/parser.js"></script>
     <script src="script/rogue.js"></script>
+    <script src="script/selector.js"></script>
     <script type="text/javascript">
     window.RogueController = registry.invoke('RogueController');
       window.ctrl = new RogueController('ctrl',{
         saveButton:"savebtn",
         paletteSelector:"palettes",
-        paletteInput:"palette",
-        paletteDisplay:"colors",
+        colorSelector:"palette",
+        colorPicker:"selectedColor",
         tileSelector:"tiles",
         tilePaletteSelector:"palettesForTile",
         tileCharIndex:"tile",
@@ -67,15 +69,18 @@
       <hr/>
       <input type="checkbox" checked id="hidePalettes" onClick="toggleVisibility(this,'paletteCtrl')"/><label for="hidePalettes">Show Palettes</label>
       <div id="paletteCtrl">
-        <button onclick="ctrl.addPalette('palettes')">Add Palette</button>
+        <button onclick="ctrl.addPalette()">Add Palette</button>
         <br/>
         <label for="palettes">Palettes: </label>
-        <select id="palettes" onselect="ctrl.selectAndDrawPalette(this,'palette','colors')"></select>
+        <select id="palettes" onchange="ctrl.selectAndDrawPalette()"></select>
         <br/>
         <label for="palette">Palette: </label>
-        <input id="palette" onchange="ctrl.drawPalette(this,'colors')"/>
+        <select id="palette" onchange="ctrl.selectColorForEditing()"></select>
+        <button onclick="ctrl.removeSelectedColorFromPalette()">Remove Color From Palette</button>
         <br/>
-        <ul id="colors"></ul>
+        <button onClick="ctrl.makeColorTransparent()">Make Transparent</button>
+        <input id="selectedColor" type="color"/>
+        <button onClick="ctrl.addOrUpdateColor()">Update</button>
       </div>
       <hr/>
       <input type="checkbox" checked id="hideTiles" onClick="toggleVisibility(this,'tileCtrl')"/><label for="hideTiles">Show Tiles</label>

@@ -2,8 +2,8 @@
   var domKeys = [
     'saveButton',
     'paletteSelector',
-    'paletteInput',
-    'paletteDisplay',
+    'colorSelector',
+    'colorPicker',
     'tileSelector',
     'tilePaletteSelector',
     'tileCharIndex',
@@ -23,18 +23,29 @@
   registry.apply("RogueController",[
     "FileParser",
     "Selector",
-    "PaletteDisplay"
-  ],function(FileParser,Selector){
+    "Palette"
+  ],function(FileParser,Selector,Palette){
     var parser = new FileParser();
     return function(instanceName,domIds){
       var ui = {};
+      var paletteUI = {};
       var data = {tiles:{},palettes:{},map:{}};
+      var palette = new Palette('ctrl',data.palettes,paletteUI)
       var selected = {};
-      var updateView = function() {}
+      var updateView = function() {
+        palette.updatePaletteLists();
+      }
       this.init = function() {
         Object.entries(domIds).forEach(function(entry){
           ui[entry[0]] = document.getElementById(entry[1]);
         });
+        ['paletteSelector',
+        'colorSelector',
+        'colorPicker',
+        'tilePaletteSelector',
+        "paletteForMapSelector"].forEach(function(key){
+          paletteUI[key] = ui[key];
+        })
       }
       this.loadFile = function(fileInputId) {
         loadFile(document.getElementById(fileInputId),function(fileData) {
@@ -45,22 +56,20 @@
           updateView();
         });
       }
-      this.addPalette = function(selectorId) {
-        var paletteName = prompt("What do you want to name this palette?");
-        if (data.palettes[paletteName]) {
-          alert("There is already a palette named '" + paletteName + "'.");
-        } else {
-          data.palettes[paletteName] = {};
-          Selector.loadSelector(ui.paletteSelector,Object.keys(data.palettes),"Choose a palette:");
-          Selector.loadSelector(ui.tilePaletteSelector,Object.keys(data.palettes),"Choose a palette:");
-          Selector.loadSelector(ui.paletteForMapSelector,Object.keys(data.palettes),"Choose a palette:");
-        }
+      this.addPalette = function() {
+        palette.addPalette()
       }
-      this.selectAndDrawPalette = function(selector,inputId,outputId) {
-
+      this.selectAndDrawPalette = function() {
+        palette.selectAndDrawPalette();
       }
-      this.drawPalette = function(input,outputId) {
-
+      this.selectColorForEditing = function() {
+        palette.selectColorForEditing();
+      }
+      this.addOrUpdateColor = function() {
+        palette.addOrUpdateColor();
+      }
+      this.removeSelectedColorFromPalette = function() {
+        palette.removeSelectedColorFromPalette();
       }
       this.addTile = function(selectorId) {
         var tileName = prompt("What do you want to name this tile?");
