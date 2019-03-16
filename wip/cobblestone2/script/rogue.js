@@ -5,34 +5,32 @@
     'paletteInput',
     'paletteDisplay',
     'tileSelector',
-    'tilePaletteSelector'
+    'tilePaletteSelector',
     'tileCharIndex',
     'tilePixelInput',
     'tileDisplay',
     'mapInput',
-    'mapDisplay'
-  ];
-  var charDomKeys = [
-    "collapseLabel",
-    "tileForMap",
-    "paletteForMap",
-    "flipdown",
-    "flipover",
-    "turnright",
-    "turnleft",
-    "showTile"
+    'mapDisplay',
+    "charSelector",
+    "tileForMapSelector",
+    "paletteForMapSelector",
+    "flipdownSwitch",
+    "flipoverSwitch",
+    "turnrightSwitch",
+    "turnleftSwitch",
+    "charTileDisplay"
   ]
   registry.apply("RogueController",[
     "FileParser",
-    "Selector"
+    "Selector",
+    "PaletteDisplay"
   ],function(FileParser,Selector){
     var parser = new FileParser();
     return function(instanceName,domIds){
       var ui = {};
-      var state = {tiles:{},palettes:{},map:{}};
-      var updateView = function() {
-
-      }
+      var data = {tiles:{},palettes:{},map:{}};
+      var selected = {};
+      var updateView = function() {}
       this.init = function() {
         Object.entries(domIds).forEach(function(entry){
           ui[entry[0]] = document.getElementById(entry[1]);
@@ -48,7 +46,15 @@
         });
       }
       this.addPalette = function(selectorId) {
-
+        var paletteName = prompt("What do you want to name this palette?");
+        if (data.palettes[paletteName]) {
+          alert("There is already a palette named '" + paletteName + "'.");
+        } else {
+          data.palettes[paletteName] = {};
+          Selector.loadSelector(ui.paletteSelector,Object.keys(data.palettes),"Choose a palette:");
+          Selector.loadSelector(ui.tilePaletteSelector,Object.keys(data.palettes),"Choose a palette:");
+          Selector.loadSelector(ui.paletteForMapSelector,Object.keys(data.palettes),"Choose a palette:");
+        }
       }
       this.selectAndDrawPalette = function(selector,inputId,outputId) {
 
@@ -57,7 +63,14 @@
 
       }
       this.addTile = function(selectorId) {
-
+        var tileName = prompt("What do you want to name this tile?");
+        if (data.tiles[tileName]) {
+          alert("There is already a tile named '" + tileName + "'.");
+        } else {
+          data.tiles[tileName] = {};
+          Selector.loadSelector(ui.tileSelector,Object.keys(data.tiles),"Choose a tile:");
+          Selector.loadSelector(ui.tileForMapSelector,Object.keys(data.tiles),"Choose a tile:");
+        }
       }
       this.selectAndDrawTile = function(selector,inputId,textAreaId,outputId) {
 

@@ -3,7 +3,6 @@
   <head>
     <title>Cobblestone: Rogue</title>
     <link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
-    <link rel="shortcut icon" href="../../favicon.ico">
     <script type="text/javascript">
       function toggleVisibility(input,id) {
         if (input.checked) {
@@ -30,6 +29,7 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
+    <script src="script/parser.js"></script>
     <script src="script/rogue.js"></script>
     <script type="text/javascript">
     window.RogueController = registry.invoke('RogueController');
@@ -44,7 +44,15 @@
         tilePixelInput:"pixels",
         tileDisplay:"drawTile",
         mapInput:"map",
-        mapDisplay:"drawMap"
+        mapDisplay:"drawMap",
+        charSelector:"charSelect",
+        tileForMapSelector:"tileForMap",
+        paletteForMapSelector:"paletteForMap",
+        flipdownSwitch:"flipdown",
+        flipoverSwitch:"flipover",
+        turnrightSwitch:"turnright",
+        turnleftSwitch:"turnleft",
+        charTileDisplay:"showTile"
       });
     </script>
   </head>
@@ -117,7 +125,7 @@
           </tr>
         </table>
         <p><label for="chars">Map Char Index: </label><input id="chars" onchange="this.updateMapCharIndex(this,'charSelect')"/></p>
-        <p><input type="checkbox" checked id="collapseChar" onClick="toggleVisibility(this,'charCtrl')"/><label id="collapseLabel" for="collapseChar">Char: "_"</label></p>
+        <p><input type="checkbox" checked id="collapseChar" onClick="toggleVisibility(this,'charCtrl')"/><label for="collapseChar">Characters:</label></p>
         <div id="charCtrl">
           <p><label for="charSelect">Chars: </label><select id="charSelect" onselect="ctrl.selectAndDrawChar(this,'tileForMap','paletteForMap','flipdown','flipover','turnright','turnleft','showTile')"></select></p>
           <p><label for="tileForMap">Tile: </label><select id="tileForMap" onselect="ctrl.selectTileForChar(this)"></select></p>
