@@ -42,10 +42,12 @@
         ['paletteSelector',
         'colorSelector',
         'colorPicker',
+        'paletteDisplay',
         'tilePaletteSelector',
         "paletteForMapSelector"].forEach(function(key){
           paletteUI[key] = ui[key];
-        })
+        });
+        palette.updatePaletteLists();
       }
       this.loadFile = function(fileInputId) {
         loadFile(document.getElementById(fileInputId),function(fileData) {
@@ -65,8 +67,14 @@
       this.selectColorForEditing = function() {
         palette.selectColorForEditing();
       }
-      this.addOrUpdateColor = function() {
-        palette.addOrUpdateColor();
+      this.addColor = function() {
+        palette.addColor();
+      }
+      this.updateColor = function() {
+        palette.updateColor();
+      }
+      this.makeColorTransparent = function() {
+        palette.makeColorTransparent();
       }
       this.removeSelectedColorFromPalette = function() {
         palette.removeSelectedColorFromPalette();

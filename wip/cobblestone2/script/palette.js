@@ -1,20 +1,22 @@
 (function(){
   var lineItem = function(color,instanceName) {
-    return `<li><a href="#" onclick="${instanceName}.removeColor()" style="display:block;background-color:${color};">${color}</a></li>`;
+    if (color) {
+      return `<li style="display:inline;">${color}<span style="color:${color};background-color:${color};display:block;">_</span></li>`;
+    } else {
+      return `<li style="display:inline;">Transparent<span style="display:block;">_</span></li>`;
+    }
   }
   var paletteOption = function(option,paletteName) {
     option.text = paletteName;
     option.value = paletteName;
   }
   var colorOption = function(option,color,index) {
-    if (color.length) {
+    if (color) {
       option.value = index;
-      option.text = "_";
-      option.style.backgroundColor = color;
+      option.text = color;
     } else {
       option.value = index;
       option.text = "Transparent";
-      option.style.backgroundColor = "none";
     }
   }
   registry.apply("Palette",[
@@ -23,13 +25,15 @@
     return function(instanceName,palettes,ui){
       var updateColorSelector = function() {
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        if (selectedPalette.length == 0) {
-          Selector.loadSelector(ui.colorSelector,palettes[selectedPalette],"Add a color!",colorOption);
+        console.log("{" + selectedPalette + "}");
+        if (selectedPalette) {
+          Selector.loadSelector(ui.colorSelector,palettes[selectedPalette],"Choose a color to change:",colorOption);
           Selector.selectLast(ui.colorSelector);
+          ui.paletteDisplay.innerHTML = palettes[selectedPalette].map(lineItem);
         }
       }
       var updatePaletteLists = function() {
-        Selector.loadSelector(ui.paletteSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
+        Selector.loadSelector(ui.paletteSelector,Object.keys(palettes),"Choose a palette to edit:",paletteOption);
         Selector.selectLast(ui.paletteSelector);
         Selector.loadSelector(ui.tilePaletteSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
         Selector.selectLast(ui.tilePaletteSelector);
@@ -50,51 +54,56 @@
       }
       this.selectColorForEditing = function() {
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        if (selectedPalette.length == 0) {
+        if (selectedPalette) {
           var selectedPaletteIndex = Selector.selectedValue(ui.colorSelector);
-          if (selectedPaletteIndex.length == 0) {
+          if (selectedPaletteIndex) {
             ui.colorPicker.value = palettes[selectedPalette][selectedPaletteIndex];
           } else {
-            ui.colorPicker.value = none;
+            ui.colorPicker.value = undefined;
           }
         }
       }
-      this.addOrUpdateColor = function() {
+      this.addColor = function() {
         console.log("clicked");
         console.log(ui.colorPicker.value);
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        if (selectedPalette.length == 0) {
-          var selectedPaletteIndex = Selector.selectedValue(ui.colorSelector);
-          if (selectedPaletteIndex.length == 0) {
-            console.log("changing color in palette: " + selectedPaletteIndex);
-            palettes[selectedPalette][selectedPaletteIndex] = ui.colorPicker.value;
-          } else {
-            console.log("adding color to palette.")
-            palettes[selectedPalette].push(ui.colorPicker.value);
-          }
+        if (selectedPalette) {
+          console.log("adding color to palette.")
+          palettes[selectedPalette].push(ui.colorPicker.value);
           updateColorSelector();
         }
       }
-      this.addOrUpdateColor = function() {
+      this.updateColor = function() {
+        console.log("clicked");
+        console.log(ui.colorPicker.value);
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        if (selectedPalette.length == 0) {
+        if (selectedPalette) {
           var selectedPaletteIndex = Selector.selectedValue(ui.colorSelector);
-          if (selectedPaletteIndex.length == 0) {
-            palettes[selectedPalette][selectedPaletteIndex] = "";
-          } else {
-            palettes[selectedPalette].push("");
+          if (selectedPaletteIndex) {
+            console.log("changing color in palette: " + selectedPaletteIndex);
+            palettes[selectedPalette][selectedPaletteIndex] = ui.colorPicker.value;
+            updateColorSelector();
           }
-          updateColorSelector();
+        }
+      }
+      this.makeColorTransparent = function() {
+        var selectedPalette = Selector.selectedValue(ui.paletteSelector);
+        if (selectedPalette) {
+          var selectedPaletteIndex = Selector.selectedValue(ui.colorSelector);
+          if (selectedPaletteIndex) {
+            palettes[selectedPalette][selectedPaletteIndex] = null;
+            updateColorSelector();
+          }
         }
       }
       this.removeSelectedColorFromPalette = function() {
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        if (selectedPalette.length == 0) {
+        if (selectedPalette) {
           var selectedPaletteIndex = Selector.selectedValue(ui.colorSelector);
-          if (selectedPaletteIndex.length == 0) {
+          if (selectedPaletteIndex) {
             palettes[selectedPalette].splice(selectedPaletteIndex,1);
+            updateColorSelector();
           }
-          updateColorSelector();
         }
       }
     };

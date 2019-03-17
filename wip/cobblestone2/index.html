@@ -40,6 +40,7 @@
         paletteSelector:"palettes",
         colorSelector:"palette",
         colorPicker:"selectedColor",
+        paletteDisplay:"paletteList",
         tileSelector:"tiles",
         tilePaletteSelector:"palettesForTile",
         tileCharIndex:"tile",
@@ -74,13 +75,17 @@
         <label for="palettes">Palettes: </label>
         <select id="palettes" onchange="ctrl.selectAndDrawPalette()"></select>
         <br/>
-        <label for="palette">Palette: </label>
+        <label for="palette">Colors: </label>
         <select id="palette" onchange="ctrl.selectColorForEditing()"></select>
-        <button onclick="ctrl.removeSelectedColorFromPalette()">Remove Color From Palette</button>
+        <button onClick="ctrl.addColor()">Add</button>
         <br/>
         <button onClick="ctrl.makeColorTransparent()">Make Transparent</button>
         <input id="selectedColor" type="color"/>
-        <button onClick="ctrl.addOrUpdateColor()">Update</button>
+        <button onClick="ctrl.updateColor()">Update</button>
+        <br/>
+        <button onclick="ctrl.removeSelectedColorFromPalette()">Remove Color From Palette</button>
+        <ul id="paletteList">
+        </ul>
       </div>
       <hr/>
       <input type="checkbox" checked id="hideTiles" onClick="toggleVisibility(this,'tileCtrl')"/><label for="hideTiles">Show Tiles</label>
