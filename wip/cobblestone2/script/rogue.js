@@ -14,23 +14,27 @@
     "charSelector",
     "tileForMapSelector",
     "paletteForMapSelector",
-    "flipdownSwitch",
-    "flipoverSwitch",
-    "turnrightSwitch",
-    "turnleftSwitch",
     "charTileDisplay"
-  ]
+  ];
   registry.apply("RogueController",[
     "FileParser",
+    "Palette",
     "Selector",
-    "Palette"
-  ],function(FileParser,Selector,Palette){
+    "SVG",
+    "Tile",
+    "TileMap"
+  ],function(FileParser,Palette,Selector,SVG,Tile,TileMap){
     var parser = new FileParser();
     return function(instanceName,domIds){
       var ui = {};
       var paletteUI = {};
+      var tileUI = {};
+      var tileMapUI = {};
       var data = {tiles:{},palettes:{},map:{}};
-      var palette = new Palette('ctrl',data.palettes,paletteUI)
+      var palette = new Palette(data.palettes,paletteUI);
+      var svg = new SVG();
+      var tile = new Tile('ctrl',svg,data.tiles,data.palettes,tileUI);
+      var tileMap = new TileMap(svg,data.tiles,data.palettes,data.map,mapUI);
       var selected = {};
       var updateView = function() {
         palette.updatePaletteLists();
@@ -48,6 +52,22 @@
           paletteUI[key] = ui[key];
         });
         palette.updatePaletteLists();
+        ['tileSelector',
+        'tilePaletteSelector',
+        'tileCharIndex',
+        'tilePixelInput',
+        'tileDisplay',
+        'tileForMapSelector'].forEach(function(key){
+          tileUI[key] = ui[key];
+        });
+        ['mapInput',
+        'mapDisplay',
+        "charSelector",
+        "tileForMapSelector",
+        "paletteForMapSelector",
+        "charTileDisplay"].forEach(function(key) {
+          tileMapUI[key] = ui[key];
+        })
       }
       this.loadFile = function(fileInputId) {
         loadFile(document.getElementById(fileInputId),function(fileData) {
@@ -79,45 +99,35 @@
       this.removeSelectedColorFromPalette = function() {
         palette.removeSelectedColorFromPalette();
       }
-      this.addTile = function(selectorId) {
-        var tileName = prompt("What do you want to name this tile?");
-        if (data.tiles[tileName]) {
-          alert("There is already a tile named '" + tileName + "'.");
-        } else {
-          data.tiles[tileName] = {};
-          Selector.loadSelector(ui.tileSelector,Object.keys(data.tiles),"Choose a tile:");
-          Selector.loadSelector(ui.tileForMapSelector,Object.keys(data.tiles),"Choose a tile:");
-        }
+      this.addTile = function() {
+        tile.addTile();
       }
-      this.selectAndDrawTile = function(selector,inputId,textAreaId,outputId) {
-
+      this.swapPrevTileChar = function(index) {
+        tile.swapPrevTileChar(index);
       }
-      this.updateTileCharIndex = function(input,textAreaId,outputId) {
-
+      this.swapNextTileChar = function(index) {
+        tile.swapNextTileChar(index);
       }
-      this.selectPaletteForTile = function(input,textAreaId,charIndexId,outputId) {
-
+      this.updateAndDrawTile = function() {
+        tile.updateAndDrawTile();
       }
-      this.drawTile = function(input,charIndexId,paletteSelectorId,outputId) {
-
+      this.drawTile = function() {
+        tile.drawTile();
       }
-      this.drawMap = function(input,outputId) {
-
+      this.drawMap = function() {
+        tileMap.drawMap();
       }
-      this.updateMapCharIndex = function(input,charselectId) {
-
+      this.selectAndDrawChar = function() {
+        tileMap.selectAndDrawChar();
       }
-      this.toggleChar = function(input) {
-
+      this.selectTileForChar = function() {
+        tileMap.selectTileForChar();
       }
-      this.selectTileForChar = function(input) {
-
+      this.selectPaletteForChar = function() {
+        tileMap.selectPaletteForChar();
       }
-      this.selectPaletteForChar = function(input) {
-
-      }
-      this.applyTransform = function(index,transform) {
-
+      this.applyTransform = function(input,transform) {
+        tileMap.applyTransform(input.checked,transform);
       }
     }
   })

@@ -1,5 +1,5 @@
 (function(){
-  var lineItem = function(color,instanceName) {
+  var lineItem = function(color) {
     if (color) {
       return `<li style="display:inline;">${color}<span style="color:${color};background-color:${color};display:block;">_</span></li>`;
     } else {
@@ -22,14 +22,13 @@
   registry.apply("Palette",[
     "Selector"
   ],function(Selector){
-    return function(instanceName,palettes,ui){
+    return function(palettes,ui){
       var updateColorSelector = function() {
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
-        console.log("{" + selectedPalette + "}");
         if (selectedPalette) {
           Selector.loadSelector(ui.colorSelector,palettes[selectedPalette],"Choose a color to change:",colorOption);
           Selector.selectLast(ui.colorSelector);
-          ui.paletteDisplay.innerHTML = palettes[selectedPalette].map(lineItem);
+          ui.paletteDisplay.innerHTML = palettes[selectedPalette].map(lineItem).join("");
         }
       }
       var updatePaletteLists = function() {
