@@ -64,6 +64,7 @@
             index:[]
           };
           Selector.loadSelector(ui.tileSelector,Object.keys(tiles),"Choose a tile:");
+          Selector.selectLast(ui.tileSelector);
           Selector.loadSelector(ui.tileForMapSelector,Object.keys(tiles),"Choose a tile:");
         }
       }

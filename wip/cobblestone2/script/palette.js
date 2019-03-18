@@ -35,9 +35,7 @@
         Selector.loadSelector(ui.paletteSelector,Object.keys(palettes),"Choose a palette to edit:",paletteOption);
         Selector.selectLast(ui.paletteSelector);
         Selector.loadSelector(ui.tilePaletteSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
-        Selector.selectLast(ui.tilePaletteSelector);
         Selector.loadSelector(ui.paletteForMapSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
-        Selector.selectLast(ui.paletteForMapSelector);
         updateColorSelector();
       }
       this.updatePaletteLists = updatePaletteLists;

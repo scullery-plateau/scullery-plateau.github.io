@@ -1,9 +1,14 @@
 (function(){
   registry.apply("TileMap",[
-    "Selector"
-  ],function(){
+    "Selector",
+    "Pixelator"
+  ],function(Selector,Pixelator){
     return function(svg,tiles,palettes,map,ui){
-      this.drawMap = function() {
+      var drawMap = function() {
+
+      }
+      this.updateAndDrawMap = function() {
+
       }
       this.selectAndDrawChar = function() {
       }
