@@ -92,7 +92,7 @@
       }
       this.drawTile = drawTile;
       this.updateAndDrawTile = function() {
-        drawTile(ui.tilePixelInput.value.split("\r").join("").split("\n");
+        drawTile(ui.tilePixelInput.value.split("\r").join("").split("\n"));
       }
     };
   });

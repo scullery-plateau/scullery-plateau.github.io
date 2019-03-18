@@ -34,7 +34,7 @@
       var palette = new Palette(data.palettes,paletteUI);
       var svg = new SVG();
       var tile = new Tile('ctrl',svg,data.tiles,data.palettes,tileUI);
-      var tileMap = new TileMap(svg,data.tiles,data.palettes,data.map,mapUI);
+      var tileMap = new TileMap(svg,data.tiles,data.palettes,data.map,tileMapUI);
       var selected = {};
       var updateView = function() {
         palette.updatePaletteLists();
