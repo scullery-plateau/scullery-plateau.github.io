@@ -1,15 +1,15 @@
 (function(){
   var lineItem = function(instanceName,char,color,index) {
     if (color) {
-      return `<li style="display:inline;">"${char}": ${color}<button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button><span style="color:${color};background-color:${color};display:block;">_</span></li>`;
+      return `<li style="display:inline;">"${char}": ${color} <span style="background-color:${color};color:${color};">______</span> <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
     } else {
-      return `<li style="display:inline;">"${char}": Transparent<button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button><span style="display:block;">_</span></li>`;
+      return `<li style="display:inline;">"${char}": Transparent <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
     }
   }
   registry.apply("Tile",[
     "Selector"
   ],function(Selector){
-    return function(instanceName,svg,tiles,palettes,ui){
+    return function(instanceName,canvas,tiles,palettes,ui){
       var drawTile = function(rows) {
         var tileName = Selector.selectedValue(ui.tileSelector);
         var paletteName = Selector.selectedValue(ui.tilePaletteSelector);
@@ -37,12 +37,12 @@
               mapping[tile.index[i]] = palette[i];
             }
             ui.tileCharIndex.innerHTML = listing.join("");
-            var pixels = [];
+            canvas.clear();
             tile.pixels.forEach(function(row,y) {
               row.forEach(function(char,x) {
                 var color = mapping[char];
                 if (color) {
-                  pixels.push({
+                  canvas.addPixel({
                     x:x,
                     y:y,
                     color:color
@@ -50,7 +50,7 @@
                 }
               })
             })
-            ui.tileDisplay = svg.draw(pixels);
+            ui.tileDisplay = canvas.drawSVG();
           }
         }
       }

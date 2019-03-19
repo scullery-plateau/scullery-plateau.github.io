@@ -2,8 +2,8 @@
   registry.apply("TileMap",[
     "Selector",
     "Pixelator"
-  ],function(Selector,Pixelator){
-    return function(svg,tiles,palettes,map,ui){
+  ],function(Selector){
+    return function(canvas,tiles,palettes,map,ui){
       var drawMap = function() {
 
       }

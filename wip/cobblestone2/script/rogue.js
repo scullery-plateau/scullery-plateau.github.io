@@ -17,13 +17,13 @@
     "charTileDisplay"
   ];
   registry.apply("RogueController",[
+    "Canvas",
     "FileParser",
     "Palette",
     "Selector",
-    "SVG",
     "Tile",
-    "TileMap"
-  ],function(FileParser,Palette,Selector,SVG,Tile,TileMap){
+    "TileMap",
+  ],function(Canvas,FileParser,Palette,Selector,Tile,TileMap){
     var parser = new FileParser();
     return function(instanceName,domIds){
       var ui = {};
@@ -32,9 +32,10 @@
       var tileMapUI = {};
       var data = {tiles:{},palettes:{},map:{}};
       var palette = new Palette(data.palettes,paletteUI);
-      var svg = new SVG();
-      var tile = new Tile('ctrl',svg,data.tiles,data.palettes,tileUI);
-      var tileMap = new TileMap(svg,data.tiles,data.palettes,data.map,tileMapUI);
+      var tileCanvas = new Canvas();
+      var tile = new Tile('ctrl',tileCanvas,data.tiles,data.palettes,tileUI);
+      var mapCanvas = new Canvas();
+      var tileMap = new TileMap(mapCanvas,data.tiles,data.palettes,data.map,tileMapUI);
       var selected = {};
       var updateView = function() {
         palette.updatePaletteLists();

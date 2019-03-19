@@ -1,9 +1,9 @@
 (function(){
   var lineItem = function(color) {
     if (color) {
-      return `<li style="display:inline;">${color}<span style="color:${color};background-color:${color};display:block;">_</span></li>`;
+      return `<span style="color:${color};background-color:${color};">___</span>`;
     } else {
-      return `<li style="display:inline;">Transparent<span style="display:block;">_</span></li>`;
+      return `<span>___</span>`;
     }
   }
   var paletteOption = function(option,paletteName) {
@@ -24,14 +24,20 @@
   ],function(Selector){
     return function(palettes,ui){
       var updateColorSelector = function() {
+        console.log("updating color selector");
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
         if (selectedPalette) {
           Selector.loadSelector(ui.colorSelector,palettes[selectedPalette],"Choose a color to change:",colorOption);
           Selector.selectLast(ui.colorSelector);
-          ui.paletteDisplay.innerHTML = palettes[selectedPalette].map(lineItem).join("");
+          ui.paletteDisplay.innerHTML = Object.entries(palettes).map(function(entry) {
+            var paletteName = entry[0];
+            var palette = entry[1].map(lineItem).join(" ");
+            return `<li>${paletteName}: ${palette}</li>`;
+          }).join("");
         }
       }
       var updatePaletteLists = function() {
+        console.log("updating palette lists");
         Selector.loadSelector(ui.paletteSelector,Object.keys(palettes),"Choose a palette to edit:",paletteOption);
         Selector.selectLast(ui.paletteSelector);
         Selector.loadSelector(ui.tilePaletteSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
