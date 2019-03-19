@@ -7,50 +7,29 @@
     }
   }
   registry.apply("Tile",[
-    "Selector"
-  ],function(Selector){
+    "Selector",
+    "TileOperations"
+  ],function(Selector,TileOperations){
     return function(instanceName,canvas,tiles,palettes,ui){
-      var drawTile = function(rows) {
+      var drawTile = function(update) {
         var tileName = Selector.selectedValue(ui.tileSelector);
         var paletteName = Selector.selectedValue(ui.tilePaletteSelector);
         if (tiles[tileName]) {
           if (palettes[paletteName]) {
             var tile = tiles[tileName];
-            if (rows) {
-              var chars = rows.join("");
-              var newChars = tile.index.reduce(function(char){
-                return myChars.split(char).join("");
-              },chars);
-              newChars.split("").forEach(function(char) {
-                tile.index.push(char);
-              })
-              tile.pixels = rows.map(function(row) {
-                return row.join("");
-              });
+            if (update) {
+              TileOperations.updateTile(tile,update);
             }
             var palette = palettes[paletteName];
             var size = Math.min(tile.index.length,palette.length);
             var listing = [];
-            var mapping = {};
             for (var i = 0; i < size; i++) {
               listing.push(lineItem(instanceName,tile.index[i],palette[i],i));
-              mapping[tile.index[i]] = palette[i];
             }
             ui.tileCharIndex.innerHTML = listing.join("");
             canvas.clear();
-            tile.pixels.forEach(function(row,y) {
-              row.forEach(function(char,x) {
-                var color = mapping[char];
-                if (color) {
-                  canvas.addPixel({
-                    x:x,
-                    y:y,
-                    color:color
-                  });
-                }
-              })
-            })
-            ui.tileDisplay = canvas.drawSVG();
+            TileOperations.applyPaletteToTile(palette,tile);
+            ui.tileDisplay = canvas.drawTileSVG();
           }
         }
       }
@@ -92,7 +71,7 @@
       }
       this.drawTile = drawTile;
       this.updateAndDrawTile = function() {
-        drawTile(ui.tilePixelInput.value.split("\r").join("").split("\n"));
+        drawTile(ui.tilePixelInput.value);
       }
     };
   });
