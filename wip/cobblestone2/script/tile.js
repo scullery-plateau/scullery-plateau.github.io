@@ -6,12 +6,18 @@
       return `<li style="display:inline;">"${char}": Transparent <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
     }
   }
+  var tileOption = function(option,tileName) {
+    option.text = tileName;
+    option.value = tileName;
+  }
   registry.apply("Tile",[
     "Selector",
     "TileOperations"
   ],function(Selector,TileOperations){
     return function(instanceName,canvas,tiles,palettes,ui){
       var drawTile = function(update) {
+        console.log("draw tile");
+        console.log(update);
         var tileName = Selector.selectedValue(ui.tileSelector);
         var paletteName = Selector.selectedValue(ui.tilePaletteSelector);
         if (tiles[tileName]) {
@@ -42,9 +48,9 @@
             pixels:[],
             index:[]
           };
-          Selector.loadSelector(ui.tileSelector,Object.keys(tiles),"Choose a tile:");
+          Selector.loadSelector(ui.tileSelector,Object.keys(tiles),"Choose a tile:",tileOption);
           Selector.selectLast(ui.tileSelector);
-          Selector.loadSelector(ui.tileForMapSelector,Object.keys(tiles),"Choose a tile:");
+          Selector.loadSelector(ui.tileForMapSelector,Object.keys(tiles),"Choose a tile:",tileOption);
         }
       }
       var swap = function(i,j) {

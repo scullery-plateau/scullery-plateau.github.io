@@ -12,7 +12,7 @@
           tile.index.push(char);
         })
         tile.pixels = rows.map(function(row) {
-          return row.join("");
+          return row.split("");
         });
       },
       applyPaletteToTile:function(palette,tile) {
@@ -30,10 +30,9 @@
                 color:color
               });
             }
-          })
-        })
-
+          });
+        });
       }
     }
-  })
+  });
 })();

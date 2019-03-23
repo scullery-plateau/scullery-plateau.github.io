@@ -1,5 +1,5 @@
 (function(){
-  var default = {
+  var defaultConfig = {
     tileScale:10,
     pixelScale:6,
     pixelCount:16,
@@ -8,7 +8,7 @@
   registry.apply("Canvas",[
   ],function(){
     return function(config){
-      var state = Object.assign(default,config);
+      var state = Object.assign(defaultConfig,config);
       var svg = [];
       this.setTileScale = function(scale) {
         state.tileScale = scale;
