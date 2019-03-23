@@ -8,6 +8,11 @@
         var newChars = tile.index.reduce(function(myChars,char){
           return myChars.split(char).join("");
         },chars);
+        while (newChars.length > 0) {
+          var next = newChars[0];
+          tile.index.push(next);
+          newChars = newChars.split(next).join("");
+        }
         newChars.split("").forEach(function(char) {
           tile.index.push(char);
         })
@@ -15,7 +20,8 @@
           return row.split("");
         });
       },
-      applyPaletteToTile:function(palette,tile) {
+      applyPaletteToTile:function(palette,tile,forEach) {
+        var size = Math.min(palette.length,tile.index.length);
         var mapping = {};
         for (var i = 0; i < size; i++) {
           mapping[tile.index[i]] = palette[i];
@@ -24,7 +30,7 @@
           row.forEach(function(char,x) {
             var color = mapping[char];
             if (color) {
-              canvas.addPixel({
+              forEach({
                 x:x,
                 y:y,
                 color:color

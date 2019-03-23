@@ -1,9 +1,9 @@
 (function(){
   var lineItem = function(instanceName,char,color,index) {
     if (color) {
-      return `<li style="display:inline;">"${char}": ${color} <span style="background-color:${color};color:${color};">______</span> <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
+      return `<li>"${char}": ${color} <span style="background-color:${color};color:${color};">______</span> <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
     } else {
-      return `<li style="display:inline;">"${char}": Transparent <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
+      return `<li>"${char}": Transparent <button onclick="${instanceName}.swapNextTileChar(${index})">+</button><button onclick="${instanceName}.swapPrevTileChar(${index})">-</button></li>`;
     }
   }
   var tileOption = function(option,tileName) {
@@ -16,8 +16,6 @@
   ],function(Selector,TileOperations){
     return function(instanceName,canvas,tiles,palettes,ui){
       var drawTile = function(update) {
-        console.log("draw tile");
-        console.log(update);
         var tileName = Selector.selectedValue(ui.tileSelector);
         var paletteName = Selector.selectedValue(ui.tilePaletteSelector);
         if (tiles[tileName]) {
@@ -34,8 +32,10 @@
             }
             ui.tileCharIndex.innerHTML = listing.join("");
             canvas.clear();
-            TileOperations.applyPaletteToTile(palette,tile);
-            ui.tileDisplay = canvas.drawTileSVG();
+            TileOperations.applyPaletteToTile(palette,tile,function(pixel) {
+              canvas.addPixel(pixel.x,pixel.y,pixel.color);
+            });
+            canvas.drawTileSVG(ui.tileDisplay);
           }
         }
       }
@@ -66,6 +66,7 @@
           var temp = arr[i];
           arr[i] = arr[j];
           arr[j] = temp;
+          console.log()
           drawTile();
         }
       }

@@ -118,6 +118,9 @@
       this.drawMap = function() {
         tileMap.drawMap();
       }
+      this.updateAndDrawMap = function() {
+        tileMap.updateAndDrawMap();
+      }
       this.selectAndDrawChar = function() {
         tileMap.selectAndDrawChar();
       }

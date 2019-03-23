@@ -24,7 +24,6 @@
   ],function(Selector){
     return function(palettes,ui){
       var updateColorSelector = function() {
-        console.log("updating color selector");
         var selectedPalette = Selector.selectedValue(ui.paletteSelector);
         if (selectedPalette) {
           Selector.loadSelector(ui.colorSelector,palettes[selectedPalette],"Choose a color to change:",colorOption);
@@ -37,7 +36,6 @@
         }
       }
       var updatePaletteLists = function() {
-        console.log("updating palette lists");
         Selector.loadSelector(ui.paletteSelector,Object.keys(palettes),"Choose a palette to edit:",paletteOption);
         Selector.selectLast(ui.paletteSelector);
         Selector.loadSelector(ui.tilePaletteSelector,Object.keys(palettes),"Choose a palette:",paletteOption);
