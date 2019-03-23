@@ -22,7 +22,10 @@
           if (palettes[paletteName]) {
             var tile = tiles[tileName];
             if (update) {
-              TileOperations.updateTile(tile,update);
+              TileOperations.update(tile.index,update,function(allChars,newChars) {
+                tile.pixels = allChars;
+                tile.index = tile.index.concat(newChars);
+              });
             }
             var palette = palettes[paletteName];
             var size = Math.min(tile.index.length,palette.length);
@@ -78,7 +81,14 @@
       }
       this.drawTile = drawTile;
       this.updateAndDrawTile = function() {
-        drawTile(ui.tilePixelInput.value);
+        if (tiles[tileName]) {
+          var tile = tiles[tileName];
+          TileOperations.update(tile.index,ui.tilePixelInput.value,function(allChars,newChars) {
+            tile.pixels = allChars;
+            tile.index = tile.index.concat(newChars);
+          });
+          drawTile();
+        }
       }
     };
   });

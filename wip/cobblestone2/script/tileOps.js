@@ -1,24 +1,40 @@
 (function(){
+  var transforms = {
+    flipdown:function(p) {
+
+    },
+    flipover:function(p) {
+
+    },
+    turnright:function(p) {
+
+    },
+    turnleft:function(p) {
+
+    }
+  }
   registry.apply("TileOperations",[
   ],function(){
     return {
-      updateTile:function(tile,text) {
+      getTransformNames:function(){
+        return Object.keys(transforms);
+      }
+      update:function(index,text,updateFn) {
         var rows = text.split("\r").join("").split("\n");
         var chars = rows.join("");
-        var newChars = tile.index.reduce(function(myChars,char){
+        var newChars = index.reduce(function(myChars,char){
           return myChars.split(char).join("");
         },chars);
+        var newCharIndex = [];
         while (newChars.length > 0) {
           var next = newChars[0];
-          tile.index.push(next);
+          newCharIndex.push(next);
           newChars = newChars.split(next).join("");
         }
-        newChars.split("").forEach(function(char) {
-          tile.index.push(char);
-        })
-        tile.pixels = rows.map(function(row) {
+        var allChars = rows.map(function(row) {
           return row.split("");
         });
+        update(allChars,newCharIndex);
       },
       applyPaletteToTile:function(palette,tile,forEach) {
         var size = Math.min(palette.length,tile.index.length);
