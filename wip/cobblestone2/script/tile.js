@@ -21,12 +21,6 @@
         if (tiles[tileName]) {
           if (palettes[paletteName]) {
             var tile = tiles[tileName];
-            if (update) {
-              TileOperations.update(tile.index,update,function(allChars,newChars) {
-                tile.pixels = allChars;
-                tile.index = tile.index.concat(newChars);
-              });
-            }
             var palette = palettes[paletteName];
             var size = Math.min(tile.index.length,palette.length);
             var listing = [];
@@ -41,6 +35,16 @@
             canvas.drawTileSVG(ui.tileDisplay);
           }
         }
+      }
+      this.reloadView = function() {
+        Selector.loadSelector(ui.tileSelector,Object.keys(tiles),"Choose a tile:",tileOption);
+        Selector.selectLast(ui.tileSelector);
+        Selector.loadSelector(ui.tileForMapSelector,Object.keys(tiles),"Choose a tile:",tileOption);
+        Selector.selectLast(ui.tilePaletteSelector);
+        ui.tilePixelInput.value = tile.pixels.map(function(row) {
+          return row.join("");
+        }).join("\r\n")
+        drawTile();
       }
       this.addTile = function() {
         var tileName = prompt("What do you want to name this tile?");

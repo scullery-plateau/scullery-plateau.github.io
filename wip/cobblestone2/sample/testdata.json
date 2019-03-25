@@ -1,0 +1,21 @@
+{
+  "tiles":{
+    "stillwater":{
+      "pixels":[["a","b","a","b"]],
+      "index":["a","b"]
+    }
+  },
+  "palettes":{
+    "water":["#0000ff","#00ffff"]
+  },
+  "map":{
+    "map":[["a"]],
+    "chars":{
+      "a":{
+        "tile":"stillwater",
+        "palette":"water",
+        "transforms":{}
+      }
+    }
+  }
+}

@@ -1,16 +1,28 @@
 (function(){
   var transforms = {
     flipdown:function(p) {
-
+      return Object.assign(p,{
+        x:p.x,
+        y:15-p.y
+      })
     },
     flipover:function(p) {
-
+      return Object.assign(p,{
+        x:15-p.x,
+        y:p.y
+      })
     },
     turnright:function(p) {
-
+      return Object.assign(p,{
+        x:15-p.y,
+        y:p.x
+      })
     },
     turnleft:function(p) {
-
+      return Object.assign(p,{
+        x:p.y,
+        y:15-p.x
+      })
     }
   }
   registry.apply("TileOperations",[
@@ -18,7 +30,14 @@
     return {
       getTransformNames:function(){
         return Object.keys(transforms);
-      }
+      },
+      applyTransforms:function(finalFn,transforms){
+        return function(pix) {
+          return finalFn(Object.keys(transforms).reduce(function(p,tf) {
+            return tf(p);
+          },pix));
+        }
+      },
       update:function(index,text,updateFn) {
         var rows = text.split("\r").join("").split("\n");
         var chars = rows.join("");

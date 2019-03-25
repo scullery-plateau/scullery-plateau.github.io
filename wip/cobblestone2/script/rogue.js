@@ -35,10 +35,13 @@
       var tileCanvas = new Canvas();
       var tile = new Tile('ctrl',tileCanvas,data.tiles,data.palettes,tileUI);
       var mapCanvas = new Canvas();
-      var tileMap = new TileMap(mapCanvas,data.tiles,data.palettes,data.map,tileMapUI);
+      var mapTileCanvas = new Canvas();
+      var tileMap = new TileMap(mapCanvas,mapTileCanvas,data.tiles,data.palettes,data.map,tileMapUI);
       var selected = {};
-      var updateView = function() {
+      var reloadView = function() {
         palette.updatePaletteLists();
+        tile.reloadView();
+        tileMap.reloadView();
       }
       this.init = function() {
         Object.entries(domIds).forEach(function(entry){
@@ -73,10 +76,18 @@
       this.loadFile = function(fileInputId) {
         loadFile(document.getElementById(fileInputId),function(fileData) {
           var jsonFileData = parser.parse(fileData);
-          ["tiles","palettes","map"].forEach(function(key) {
-            state[key] = jsonFileData[key];
+          Object.keys(jsonFileData.tiles).forEach(function(key) {
+            data.tiles[key] = jsonFileData.tiles[key];
           });
-          updateView();
+          Object.keys(jsonFileData.palettes).forEach(function(key) {
+            data.palettes[key] = jsonFileData.palettes[key];
+          });
+          data.map.chars = {};
+          Object.keys(jsonFileData.map.chars).forEach(function(key) {
+            data.map.chars[key] = jsonFileData.map.chars[key];
+          });
+          data.map.map = jsonFileData.map.map;
+          reloadView();
         });
       }
       this.addPalette = function() {

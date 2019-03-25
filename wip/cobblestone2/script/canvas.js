@@ -48,7 +48,7 @@
       this.addPixel = function(x,y,color) {
         svg.push(pixel(state,x,y,color));
       }
-      this.addTile = function(x,y,palette,tile) {
+      this.addTile = function(x,y,tile) {
       }
       this.drawTileSVG = function(ui) {
         var dim = state.tileScale * state.pixelCount;
