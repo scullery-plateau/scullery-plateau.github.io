@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript">
-    </script>
     <style type="text/css">
       td {
         vertical-align: top;
@@ -11,8 +9,20 @@
         display: none;
       }
     </style>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registry = new Registry();
+    </script>
+    <script src="script/mapcanvas.js"></script>
+    <script src="script/simple.js"></script>
+    <script src="script/tileOps.js"></script>
+    <script type="text/javascript">
+      window.SimpleForm = registry.invoke("SimpleForm");
+      window.simpleForm = new SimpleForm('canvas','print');
+    </script>
   </head>
-  <body>
+  <body onload="window.ctrl = new SimpleProcessor('loadfile','canvas','print');">
     <div id="ctrl">
       <div id="loadsave">
         <label for="loadfile">File: </label>

@@ -25,19 +25,57 @@
       });
     }
   }
+  var charTileRenderer = function(chars,tiles,palettes,init,forEachPixel,forTile) {
+    return function(char) {
+      if(chars[char]) {
+        var charObj = map.chars[char];
+        if (tiles[charObj.tile]) {
+          if (palettes[charObj.palette]) {
+            var tile = tiles[charObj.tile];
+            var palette = palettes[charObj.palette];
+            init(char);
+            applyPaletteToTile(palette,tile,applyTransforms(function(pixel) {
+              forEachPixel(pixel.x,pixel.y,pixel.color);
+            }, charObj.transforms));
+            forTile();
+          }
+        }
+      }
+    }
+  }
+  var applyPaletteToTile = function(palette,tile,forEach) {
+    var size = Math.min(palette.length,tile.index.length);
+    var mapping = {};
+    for (var i = 0; i < size; i++) {
+      mapping[tile.index[i]] = palette[i];
+    }
+    tile.pixels.forEach(function(row,y) {
+      row.forEach(function(char,x) {
+        var color = mapping[char];
+        if (color) {
+          forEach({
+            x:x,
+            y:y,
+            color:color
+          });
+        }
+      });
+    });
+  }
+  var applyTransforms = function(finalFn,transforms){
+    return function(pix) {
+      return finalFn(Object.keys(transforms).reduce(function(p,tf) {
+        return tf(p);
+      },pix));
+    }
+  }
   registry.apply("TileOperations",[
   ],function(){
     return {
       getTransformNames:function(){
         return Object.keys(transforms);
       },
-      applyTransforms:function(finalFn,transforms){
-        return function(pix) {
-          return finalFn(Object.keys(transforms).reduce(function(p,tf) {
-            return tf(p);
-          },pix));
-        }
-      },
+      applyTransforms:applyTransforms,
       update:function(index,text,updateFn) {
         var rows = text.split("\r").join("").split("\n");
         var chars = rows.join("");
@@ -53,27 +91,10 @@
         var allChars = rows.map(function(row) {
           return row.split("");
         });
-        update(allChars,newCharIndex);
+        updateFn(allChars,newCharIndex);
       },
-      applyPaletteToTile:function(palette,tile,forEach) {
-        var size = Math.min(palette.length,tile.index.length);
-        var mapping = {};
-        for (var i = 0; i < size; i++) {
-          mapping[tile.index[i]] = palette[i];
-        }
-        tile.pixels.forEach(function(row,y) {
-          row.forEach(function(char,x) {
-            var color = mapping[char];
-            if (color) {
-              forEach({
-                x:x,
-                y:y,
-                color:color
-              });
-            }
-          });
-        });
-      }
+      applyPaletteToTile:applyPaletteToTile,
+      buildCharTileRenderer:charTileRenderer
     }
   });
 })();

@@ -1,49 +1,13 @@
 (function(){
   registry.apply("TileMap",[
+    "MapOperations",
     "Selector",
     "TileOperations"
-  ],function(Selector,TileOperations) {
+  ],function(MapOperations,Selector,TileOperations) {
     return function(mapCanvas,tileCanvas,tiles,palettes,map,ui) {
-      var charTileRenderer = function(init,forEachPixel,forTile) {
-        return function(char) {
-          if(map.chars[char]) {
-            var charObj = map.chars[char];
-            if (tiles[charObj.tile]) {
-              if (palettes[charObj.palette]) {
-                var tile = tiles[charObj.tile];
-                var palette = palettes[charObj.palette];
-                init(char);
-                TileOperations.applyPaletteToTile(palette,tile,TileOperations.applyTransforms(function(pixel) {
-                  forEachPixel(pixel.x,pixel.y,pixel.color);
-                }, charObj.transforms));
-                forTile();
-              }
-            }
-          }
-        }
-      }
-      var drawMap = function() {
-        var renderState = {};
-        var charMap = {};
-        var render = charTileRenderer(function(char) {
-          renderState.selectedChar = char;
-          renderState.pixels = [];
-        },function(x,y,color) {
-          renderState.pixels.push({x:x,y:y,color:color});
-        },function() {
-          charMap[renderState.selectedChar] = renderState.pixels;
-        });
-        Object.keys(map.chars).forEach(render);
-        mapCanvas.clear()
-        map.map.forEach(function(row, rowIndex) {
-          row.forEach(function(cell, colIndex) {
-            mapCanvas.addTile(colIndex, rowIndex, charMap[cell]);
-          });
-        });
-        mapCanvas.drawMapSVG(ui.printerOut);
-      }
+      var mapOps = new MapOperations(map,tiles,palettes,mapCanvas,ui.printerOut,ui.mapDisplay);
       var drawTile = function() {
-        var render = charTileRenderer(tileCanvas.clear,tileCanvas.addPixel,function() {
+        var render = TileOperations.buildCharTileRenderer(map.chars,tiles,palettes,tileCanvas.clear,tileCanvas.addPixel,function() {
           tileCanvas.drawTileSVG(ui.charTileDisplay);
         })
         var char = Selector.selectedValue(ui.charSelector);
@@ -71,7 +35,7 @@
         Selector.loadSelector(ui.charSelector,Object.keys(map.chars),"Choose the map character to which to apply a tile and palette.",charOption);
         Selector.selectLast(ui.charSelector);
         selectChar();
-        drawMap();
+        mapOps.drawMap();
       }
       this.updateAndDrawMap = function() {
         TileOperations.update(Object.keys(map.chars),ui.mapInput,function(allChars,newChars) {
@@ -81,7 +45,7 @@
           });
           Selector.loadSelector(ui.charSelector,Object.keys(map.chars),"Choose the map character to which to apply a tile and palette.",charOption);
         });
-        drawMap();
+        mapOps.drawMap();
       }
       this.selectAndDrawChar = function() {
         selectChar();
@@ -92,7 +56,7 @@
           var tile = Selector.selectedValue(ui.tileForMapSelector);
           map.chars[char].tile = tile;
           drawTile();
-          drawMap();
+          mapOps.drawMap();
         }
       }
       this.selectPaletteForChar = function() {
@@ -101,7 +65,7 @@
           var palette = Selector.selectedValue(ui.paletteForMapSelector);
           map.chars[char].palette = palette;
           drawTile();
-          drawMap();
+          mapOps.drawMap();
         }
       }
       this.applyTransform = function(selected,transform) {
@@ -113,7 +77,7 @@
             delete map.chars[char].transforms[transform];
           }
           drawTile();
-          drawMap();
+          mapOps.drawMap();
         }
       }
     };

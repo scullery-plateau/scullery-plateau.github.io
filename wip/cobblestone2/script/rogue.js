@@ -1,4 +1,23 @@
-(function(){
+function() {
+  var renderState = {};
+  var charMap = {};
+  var render = TileOperations.buildCharTileRenderer(map.chars,function(char) {
+    renderState.selectedChar = char;
+    renderState.pixels = [];
+  },function(x,y,color) {
+    renderState.pixels.push({x:x,y:y,color:color});
+  },function() {
+    charMap[renderState.selectedChar] = renderState.pixels;
+  });
+  Object.keys(map.chars).forEach(render);
+  mapCanvas.clear()
+  map.map.forEach(function(row, rowIndex) {
+    row.forEach(function(cell, colIndex) {
+      mapCanvas.addTile(colIndex, rowIndex, charMap[cell]);
+    });
+  });
+  mapCanvas.drawMapSVG(ui.printerOut);
+}(function(){
   var domKeys = [
     'saveButton',
     'paletteSelector',
