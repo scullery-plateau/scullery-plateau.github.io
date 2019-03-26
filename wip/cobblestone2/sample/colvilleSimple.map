@@ -1,0 +1,173 @@
+             788888888889
+             4..........6
+             4..........6
+             4..........6
+             4..........6
+             4..........6
+             4..........6
+             4..........6
+             4..........6
+             1222Z..C2223
+                 4..6
+                 4..6
+                 4..6
+                 1=23
+                 7S888889
+                 4......6
+                 4......6
+                 4......6
+                 4......6
+                 4......6
+                 4......6
+                 4......6
+                 12Z..C23
+                   4..6
+                   4..6
+    7888888889     4..6
+    4........6     4..6
+7888Q........E88888Q..6
+4.................**..6
+4.................**..6
+4^^CZ........C222222223
+4^^64........6
+4^^61222222223
+4^^6
+4^^6
+4^^6
+Q--E
+
+".": floor, floor
+"^": stairs, stairs, flipover
+"-": front-door, door
+"*": floor, floor, flipover
+"8": wall, wall
+"4": wall, wall, turnleft
+"6": wall, wall, turnright
+"2": wall, wall, flipdown
+"7": wall-corner, wall
+"9": wall-corner, wall, flipover
+"1": wall-corner, wall, flipdown
+"3": wall-corner, wall, flipdown, flipover
+"Q": wall-inside-corner, wall
+"E": wall-inside-corner, wall, flipover
+"Z": wall-inside-corner, wall, flipdown
+"C": wall-inside-corner, wall, flipover, flipdown
+"S": wall, wall, flipover
+"=": floor, floor
+
+floor: lightgrey, slategrey, darkslategrey, black
+stairs: lightgrey, darkslategrey
+door: white, mediumpurple, indigo, black
+wall: palegoldenrod, darkgoldenrod, black, saddlebrown
+
+floor
+"abc"
+aaaaaaaaaaaaaaaa
+aaccccccacccccaa
+acbbbbbcacccccca
+acbbbbbcacccccca
+acbbbbacacccccca
+acbbbacaaaaaccca
+acaaacacccccacca
+accccacccccccaaa
+aaaaacccccccacca
+accccacccccacbca
+acccccacccacbbca
+accccccaaacbbbca
+accccccaccbbbbca
+accccccacaaaaaca
+aacccccaccccccaa
+aaaaaaaaaaaaaaaa
+
+stairs
+"ab"
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+baaaaaaaaaaaaaab
+baaaaaaaaaaaaaab
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbaaaaaaaaaaaabb
+bbaaaaaaaaaaaabb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbaaaaaaaaaabbb
+bbbaaaaaaaaaabbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+
+front-door
+"abcd"
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+dbbbbbbbbbbbbbbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccaaccccaaccbd
+dbcabbaccabbacbd
+dbabbbbaabbbbabd
+dbbbddbbbbddbbbd
+dbbddddbbddddbbd
+dddddddddddddddd
+
+wall
+"abcd"
+aaaaaaaaaaaaaaaa
+bdcbbbbbbdcbbbbb
+ddcbddbdddcbddbd
+ddcdddddddcddddd
+ddcdddddddcddddd
+cccccccccccccccc
+bbbbdcbbbbbbdcbb
+dddddcdddddddcdd
+dddddcdddddddcdd
+cccccccccccccccc
+bdcbbbbbbdcbbbbb
+ddcdddddddcddddd
+cccccccccccccccc
+dddddcdddddddcdd
+cccccccccccccccc
+
+wall-corner
+"abcd"
+aaaaaaaaaaaaaaaa
+abbbbbbbbdcbbbbb
+abcccdddddcbddbd
+abccccddddcddddd
+abdccccdddcddddd
+abddcccccccccccc
+abdddcccbbbbdcbd
+abdddcccdddddcdd
+abdddcbdccdddcdd
+abbddcbdcccccccc
+abdddc6bbbbbbbbb
+abdddcdddcccdddd
+abbddcbddcbccccc
+acccccbddcbdccdd
+addddcbddcbdcccc
+abdddcbddcbdcdcc
+
+wall-inside-corner
+"abcd"
+aabddcbddcbdcdccc
+aabbdcddddcbdcdcc
+bbabdcccccbdccccc
+dbbabcbdddbdcdccc
+dddbacbddcbdcdccc
+cccccbbddccccdccc
+dddddbaddcddcdccc
+ddddddbadcbdcdccc
+dddddcddacbdcdccc
+cccccccccdbdcdccc
+bdcbbbbbbbadcdccc
+ddcddddddddbcdccc
+ccccccccccccdbccc
+dddddcdddddddbccc
+ccccccccccccccccc
