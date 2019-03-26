@@ -1,9 +1,7 @@
 (function(){
   var defaultConfig = {
     tileScale:10,
-    pixelScale:6,
-    pixelCount:16,
-    rasterScale:5
+    pixelCount:16
   }
   var pixel = function(state,x,y,color) {
     return `<rect x="${x*state.tileScale}" y="${y*state.tileScale}" width="${state.tileScale}" height="${state.tileScale}" fill="${color}" stroke="none"/>`;
@@ -23,7 +21,7 @@
   var frame = function(width,height,svg) {
     return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}">${svg}</svg>`;
   }
-  registry.apply("Canvas",[
+  registry.apply("TileCanvas",[
   ],function(){
     return function(config){
       var state = Object.assign(defaultConfig,config);
@@ -48,18 +46,10 @@
       this.addPixel = function(x,y,color) {
         svg.push(pixel(state,x,y,color));
       }
-      this.addTile = function(x,y,tile) {
-      }
       this.drawTileSVG = function(ui) {
         var dim = state.tileScale * state.pixelCount;
         var list = [].concat(svg,state.grid).join("");
         ui.innerHTML = frame(dim, dim, list);
-      }
-      this.drawMapSVG = function(ui) {
-
-      }
-      this.paintPNG = function(ui) {
-
       }
     };
   });

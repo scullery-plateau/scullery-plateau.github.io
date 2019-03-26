@@ -17,13 +17,14 @@
     "charTileDisplay"
   ];
   registry.apply("RogueController",[
-    "Canvas",
     "FileParser",
+    "MapCanvas",
     "Palette",
     "Selector",
     "Tile",
-    "TileMap",
-  ],function(Canvas,FileParser,Palette,Selector,Tile,TileMap){
+    "TileCanvas",
+    "TileMap"
+  ],function(FileParser,MapCanvas,Palette,Selector,TileCanvas,Tile,TileMap){
     var parser = new FileParser();
     return function(instanceName,domIds){
       var ui = {};
@@ -32,10 +33,10 @@
       var tileMapUI = {};
       var data = {tiles:{},palettes:{},map:{}};
       var palette = new Palette(data.palettes,paletteUI);
-      var tileCanvas = new Canvas();
+      var tileCanvas = new TileCanvas();
       var tile = new Tile('ctrl',tileCanvas,data.tiles,data.palettes,tileUI);
-      var mapCanvas = new Canvas();
-      var mapTileCanvas = new Canvas();
+      var mapCanvas = new MapCanvas();
+      var mapTileCanvas = new TileCanvas();
       var tileMap = new TileMap(mapCanvas,mapTileCanvas,data.tiles,data.palettes,data.map,tileMapUI);
       var selected = {};
       var reloadView = function() {
@@ -69,7 +70,8 @@
         "charSelector",
         "tileForMapSelector",
         "paletteForMapSelector",
-        "charTileDisplay"].forEach(function(key) {
+        "charTileDisplay",
+        "printerOut"].forEach(function(key) {
           tileMapUI[key] = ui[key];
         })
       }

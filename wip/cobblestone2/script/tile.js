@@ -41,6 +41,7 @@
         Selector.selectLast(ui.tileSelector);
         Selector.loadSelector(ui.tileForMapSelector,Object.keys(tiles),"Choose a tile:",tileOption);
         Selector.selectLast(ui.tilePaletteSelector);
+        var tile = tiles[Selector.selectedValue(ui.tileSelector)];
         ui.tilePixelInput.value = tile.pixels.map(function(row) {
           return row.join("");
         }).join("\r\n")

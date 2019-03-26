@@ -3,26 +3,26 @@
     flipdown:function(p) {
       return Object.assign(p,{
         x:p.x,
-        y:15-p.y
-      })
+        y:(15-p.y)
+      });
     },
     flipover:function(p) {
       return Object.assign(p,{
-        x:15-p.x,
+        x:(15-p.x),
         y:p.y
-      })
+      });
     },
     turnright:function(p) {
       return Object.assign(p,{
-        x:15-p.y,
+        x:(15-p.y),
         y:p.x
-      })
+      });
     },
     turnleft:function(p) {
       return Object.assign(p,{
         x:p.y,
-        y:15-p.x
-      })
+        y:(15-p.x)
+      });
     }
   }
   registry.apply("TileOperations",[

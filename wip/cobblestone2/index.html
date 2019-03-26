@@ -3,6 +3,25 @@
   <head>
     <title>Cobblestone: Rogue</title>
     <link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
+    <style type="text/css">
+      @media print {
+        #ctrl {
+          display: block;
+        }
+        #print {
+          display: block;
+        }
+      }
+
+      @media screen {
+        #ctrl {
+          display: block;
+        }
+        #print {
+          display: block;
+        }
+      }
+    </style>
     <script type="text/javascript">
       function toggleVisibility(input,id) {
         if (input.checked) {
@@ -29,7 +48,7 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
-    <script src="script/canvas.js"></script>
+    <script src="script/mapcanvas.js"></script>
     <script src="script/palette.js"></script>
     <script src="script/parser.js"></script>
     <script src="script/pixelator.js"></script>
@@ -37,6 +56,7 @@
     <script src="script/selector.js"></script>
     <script src="script/svg.js"></script>
     <script src="script/tile.js"></script>
+    <script src="script/tilecanvas.js"></script>
     <script src="script/tilemap.js"></script>
     <script src="script/tileOps.js"></script>
     <script type="text/javascript">
@@ -57,7 +77,8 @@
         charSelector:"charSelect",
         tileForMapSelector:"tileForMap",
         paletteForMapSelector:"paletteForMap",
-        charTileDisplay:"showTile"
+        charTileDisplay:"showTile",
+        printerOut:"print"
       });
     </script>
   </head>
@@ -164,7 +185,6 @@
         </div>
       </div>
     </div>
-    <div id="canvas"></div>
     <div id="print"></div>
   </body>
 </html>

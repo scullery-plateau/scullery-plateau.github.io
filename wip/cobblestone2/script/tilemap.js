@@ -2,8 +2,8 @@
   registry.apply("TileMap",[
     "Selector",
     "TileOperations"
-  ],function(Selector,TileOperations){
-    return function(mapCanvas,tileCanvas,tiles,palettes,map,ui){
+  ],function(Selector,TileOperations) {
+    return function(mapCanvas,tileCanvas,tiles,palettes,map,ui) {
       var charTileRenderer = function(init,forEachPixel,forTile) {
         return function(char) {
           if(map.chars[char]) {
@@ -15,7 +15,7 @@
                 init(char);
                 TileOperations.applyPaletteToTile(palette,tile,TileOperations.applyTransforms(function(pixel) {
                   forEachPixel(pixel.x,pixel.y,pixel.color);
-                },charObj.transforms));
+                }, charObj.transforms));
                 forTile();
               }
             }
@@ -23,17 +23,24 @@
         }
       }
       var drawMap = function() {
-        var renderState = {charMap:{}};
+        var renderState = {};
+        var charMap = {};
         var render = charTileRenderer(function(char) {
           renderState.selectedChar = char;
           renderState.pixels = [];
         },function(x,y,color) {
           renderState.pixels.push({x:x,y:y,color:color});
         },function() {
-          renderState.charMap[renderState.selectedChar] = renderState.pixels;
+          charMap[renderState.selectedChar] = renderState.pixels;
         });
         Object.keys(map.chars).forEach(render);
-        
+        mapCanvas.clear()
+        map.map.forEach(function(row, rowIndex) {
+          row.forEach(function(cell, colIndex) {
+            mapCanvas.addTile(colIndex, rowIndex, charMap[cell]);
+          });
+        });
+        mapCanvas.drawMapSVG(ui.printerOut);
       }
       var drawTile = function() {
         var render = charTileRenderer(tileCanvas.clear,tileCanvas.addPixel,function() {
