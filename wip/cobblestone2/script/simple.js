@@ -26,7 +26,7 @@
         loadFile(ui.fileLoadInput,function(fileData) {
           var data = parser.parseMapFile(fileData);
           var mapCanvas = new MapCanvas();
-          var mapOps new MapOperations(data.map,data.tiles,data.palettes,mapCanvas,ui.printer,ui.canvas);
+          var mapOps = new MapOperations(data.map,data.tiles,data.palettes,mapCanvas,ui.printer,ui.canvas);
           mapOps.drawMap();
         })
       }

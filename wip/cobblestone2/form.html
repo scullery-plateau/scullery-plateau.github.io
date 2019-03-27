@@ -15,14 +15,14 @@
       window.registry = new Registry();
     </script>
     <script src="script/mapcanvas.js"></script>
+    <script src="script/mapOps.js"></script>
     <script src="script/simple.js"></script>
     <script src="script/tileOps.js"></script>
     <script type="text/javascript">
       window.SimpleForm = registry.invoke("SimpleForm");
-      window.simpleForm = new SimpleForm('canvas','print');
     </script>
   </head>
-  <body onload="window.ctrl = new SimpleProcessor('loadfile','canvas','print');">
+  <body onload="window.ctrl = new SimpleForm('loadfile','canvas','print');">
     <div id="ctrl">
       <div id="loadsave">
         <label for="loadfile">File: </label>

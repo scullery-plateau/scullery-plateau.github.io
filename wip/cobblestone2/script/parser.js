@@ -33,6 +33,7 @@
         var chars = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') >= 0;
         });
+
         var tiles = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') < 0;
         });
