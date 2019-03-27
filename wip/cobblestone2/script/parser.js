@@ -26,22 +26,28 @@
           throw "only one map per file!"
         }
         data.map.map = splitGrid(maps[0]);
-        var palettes = fileTextBlocks.filter(function(block) {
+        data.palettes = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') < 0 && block.indexOf(':') >= 0;
         }).reduce(function(out,block){
+          console.log("palette block");
+          console.log(block);
           return block.split("\n").reduce(function(paletteMap,row){
-            var kv = row.split("\:");
+            console.log("palette row");
+            console.log(row);
+            var kv = row.split(":");
             var paletteName = kv[0].trim();
-            var colors = kv[1].trim.split(",").forEach(function(c) {
+            var colors = kv[1].trim().split(",").forEach(function(c) {
               return c.trim();
             });
             paletteMap[paletteName] = colors;
             return paletteMap;
           },out);
         },{})
-        var chars = fileTextBlocks.filter(function(block) {
+        data.map.chars = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') >= 0;
         }).reduce(function(out,block) {
+          console.log("char block");
+          console.log(block);
           return block.split("\n").reduce(function(charMap,row) {
             var kv = row.split("\:");
             var char = JSON.parse(kv[0].trim());
@@ -54,17 +60,21 @@
             obj.transforms = vars.reduce(function(tfs,tf) {
               tfs[tf] = true;
               return tfs;
-            });
+            }, {});
             charMap[char] = obj;
             return charMap;
           }, out)
         }, {});
 
-        var tiles = fileTextBlocks.filter(function(block) {
+        data.tiles = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') < 0;
         }).reduce(function(out,block){
-          var rows = block.split("");
+          console.log("tile block");
+          console.log(block);
+          var rows = block.split("\n");
           var tileName = rows.shift();
+          console.log("tileName");
+          console.log(tileName);
           var tileIndex = JSON.parse(rows.shift()).split("");
           var pixels = rows.map(function(row) {
             return row.split("");
@@ -75,7 +85,8 @@
           };
           return out;
         }, {});
-
+        console.log(data);
+        return data;
       }
     };
   });

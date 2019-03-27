@@ -28,7 +28,7 @@
   var charTileRenderer = function(chars,tiles,palettes,init,forEachPixel,forTile) {
     return function(char) {
       if(chars[char]) {
-        var charObj = map.chars[char];
+        var charObj = chars[char];
         if (tiles[charObj.tile]) {
           if (palettes[charObj.palette]) {
             var tile = tiles[charObj.tile];

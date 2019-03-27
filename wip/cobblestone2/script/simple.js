@@ -14,9 +14,10 @@
     return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}">${svg}</svg>`;
   }
   registry.apply("SimpleForm",[
-    "MapCanvas","MapOperations","TileOperations"
-  ],function(MapCanvas,MapOperations,TileOperations){
+    "FileParser","MapCanvas","MapOperations","TileOperations"
+  ],function(FileParser,MapCanvas,MapOperations,TileOperations){
     return function(fileLoadInputId,canvasId,printOutId){
+      var parser = new FileParser();
       this.loadFile = function() {
         var ui = {
           printer:document.getElementById(printOutId),
