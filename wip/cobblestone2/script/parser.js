@@ -25,18 +25,57 @@
         if (maps.length > 1) {
           throw "only one map per file!"
         }
-        data.map.map = gridStr(maps[0]);
+        data.map.map = splitGrid(maps[0]);
         var palettes = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') < 0 && block.indexOf(':') >= 0;
-        });
-        
+        }).reduce(function(out,block){
+          return block.split("\n").reduce(function(paletteMap,row){
+            var kv = row.split("\:");
+            var paletteName = kv[0].trim();
+            var colors = kv[1].trim.split(",").forEach(function(c) {
+              return c.trim();
+            });
+            paletteMap[paletteName] = colors;
+            return paletteMap;
+          },out);
+        },{})
         var chars = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') >= 0;
-        });
+        }).reduce(function(out,block) {
+          return block.split("\n").reduce(function(charMap,row) {
+            var kv = row.split("\:");
+            var char = JSON.parse(kv[0].trim());
+            var vars = kv[1].trim().split(",").map(function(elem) {
+              return elem.trim();
+            });
+            var obj = {};
+            obj.tile = vars.shift();
+            obj.palette = vars.shift();
+            obj.transforms = vars.reduce(function(tfs,tf) {
+              tfs[tf] = true;
+              return tfs;
+            });
+            charMap[char] = obj;
+            return charMap;
+          }, out)
+        }, {});
 
         var tiles = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') < 0;
-        });
+        }).reduce(function(out,block){
+          var rows = block.split("");
+          var tileName = rows.shift();
+          var tileIndex = JSON.parse(rows.shift()).split("");
+          var pixels = rows.map(function(row) {
+            return row.split("");
+          })
+          out[tileName] = {
+            index:tileIndex,
+            pixels:pixels
+          };
+          return out;
+        }, {});
+
       }
     };
   });
