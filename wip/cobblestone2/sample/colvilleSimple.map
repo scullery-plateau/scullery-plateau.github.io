@@ -37,7 +37,7 @@
 Q--E
 
 ".": floor, floor
-"^": stairs, stairs, flipover
+"^": stairs, stairs, flipdown
 "-": front-door, door
 "*": floor, floor, flipover
 "8": wall, wall
@@ -134,6 +134,7 @@ ddcdddddddcddddd
 cccccccccccccccc
 dddddcdddddddcdd
 cccccccccccccccc
+cccccccccccccccc
 
 wall-corner
 "abcd"
@@ -156,18 +157,19 @@ abdddcbddcbdcdcc
 
 wall-inside-corner
 "abcd"
-aabddcbddcbdcdccc
-aabbdcddddcbdcdcc
-bbabdcccccbdccccc
-dbbabcbdddbdcdccc
-dddbacbddcbdcdccc
-cccccbbddccccdccc
-dddddbaddcddcdccc
-ddddddbadcbdcdccc
-dddddcddacbdcdccc
-cccccccccdbdcdccc
-bdcbbbbbbbadcdccc
-ddcddddddddbcdccc
-ccccccccccccdbccc
-dddddcdddddddbccc
-ccccccccccccccccc
+aabddcbddcbdcdcc
+aabbdcdddcbdcdcc
+bbabdcccccbdcccc
+dbbabcbdddbdcdcc
+dddbacbddcbdcdcc
+cccccbbddccccdcc
+dddddbaddcddcdcc
+ddddddbadcbdcdcc
+dddddcddacbdcdcc
+cccccccccdbdcdcc
+bdcbbbbbbbadcdcc
+ddcddddddddbcdcc
+ccccccccccccdbcc
+dddddcdddddddbcc
+cccccccccccccccc
+cccccccccccccccc

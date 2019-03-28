@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
     <style type="text/css">
-      td {
-        vertical-align: top;
-      }
-      #mapCtrl, canvas, print {
-        display: none;
+      @media print {
+        #ctrl, #canvas {
+          display: none;
+        }
       }
     </style>
     <script src="../../common/script/util/file.js"></script>

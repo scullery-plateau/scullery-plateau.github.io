@@ -34,11 +34,13 @@
           return block.split("\n").reduce(function(paletteMap,row){
             console.log("palette row");
             console.log(row);
-            var kv = row.split(":");
+            var kv = row.split("\:");
             var paletteName = kv[0].trim();
-            var colors = kv[1].trim().split(",").forEach(function(c) {
+            var colors = kv[1].trim().split(",").map(function(c) {
               return c.trim();
             });
+            console.log("colors");
+            console.log(colors)
             paletteMap[paletteName] = colors;
             return paletteMap;
           },out);

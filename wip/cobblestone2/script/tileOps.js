@@ -62,10 +62,12 @@
       });
     });
   }
-  var applyTransforms = function(finalFn,transforms){
+  var applyTransforms = function(finalFn,tfs) {
     return function(pix) {
-      return finalFn(Object.keys(transforms).reduce(function(p,tf) {
-        return tf(p);
+      return finalFn(Object.keys(tfs).reduce(function(p,tf) {
+        if(tfs[tf]) {
+          return transforms[tf](p);
+        }
       },pix));
     }
   }
