@@ -25,18 +25,12 @@
         data.palettes = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') < 0 && block.indexOf(':') >= 0;
         }).reduce(function(out,block){
-          console.log("palette block");
-          console.log(block);
           return block.split("\n").reduce(function(paletteMap,row){
-            console.log("palette row");
-            console.log(row);
             var kv = row.split("\:");
             var paletteName = kv[0].trim();
             var colors = kv[1].trim().split(",").map(function(c) {
               return c.trim();
             });
-            console.log("colors");
-            console.log(colors)
             paletteMap[paletteName] = colors;
             return paletteMap;
           },out);
@@ -44,8 +38,6 @@
         data.map.chars = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') >= 0;
         }).reduce(function(out,block) {
-          console.log("char block");
-          console.log(block);
           return block.split("\n").reduce(function(charMap,row) {
             var kv = row.split("\:");
             var char = JSON.parse(kv[0].trim());
@@ -67,12 +59,8 @@
         data.tiles = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') >= 0 && block.indexOf(':') < 0;
         }).reduce(function(out,block){
-          console.log("tile block");
-          console.log(block);
           var rows = block.split("\n");
           var tileName = rows.shift();
-          console.log("tileName");
-          console.log(tileName);
           var tileIndex = JSON.parse(rows.shift()).split("");
           var pixels = rows.map(function(row) {
             return row.split("");
@@ -83,7 +71,6 @@
           };
           return out;
         }, {});
-        console.log(data);
         return data;
       }
     };

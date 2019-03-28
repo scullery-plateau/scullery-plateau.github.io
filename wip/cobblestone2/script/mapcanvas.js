@@ -11,13 +11,12 @@
     return `<rect x="${col*state.pixelScale*state.pixelCount}" y="${row*state.pixelScale*state.pixelCount}" width="${state.pixelScale*state.pixelCount}" height="${state.pixelScale*state.pixelCount}" fill="none" stroke="black" stroke-width="2"/>`;
   }
   var frame = function(width,height,svg) {
-    return `<svg width="100%" height="100%" viewBox="0 0 ${width} ${height}">${svg}</svg>`;
+    return `<svg width="8in" height="10in" viewBox="0 0 ${width} ${height}">${svg}</svg>`;
   }
   registry.apply("MapCanvas",[
   ],function(){
     return function(config){
       var state = Object.assign(defaultConfig,config);
-      console.log(state);
       state.width = 0;
       state.height = 0;
       var svg = [];
@@ -53,7 +52,7 @@
         ui.innerHTML += frame(width, height, svg.join(""));
       }
       this.paintPNG = function(ui) {
-        
+
       }
     };
   });
