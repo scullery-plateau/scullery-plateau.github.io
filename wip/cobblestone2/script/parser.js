@@ -19,13 +19,9 @@
             chars:{}
           }
         };
-        var maps = fileTextBlocks.filter(function(block) {
+        data.map.maps = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') < 0 && block.indexOf(':') < 0;
-        });
-        if (maps.length > 1) {
-          throw "only one map per file!"
-        }
-        data.map.map = splitGrid(maps[0]);
+        }).map(splitGrid);
         data.palettes = fileTextBlocks.filter(function(block) {
           return block.indexOf('"') < 0 && block.indexOf(':') >= 0;
         }).reduce(function(out,block){

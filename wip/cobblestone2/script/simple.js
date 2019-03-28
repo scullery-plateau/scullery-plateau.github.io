@@ -29,6 +29,7 @@
           var mapCanvas = new MapCanvas();
           var mapOps = new MapOperations(data.map,data.tiles,data.palettes,mapCanvas,ui.printer,ui.canvas);
           mapOps.drawMap();
+          alert("complete and ready to print.");
         })
       }
     };

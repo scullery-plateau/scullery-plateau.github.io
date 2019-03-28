@@ -33,6 +33,9 @@
       this.setPixelCount = function(scale) {
         state.pixelCount = scale;
       }
+      this.clearUI = function(ui) {
+        ui.innerHTML = "";
+      }
       this.clear = function() {
         svg = [];
       }
@@ -47,10 +50,10 @@
       this.drawMapSVG = function(ui) {
         var width = state.width*state.pixelScale*state.pixelCount;
         var height = state.height*state.pixelScale*state.pixelCount;
-        ui.innerHTML = frame(width, height, svg.join(""));
+        ui.innerHTML += frame(width, height, svg.join(""));
       }
       this.paintPNG = function(ui) {
-
+        
       }
     };
   });

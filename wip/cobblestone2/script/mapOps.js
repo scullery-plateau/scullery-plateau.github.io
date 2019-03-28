@@ -19,16 +19,19 @@
         });
         Object.keys(map.chars).forEach(render);
         console.log(charMap);
-        mapCanvas.clear()
-        map.map.forEach(function(row, rowIndex) {
-          row.forEach(function(cell, colIndex) {
-            if (charMap[cell]) {
-              mapCanvas.addTile(colIndex, rowIndex, charMap[cell]);
-            }
+        mapCanvas.clearUI(printerUI);
+        map.maps.forEach(function(map) {
+          mapCanvas.clear();
+          map.forEach(function(row, rowIndex) {
+            row.forEach(function(cell, colIndex) {
+              if (charMap[cell]) {
+                mapCanvas.addTile(colIndex, rowIndex, charMap[cell]);
+              }
+            });
           });
+          mapCanvas.drawMapSVG(printerUI);
         });
-        mapCanvas.drawMapSVG(printerUI);
       }
     }
-  })
+  });
 })();
