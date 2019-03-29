@@ -20,8 +20,8 @@
     ctx.strokeRect(x*state.rasterScale,y*state.rasterScale,dim*state.rasterScale,dim*state.rasterScale);
     return `<rect x="${x*state.pixelScale}" y="${y*state.pixelScale}" width="${dim*state.pixelScale}" height="${dim*state.pixelScale}" fill="none" stroke="black" stroke-width="2"/>`;
   }
-  var frame = function(width,height,svg) {
-    return `<svg width="8in" height="10in" viewBox="0 0 ${width*state.pixelScale*state.pixelCount} ${height*state.pixelScale*state.pixelCount}">${svg}</svg>`;
+  var frame = function(state,svg) {
+    return `<svg width="8in" height="10in" viewBox="0 0 ${state.width*state.pixelScale*state.pixelCount} ${state.height*state.pixelScale*state.pixelCount}">${svg}</svg>`;
   }
   var img = function(pic,index) {
     return `<a href="${pic}" download="tilesheet${index}.png"><img src="${pic}"/></a>`;
@@ -67,7 +67,7 @@
         svg.push(cell(state,col,row,ctx.ctx));
       }
       this.drawMapSVG = function(ui) {
-        ui.innerHTML += frame(state.width, state.height, svg.join(""));
+        ui.innerHTML += frame(state, svg.join(""));
       }
       this.paintPNG = function(ui,map) {
         map = map || "";

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cobblestone: Rogue</title>
+    <link rel="stylesheet" type="text/css" href="../../common/style/print.css"/>
+    <style type="text/css">
+      @media print {
+        #ctrl {
+          display: block;
+        }
+        #print {
+          display: block;
+        }
+      }
+
+      @media screen {
+        #ctrl {
+          display: block;
+        }
+        #print {
+          display: block;
+        }
+      }
+    </style>
+    <script type="text/javascript">
+      function toggleVisibility(input,id) {
+        if (input.checked) {
+          document.getElementById(id).style.display = "block";
+        } else {
+          document.getElementById(id).style.display = "none";
+        }
+      }
+    </script>
+    <style type="text/css">
+      td {
+        vertical-align: top;
+      }
+      #mapCtrl, canvas, print {
+        display: none;
+      }
+    </style>
+    <script src="../../common/script/extend/Array.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registry = new Registry();
+    </script>
+    <script src="script/mapcanvas.js"></script>
+    <script src="script/palette.js"></script>
+    <script src="script/parser.js"></script>
+    <script src="script/pixelator.js"></script>
+    <script src="script/rogue.js"></script>
+    <script src="script/selector.js"></script>
+    <script src="script/svg.js"></script>
+    <script src="script/tile.js"></script>
+    <script src="script/tilecanvas.js"></script>
+    <script src="script/tilemap.js"></script>
+    <script src="script/tileOps.js"></script>
+    <script type="text/javascript">
+    window.RogueController = registry.invoke('RogueController');
+      window.ctrl = new RogueController('ctrl',{
+        saveButton:"savebtn",
+        paletteSelector:"palettes",
+        colorSelector:"palette",
+        colorPicker:"selectedColor",
+        paletteDisplay:"paletteList",
+        tileSelector:"tiles",
+        tilePaletteSelector:"palettesForTile",
+        tileCharIndex:"tileCharList",
+        tilePixelInput:"pixels",
+        tileDisplay:"drawTile",
+        mapInput:"map",
+        mapDisplay:"drawMap",
+        charSelector:"charSelect",
+        tileForMapSelector:"tileForMap",
+        paletteForMapSelector:"paletteForMap",
+        charTileDisplay:"showTile",
+        printerOut:"print"
+      });
+    </script>
+  </head>
+  <body onload="ctrl.init();">
+    <div id="ctrl">
+      <div id="loadsave">
+        <label for="loadfile">File: </label>
+        <input id="loadfile" type="file"/>
+        <button onclick="ctrl.loadFile('loadfile')">Load</button>
+        <span id="savebtn"></span>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hidePalettes" onClick="toggleVisibility(this,'paletteCtrl')"/><label for="hidePalettes">Show Palettes</label>
+      <div id="paletteCtrl">
+        <button onclick="ctrl.addPalette()">Add Palette</button>
+        <br/>
+        <label for="palettes">Palettes: </label>
+        <select id="palettes" onchange="ctrl.selectAndDrawPalette()"></select>
+        <br/>
+        <label for="palette">Colors: </label>
+        <select id="palette" onchange="ctrl.selectColorForEditing()"></select>
+        <button onClick="ctrl.addColor()">Add</button>
+        <br/>
+        <button onClick="ctrl.makeColorTransparent()">Make Transparent</button>
+        <input id="selectedColor" type="color"/>
+        <button onClick="ctrl.updateColor()">Update</button>
+        <br/>
+        <button onclick="ctrl.removeSelectedColorFromPalette()">Remove Color From Palette</button>
+        <ul id="paletteList">
+        </ul>
+      </div>
+      <hr/>
+      <input type="checkbox" checked id="hideTiles" onClick="toggleVisibility(this,'tileCtrl')"/><label for="hideTiles">Show Tiles</label>
+      <div id="tileCtrl">
+        <button onclick="ctrl.addTile('tiles')">Add Tile</button>
+        <br/>
+        <label for="tiles">Tiles: </label>
+        <select id="tiles" onselect="ctrl.drawTile()"></select>
+        <br/>
+        <label for="palettesForTile">Palettes: </label>
+        <select id="palettesForTile" onselect="ctrl.drawTile()"></select>
+        <br/>
+        <label for="tile">Tile Char Index: </label>
+        <ul id="tileCharList">
+        </ul>
+        <br/>
+        <table>
+          <tr>
+            <td>
+              <label for="pixels">Pixels: </label>
+              <br/>
+              <textarea id="pixels" rows="16" cols="20" onchange="ctrl.updateAndDrawTile()"></textarea>
+            </td>
+            <td>
+              <label for="drawTile">Draw Tile: </label>
+              <br/>
+              <div id="drawTile"></div>
+            </td>
+          </tr>
+        </table>
+        <br/>
+      </div>
+      <hr/>
+      <input type="checkbox" id="hideMap" onClick="toggleVisibility(this,'mapCtrl')"/><label for="hideMap">Show Map</label>
+      <div id="mapCtrl">
+        <table>
+          <tr>
+            <td>
+              <label for="map">Map: </label>
+              <br/>
+              <textarea id="map" rows="25" cols="40" onchange="ctrl.updateAndDrawMap()"></textarea>
+            </td>
+            <td>
+              <label for="drawMap">Draw Map: </label>
+              <br/>
+              <div id="drawMap"></div>
+            </td>
+          </tr>
+        </table>
+        <p><label for="chars">Map Char Index: </label><span id="chars"></span></p>
+        <p><input type="checkbox" checked id="collapseChar" onClick="toggleVisibility(this,'charCtrl')"/><label for="collapseChar">Characters:</label></p>
+        <div id="charCtrl">
+          <p><label for="charSelect">Chars: </label><select id="charSelect" onselect="ctrl.selectAndDrawChar()"></select></p>
+          <p><label for="tileForMap">Tile: </label><select id="tileForMap" onselect="ctrl.selectTileForChar()"></select></p>
+          <p><label for="paletteForMap">Palette: </label><select id="paletteForMap" onselect="ctrl.selectPaletteForChar()"></select></p>
+          <table>
+            <tr>
+              <td>
+                <label>Orient:</label>
+                <ul>
+                  <li><input type="checkbox" id="flipdown" onclick="ctrl.applyTransform(this,'flipdown')"/><label for="flipdown">Flip Down</label></li>
+                  <li><input type="checkbox" id="flipover" onclick="ctrl.applyTransform(this,'flipover')"/><label for="flipover">Flip Over</label></li>
+                  <li><input type="checkbox" id="turnright" onclick="ctrl.applyTransform(this,'turnright')"/><label for="turnright">Turn Right</label></li>
+                  <li><input type="checkbox" id="turnleft" onclick="ctrl.applyTransform(this,'turnleft')"/><label for="turnleft">Turn Left</label></li>
+                </ul>
+              </td>
+              <td>
+                <label for="showTile">Tile: </label>
+                <br/>
+                <div id="showTile"></div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="print"></div>
+  </body>
+</html>
