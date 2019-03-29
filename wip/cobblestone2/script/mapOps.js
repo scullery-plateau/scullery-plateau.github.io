@@ -2,7 +2,7 @@
   registry.apply("MapOperations",[
     "TileOperations"
   ],function(TileOperations){
-    return function(map,tiles,palettes,mapCanvas,printerUI,canvasUI){
+    return function(map,tiles,palettes,mapCanvas,printerUI,galleryUI,canvasUI){
       this.drawMap = function() {
         var renderState = {};
         var charMap = {};
@@ -16,8 +16,15 @@
         });
         Object.keys(map.chars).forEach(render);
         mapCanvas.clearUI(printerUI);
-        map.maps.forEach(function(map) {
-          mapCanvas.clear();
+        mapCanvas.clearUI(galleryUI);
+        mapCanvas.clearUI(canvasUI);
+        map.maps.forEach(function(map, mapIndex) {
+          mapCanvas.clear(canvasUI);
+          mapCanvas.dim(map.map(function(row) {
+            return row.length;
+          }).reduce(function(max,i){
+            return Math.max(max,i);
+          },0),map.length);
           map.forEach(function(row, rowIndex) {
             row.forEach(function(cell, colIndex) {
               if (charMap[cell]) {
@@ -26,6 +33,7 @@
             });
           });
           mapCanvas.drawMapSVG(printerUI);
+          mapCanvas.paintPNG(galleryUI,mapIndex);
         });
       }
     }

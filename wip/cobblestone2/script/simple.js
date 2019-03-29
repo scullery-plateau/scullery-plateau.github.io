@@ -16,18 +16,19 @@
   registry.apply("SimpleForm",[
     "FileParser","MapCanvas","MapOperations","TileOperations"
   ],function(FileParser,MapCanvas,MapOperations,TileOperations){
-    return function(fileLoadInputId,canvasId,printOutId){
+    return function(fileLoadInputId,canvasId,galleryId,printOutId){
       var parser = new FileParser();
       this.loadFile = function() {
         var ui = {
           printer:document.getElementById(printOutId),
           canvas:document.getElementById(canvasId),
+          gallery:document.getElementById(galleryId),
           fileLoadInput:document.getElementById(fileLoadInputId)
         }
         loadFile(ui.fileLoadInput,function(fileData) {
           var data = parser.parseMapFile(fileData);
           var mapCanvas = new MapCanvas();
-          var mapOps = new MapOperations(data.map,data.tiles,data.palettes,mapCanvas,ui.printer,ui.canvas);
+          var mapOps = new MapOperations(data.map,data.tiles,data.palettes,mapCanvas,ui.printer,ui.gallery,ui.canvas);
           mapOps.drawMap();
           alert("complete and ready to print.");
         })

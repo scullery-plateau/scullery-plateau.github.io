@@ -1,0 +1,191 @@
+78887888
+4...4...
+4...4...
+4^^C4...
+4^^64...
+4^^64...
+4^^64...
+4^^64...
+4^^64...
+Q--E1222
+
+88888889
+.......6
+.......6
+.......6
+.......6
+.......6
+.......6
+.......6
+.......6
+Z..C2223
+
+7S888889
+4......6
+4......6
+4......6
+4......6
+4......6
+4......6
+4......6
+12Z..C23
+
+88888889
++++++++6
++++++++6
+2222Z**6
+4..64**6
+4..64++6
+4..64++6
+1=234++6
+    4++6
+
+78Q++E89
+4++++++6
+4++++++6
+4++++++6
+4++++++6
+4++++++6
+4++++++6
+4++++++6
+4++++++6
+12Z++C23
+
+".": floor, floor
+"+": floor, floor, turnleft
+"^": stairs, stairs, flipdown
+"-": front-door, door
+"*": floor, floor, flipover
+"8": wall, wall
+"4": wall, wall, turnleft
+"6": wall, wall, turnright
+"2": wall, wall, flipdown
+"7": wall-corner, wall
+"9": wall-corner, wall, flipover
+"1": wall-corner, wall, flipdown
+"3": wall-corner, wall, flipdown, flipover
+"Q": wall-inside-corner, wall
+"E": wall-inside-corner, wall, flipover
+"Z": wall-inside-corner, wall, flipdown
+"C": wall-inside-corner, wall, flipover, flipdown
+"S": wall, wall, flipover
+"=": floor, floor
+
+floor: lightgrey, slategrey, darkslategrey, black
+stairs: lightgrey, darkslategrey
+door: white, mediumpurple, indigo, black
+wall: palegoldenrod, darkgoldenrod, black, saddlebrown
+
+floor
+"abc"
+aaaaaaaaaaaaaaaa
+aaccccccacccccaa
+acbbbbbcacccccca
+acbbbbbcacccccca
+acbbbbacacccccca
+acbbbacaaaaaccca
+acaaacacccccacca
+accccacccccccaaa
+aaaaacccccccacca
+accccacccccacbca
+acccccacccacbbca
+accccccaaacbbbca
+accccccaccbbbbca
+accccccacaaaaaca
+aacccccaccccccaa
+aaaaaaaaaaaaaaaa
+
+stairs
+"ab"
+aaaaaaaaaaaaaaaa
+aaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+baaaaaaaaaaaaaab
+baaaaaaaaaaaaaab
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbaaaaaaaaaaaabb
+bbaaaaaaaaaaaabb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbaaaaaaaaaabbb
+bbbaaaaaaaaaabbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+
+front-door
+"abcd"
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+dbbbbbbbbbbbbbbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccaaccccaaccbd
+dbcabbaccabbacbd
+dbabbbbaabbbbabd
+dbbbddbbbbddbbbd
+dbbddddbbddddbbd
+dddddddddddddddd
+
+wall
+"abcd"
+aaaaaaaaaaaaaaaa
+bdcbbbbbbdcbbbbb
+ddcbddbdddcbddbd
+ddcdddddddcddddd
+ddcdddddddcddddd
+cccccccccccccccc
+bbbbdcbbbbbbdcbb
+dddddcdddddddcdd
+dddddcdddddddcdd
+cccccccccccccccc
+bdcbbbbbbdcbbbbb
+ddcdddddddcddddd
+cccccccccccccccc
+dddddcdddddddcdd
+cccccccccccccccc
+cccccccccccccccc
+
+wall-corner
+"abcd"
+aaaaaaaaaaaaaaaa
+abbbbbbbbdcbbbbb
+abcccdddddcbddbd
+abccccddddcddddd
+abdccccdddcddddd
+abddcccccccccccc
+abdddcccbbbbdcbd
+abdddcccdddddcdd
+abdddcbdccdddcdd
+abbddcbdcccccccc
+abdddc6bbbbbbbbb
+abdddcdddcccdddd
+abbddcbddcbccccc
+acccccbddcbdccdd
+addddcbddcbdcccc
+abdddcbddcbdcdcc
+
+wall-inside-corner
+"abcd"
+aabddcbddcbdcdcc
+aabbdcdddcbdcdcc
+bbabdcccccbdcccc
+dbbabcbdddbdcdcc
+dddbacbddcbdcdcc
+cccccbbddccccdcc
+dddddbaddcddcdcc
+ddddddbadcbdcdcc
+dddddcddacbdcdcc
+cccccccccdbdcdcc
+bdcbbbbbbbadcdcc
+ddcddddddddbcdcc
+ccccccccccccdbcc
+dddddcdddddddbcc
+cccccccccccccccc
+cccccccccccccccc

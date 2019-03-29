@@ -2,16 +2,29 @@
   var defaultConfig = {
     pixelScale:6,
     pixelCount:16,
-    rasterScale:5
+    rasterScale:2
   }
-  var pixel = function(state,col,row,px,py,color) {
-    return `<rect x="${col*state.pixelScale*state.pixelCount + px*state.pixelScale}" y="${row*state.pixelScale*state.pixelCount + py*state.pixelScale}" width="${state.pixelScale}" height="${state.pixelScale}" fill="${color}" stroke="${color}"/>`;
+  var pixel = function(state,col,row,px,py,color,ctx) {
+    var x = col*state.pixelCount + px;
+    var y = row*state.pixelCount + py;
+    var dim = 1;
+    ctx.fillStyle = color;
+    ctx.fillRect(x*state.rasterScale,y*state.rasterScale,dim*state.rasterScale,dim*state.rasterScale);
+    return `<rect x="${x*state.pixelScale}" y="${y*state.pixelScale}" width="${dim*state.pixelScale}" height="${dim*state.pixelScale}" fill="${color}" stroke="${color}"/>`;
   }
-  var cell = function(state,col,row) {
-    return `<rect x="${col*state.pixelScale*state.pixelCount}" y="${row*state.pixelScale*state.pixelCount}" width="${state.pixelScale*state.pixelCount}" height="${state.pixelScale*state.pixelCount}" fill="none" stroke="black" stroke-width="2"/>`;
+  var cell = function(state,col,row,ctx) {
+    var x = col*state.pixelCount;
+    var y = row*state.pixelCount;
+    var dim = state.pixelCount;
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(x*state.rasterScale,y*state.rasterScale,dim*state.rasterScale,dim*state.rasterScale);
+    return `<rect x="${x*state.pixelScale}" y="${y*state.pixelScale}" width="${dim*state.pixelScale}" height="${dim*state.pixelScale}" fill="none" stroke="black" stroke-width="2"/>`;
   }
   var frame = function(width,height,svg) {
-    return `<svg width="8in" height="10in" viewBox="0 0 ${width} ${height}">${svg}</svg>`;
+    return `<svg width="8in" height="10in" viewBox="0 0 ${width*state.pixelScale*state.pixelCount} ${height*state.pixelScale*state.pixelCount}">${svg}</svg>`;
+  }
+  var img = function(pic,index) {
+    return `<a href="${pic}" download="tilesheet${index}.png"><img src="${pic}"/></a>`;
   }
   registry.apply("MapCanvas",[
   ],function(){
@@ -19,6 +32,7 @@
       var state = Object.assign(defaultConfig,config);
       state.width = 0;
       state.height = 0;
+      var ctx = {};
       var svg = [];
       this.setTileScale = function(scale) {
         state.tileScale = scale;
@@ -35,24 +49,29 @@
       this.clearUI = function(ui) {
         ui.innerHTML = "";
       }
-      this.clear = function() {
+      this.clear = function(canvasUI) {
         svg = [];
+        ctx.canvas = document.createElement("canvas");
+        ctx.ctx = ctx.canvas.getContext("2d");
+      }
+      this.dim = function(width,height) {
+        ctx.canvas.width = width * state.rasterScale*state.pixelCount;
+        ctx.canvas.height = height * state.rasterScale*state.pixelCount;
       }
       this.addTile = function(col,row,tile) {
         state.width = Math.max(state.width,col + 1);
         state.height = Math.max(state.height,row + 1);
         tile.forEach(function(p) {
-          svg.push(pixel(state,col,row,p.x,p.y,p.color));
+          svg.push(pixel(state,col,row,p.x,p.y,p.color,ctx.ctx));
         });
-        svg.push(cell(state,col,row));
+        svg.push(cell(state,col,row,ctx.ctx));
       }
       this.drawMapSVG = function(ui) {
-        var width = state.width*state.pixelScale*state.pixelCount;
-        var height = state.height*state.pixelScale*state.pixelCount;
-        ui.innerHTML += frame(width, height, svg.join(""));
+        ui.innerHTML += frame(state.width, state.height, svg.join(""));
       }
-      this.paintPNG = function(ui) {
-
+      this.paintPNG = function(ui,map) {
+        map = map || "";
+        ui.innerHTML += img(ctx.canvas.toDataURL(),map);
       }
     };
   });
