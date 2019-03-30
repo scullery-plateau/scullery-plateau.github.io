@@ -61,6 +61,7 @@
         }).reduce(function(out,block){
           var rows = block.split("\n");
           var tileName = rows.shift();
+          console.log(tileName);
           var tileIndex = JSON.parse(rows.shift()).split("");
           var pixels = rows.map(function(row) {
             return row.split("");

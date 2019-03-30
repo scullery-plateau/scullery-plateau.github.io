@@ -1,3 +1,8 @@
+abcdefgh
+ijklmnop
+qrstuvwx
+yzAB
+
 78887888
 4...4...
 4...4...
@@ -51,32 +56,73 @@ Z..C2223
 4++++++6
 12Z++C23
 
-".": floor, floor
-"+": floor, floor, turnleft
+".": stone-tile, floor
+"+": stone-tile, floor, turnleft
 "^": stairs, stairs, flipdown
 "-": front-door, door
-"*": floor, floor, flipover
-"8": wall, wall
-"4": wall, wall, turnleft
-"6": wall, wall, turnright
-"2": wall, wall, flipdown
-"7": wall-corner, wall
-"9": wall-corner, wall, flipover
-"1": wall-corner, wall, flipdown
-"3": wall-corner, wall, flipdown, flipover
-"Q": wall-inside-corner, wall
-"E": wall-inside-corner, wall, flipover
-"Z": wall-inside-corner, wall, flipdown
-"C": wall-inside-corner, wall, flipover, flipdown
-"S": wall, wall, flipover
-"=": floor, floor
+"*": stone-tile, floor, flipover
+"8": brick-wall, wall
+"4": brick-wall, wall, turnleft
+"6": brick-wall, wall, turnright
+"2": brick-wall, wall, flipdown
+"7": brick-corner, wall
+"9": brick-corner, wall, flipover
+"1": brick-corner, wall, flipdown
+"3": brick-corner, wall, flipdown, flipover
+"Q": brick-edge, wall
+"E": brick-edge, wall, flipover
+"Z": brick-edge, wall, flipdown
+"C": brick-edge, wall, flipover, flipdown
+"S": brick-wall, wall, flipover
+"=": stone-tile, floor
+"a": block, stone
+"b": brick-corner, brick
+"c": brick-edge, brick
+"d": brick-wall, brick
+"e": broken-floor, sand
+"f": bubble-tile, shiny
+"g": cave-corner, sand
+"h": cave-edge, sand
+"i": cave-floor, sand
+"j": cave-wall, sand
+"k": floral-stone, sand
+"l": shiny-tile, shiny
+"m": shuttered-door, door
+"n": stairs, stairs
+"o": stair-down, door
+"p": stair-up, door
+"q": standing-brazier, lantern
+"r": statue, door
+"s": stone-corner, stone
+"t": stone-edge, stone
+"u": stone-floor, stone
+"v": stone-tile, stone
+"w": stone-wall, stone
+"x": tile-floor, stairs
+"y": wall-braziers, brazier
+"z": wet-floor, shallow
+"A": half-door, half-door
+"B": stair-door, door
 
 floor: lightgrey, slategrey, darkslategrey, black
 stairs: lightgrey, darkslategrey
 door: white, mediumpurple, indigo, black
 wall: palegoldenrod, darkgoldenrod, black, saddlebrown
+shallow: lightblue, blue
+block: mediumpurple, indigo, black
+half-door: white, orangered, maroon, palegoldenrod, darkgoldenrod, saddlebrown, mediumpurple, indigo, black
+black-border: none, black
+sand: white, tan, brown, black
+shiny: lightblue, blue, indigo, black
+stone: lightgreen, green, darkgreen, black
+brick: white, pink, black, purple
+red-border: none, red
+lantern: white, orangered, maroon, black, darkgoldenrod, saddlebrown
+blue-border: none, blue
+brazier: white, orangered, maroon, palegoldenrod, darkgoldenrod, saddlebrown, black
+green-border: none, green
 
-floor
+stone-tile
 "abc"
 aaaaaaaaaaaaaaaa
 aaccccccacccccaa
@@ -133,7 +179,7 @@ dbbbddbbbbddbbbd
 dbbddddbbddddbbd
 dddddddddddddddd
 
-wall
+brick-wall
 "abcd"
 aaaaaaaaaaaaaaaa
 bdcbbbbbbdcbbbbb
@@ -152,7 +198,7 @@ dddddcdddddddcdd
 cccccccccccccccc
 cccccccccccccccc
 
-wall-corner
+brick-corner
 "abcd"
 aaaaaaaaaaaaaaaa
 abbbbbbbbdcbbbbb
@@ -164,14 +210,14 @@ abdddcccbbbbdcbd
 abdddcccdddddcdd
 abdddcbdccdddcdd
 abbddcbdcccccccc
-abdddc6bbbbbbbbb
+abdddcccccccbbbb
 abdddcdddcccdddd
 abbddcbddcbccccc
 acccccbddcbdccdd
 addddcbddcbdcccc
 abdddcbddcbdcdcc
 
-wall-inside-corner
+brick-edge
 "abcd"
 aabddcbddcbdcdcc
 aabbdcdddcbdcdcc
@@ -189,3 +235,435 @@ ccccccccccccdbcc
 dddddcdddddddbcc
 cccccccccccccccc
 cccccccccccccccc
+
+bubble-tile
+"abc"
+bbbaaaaaaaaaabbb
+bbaabbbbbbbbaabb
+baabaaaabbbbbaab
+aabaabbbbbbbbbaa
+abaabbbbbbbbbbba
+ababbbbbbbbbbbba
+ababbbbbbbbbbbba
+abbbbbbbbbbbbbba
+ababbbbbbbbbbbba
+abbbbbbbbbbbbcba
+abbbbbbbbbbbbcba
+abbbbbbbbbbbccba
+aabbbbbbbbbccbaa
+baabbbccccccbaab
+bbaabbbbbbbbaabb
+bbbaaaaaaaaaabbb
+
+block
+"abc"
+cccccccccccccccc
+caabbbbbbbbbbbbc
+cbbabbbbbbbbbccc
+cbbbaaaaaaaacccc
+cbbbabbbbbbacccc
+cbbbabaaaabacccc
+cbbbabaaaabacccc
+cbbbabaaaabacccc
+cbbbabaaaabacccc
+cbbbabbbbbbacccc
+cbbbaaaaaaaacccc
+cbbbccccccccaccc
+cbbccccccccccacc
+cbccccccccccccac
+ccccccccccccccac
+cccccccccccccccc
+
+broken-floor
+"abc"
+aabaaabaaaabaaaa
+aabbbbbaaaaabaab
+bbbaaabaaaaaccba
+abaaaaacaaaacaaa
+abaaaaaccccccaaa
+aabaaacaaacaacaa
+aaacccaaaacaaaca
+aaaaacaaacaaaaac
+aaaaacbaacaaaaac
+aaaaaccccccccaac
+bbaacaaccbaaacca
+aabcaaaacaaaacaa
+aaabaaaacaaaacaa
+aaabbaaaccbbbbba
+abbaabbbaaaaaaab
+aaaaaaabaaaaaaaa
+
+cave-wall
+"abcd"
+abccccccdbbbcccd
+aabbcccccdbbccdd
+baabbcccccdccddc
+bbaabbccccddddcb
+bbaabbbbcccdddcb
+baabbbbcccdccddc
+aabbcccccdbbccdd
+aabccddddbbbbccd
+abccccccdbbbcccd
+aabbcccccdbbccdd
+baabbcccccdccddc
+bbaabbccccddddcb
+bbaabbbbcccdddcb
+baabbbbcccdccddc
+aabbcccccdbbccdd
+aabccddddbbbbccd
+
+cave-edge
+"abcd"
+dccbbbbddcccbaab
+ddccbbdcccbbaaba
+cddccdcccbbbaaaa
+bcdddccccbbbaaab
+bcddddcccbbabbbc
+cddccdcccbabbbbc
+ddccbbdcccbbbbcd
+dcccbbbdcccccccd
+dccccccddccccccd
+cddddddcbdccccdb
+bddcbbdcbbdcddbb
+bdcbbbdcbbcddcbb
+bdcbbcdcbccddccc
+bcdccddcccddddcc
+bbcddddccddccddc
+dbbbbcddddcbbcdd
+
+cave-floor
+"abcd"
+bbbbbccbbbcbbbbb
+bbcbcabdbbbbbbbb
+bbbbccddbbbbbbbb
+bbbbbbbbbbbcbbbb
+bbcbbbbbbbcadbbb
+bbbbbbcbbbcdcbbb
+bccbbbbbbbbbbbbb
+caccbbbccbbbbbbb
+cccdbbbcacbbbbcb
+bddcbbbcccbbbbbb
+bbbbccbbbbbbbbbb
+bcbcabcbbbbccbbb
+bbbdbcdbbbcabcbb
+bbbcddcbbbcbcdbb
+bbbbbbbbbbbddcbb
+
+cave-corner
+"abcd"
+bbbaaaaaaabbbbaa
+bbbaabbbaaabbaab
+bbaaabccbbaaaabc
+aaaaabcccbbaabbc
+aaaabbccccbbbbcc
+abbbbbccdcbbbccc
+abbcccccdcbbcccc
+abccdddddccbcccc
+abccccccdcccccdb
+aabbccccddccddbb
+baabbccccdddcbbb
+bbaabbccccddccbb
+bbaabbbbcdcddccc
+baabbbbcdcccddcc
+aabbccccdbcccddc
+aabccdddbbbcccdd
+
+floral-stone
+"ab"
+aabbbbbaaaabaaaa
+aabbbbbaaaaabaaa
+babaaabaaababbbb
+abaaaaabaaaabaaa
+abaaaaabbbbbbaaa
+abbaaabbbbbaabaa
+baabbbbbbbbaaabb
+aaaaabbbbbbaaaab
+aabaabbbbbbaaaab
+baaaabbbbbbbaaab
+bbaabaaabaaabbba
+abbbaaaabaaaabaa
+abbbaaaabaababaa
+abbbbaabbbaaabaa
+bbaaabbbbbbbbaab
+abaaabbbbbbaaaaa
+
+half-door
+"abcdefghi"
+bccccccbiaaaaaaa
+ccbbbbcciaaaaaaa
+cbbaabbciaaaaaaa
+cbaaaabciggggggg
+cbaaaabcighhhhhh
+cbbaabbcighhhhhh
+ccbbbbccighhhhhh
+bccccccbighhhhhh
+iddddddiighhhhhh
+ieeeeeeiighhiihh
+iiiiiiiiighiaaih
+fieddeifigiaggai
+fieddeifigagggga
+fiieeiifigggiigg
+iiiiiiiiiggiiiig
+iiiiiiiiiiiiiiii
+
+shiny-tile
+"abc"
+aaaaaaaaaaaaaaaa
+aabbbbbbbbbbbbaa
+abbbbabbaaabbbba
+abbaabbaabbbbbba
+abaabbaabbbbbbba
+ababbaabbbbbbbba
+abbbaabbbbbbbbba
+abbaabbbbbbbbbba
+abaabbbbbbbbbbba
+ababbbbbbbbbbbba
+ababbbbbbbbbbbba
+abbbbbbbbbbbbbba
+abbbbbbbbbbbbbba
+acbbbbbbbbbbbbca
+aaccccccccccccaa
+aaaaaaaaaaaaaaaa
+
+shuttered-door
+"abcd"
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+daaaaaaaaaaaaaad
+dbbbbbbbbbbbbbbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccccccccccccbd
+dbccaaccccaaccbd
+dbcabbaccabbacbd
+dbabbbbaabbbbabd
+dbbbddbbbbddbbbd
+dbbddddbbddddbbd
+dddddddddddddddd
+
+standing-brazier
+"abcdef"
+acddddddddddddca
+cdaaaadaddaaaadc
+daaaadaadadbaaad
+daaadabadaadbaad
+daadaabbabadbaad
+daadabbcbbadbaad
+daadabbccbadbaad
+daaadabddadbaaad
+daaaaaaaaaaaaaad
+dfaaaaaaaaaaaafd
+daffffffffffffad
+daaaaaaaaaaaaaad
+deaaadaaaadaaaed
+edeaaadaadaaaede
+dadeeeeeeeeeedad
+ddfddddddddddfdd
+
+stair-down
+"abcd"
+cccccccccccccccc
+caaaaaaaaaaaaaac
+cadccccccdddddac
+cadccccccdaaadac
+caddddddddaaadac
+caddddddddaaadac
+caddddbbbdaaadac
+caddddbbbdaaadac
+caddddbbbdaaadac
+cadccdbbbdaaadac
+cadccdbbbdaaadac
+cadccdbbbdaaadac
+cadccdbbbdaaadac
+caddddddddddddac
+caaaaaaaaaaaaaac
+cccccccccccccccc
+
+stair-door
+"abcd"
+aaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbb
+bbcddddddddddcbb
+bcdddddddbbbbdcb
+bddddddddbabbbdb
+bddddddddcbabbdb
+bdddddbbdccbabdb
+bddddbbbbdccbadb
+bdddbabbbbdccbdb
+bdddcbaabbbdccdb
+bdddcccbaabbdcdb
+bdddddcccbaabddb
+bdbabddddccbabdb
+bdaaaaabddddccdb
+bdaaaaaaaabddddb
+dddddddddddddddd
+
+stair-up
+"abcd"
+ccccccccccdddddd
+caaaaaaaaadbbbbd
+cabbbbdddddbbbbd
+cabbbbdbbbdbbbbd
+cadddddbbbdbbbbd
+cadbbbdbbbdbbbbd
+cadbbbdbbbdaaaad
+cadbbbdbbbdddddd
+cadbbbdaaadddddd
+cadbbbdddddddddd
+cadaaadddddddddd
+cadddddddddddddd
+cadddddddddddddd
+cabbbbbbbbbbbbbc
+caaaaaaaaaaaaaac
+cccccccccccccccc
+
+statue
+"abcd"
+bbbbbddddddbdddd
+bbdddcbaabcdddbb
+bdaadbbaabbdaadb
+bdbdcbbbbbbdbbdb
+bdcdbbddddbbdcdb
+bbdcbdaaaadbcdbb
+bddcdaaddaadcddb
+dadcdbaddabdcdad
+dbdddcbaabcdddbd
+dddcbddddddbcddd
+dadcbbbbbbbbcdad
+daadcbbaabbcdaad
+bddddcbbbbcddddd
+bbdabdccccdbaddb
+bdabbcddddcbbadb
+bddddddddddddddb
+
+stone-wall
+"abcd"
+aaaaaaaaaaaaaaaa
+bccccccccccccccc
+cbbccccccbbccccc
+cccccccccccccccc
+cccccccccccccccc
+cccccddccccccddc
+cccccbbccccccbbc
+cccccccccccccccc
+cccddccccccddccc
+dddddddddddddddd
+bbbbbccbbbbbbccb
+cccccbbccccccbbc
+ddccccccddcccccc
+cccccccccccccccc
+dddddddddddddddd
+
+stone-floor
+"abcd"
+bcaabaabbcaabaaa
+abcaaacbbbcaaaaa
+aabcccbaaabcabaa
+aabbbbaaaaabcaba
+aabbaaaabacbbaaa
+acbaabaaacbbbcaa
+cbaabaaacbaaabcc
+bbabaaacbaaaaabb
+bbcaaacbaaaaaacb
+aabcccbaaaabacba
+aaabbbaaaabacbaa
+aaaabaababacbbaa
+abaabcaaaacbbbaa
+aabaabccccbaabca
+aaabaabbbbaaaabc
+caaaaaabbaaaaaab
+
+stone-edge
+"abcd"
+aacccccccdbcccd
+aabccccccdcbccd
+cbabcccccdcbccd
+ccbabcccddbcccd
+cccbabccddbcccd
+ccccbabccdbcccd
+cccccbabcdbcdcd
+ccccccbacdbcdcd
+cccddcccadbcccd
+dddddddddcbcccd
+bbbbbccbbbacccd
+cccccbbccccbccd
+ddccccccccccbcd
+cccccccccccccbd
+ddddddddddddddd
+
+stone-corner
+"abcd"
+aaaaaaaaaaaaaaaa
+abbbbbbbbbbbbbbb
+abddcccccbbccccc
+abdddccccccccccc
+abcdddcccccccccc
+abccdddccccccddc
+abcccdddcccccbbc
+abccccddcccccccc
+abccccccddcccccc
+abcccdbcdddddddd
+abcccdbccdddbbbb
+abcccccccdddcccc
+abcccccccdbdcccc
+abbccccccdbcddcc
+abbccccccdbccddd
+abcccccccdbcccdd
+
+tile-floor
+"ab"
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+aaaaaaaabbbbbbbb
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+bbbbbbbbaaaaaaaa
+
+wall-braziers
+"abcdefg"
+bccccccbbccccccb
+ccbbbbccccbbbbcc
+cbbaabbccbbaabbc
+cbaaaabccbaaaabc
+cbaaaabccbaaaabc
+cbbaabbccbbaabbc
+ccbbbbccccbbbbcc
+bccccccbbccccccb
+gddddddggddddddg
+geeeeeeggeeeeeeg
+fgeddegffgeddegf
+fgeddegffgeddegf
+fggeeggffggeeggf
+gggggggggggggggg
+gggggggggggggggg
+gggggggggggggggg
+
+wet-floor
+"ab"
+bbbbbbbbbbbbbbbb
+baabbbbbbaabbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbaabbbbbbaabb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+baabbbbbbaabbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+bbbbaabbbbbbaabb
+bbbbbbbbbbbbbbbb
