@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fight Club 5 Publisher</title>
+    <style type="text/css">
+      @media screen {
+        #print {
+          display: none;
+        }
+      }
+      @media print {
+        #ctrl, #canvas {
+          display: none;
+        }
+      }
+      svg {
+        page-break-after: always;
+        margin: 0.25in 0.25in 0in 0.25in;
+      }
+      @page {
+        size: portrait;
+        margin: 0;
+      }
+    </style>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registry = new Registry();
+    </script>
+    <script type="text/javascript">
+      function loadFightClub5File(ui) {
+        loadFile(ui,function(fileData) {
+          var domParser = new DOMParser();
+          var singleFileData = Object.values(fileData)[0];
+          window.fightClub5Data = domParser.parseFromString(singleFileData,"text/xml");
+        })
+      }
+    </script>
+  </head>
+  <body onload="">
+    <div id="ctrl">
+      <h2>Fight Club 5 Publisher</h2>
+      <p>This tool is meant to allow manipulation and publishing of "Fight Club 5" data.</p>
+      <div id="loadsave">
+        <label for="loadfile">File: </label>
+        <input id="loadfile" type="file"/>
+        <button onclick="loadFightClub5File(document.getElementById('loadfile'))">Load</button>
+      </div>
+      <div id="canvas"></div>
+    </div>
+    <div id="print"></div>
+  </body>
+</html>
