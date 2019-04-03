@@ -11,7 +11,11 @@
         return JSON.parse(Object.values(fileData)[0]);
       }
       this.parseMapFile = function(fileData) {
-        var fileTextBlocks = Object.values(fileData)[0].split("\r").join("").split("\n\n");
+        var fileTextBlocks = Object.values(fileData)[0].split("\r").join("");
+        while (fileTextBlocks.indexOf("\n\n\n") >= 0) {
+          fileTextBlocks = fileTextBlocks.split("\n\n\n").join("\n\n");
+        }
+        fileTextBlocks = fileTextBlocks.split("\n\n");
         var data = {
           tiles:{},
           palettes:{},

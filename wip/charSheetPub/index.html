@@ -3,11 +3,6 @@
   <head>
     <title>D&D 5e Character Sheet Publisher</title>
     <style type="text/css">
-      @media screen {
-        #print {
-          display: none;
-        }
-      }
       @media print {
         #ctrl, #canvas {
           display: none;
@@ -27,14 +22,13 @@
     <script type="text/javascript">
       window.registry = new Registry();
     </script>
+    <script src="script/charmath.js"></script>
+    <script src="script/controller.js"></script>
+    <script src="script/parser.js"></script>
+    <script src="script/template.js"></script>
     <script type="text/javascript">
-      function load5eCharSheet(ui) {
-        loadFile(ui,function(fileData) {
-          var domParser = new DOMParser();
-          var singleFileData = Object.values(fileData)[0];
-          window.charSheet = domParser.parseFromString(singleFileData,"text/xml");
-        })
-      }
+      window.Controller = registry.invoke("CharSheetController");
+      window.ctrl = new Controller('loadfile','print');
     </script>
   </head>
   <body onload="">
@@ -45,9 +39,8 @@
       <div id="loadsave">
         <label for="loadfile">File: </label>
         <input id="loadfile" type="file"/>
-        <button onclick="load5eCharSheet(document.getElementById('loadfile'))">Load</button>
+        <button onclick="ctrl.loadFile()">Load</button>
       </div>
-      <div id="canvas"></div>
     </div>
     <div id="print"></div>
   </body>

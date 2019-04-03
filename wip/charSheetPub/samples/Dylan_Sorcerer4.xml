@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>26</currentHealth>
+<maxHealth>26</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>5</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>35</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Sorcerer⊡Storm Sorcery⊡4⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sorcery Points⊡Sorcery Pts⊡4⊡4⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Durable⊟metamagic⊡Empowered Spell⊟⊟⊟Half-Elf⊟Half-Elf Variant⊟Urchin⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Club⊠5 feet⊠1100⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>9⊠13⊠15⊠12⊠11⊠17⊠false⊠false⊠true⊠false⊠false⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠4⊠false⊠⊟</spellList>
+<noteList>Half-Elf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+Urchin Feature:
+• Your party can travel through a city twice as fast when not in combat
+Sorcerer Features:
+• Sorcerer Archetype: Storm
+• You know Primordial
+• You can fly 10ft without provoking as a bonus action when you cast a non-cantrip spell
+• You have a max of 4 sorcery points used to alter spells and regain spell slots
+• Empowered Spell: You can reroll up to Cha mod damage dice for 1 sorcery point and can use this with other metamagic
+• Durable: You always regain at least 2x Con mod from a hit die and you gain +1 Con
+⊠⊠Daggers, Darts, Slings, Quarterstaffs, Light Crossbows
+⊠Disguise kit
+Thieves' tools
+⊠Common
+Elvish
+Extra Language
+Primordial
+⊠club
+dagger (2)
+arcane focus
+explorer's pack
+small knife
+map of your home city
+pet mouse
+token of your parents
+set of common clothes
+belt pouch
+⊠⊠Sorcerer 4⊠Variant⊠Urchin⊠⊠⊠⊠⊠⊠Dylan⊠Sorcerer 4⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠4⊠6⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>
