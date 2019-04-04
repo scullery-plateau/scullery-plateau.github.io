@@ -1,0 +1,25 @@
+<!DOCTYPE hexmap [
+  <!ELEMENT hexmap (map,tile-dim,tile+,)
+]>
+<hexmap>
+  <map name="" scale="" orientation="">
+gfffihbbbfi
+gfbbbbbbbci
+ffffffbbbbb
+gdbffbbbbbc
+fdbbbabcbbc
+dcbbccbbcbb
+cbbcccccccb
+cibbccchcdc
+cdcbbciicde
+ddbbcdcddee
+  </map>
+  <tile-dim width="" height=""/>
+  <tile char="a" label="Farmland" bg-color="green">
+  </tile>
+  <icon name="Fort">
+  </icon>
+  <label x="" y="" text="" vertical-align="" horizontal-align="">
+    <with-icon name="Fort"/>
+  </label>
+</hexmap>

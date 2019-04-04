@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HexAtlas</title>
+    <style type="text/css">
+      @media screen {
+        #print {
+          display: none;
+        }
+      }
+      @media print {
+        #ctrl, #canvas {
+          display: none;
+        }
+      }
+      svg {
+        page-break-after: always;
+        margin: 0.25in 0.25in 0in 0.25in;
+      }
+      @page {
+        size: portrait;
+        margin: 0;
+      }
+    </style>
+    <script src="../../common/script/util/file.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registry = new Registry();
+    </script>
+    <script src="script/hexatlas.js"></script>
+    <script type="text/javascript">
+      window.HexAtlas = registry.invoke("HexAtlas");
+    </script>
+  </head>
+  <body onload="hexAtlas = new HexAtlas('loadfile','gallery','print')">
+    <div id="ctrl">
+      <h2>HexAtlas: World Map Builder</h2>
+      <p>HexAtlas is a tool for building world maps using colored and iconed hexes</p>
+      <p>Press 'Print' once file is loaded to print or save as pdf to print later. Click on individual images to download as png files.<p>
+      <a target="_blank" href="sample/sampleFile.xml" download="sampleFile.xml">Sample Map File</a>
+      <div id="loadsave">
+        <label for="loadfile">File: </label>
+        <input id="loadfile" type="file"/>
+        <button onclick="hexAtlas.loadFile()">Load</button>
+        <button onclick="print()">Print</button>
+      </div>
+      <div id="canvas"></div>
+      <div id="gallery"></div>
+    </div>
+    <div id="print"></div>
+  </body>
+</html>
