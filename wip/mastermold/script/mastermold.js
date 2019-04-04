@@ -2,22 +2,18 @@
   var imageTag = function(src,alt) {
     return `<img src="${src}" alt="${alt}" title="${alt}"/>`;
   }
-  var frameSVG = function(fileName,imgURL,x,y,r,color,size) {
-    var img = document.createElement("img");
-    img.src = imgURL;
-    var imgWidth = img.naturalWidth;
-    var imgHeight = img.naturalHeight;
-    var d = r * 2;
-    return `
-<svg width="${size}in" height="${size}in" viewbox="0 0 ${d} ${d}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  var frameSVG = function(fileName,img) {
+    var d = img.token.r * 2;
+    var svg = `
+<svg width="${96 * img.token.size}" height="${96 * img.token.size}" viewbox="0 0 ${d} ${d}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
-    <pattern id="${fileName}" x="${x-r}" y="${y-r}" width="${r}" height="${r}">
-      <image xlink:href="${imgURL}" x="0" y="0" height="${imgHeight}" width="${imgHeight}">
+    <pattern id="${fileName}pattern" patternUnits="userSpaceOnUse" x="${img.token.x - img.token.r}" y="${img.token.y - img.token.r}" width="${img.width}" height="${img.height}">
+      <image id="${fileName}Img" xlink:href="${img.img}" x="0" y="0" height="${img.height}" width="${img.width}"/>
     </pattern>
   </defs>
-  <circle cx="${r}" cy="${r}" fill="url(#${fileName})" stroke="${color}" stroke-width="1"/>
-</svg>
-    `;
+  <circle cx="${img.token.r}" cy="${img.token.r}" r="${img.token.r - 3}" fill="url(#${fileName}pattern)" stroke="${img.token.frameColor}" stroke-width="5"/>
+</svg>`;
+    return svg;
   }
   registry.apply("Mastermold",[
     "Selector"
@@ -32,20 +28,16 @@
         var fileName = Selector.selectedValue(ui.imageSelector);
         var file = files[fileName];
         if (file) {
+          console.log(file);
           ui.selectedDisplay.innerHTML = imageTag(file.img,fileName);
           if (file.token) {
             // todo - draw framed
-            frameSVG(fileName,file.img,file.token.x,file.token.y,file.token.r,file.token.color);
+            ui.frameDisplay.innerHTML = frameSVG(fileName,file);
           }
         }
       }
       var redraw = function() {
-        Selector.loadSelector(ui.imageSelector,Object.keys(files),"Select an image to edit.",function(option,fileName) {
-          option.text = fileName;
-          option.value = fileName;
-        });
         ui.imageGallery.innerHTML = Object.entries(files).map(function(entry) {
-          console.log(entry);
           return imageTag(entry[1].img,entry[0]);
         }).join("");
         // todo - draw standing pages
@@ -55,10 +47,34 @@
         loadImages(ui.fileLoader,function(fileData) {
           Object.entries(fileData).forEach(function(entry) {
             if (!(files[entry[0]])) {
-              files[entry[0]] = {img:entry[1]};
+              var img = document.createElement("img");
+              img.src = entry[1];
+              var imgWidth = img.naturalWidth;
+              var imgHeight = img.naturalHeight;
+              var d = Math.min(imgWidth,imgHeight);
+              var r = Math.floor(d/2);
+              var x = Math.floor(imgWidth/2);
+              var y = r;
+              var color = "#000000";
+              var size = "1";
+              files[entry[0]] = {
+                img:entry[1],
+                width:imgWidth,
+                height:imgHeight,
+                token:{
+                  x:x,
+                  y:y,
+                  r:r,
+                  frameColor:color,
+                  size:size
+                }
+              };
             }
           });
-          console.log(fileData);
+          Selector.loadSelector(ui.imageSelector,Object.keys(files),"Select an image to edit.",function(option,fileName) {
+            option.text = fileName;
+            option.value = fileName;
+          });
           redraw();
         })
       }
@@ -81,7 +97,8 @@
           redraw();
         }
       }
-      this.update = function() {
+      this.update = function(input) {
+        console.log(input);
         var fileName = Selector.selectedValue(ui.imageSelector);
         var file = files[fileName];
         if (file) {

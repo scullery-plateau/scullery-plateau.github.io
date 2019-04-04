@@ -65,26 +65,26 @@
         <br/>
         <select id="imageSelector" onchange="mastermold.selectImage()"></select>
         <br/>
-        <label for="standingCheck">Standing?<input id="standingCheck" type="checkbox" onclick="mastermold.update()"/></label>
+        <label for="standingCheck">Standing?<input id="standingCheck" type="checkbox" onclick="mastermold.update(this)"/></label>
         <br/>
         <fieldset>
-          <legend><label for="tokenCheck">Token?<input id="tokenCheck" type="checkbox" onclick="mastermold.update()"/></label></legend>
+          <legend><label for="tokenCheck">Token?<input id="tokenCheck" type="checkbox" onclick="mastermold.update(this)"/></label></legend>
           <table><tr>
             <td>
-              <label for="centerX">Center X: <input id="centerX" type="number" onclick="mastermold.update()"/></label>
+              <label for="centerX">Center X: <input id="centerX" type="number" onclick="mastermold.update(this)"/></label>
               <br/>
-              <label for="centerY">Center Y: <input id="centerY" type="number" onclick="mastermold.update()"/></label>
+              <label for="centerY">Center Y: <input id="centerY" type="number" onclick="mastermold.update(this)"/></label>
               <br/>
-              <label for="radius">Radius: <input id="radius" type="number" onclick="mastermold.update()"/></label>
+              <label for="radius">Radius: <input id="radius" type="number" onclick="mastermold.update(this)"/></label>
               <br/>
-              <label for="size">Size: <select id="size" onchange="mastermold.update()">
+              <label for="size">Size: <select id="size" onchange="mastermold.update(this)">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="4">4</option>
               </select></label>
               <br/>
-              <label for="frameColor">Frame Color: <input id="frameColor" type="color"/><button onclick="mastermold.update()">Update Frame Color</button></label>
+              <label for="frameColor">Frame Color: <input id="frameColor" type="color"/><button onclick="mastermold.update(this)">Update Frame Color</button></label>
             </td>
             <td>
               <div id="selected"></div>
