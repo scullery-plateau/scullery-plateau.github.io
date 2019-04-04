@@ -8,25 +8,33 @@
       }, interval);
     }
   }
-  window.loadFile = function(input,onComplete) {
-    var file = input.files[0];
-    if (!file) {
-      return;
+  var fileLoader = function(readFn) {
+    return function(input,onComplete) {
+      var file = input.files[0];
+      if (!file) {
+        return;
+      }
+      var filedata = {};
+      Array.from(input.files).forEach(function(file){
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          filedata[file.name] = e.target.result;
+        };
+        readFn(reader,file);
+      });
+      delay(function() {
+        return Object.keys(filedata).length == input.files.length;
+      }, function() {
+        onComplete(filedata);
+      }, 500)
     }
-    var filedata = {};
-    Array.from(input.files).forEach(function(file){
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        filedata[file.name] = e.target.result;
-      };
-      reader.readAsText(file);
-    });
-    delay(function() {
-      return Object.keys(filedata).length == input.files.length;
-    }, function() {
-      onComplete(filedata);
-    }, 500)
   }
+  window.loadFile = fileLoader(function(reader,file) {
+    reader.readAsText(file)
+  });
+  window.loadImages = fileLoader(function(reader,file) {
+    reader.readAsDataURL(file);
+  })
   window.makeDownloadLink = function(label,filename,type,encoding,data) {
     var link = document.createElement("a");
     link.innerHTML = label;
