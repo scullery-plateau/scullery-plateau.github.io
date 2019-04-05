@@ -2,6 +2,9 @@
   var imageTag = function(src,alt) {
     return `<img src="${src}" alt="${alt}" title="${alt}"/>`;
   }
+  var imageLink = function(src,alt,instanceName) {
+    return `<a href="#" onclick="${instanceName}.setSelectedImage('${alt}')"><img src="${src}" alt="${alt}" title="${alt}"/></a>`;
+  }
   var frameSVG = function(fileName,img) {
     var d = img.token.r * 2;
     var svg = `
@@ -18,7 +21,7 @@
   registry.apply("Mastermold",[
     "Selector"
   ],function(Selector) {
-    return function(uiIds){
+    return function(uiIds,instanceName){
       var files = {};
       var ui = Object.entries(uiIds).reduce(function(out,entry) {
         out[entry[0]] = document.getElementById(entry[1]);
@@ -31,54 +34,58 @@
           console.log(file);
           ui.selectedDisplay.innerHTML = imageTag(file.img,fileName);
           if (file.token) {
-            // todo - draw framed
             ui.frameDisplay.innerHTML = frameSVG(fileName,file);
           }
         }
       }
       var redraw = function() {
         ui.imageGallery.innerHTML = Object.entries(files).map(function(entry) {
-          return imageTag(entry[1].img,entry[0]);
+          return imageLink(entry[1].img,entry[0],instanceName);
         }).join("");
         // todo - draw standing pages
         // todo - draw circle pages
       }
+      var buildImgData = function(files,fileName,imgData,img) {
+        return function() {
+          var imgWidth = img.naturalWidth;
+          var imgHeight = img.naturalHeight;
+          var d = Math.min(imgWidth,imgHeight);
+          var r = Math.floor(d/2);
+          var x = Math.floor(imgWidth/2);
+          var y = r;
+          var color = "#000000";
+          var size = "1";
+          files[fileName] = {
+            img:imgData,
+            width:imgWidth,
+            height:imgHeight,
+            token:{
+              x:x,
+              y:y,
+              r:r,
+              frameColor:color,
+              size:size
+            }
+          };
+          ui.imageGallery.innerHTML += imageLink(imgData,fileName,instanceName);
+        }
+      }
       this.addFiles = function() {
         loadImages(ui.fileLoader,function(fileData) {
-          Object.entries(fileData).forEach(function(entry) {
-            if (!(files[entry[0]])) {
-              var img = document.createElement("img");
-              img.src = entry[1];
-              var imgWidth = img.naturalWidth;
-              var imgHeight = img.naturalHeight;
-              var d = Math.min(imgWidth,imgHeight);
-              var r = Math.floor(d/2);
-              var x = Math.floor(imgWidth/2);
-              var y = r;
-              var color = "#000000";
-              var size = "1";
-              files[entry[0]] = {
-                img:entry[1],
-                width:imgWidth,
-                height:imgHeight,
-                token:{
-                  x:x,
-                  y:y,
-                  r:r,
-                  frameColor:color,
-                  size:size
-                }
-              };
-            }
-          });
-          Selector.loadSelector(ui.imageSelector,Object.keys(files),"Select an image to edit.",function(option,fileName) {
+          Selector.loadSelector(ui.imageSelector,Object.keys(fileData),"Select an image to edit.",function(option,fileName) {
             option.text = fileName;
             option.value = fileName;
           });
-          redraw();
+          Object.entries(fileData).forEach(function(entry) {
+            if (!(files[entry[0]])) {
+              var img = document.createElement("img");
+              img.onload = buildImgData(files,entry[0],entry[1],img);
+              img.src = entry[1];
+            }
+          });
         })
       }
-      this.selectImage = function() {
+      var selectImage = function() {
         var fileName = Selector.selectedValue(ui.imageSelector);
         var file = files[fileName];
         if (file) {
@@ -96,6 +103,13 @@
           drawSingle();
           redraw();
         }
+      }
+      this.setSelectedImage = function(key) {
+        Selector.setSelectedValue(ui.imageSelector,key);
+        selectImage();
+      }
+      this.selectImage = function() {
+        selectImage();
       }
       this.update = function(input) {
         console.log(input);
