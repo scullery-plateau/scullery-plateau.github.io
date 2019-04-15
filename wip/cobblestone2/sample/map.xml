@@ -1,0 +1,99 @@
+<!DOCTYPE map-file [
+<!ELEMENT map-file (map+,characters,tiles,palettes)>
+<!ELEMENT map (body,pages?)>
+<!ELEMENT body (#pcdata)>
+<!ELEMENT pages (page+)>
+<!ELEMENT page (from*)>
+<!ELEMENT from (to?,(turnleft|turnright)?)>
+<!ATTLIST from
+x CDATA #REQUIRED
+y CDATA #REQUIRED
+width CDATA #IMPLIED
+height CDATA #IMPLIED
+>
+<!ELEMENT to EMPTY>
+<!ATTLIST to
+x CDATA #REQUIRED
+y CDATA #REQUIRED
+>
+<!ELEMENT character-mapping (flipover|flipdown|turnleft|turnright)*>
+<!ATTLIST character-mapping
+character CDATA #REQUIRED
+tile CDATA #REQUIRED
+palette CDATA #REQUIRED
+>
+<!ELEMENT flipover EMPTY>
+<!ELEMENT flipdown EMPTY>
+<!ELEMENT turnleft EMPTY>
+<!ELEMENT turnright EMPTY>
+<!ELEMENT tiles (tile+)>
+<!ELEMENT tile (#pcdata)>
+<!ATTLIST tile
+name CDATA #REQUIRED
+index CDATA #REQUIRED
+>
+<!ELEMENT palettes (palette+)>
+<!ELEMENT palette (color+)>
+<!ATTLIST palette
+name CDATA #REQUIRED
+>
+<!ELEMENT color (#pcdata)>
+]>
+<map-file>
+  <map>
+    <body>
+`            788888888889
+`            4...$!!#...6
+`            4...%;;*...6
+`            4..{}..{}..6
+`            4..[]..[]..6
+`            4..{}..{}..6
+`            4..[]..[]..6
+`            4..{}..{}..6
+`            4..[]..[]..6
+`            1222Z..C2223
+`                4..6
+`                4..6
+`                4..6
+`                1=23
+`                7S888889
+`                4.|TH:.6
+`                4.|th:.6
+`                4.(--).6
+`                4......6
+`                4......6
+`                4......6
+`                4......6
+`                12Z..C23
+`                  4..6
+`                  4..6
+`   7888888889     4..6
+`   4........6     4..6
+7888Q........E88888Q..6
+4.......Ff........**..6
+4.......Oo........**..6
+4^^CZ........C222222223
+4^^64........6
+4^^61222222223
+4^^6
+4^^6
+4^^6
+Q--E
+    </body>
+    <pages>
+      <page>
+        <from x="0" y="27" width="4"/>
+        <from x="13" y="0" width="4">
+          <to x="4" y="0"/>
+        </from>
+      </page>
+      <page>
+        <from x="4" y="25" width="4"><turnright/></from>
+      </page>
+      <page>
+        <from x="4" y="25" width="4"><turnright/></from>
+      </page>
+    </pages>
+  </map>
+
+</map-file>
