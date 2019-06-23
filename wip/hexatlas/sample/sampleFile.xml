@@ -1,8 +1,17 @@
 <!DOCTYPE hexmap [
-  <!ELEMENT hexmap (map,tile-dim,tile+,)
+  <!ELEMENT hexmap (map,tile+,path+,icon+,label+)>
+  <!ATTLIST hexmap
+    hex-height CDATA #REQUIRED
+    line-width CDATA #REQUIRED
+    >
+  <!ELEMENT map (#PCDATA)>
+  <!ELEMENT tile (path|circle|ellipse|rectangle|polygon)+>
+  <!ELEMENT path (line-to|curve-to|arc-to|bezier-to)+>
+  <!ELEMENT icon (path|circle|ellipse|rectangle|polygon)>
+  <!ELEMENT label EMPTY>
 ]>
-<hexmap>
-  <map name="" scale="" orientation="">
+<hexmap name="" scale="" orientation="" hex-height="" line-width="">
+  <map>
 gfffihbbbfi
 gfbbbbbbbci
 ffffffbbbbb
@@ -14,9 +23,11 @@ cibbccchcdc
 cdcbbciicde
 ddbbcdcddee
   </map>
-  <tile-dim width="" height=""/>
   <tile char="a" label="Farmland" bg-color="green">
   </tile>
+  <path init-x="" init-y="" complete-path="">
+    <circle>
+  </path>
   <icon name="Fort">
   </icon>
   <label x="" y="" text="" vertical-align="" horizontal-align="">
