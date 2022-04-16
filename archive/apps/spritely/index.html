@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>Spritely: Pixel Art</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../common/style/print.css"/>
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <style type="text/css">
+      img {
+        border: 1px solid black;
+      }
+      input[type="number"]{
+        width: 4em;
+      }
+    </style>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="../../common/script/util/registry.js"></script>
+    <script type="text/javascript">
+      window.registryName = "registry";
+      window.registry = new Registry();
+    </script>
+    <script src="../../common/script/drawUtil/palettectrl.js"></script>
+    <script src="../../common/script/drawUtil/gridtf.js"></script>
+    <script src="../../common/script/drawUtil/pixelcanvas.js"></script>
+    <script src="../../common/script/drawUtil/pixelpainter.js"></script>
+    <script src="../../common/script/drawUtil/point.js"></script>
+    <script src="../../common/script/drawUtil/colorconstants.js"></script>
+    <script src="../../common/script/drawUtil/tileparser.js"></script>
+    <script src="script/spritely.js"></script>
+    <script type="text/javascript">
+      var Spritely = registry.invoke('Spritely');
+      window.pix = new Spritely('pix','input','widthField','heightField','colorSelect','color','palette','canvas','builder','out','codeOut',16,10);
+    </script>
+  </head>
+  <body onload="pix.init()">
+    <div class="container">
+      <h1>Spritely: Pixel Art</h1>
+      <hr/>
+      <div id="loadsave">
+        <input type="file" id="input" onchange="pix.loadData('input')"/>
+        <span id="codeOut"></span>
+      </div>
+      <hr/>
+      <div class="row">
+        <div class="col-md-3">
+          <h4>Controls</h4>
+          <h5>Size</h5>
+          <div>
+            <label for="width"> Width:</label>
+            <input type="number" id="widthField" name="width" value="0" onChange="pix.resize()"/>
+          </div>
+          <div>
+            <label for="height"> Height:</label>
+            <input type="number" id="heightField" name="height" value="0" onChange="pix.resize()"/>
+          </div>
+          <div>
+            <label for="scale"> Scale:</label>
+            <input type="number" id="scaleField" name="scale" value="1" min="1" onChange="pix.setScale(this.value)"/>
+          </div>
+          <hr/>
+          <h5>Transform</h5>
+          <button name="transform" onClick="pix.transform('flip-down')">Flip Down</button>
+          <button name="transform" onClick="pix.transform('flip-over')">Flip Over</button>
+          <button name="transform" onClick="pix.transform('turn-right')">Turn Right</button>
+          <button name="transform" onClick="pix.transform('turn-left')">Turn Left</button>
+          <button name="transform" onClick="pix.transform('shift-right')">Shift Right</button>
+          <button name="transform" onClick="pix.transform('shift-left')">Shift Left</button>
+          <button name="transform" onClick="pix.transform('shift-up')">Shift Up</button>
+          <button name="transform" onClick="pix.transform('shift-down')">Shift Down</button>
+          <hr/>
+          <h5>Palette</h5>
+          <input type="checkbox" name="transparent" onChange="pix.makeTransparent(this.checked)"/>
+          <label for="transparent">Make Image Transparent?</label>
+          <br/>
+          <div id="palette"></div>
+          <br/>
+          <button onClick="pix.addColor()">Add Color</button>
+        </div>
+        <div class="col-md-6">
+          <h4>Canvas</h4>
+          <p>Select a color from your palette, then click on the pixels you wish to make that color. Changing the value of a color in your palette will change the color of each pixel of the matching color in your image.</p>
+          <div id="canvas"></div>
+        </div>
+        <div class="col-md-3">
+          <h4>Output</h4>
+          <canvas id="builder" style="display: none;"></canvas>
+          <p>Click on the image below to download the image.</p>
+          <div id="out"></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

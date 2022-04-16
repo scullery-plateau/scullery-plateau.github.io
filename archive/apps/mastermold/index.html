@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MasterMold: Build Your Paper Minis</title>
+    <link rel="stylesheet" type="text/css" href="style/print.css"/>
+    <script src="../../common/script/extend/JSON.js"></script>
+    <script src="../../common/script/extend/Object.js"></script>
+    <script src="../../common/script/extend/Number.js"></script>
+    <script src="script/mastermold-sandbox.js"></script>
+    <script type="text/javascript">
+    </script>
+  </head>
+  <body onload="demo()">
+    <div id="ctrl">
+      <p>Enter in a list of the URLS of the images you wish to use for your minis, one link per line, no more than 20 urls at a time (any additional urls will be discarded).
+      Use the browser's "print" ability to either print your minis or save them as a ".pdf" file.</p>
+      <textarea id="input"></textarea>
+      <button onclick="displayFromInput(document.getElementById('input').value)">Build My Minis</button>
+    </div>
+    <div id="gallery"></div>
+    <div id="print"></div>
+  </body>
+</html>
