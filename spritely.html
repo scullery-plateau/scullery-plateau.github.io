@@ -53,12 +53,10 @@
     <script type="text/javascript">
       (function () {
         window.closeStrayMenu = function (e) {
-          console.log(e);
-          let navBarNavCount = e.path.filter((elem) => {
-            return (
-              elem.tagName.toLowerCase() == 'ul' &&
-              elem.classList.contains('navbar-nav')
-            );
+          let bodyIndex = e.path.map((e) => e.tagName).indexOf('BODY');
+          let bodyChildren = e.path.filter((e, i) => i < bodyIndex);
+          let navBarNavCount = e.path.filter((elem, index) => {
+            return i < bodyIndex && elem.className.indexOf('navbar-nav') >= 0;
           }).length;
           if (navBarNavCount < 1) {
             document.dispatchEvent(new Event('CloseMenus'));

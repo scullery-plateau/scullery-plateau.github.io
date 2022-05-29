@@ -38,6 +38,7 @@
     aboutId
   ) {
     document.getElementById(bgColorId).value = defaultColor;
+    document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
       palette: [],
       pixels: {},
@@ -56,6 +57,8 @@
     };
     let setColor = function (index) {
       selectColor(index);
+      document.getElementById(paletteColorInputId).value =
+        data.palette[selectedColorIndex];
       document.getElementById(paletteColorInputId).click();
     };
     let buildPaletteButton = function (color, index) {
@@ -195,7 +198,7 @@
       paintCanvas();
     };
     window.setBackgroundColor = function (colorInput) {
-      data.backgroundColor = colorInput;
+      data.backgroundColor = colorInput.value;
       drawPalette();
       paintCanvas();
     };
