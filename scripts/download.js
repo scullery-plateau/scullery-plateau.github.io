@@ -33,9 +33,15 @@
     initPopup(fileNameInputTemplate(fieldId, defaultFilename), [
       {
         label: 'Download',
+        class: 'success',
         handler: () => {
           triggerDownload(fieldId, defaultFilename, jsonData);
         },
+      },
+      {
+        label: 'Cancel',
+        class: 'danger',
+        handler: () => {},
       },
     ]);
   };

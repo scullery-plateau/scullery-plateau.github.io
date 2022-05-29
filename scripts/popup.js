@@ -3,9 +3,7 @@
     return function (menu, buttonSpec) {
       let button = document.createElement('button');
       button.innerHTML = buttonSpec.label;
-      ['class'].forEach((attr) => {
-        button.setAttribute(attr, buttonSpec[attr]);
-      });
+      button.setAttribute('class', 'btn btn-' + buttonSpec.class);
       let listener = () => {
         buttonSpec.handler();
         popup.close();
@@ -29,7 +27,7 @@
     if (buttonSpecs.length == 0) {
       buttonSpecs.push({
         label: 'OK',
-        class: 'btn btn-info',
+        class: 'info',
         handler: () => {},
       });
     }
