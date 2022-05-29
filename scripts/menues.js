@@ -15,4 +15,14 @@
       classList.add('show-menu');
     }
   };
+  window.closeStrayMenu = function (e) {
+    let bodyIndex = e.path.map((e) => e.tagName).indexOf('BODY');
+    let bodyChildren = e.path.filter((e, i) => i < bodyIndex);
+    let navBarNavCount = e.path.filter((elem, index) => {
+      return i < bodyIndex && elem.className.indexOf('navbar-nav') >= 0;
+    }).length;
+    if (navBarNavCount < 1) {
+      document.dispatchEvent(new Event('CloseMenus'));
+    }
+  };
 })();
