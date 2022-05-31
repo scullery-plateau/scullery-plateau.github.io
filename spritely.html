@@ -287,7 +287,20 @@
       <div id="imageDownload">
         <div>
           <canvas id="htmlcanvas" style="display: none"></canvas>
-          <div></div>
+          <div class="form-group">
+            <label for="imageFileName">File Name:</label>
+            <input type="text" class="form-control" id="imageFileName" />
+          </div>
+          <div class="form-group">
+            <label for="imageScale">Image Scale:</label>
+            <input
+              type="number"
+              value="5"
+              class="form-control"
+              id="imageScale"
+              onchange="repaintImage(this,'htmlcanvas','imageFileName','imageLink','imageDisplay')"
+            />
+          </div>
           <div>
             <a id="imageLink">
               <img id="imageDisplay" />
@@ -296,6 +309,20 @@
         </div>
       </div>
     </div>
+    <script type="text/javascript">
+      (function () {
+        window.repaintImage = function (
+          scaleElem,
+          canvasElemId,
+          linkId,
+          imgId
+        ) {
+          let canvasElem = document.getElementById(canvasElemId);
+          let link = document.getElementById(linkId);
+          let img = document.getElementById(imgId);
+        };
+      })();
+    </script>
     <footer>
       <div class="jumbotronn text-center">
         <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>

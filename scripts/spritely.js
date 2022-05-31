@@ -241,6 +241,14 @@
       drawPalette();
       paintCanvas();
     };
+    let drawImageInCanvas = function (canvasElem) {};
+    window.repaintImage = function (scaleElem, canvasElemId, linkId, imgId) {
+      let scale = scaleElem.value;
+      let canvasElem = document.getElementById(canvasElemId);
+      let imgUrl = drawImageInCanvas(canvasElem);
+      let link = document.getElementById(linkId);
+      let img = document.getElementById(imgId);
+    };
     paintCanvas();
   };
 })();
