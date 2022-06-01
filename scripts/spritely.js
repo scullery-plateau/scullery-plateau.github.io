@@ -22,7 +22,7 @@
     return 'paletteBtn' + index;
   };
   let getPixelId = function (x, y) {
-    return x + 'x' + y;
+    return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
   };
   window.init = function (
     transparentColorId,
@@ -269,12 +269,55 @@
       drawPalette();
       paintCanvas();
     };
+    let transforms = {
+      turnLeft: (x, y) => {
+        return getPixelId(y, 15 - x);
+      },
+      turnRight: (x, y) => {
+        return getPixelId(15 - y, x);
+      },
+      flipOver: (x, y) => {
+        return getPixelId(15 - x, y);
+      },
+      flipDown: (x, y) => {
+        return getPixelId(x, 15 - y);
+      },
+      shiftRight: (x, y) => {
+        return getPixelId(x + 1, y);
+      },
+      shiftLeft: (x, y) => {
+        return getPixelId(x - 1, y);
+      },
+      shiftUp: (x, y) => {
+        return getPixelId(x, y - 1);
+      },
+      shiftDown: (x, y) => {
+        return getPixelId(x, y + 1);
+      },
+    };
     window.transform = function (e, tfType) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      console.log('called transform');
-      alert("'transform' not yet implemented");
-      //todo
+      let transformFn = transforms[tfType];
+      let newPixels = {};
+      let commonKeys = [];
+      for (let x = 0; x < 16; x++) {
+        for (let y = 0; y < 16; y++) {
+          let currentKey = getPixelId(x, y);
+          commonKeys.push(currentKey);
+          if (currentKey in data.pixels) {
+            newPixels[transformFn(x, y)] = data.pixels[currentKey];
+          }
+        }
+      }
+      Object.keys(newPixels).forEach((k) => {
+        if (commonKeys.indexOf(k) < 0) {
+          delete newPixels[k];
+        }
+      });
+      data.pixels = newPixels;
+      drawPalette();
+      paintCanvas();
     };
     window.showAbout = function (e) {
       e.preventDefault();
