@@ -64,20 +64,19 @@
       'paletteDefs',
       'paletteColor',
       'canvas',
-      'popup',
-      'popupContent',
-      'popupMenu',
-      'about'
+      'about',
+      'imageDownload',
+      'imageScale','htmlcanvas','imageFileName','imageLink','imageDisplay'
       )"
     onclick="closeStrayMenu(event)"
   >
     <div class="navbar justify-content-start">
       <div class="mr-3">
         <ul class="navbar-nav">
-          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+          <li class="nav-item active drowpdown">
             <a
               href="#"
-              class="text-light nav-link dropdown-toggle"
+              class="rpg-box p-3 text-light nav-link dropdown-toggle"
               onclick="toggleMenu(event,this)"
             ></a>
             <ul class="dropdown-menu rpg-box">
@@ -266,8 +265,27 @@
         />
       </defs>
     </svg>
-    <div id="palette" class="rpg-title-box m-3"></div>
-    <div id="canvas" class="rpg-title-box m-3"></div>
+    <div
+      class="rpg-title-box m-3 d-flex justify-content-between"
+      title="Palette"
+    >
+      <button class="btn btn-success" title="Add Color" onclick="addColor()">
+        +
+      </button>
+      <div id="palette"></div>
+      <button
+        class="btn btn-danger"
+        title="Remove Selected Color"
+        onclick="removeColor()"
+      >
+        X
+      </button>
+    </div>
+    <div
+      id="canvas"
+      class="rpg-title-box m-3"
+      title="click to paint a pixel"
+    ></div>
     <div style="display: none">
       <div id="paletteDefs"></div>
       <input id="paletteColor" type="color" onchange="updateColor(this)" />
@@ -298,7 +316,7 @@
               value="5"
               class="form-control"
               id="imageScale"
-              onchange="repaintImage(this,'htmlcanvas','imageFileName','imageLink','imageDisplay')"
+              onchange="repaintImage()"
             />
           </div>
           <div>

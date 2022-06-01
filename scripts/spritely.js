@@ -32,10 +32,13 @@
     paletteDefsId,
     paletteColorInputId,
     canvasId,
-    popupId,
-    popupContentId,
-    popupMenuId,
-    aboutId
+    aboutId,
+    imageDownloadPopupId,
+    imgDlScaleId,
+    imgDlCanvasId,
+    imgDlFileNameId,
+    imgDlLinkId,
+    imgDlDisplayId
   ) {
     document.getElementById(bgColorId).value = defaultColor;
     document.getElementById(paletteColorInputId).value = defaultColor;
@@ -70,11 +73,19 @@
         'palette-color rounded-circle m-2' +
           (index == selectedColorIndex ? ' selected-color' : '')
       );
+      button.setAttribute(
+        'title',
+        'click to select, double click or right click to change this color'
+      );
       button.setAttribute('style', `color:${color};background-color:${color};`);
       button.addEventListener('click', () => {
         selectColor(index);
       });
       button.addEventListener('dblclick', () => {
+        setColor(index);
+      });
+      button.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
         setColor(index);
       });
       return button;
@@ -171,9 +182,7 @@
     window.showImageDownload = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      console.log('called showImageDownload');
-      alert("'showImageDownload' not yet implemented");
-      // todo
+      initPopup(document.getElementById(imageDownloadPopupId).innerHTML);
     };
     window.addColor = function (e) {
       if (e) {
@@ -185,8 +194,10 @@
       setColor(data.palette.length - 1);
     };
     window.removeColor = function (e) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+      if (e) {
+        e.preventDefault();
+        document.dispatchEvent(new Event('CloseMenus'));
+      }
       data.palette.splice(selectedColorIndex, 1);
       Object.entries(data.pixels)
         .filter(([key, value]) => value >= data.palette.length)
@@ -217,7 +228,6 @@
     window.showAbout = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      console.log('called showAbout');
       initPopup(document.getElementById(aboutId).innerHTML);
     };
     window.toggleColor = function (e, x, y) {
@@ -241,13 +251,41 @@
       drawPalette();
       paintCanvas();
     };
-    let drawImageInCanvas = function (canvasElem) {};
-    window.repaintImage = function (scaleElem, canvasElemId, linkId, imgId) {
-      let scale = scaleElem.value;
-      let canvasElem = document.getElementById(canvasElemId);
-      let imgUrl = drawImageInCanvas(canvasElem);
-      let link = document.getElementById(linkId);
-      let img = document.getElementById(imgId);
+    let drawImageInCanvas = function (canvasElem, scale, imgDim) {
+      var ctx = canvas.getContext('2d');
+      if (!data.isTransparent) {
+        ctx.fillStyle(data.backgroundColor);
+        ctx.fillRect(0, 0, imgDim, imgDim);
+      }
+      for (let x = 0; x < 16; x++) {
+        for (let y = 0; y < 16; y++) {
+          let pixelId = getPixelId(x, y);
+          if (pixelId in data.pixels) {
+            ctx.fillStyle(data.palette[data.pixels[pixelId]]);
+            ctx.fillRect(scale * x, scale * y, scale, scale);
+          }
+        }
+      }
+      return canvasElem.toDataUrl('image/png');
+    };
+    window.repaintImage = function () {
+      let scale = document.getElmentById(imgDlScaleId).value;
+      let imgDim = dim * scale;
+      let fileName = normalizeFilename(
+        document.getElementById(imgDlFileNameId),
+        '.png',
+        'spritely'
+      );
+      let canvasElem = document.getElementById(imgDlCanvasId);
+      canvasElem.setAttribute('height', imgDim);
+      canvasElem.setAttribute('width', imgDim);
+      let imgUrl = drawImageInCanvas(canvasElem, scale, imgDim);
+      let link = document.getElementById(imgDlLinkId);
+      link.setAttribute('download', fileName);
+      link.setAttribute('href', imgUrl);
+      let img = document.getElementById(imgDlDisplayId);
+      img.setAttribute('src', imgUrl);
+      img.setAttribute('style', `width: ${imgDim}; height: ${imgDim};`);
     };
     paintCanvas();
   };
