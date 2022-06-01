@@ -169,7 +169,6 @@
     window.downloadFile = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      console.log('called downloadFile');
       let jsonData = {
         palette: data.palette,
         pixels: data.pixels,
