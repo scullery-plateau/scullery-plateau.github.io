@@ -8,6 +8,7 @@
         buttonSpec.handler();
         popup.close();
         popup.parentNode.removeChild(popup);
+        document.dispatchEvent(new Event('ModalClosed'));
       };
       button.addEventListener('click', listener);
       menu.appendChild(button);
@@ -34,5 +35,6 @@
     buttonSpecs.reduce(appendPopupMenuButton(popup), menu);
     document.getElementsByTagName('body')[0].appendChild(popup);
     popup.showModal();
+    document.dispatchEvent(new Event('ModalShown'));
   };
 })();

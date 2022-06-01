@@ -182,7 +182,28 @@
     window.showImageDownload = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      initPopup(document.getElementById(imageDownloadPopupId).innerHTML);
+      localStorage.setItem(
+        'canvasTemplate',
+        document.getElementById(imgDlDisplayId).innerHTML
+      );
+      document.getElementById(imgDlDisplayId).innerHTML = '';
+      localStorage.setItem(
+        'imgLinkTemplate',
+        document.getElementById(imgDlLinkId).innerHTML
+      );
+      document.getElementById(imgDlLinkId).innerHTML = '';
+      let popupContent = document.getElementById(imageDownloadPopupId);
+      let rawPopupContent = popupContent.innerHTML;
+      popupContent.innerHTML = '';
+      setUpOneTimeEvent('ModalShown', repaintImage);
+      setUpOneTimeEvent('ModalClosed', () => {
+        popupContent.innerHTML = rawPopupContent;
+        document.getElementById(imgDlDisplayId).innerHTML =
+          localStorage.getItem('canvasTemplate');
+        document.getElementById(imgDlLinkId).innerHTML =
+          localStorage.getItem('imgLinkTemplate');
+      });
+      initPopup(rawPopupContent);
     };
     window.addColor = function (e) {
       if (e) {
@@ -252,40 +273,40 @@
       paintCanvas();
     };
     let drawImageInCanvas = function (canvasElem, scale, imgDim) {
-      var ctx = canvas.getContext('2d');
+      let ctx = canvasElem.getContext('2d');
       if (!data.isTransparent) {
-        ctx.fillStyle(data.backgroundColor);
+        ctx.fillStyle = data.backgroundColor;
         ctx.fillRect(0, 0, imgDim, imgDim);
       }
       for (let x = 0; x < 16; x++) {
         for (let y = 0; y < 16; y++) {
           let pixelId = getPixelId(x, y);
           if (pixelId in data.pixels) {
-            ctx.fillStyle(data.palette[data.pixels[pixelId]]);
+            ctx.fillStyle = data.palette[data.pixels[pixelId]];
             ctx.fillRect(scale * x, scale * y, scale, scale);
           }
         }
       }
-      return canvasElem.toDataUrl('image/png');
+      return canvasElem.toDataURL('image/png');
     };
     window.repaintImage = function () {
-      let scale = document.getElmentById(imgDlScaleId).value;
+      let scale = document.getElementById(imgDlScaleId).value;
       let imgDim = dim * scale;
-      let fileName = normalizeFilename(
-        document.getElementById(imgDlFileNameId),
+      let filename = normalizeFilename(
+        document.getElementById(imgDlFileNameId).value,
         '.png',
         'spritely'
       );
+      let canvasTpl = localStorage.getItem('canvasTemplate');
+      document.getElementById(imgDlDisplayId).innerHTML = eval(
+        '`' + canvasTpl + '`'
+      );
       let canvasElem = document.getElementById(imgDlCanvasId);
-      canvasElem.setAttribute('height', imgDim);
-      canvasElem.setAttribute('width', imgDim);
-      let imgUrl = drawImageInCanvas(canvasElem, scale, imgDim);
-      let link = document.getElementById(imgDlLinkId);
-      link.setAttribute('download', fileName);
-      link.setAttribute('href', imgUrl);
-      let img = document.getElementById(imgDlDisplayId);
-      img.setAttribute('src', imgUrl);
-      img.setAttribute('style', `width: ${imgDim}; height: ${imgDim};`);
+      let dataURL = drawImageInCanvas(canvasElem, scale, imgDim);
+      let downloadTpl = localStorage.getItem('imgLinkTemplate');
+      document.getElementById(imgDlLinkId).innerHTML = eval(
+        '`' + downloadTpl + '`'
+      );
     };
     paintCanvas();
   };
