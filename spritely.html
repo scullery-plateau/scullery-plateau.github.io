@@ -50,10 +50,8 @@
     <script type="text/javascript" src="scripts/popup.js"></script>
     <script type="text/javascript" src="scripts/triggers.js"></script>
     <script type="text/javascript" src="scripts/download.js"></script>
+    <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/spritely.js"></script>
-    <script type="text/javascript">
-      (function () {})();
-    </script>
   </head>
   <body
     class="bg-dark text-light"
@@ -67,7 +65,7 @@
       'canvas',
       'about',
       'imageDownload',
-      'imageScale','htmlcanvas','imageFileName','imageLink','imageDisplay'
+      'imageScale','htmlcanvas','imageFileName','imageLink','imageDisplay','fileLoad'
       )"
     onclick="closeStrayMenu(event)"
   >
@@ -289,6 +287,12 @@
     ></div>
     <div style="display: none">
       <div id="paletteDefs"></div>
+      <input
+        id="fileLoad"
+        type="file"
+        accept=".json,application/json"
+        onchange="loadFiles(event)"
+      />
       <input id="paletteColor" type="color" onchange="updateColor(this)" />
       <div id="about">
         <p>Spritely is a canvas for pixel art.</p>
@@ -342,20 +346,6 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript">
-      (function () {
-        window.repaintImage = function (
-          scaleElem,
-          canvasElemId,
-          linkId,
-          imgId
-        ) {
-          let canvasElem = document.getElementById(canvasElemId);
-          let link = document.getElementById(linkId);
-          let img = document.getElementById(imgId);
-        };
-      })();
-    </script>
     <footer>
       <div class="jumbotronn text-center">
         <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>

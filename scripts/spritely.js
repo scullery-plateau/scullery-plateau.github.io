@@ -38,7 +38,8 @@
     imgDlCanvasId,
     imgDlFileNameId,
     imgDlLinkId,
-    imgDlDisplayId
+    imgDlDisplayId,
+    fileLoaderId
   ) {
     document.getElementById(bgColorId).value = defaultColor;
     document.getElementById(paletteColorInputId).value = defaultColor;
@@ -162,9 +163,22 @@
     window.loadFile = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      console.log('called loadFile');
-      alert("'loadFile' not yet implemented");
+      document.getElementById(fileLoaderId).click();
+    };
+    let loadFileResultsAsJsonData = function (results, filename) {
+      alert('selected ' + filename);
       // todo
+    };
+    let processFileLoadError = function (filename, error) {
+      // todo
+    };
+    window.loadFiles = function (e) {
+      loadFilesAs(
+        Array.from(e.target.files),
+        'text',
+        loadFileResultsAsJsonData,
+        processFileLoadError
+      );
     };
     window.downloadFile = function (e) {
       e.preventDefault();
