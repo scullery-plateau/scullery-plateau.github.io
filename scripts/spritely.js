@@ -165,12 +165,29 @@
       document.dispatchEvent(new Event('CloseMenus'));
       document.getElementById(fileLoaderId).click();
     };
+    let validateLoadFileJson = function (data) {
+      // todo - call validation
+    };
     let loadFileResultsAsJsonData = function (results, filename) {
-      alert('selected ' + filename);
-      // todo
+      let jsonData = JSON.parse(results);
+      let error = validateLoadFileJson(jsonData);
+      if (error) {
+        throw error;
+      }
+      ['palette', 'pixels', 'backgroundColor', 'isTransparent'].forEach(
+        (field) => {
+          delete data[field];
+        }
+      );
+      data.palette = jsonData.palette;
+      data.pixels = jsonData.pixels;
+      data.backgroundColor = jsonData.backgroundColor;
+      data.isTransparent = !('backgroundColor' in jsonData);
+      drawPalette();
+      paintCanvas();
     };
     let processFileLoadError = function (filename, error) {
-      // todo
+      // todo -
     };
     window.loadFiles = function (e) {
       loadFilesAs(

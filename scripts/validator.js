@@ -31,8 +31,22 @@
       throw argErrors;
     }
     args.required = args.required || [];
-    let propKeys = Object.keys(args.properties);
-    let missingRequired 
+    let propKeys = Object.keys(properties);
+    return function (value) {
+      let valueType = typeof value;
+      if (valueType != 'object') {
+        return {
+          valueType: valueType,
+          message: 'Value is not an object.',
+        };
+      }
+      if (isArray(valueType)) {
+        return {
+          isArray: true,
+          message: 'Value should not be an array.',
+        };
+      }
+    };
   };
   window.validateMap = function (args, constraint) {};
   window.validateArray = function (args, pred) {};
@@ -49,6 +63,7 @@
         required: validateArray({
           arrayOf: validateString(),
         }),
+        ignoreExtraKeys: validateBoolean(),
       },
       required: ['properties'],
     },
