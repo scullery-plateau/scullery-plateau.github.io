@@ -134,11 +134,14 @@
                   <li class="">
                     <label for="backgroundColor" class="dropdown-item"
                       >Background Color:
-                      <input
+                      <button
+                        class="rounded-pill"
                         id="backgroundColor"
-                        type="color"
-                        onchange="setBackgroundColor(this)"
-                    /></label>
+                        onclick="setBackgroundColor(this)"
+                      >
+                        ____
+                      </button></label
+                    >
                   </li>
                   <li class="">
                     <label for="makeTransparent" class="dropdown-item"
@@ -293,7 +296,7 @@
         accept=".json,application/json"
         onchange="loadFiles(event)"
       />
-      <input id="paletteColor" type="color" onchange="updateColor(this)" />
+      <input id="paletteColor" type="color" />
       <div id="about">
         <p>Spritely is a canvas for pixel art.</p>
         <p>

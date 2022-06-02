@@ -1,12 +1,12 @@
 (function () {
-  window.setUpOneTimeEvent = function (event, handler) {
+  window.setUpOneTimeEvent = function (element, event, handler) {
     let oneTimeHandler = function () {
       try {
         handler();
       } finally {
-        document.removeEventListener(event, oneTimeHandler);
+        element.removeEventListener(event, oneTimeHandler);
       }
     };
-    document.addEventListener(event, oneTimeHandler);
+    element.addEventListener(event, oneTimeHandler);
   };
 })();

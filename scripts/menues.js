@@ -19,7 +19,7 @@
     let bodyIndex = e.path.map((e) => e.tagName).indexOf('BODY');
     let bodyChildren = e.path.filter((e, i) => i < bodyIndex);
     let navBarNavCount = bodyChildren.filter((elem, index) => {
-      return elem.classList.contains('navbar-nav') >= 0;
+      return elem.classList.contains('navbar-nav');
     }).length;
     if (navBarNavCount < 1) {
       document.dispatchEvent(new Event('CloseMenus'));

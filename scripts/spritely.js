@@ -24,6 +24,9 @@
   let getPixelId = function (x, y) {
     return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
   };
+  let setColorButtonColor = function (button, color) {
+    button.setAttribute('style', `color:${color};background-color:${color};`);
+  };
   window.init = function (
     transparentColorId,
     bgColorId,
@@ -41,7 +44,7 @@
     imgDlDisplayId,
     fileLoaderId
   ) {
-    document.getElementById(bgColorId).value = defaultColor;
+    setColorButtonColor(document.getElementById(bgColorId), defaultColor);
     document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
       palette: [],
@@ -59,35 +62,45 @@
         .getElementById(getPaletteButtonId(selectedColorIndex))
         .classList.add('selected-color');
     };
-    let setColor = function (index) {
+    let initColorPicker = function (color, callback) {
+      let colorInput = document.getElementById(paletteColorInputId);
+      colorInput.value = color;
+      setUpOneTimeEvent(colorInput, 'change', () => {
+        callback(colorInput.value);
+        drawPalette();
+        paintCanvas();
+      });
+      colorInput.click();
+    };
+    let setPaletteColor = function (index) {
       selectColor(index);
-      document.getElementById(paletteColorInputId).value =
-        data.palette[selectedColorIndex];
-      document.getElementById(paletteColorInputId).click();
+      initColorPicker(data.palette[selectedColorIndex], (newColor) => {
+        data.palette[selectedColorIndex] = newColor;
+      });
     };
     let buildPaletteButton = function (color, index) {
       let button = document.createElement('button');
-      button.innerHTML = '<p>----</p>';
+      button.innerHTML = '----';
       button.setAttribute('id', getPaletteButtonId(index));
       button.setAttribute(
         'class',
-        'palette-color rounded-circle m-2' +
+        'palette-color rounded-pill mr-2 ml-2' +
           (index == selectedColorIndex ? ' selected-color' : '')
       );
       button.setAttribute(
         'title',
         'click to select, double click or right click to change this color'
       );
-      button.setAttribute('style', `color:${color};background-color:${color};`);
+      setColorButtonColor(button, color);
       button.addEventListener('click', () => {
         selectColor(index);
       });
       button.addEventListener('dblclick', () => {
-        setColor(index);
+        setPaletteColor(index);
       });
       button.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        setColor(index);
+        setPaletteColor(index);
       });
       return button;
     };
@@ -225,8 +238,8 @@
       let popupContent = document.getElementById(imageDownloadPopupId);
       let rawPopupContent = popupContent.innerHTML;
       popupContent.innerHTML = '';
-      setUpOneTimeEvent('ModalShown', repaintImage);
-      setUpOneTimeEvent('ModalClosed', () => {
+      setUpOneTimeEvent(document, 'ModalShown', repaintImage);
+      setUpOneTimeEvent(document, 'ModalClosed', () => {
         popupContent.innerHTML = rawPopupContent;
         document.getElementById(imgDlDisplayId).innerHTML =
           localStorage.getItem('canvasTemplate');
@@ -242,7 +255,7 @@
       }
       data.palette.push(defaultColor);
       drawPalette();
-      setColor(data.palette.length - 1);
+      setPaletteColor(data.palette.length - 1);
     };
     window.removeColor = function (e) {
       if (e) {
@@ -259,10 +272,11 @@
       drawPalette();
       paintCanvas();
     };
-    window.setBackgroundColor = function (colorInput) {
-      data.backgroundColor = colorInput.value;
-      drawPalette();
-      paintCanvas();
+    window.setBackgroundColor = function (bgButton) {
+      initColorPicker(data.backgroundColor, (newColor) => {
+        data.backgroundColor = newColor;
+        setColorButtonColor(document.getElementById(bgColorId), newColor);
+      });
     };
     window.makeTransparent = function (checkbox) {
       data.isTransparent = document.getElementById(makeTransparentId).checked;
@@ -340,7 +354,6 @@
       paintCanvas();
     };
     window.updateColor = function (input) {
-      console.log('updateColor');
       data.palette[selectedColorIndex] = input.value;
       drawPalette();
       paintCanvas();
