@@ -23,15 +23,6 @@
       };
     }
   };
-  let getColorType = function (color) {
-    if (colors[color]) {
-      return 'name';
-    }
-    if ((/[#]([0-9a-f]{6})/i.exec(color) || [])[0] == color) {
-      return 'hex';
-    }
-    return;
-  };
   let getForegroundColor = function (hex) {
     let rgb = rgbFromHex(hex);
     let luminosity = Math.sqrt(
@@ -104,7 +95,6 @@
     populateColorNameSelector(document.getElementById(colorByNameSelectorId));
     window.setRGB = function (hex) {
       let rgb = rgbFromHex(hex);
-      let foregroundColor = getForegroundColor(hex);
       document
         .getElementById(hexColorDisplayId)
         .setAttribute(
