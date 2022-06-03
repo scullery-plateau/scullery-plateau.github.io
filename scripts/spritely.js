@@ -42,8 +42,17 @@
     imgDlFileNameId,
     imgDlLinkId,
     imgDlDisplayId,
-    fileLoaderId
+    fileLoaderId,
+    colorPickerTplId,
+    hexColorInputId,
+    hexPaletteTableId,
+    colorByNameSelectorId
   ) {
+    localStorage.setItem(
+      'colorPickerTpl',
+      document.getElementById(colorPickerTplId).innerHTML
+    );
+    document.getElementById(colorPickerTplId).innerHTML = '';
     setColorButtonColor(document.getElementById(bgColorId), defaultColor);
     document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
@@ -63,6 +72,27 @@
         .classList.add('selected-color');
     };
     let initColorPicker = function (color, callback) {
+      setUpOneTimeEvent(document, 'ModalShown', () => {
+        loadColorPicker(
+          hexColorInputId,
+          hexPaletteTableId,
+          colorByNameSelectorId,
+          color
+        );
+      });
+      initPopup(localStorage.getItem('colorPickerTpl'), [
+        {
+          label: 'Color Selected',
+          class: 'success',
+          handler: () => {
+            callback(document.getElementById(hexColorInputId).value);
+            drawPalette();
+            paintCanvas();
+          },
+        },
+      ]);
+    };
+    let initColorPicker2 = function (color, callback) {
       let colorInput = document.getElementById(paletteColorInputId);
       colorInput.value = color;
       setUpOneTimeEvent(colorInput, 'change', () => {

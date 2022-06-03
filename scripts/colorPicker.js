@@ -31,7 +31,7 @@
       c *= 3;
       return c + c * 16;
     });
-    return this.hexFromRGB(r, g, b);
+    return hexFromRGB(r, g, b);
   };
   let getColorType = function (color) {
     if (colors[color]) {
@@ -43,7 +43,7 @@
     return;
   };
   let getForegroundColor = function (hex) {
-    let rgb = this.rgbFromHex(hex);
+    let rgb = rgbFromHex(hex);
     let luminosity = Math.sqrt(
       Math.pow(rgb['red'], 2) * 0.299 +
         Math.pow(rgb['green'], 2) * 0.587 +
@@ -51,20 +51,30 @@
     );
     return luminosity > 186 ? 'black' : 'white';
   };
-  let optionTemplate = function (colorName, colorHex) {
-    return `<option style="margin: 1em, background-color: ${colorName}, color: ${getForegroundColor(
-      colorHex
-    )};" value="${colorName}">${colorName}</option>`;
-  };
-  let populateColorNameSelector = function(select) {
-    select.innerHTML = "";
-    let header = document.createElement("OPTION");
-    header.text = "Select Color By Name";
+  let populateColorNameSelector = function (select) {
+    select.innerHTML = '';
+    let header = document.createElement('OPTION');
+    header.text = 'Select Color By Name';
     header.disabled = true;
     header.selected = true;
-    header.setAttribute("hidden",true);
-    
-  }
+    header.setAttribute('hidden', true);
+    select.add(header);
+    let colorNames = Object.keys(colors);
+    colorNames.sort();
+    colorNames.forEach((colorName) => {
+      let colorHex = colors[colorName];
+      let opt = document.createElement('OPTION');
+      opt.text = colorName;
+      opt.value = colorHex;
+      opt.setAttribute(
+        'style',
+        `margin: 2em; padding: 2em; height: 3em; line-height: 3em; background-color: ${colorName}; color: ${getForegroundColor(
+          colorHex
+        )};`
+      );
+      select.add(opt);
+    });
+  };
   let buildHexPaletteTable = function () {
     let rows = [];
     for (let y = 0; y < 12; y++) {
@@ -72,12 +82,25 @@
       for (let x = 0; x < 18; x++) {
         let hex = hexFromXY(x, y);
         cells.push(
-          `<td style="padding: 0; margin: 0;"><button style="color: ${hex}; background-color: ${hex};" onclick="setRGB(${hex})">_</button></td>`
+          `<td style="padding: 0; margin: 0;"><button style="color: ${hex}; background-color: ${hex};" onclick="setRGB('${hex}')">_</button></td>`
         );
       }
       rows.push(`<tr style="padding: 0; margin: 0;">${cells.join('')}</tr>`);
     }
     return `<table style="padding: 0; margin: 0;">${rows.join('')}</table>`;
   };
-  window.setRGB = function (hex) {};
+  window.loadColorPicker = function (
+    hexColorInputId,
+    hexPaletteTableId,
+    colorByNameSelectorId,
+    color
+  ) {
+    document.getElementById(hexPaletteTableId).innerHTML =
+      buildHexPaletteTable();
+    populateColorNameSelector(document.getElementById(colorByNameSelectorId));
+    window.setRGB = function (hex) {
+      document.getElementById(hexColorInputId).value = hex;
+    };
+    setRGB(color);
+  };
 })();
