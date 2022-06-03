@@ -46,12 +46,14 @@
         border: 4px solid white;
       }
     </style>
-    <script type="text/javascript" src="scripts/menues.js"></script>
-    <script type="text/javascript" src="scripts/popup.js"></script>
-    <script type="text/javascript" src="scripts/triggers.js"></script>
+    <script type="text/javascript" src="scripts/colorPicker.js"></script>
+    <script type="text/javascript" src="scripts/colors.js"></script>
     <script type="text/javascript" src="scripts/download.js"></script>
     <script type="text/javascript" src="scripts/fileload.js"></script>
+    <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/popup.js"></script>
     <script type="text/javascript" src="scripts/spritely.js"></script>
+    <script type="text/javascript" src="scripts/triggers.js"></script>
   </head>
   <body
     class="bg-dark text-light"
@@ -345,6 +347,34 @@
                 style="width: ${imgDim}; height: ${imgDim};"
               />
             </a>
+          </div>
+        </div>
+      </div>
+      <div id="colorPicker">
+        <div class="d-flex">
+          <div class="form-group">
+            <label for="hexColor">Color Hexcode:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="hexColor"
+              onchange="setRGB(this.value)"
+            />
+          </div>
+          <div id="hexPaletteTable"></div>
+          <div class="form-group">
+            <label for="colorByName">Color by Name</label>
+            <select
+              required
+              id="colorByName"
+              class="nes-input"
+              formControlName="name"
+              (change)="setNamed()"
+            >
+              <option value="" disabled selected hidden>
+                Select Color By Name
+              </option>
+            </select>
           </div>
         </div>
       </div>
