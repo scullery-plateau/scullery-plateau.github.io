@@ -23,16 +23,6 @@
       };
     }
   };
-  let hexFromXY = function (x, y) {
-    let r = 3 * Math.floor(y / 6) + Math.floor(x / 6);
-    let g = x % 6;
-    let b = y % 6;
-    [r, g, b] = [r, g, b].map((c) => {
-      c *= 3;
-      return c + c * 16;
-    });
-    return hexFromRGB(r, g, b);
-  };
   let getColorType = function (color) {
     if (colors[color]) {
       return 'name';
@@ -75,11 +65,21 @@
       select.add(opt);
     });
   };
+  let hexFromXY = function (x, y) {
+    let r = 3 * Math.floor(x / 6) + Math.floor(y / 6);
+    let g = x % 6;
+    let b = y % 6;
+    [r, g, b] = [r, g, b].map((c) => {
+      c *= 3;
+      return c + c * 16;
+    });
+    return hexFromRGB(r, g, b);
+  };
   let buildHexPaletteTable = function () {
     let rows = [];
-    for (let y = 0; y < 12; y++) {
+    for (let y = 0; y < 18; y++) {
       let cells = [];
-      for (let x = 0; x < 18; x++) {
+      for (let x = 0; x < 12; x++) {
         let hex = hexFromXY(x, y);
         cells.push(
           `<td style="padding: 0; margin: 0;"><button style="color: ${hex}; background-color: ${hex};" onclick="setRGB('${hex}')">_</button></td>`
@@ -93,13 +93,27 @@
     hexColorInputId,
     hexPaletteTableId,
     colorByNameSelectorId,
+    redColorInputId,
+    greenColorInputId,
+    blueColorInputId,
     color
   ) {
     document.getElementById(hexPaletteTableId).innerHTML =
       buildHexPaletteTable();
     populateColorNameSelector(document.getElementById(colorByNameSelectorId));
     window.setRGB = function (hex) {
+      let rgb = rgbFromHex(hex);
       document.getElementById(hexColorInputId).value = hex;
+      document.getElementById(redColorInputId).value = rgb.red;
+      document.getElementById(greenColorInputId).value = rgb.green;
+      document.getElementById(blueColorInputId).value = rgb.blue;
+    };
+    window.setColorPart = function (rgbIn) {
+      let rgb = rgbFromHex(document.getElementById(hexColorInputId).value);
+      Object.entries(rgbIn).forEach(([key, value]) => {
+        rgb[key] = value;
+      });
+      setRGB(hexFromRGB(rgb.red, rgb.green, rgb.blue));
     };
     setRGB(color);
   };
