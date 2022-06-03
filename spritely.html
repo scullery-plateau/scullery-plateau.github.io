@@ -68,7 +68,7 @@
       'about',
       'imageDownload',
       'imageScale','htmlcanvas','imageFileName','imageLink','imageDisplay','fileLoad',
-      'colorPicker','hexColor','hexPaletteTable','colorByName','redColor','greenColor','blueColor'
+      'colorPicker','hexColor','hexPaletteTable','colorByName','redColor','greenColor','blueColor','hexColorDisplay'
       )"
     onclick="closeStrayMenu(event)"
   >
@@ -355,6 +355,7 @@
         <div class="d-flex justify-content-center">
           <div id="hexPaletteTable" class="p-2"></div>
           <div class="d-flex flex-column p-2">
+            <p id="hexColorDisplay" class="rounded-lg">__</p>
             <div class="form-group">
               <label for="hexColor">Color Hexcode:</label>
               <input

@@ -49,7 +49,8 @@
     colorByNameSelectorId,
     redColorInputId,
     greenColorInputId,
-    blueColorInputId
+    blueColorInputId,
+    hexColorDisplayId
   ) {
     localStorage.setItem(
       'colorPickerTpl',
@@ -83,6 +84,7 @@
           redColorInputId,
           greenColorInputId,
           blueColorInputId,
+          hexColorDisplayId,
           color
         );
       });

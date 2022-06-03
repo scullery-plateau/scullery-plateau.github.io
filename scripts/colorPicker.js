@@ -96,6 +96,7 @@
     redColorInputId,
     greenColorInputId,
     blueColorInputId,
+    hexColorDisplayId,
     color
   ) {
     document.getElementById(hexPaletteTableId).innerHTML =
@@ -103,6 +104,13 @@
     populateColorNameSelector(document.getElementById(colorByNameSelectorId));
     window.setRGB = function (hex) {
       let rgb = rgbFromHex(hex);
+      let foregroundColor = getForegroundColor(hex);
+      document
+        .getElementById(hexColorDisplayId)
+        .setAttribute(
+          'style',
+          `color: ${hex}; background-color: ${hex}; border: 3px solid white; font-size: 3em;"`
+        );
       document.getElementById(hexColorInputId).value = hex;
       document.getElementById(redColorInputId).value = rgb.red;
       document.getElementById(greenColorInputId).value = rgb.green;
