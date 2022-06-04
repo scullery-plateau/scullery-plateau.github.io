@@ -18,9 +18,25 @@
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
+    <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
   </head>
-  <body class="bg-dark text-light" onload="initCobblestone();">
+  <body class="bg-dark text-light" onload="initCobblestone(
+    'portraitRadio',
+    'landscapeRadio',
+    'tileSet',
+    'canvas',
+    'tileImageDefs',
+    'fileLoad',
+    'imageLoad',
+    'about',
+    'imageDownload',
+    'imageDisplay',
+    'htmlcanvas',
+    'imageFileName',
+    'imageScale',
+    'imageLink'
+  )">
     <div class="container">
       <div class="navbar justify-content-start">
         <div class="mr-3">
@@ -111,12 +127,12 @@
                       <p>
                         <div class="form-check-inline">
                           <label class="form-check-label" for="portrait">
-                            <input type="radio" class="form-check-input" name="orientation" id="portrait" value="portrait" onchange="setOrientation(this)">Portrait
+                            <input type="radio" class="form-check-input" name="orientation" id="portraitRadio" value="portrait" onchange="setOrientation(this)">Portrait
                           </label>
                         </div>
                         <div class="form-check-inline">
                           <label class="form-check-label" for="landscape">
-                            <input type="radio" class="form-check-input" name="orientation" id="landscape" value="landscape" onchange="setOrientation(this)">Landscape
+                            <input type="radio" class="form-check-input" name="orientation" id="landscapeRadio" value="landscape" onchange="setOrientation(this)">Landscape
                           </label>
                         </div>
                       </p>
@@ -144,7 +160,7 @@
         <button class="btn btn-success" title="Add Image" onclick="addImage()">
           +
         </button>
-        <div id="palette"></div>
+        <div id="tileSet"></div>
         <button
           class="btn btn-danger"
           title="Remove Selected Tile"
@@ -165,6 +181,70 @@
         <p>See the code on GitHub.</p>
       </div>
     </footer>
-    <div class="display: none;"></div>
+    <div style="display: none;">
+      <div id="tileImageDefs"></div>
+      <input
+        id="fileLoad"
+        type="file"
+        accept=".json,application/json"
+        onchange="loadFiles(event)"
+      />
+      <input
+        id="imageLoad"
+        type="file"
+        accept=".png,image/png,.jpg,image/jpg"
+        onchange="loadImages(event)"
+      />
+      <div id="about">
+        <p>Cobblestone is a map-building tool.</p>
+        <p>Build your map a page at a time. Publish them as printable or download them as images.</p>
+        <p>Import images as tiles, flip or rotate them to your desired orientation, and arrange them as you wish.</p>
+      </div>
+      <div id="imageDownload">
+        <div>
+          <div id="imageDisplay" style="display: none">
+            <canvas
+              id="htmlcanvas"
+              width="${imgDim}"
+              height="${imgDim}"
+            ></canvas>
+          </div>
+          <div class="form-group">
+            <label for="imageFileName">File Name:</label>
+            <input
+              type="text"
+              class="form-control"
+              id="imageFileName"
+              placeholder="cobblestone"
+              onchange="repaintImage()"
+            />
+          </div>
+          <div class="form-group">
+            <label for="imageScale">Image Scale:</label>
+            <input
+              type="number"
+              value="5"
+              min="1"
+              class="form-control"
+              id="imageScale"
+              onchange="repaintImage()"
+            />
+          </div>
+          <p>Click on the image to download.</p>
+          <div id="imageLink">
+            <a
+              href="${dataURL}"
+              title="click image to download"
+              download="${filename}"
+            >
+              <img
+                src="${dataURL}"
+                style="width: ${imgDim}; height: ${imgDim};"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
