@@ -1,4 +1,5 @@
 (function () {
+  initKeyEventWrapper();
   let dim = 16;
   let pixelDim = 10;
   let defaultColor = '#999999';
@@ -347,9 +348,11 @@
         return getPixelId(x, y + 1);
       },
     };
-    window.transform = function (e, tfType) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+    window.transform = function (tfType, e) {
+      if (e) {
+        e.preventDefault();
+        document.dispatchEvent(new Event('CloseMenus'));
+      }
       let transformFn = transforms[tfType];
       let newPixels = {};
       let commonKeys = [];
@@ -432,6 +435,28 @@
         '`' + downloadTpl + '`'
       );
     };
+    let arrowTriggerEvents = {
+      ctrlarrowlefthold: 'turnLeft',
+      ctrlarrowrighthold: 'turnRight',
+      ctrlarrowuphold: 'flipOver',
+      ctrlarrowdownhold: 'flipDown',
+      shiftarrowlefthold: 'shiftLeft',
+      shiftarrowrighthold: 'shiftRight',
+      shiftarrowuphold: 'shiftUp',
+      shiftarrowdownhold: 'shiftDown',
+    };
+    let arrowTrigger = function (e) {
+      console.log(e);
+      let event =
+        (e.detail.ctrlKey ? 'ctrl' : '') +
+        (e.detail.shiftKey ? 'shift' : '') +
+        e.type;
+      transform(arrowTriggerEvents[event]);
+    };
     paintCanvas();
+    document.addEventListener('arrowlefthold', arrowTrigger);
+    document.addEventListener('arrowrighthold', arrowTrigger);
+    document.addEventListener('arrowuphold', arrowTrigger);
+    document.addEventListener('arrowdownhold', arrowTrigger);
   };
 })();

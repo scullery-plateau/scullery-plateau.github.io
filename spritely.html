@@ -46,6 +46,10 @@
         border: 4px solid white;
       }
     </style>
+    <script
+      type="text/javascript"
+      src="https://voltron42.github.io/gizmo-atheneum/util/keyeventwrapper.js"
+    ></script>
     <script type="text/javascript" src="scripts/colorPicker.js"></script>
     <script type="text/javascript" src="scripts/colors.js"></script>
     <script type="text/javascript" src="scripts/download.js"></script>
@@ -203,7 +207,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'turnLeft')"
+                        onclick="transform('turnLeft',event)"
                         >Turn Left</a
                       >
                     </li>
@@ -211,7 +215,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'turnRight')"
+                        onclick="transform('turnRight',event)"
                         >Turn Right</a
                       >
                     </li>
@@ -219,7 +223,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'flipOver')"
+                        onclick="transform('flipOver',event)"
                         >Flip Over</a
                       >
                     </li>
@@ -227,7 +231,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'flipDown')"
+                        onclick="transform('flipDown',event)"
                         >Flip Down</a
                       >
                     </li>
@@ -235,7 +239,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'shiftLeft')"
+                        onclick="transform('shiftLeft',event)"
                         >Shift Left</a
                       >
                     </li>
@@ -243,7 +247,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'shiftRight')"
+                        onclick="transform('shiftRight',event)"
                         >Shift Right</a
                       >
                     </li>
@@ -251,7 +255,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'shiftUp')"
+                        onclick="transform('shiftUp',event)"
                         >Shift Up</a
                       >
                     </li>
@@ -259,7 +263,7 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="transform(event,'shiftDown')"
+                        onclick="transform('shiftDown',event)"
                         >Shift Down</a
                       >
                     </li>
