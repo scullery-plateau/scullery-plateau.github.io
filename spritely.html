@@ -349,6 +349,7 @@
               class="form-control"
               id="imageFileName"
               placeholder="spritely"
+              onchange="repaintImage()"
             />
           </div>
           <div class="form-group">
@@ -362,6 +363,7 @@
               onchange="repaintImage()"
             />
           </div>
+          <p>Click on the image to download.</p>
           <div id="imageLink">
             <a
               href="${dataURL}"

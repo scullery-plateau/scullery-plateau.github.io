@@ -451,7 +451,10 @@
         (e.detail.ctrlKey ? 'ctrl' : '') +
         (e.detail.shiftKey ? 'shift' : '') +
         e.type;
-      transform(arrowTriggerEvents[event]);
+      let tf = arrowTriggerEvents[event];
+      if (tf) {
+        transform(tf);
+      }
     };
     paintCanvas();
     document.addEventListener('arrowlefthold', arrowTrigger);
