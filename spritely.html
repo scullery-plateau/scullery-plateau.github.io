@@ -72,178 +72,6 @@
       )"
     onclick="closeStrayMenu(event)"
   >
-    <div class="navbar justify-content-start">
-      <div class="mr-3">
-        <ul class="navbar-nav">
-          <li class="nav-item active drowpdown">
-            <a
-              href="#"
-              class="rpg-box p-3 text-light nav-link dropdown-toggle"
-              onclick="toggleMenu(event,this)"
-            ></a>
-            <ul class="dropdown-menu rpg-box">
-              <li class="dropdown-submenu">
-                <a
-                  href="#"
-                  class="dropdown-item dropdown-toggle"
-                  onclick="toggleMenu(event,this)"
-                  >File</a
-                >
-                <ul class="dropdown-menu rpg-box">
-                  <li class="">
-                    <a href="#" class="dropdown-item" onclick="loadFile(event)"
-                      >Load File</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="downloadFile(event)"
-                      >Download File</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="showImageDownload(event)"
-                      >Download Image</a
-                    >
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown-submenu">
-                <a
-                  href="#"
-                  class="dropdown-item dropdown-toggle"
-                  onclick="toggleMenu(event,this)"
-                  >Palette</a
-                >
-                <ul class="dropdown-menu rpg-box">
-                  <li class="">
-                    <a href="#" class="dropdown-item" onclick="addColor(event)"
-                      >Add Color</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="removeColor(event)"
-                      >Remove Color</a
-                    >
-                  </li>
-                  <li class="">
-                    <label for="backgroundColor" class="dropdown-item"
-                      >Background Color:
-                      <button
-                        class="rounded-pill"
-                        id="backgroundColor"
-                        onclick="setBackgroundColor(this)"
-                      >
-                        ____
-                      </button></label
-                    >
-                  </li>
-                  <li class="">
-                    <label for="makeTransparent" class="dropdown-item"
-                      >Make Transparent?
-                      <input
-                        id="makeTransparent"
-                        type="checkbox"
-                        checked
-                        onchange="makeTransparent(this)"
-                    /></label>
-                  </li>
-                </ul>
-              </li>
-              <li class="dropdown-submenu">
-                <a
-                  href="#"
-                  class="dropdown-item dropdown-toggle"
-                  onclick="toggleMenu(event,this)"
-                  >Transform</a
-                >
-                <ul class="dropdown-menu rpg-box">
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'turnLeft')"
-                      >Turn Left</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'turnRight')"
-                      >Turn Right</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'flipOver')"
-                      >Flip Over</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'flipDown')"
-                      >Flip Down</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'shiftLeft')"
-                      >Shift Left</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'shiftRight')"
-                      >Shift Right</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'shiftUp')"
-                      >Shift Up</a
-                    >
-                  </li>
-                  <li class="">
-                    <a
-                      href="#"
-                      class="dropdown-item"
-                      onclick="transform(event,'shiftDown')"
-                      >Shift Down</a
-                    >
-                  </li>
-                </ul>
-              </li>
-              <li class="">
-                <a href="#" class="dropdown-item" onclick="showAbout(event)"
-                  >About</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
-      <span class="navbar-brand">Spritely</span>
-    </div>
     <svg width="0%" height="0%">
       <defs>
         <linearGradient
@@ -270,27 +98,215 @@
         />
       </defs>
     </svg>
-    <div
-      class="rpg-title-box m-3 d-flex justify-content-between"
-      title="Palette"
-    >
-      <button class="btn btn-success" title="Add Color" onclick="addColor()">
-        +
-      </button>
-      <div id="palette"></div>
-      <button
-        class="btn btn-danger"
-        title="Remove Selected Color"
-        onclick="removeColor()"
+    <div class="container">
+      <div class="navbar justify-content-start">
+        <div class="mr-3">
+          <ul class="navbar-nav">
+            <li class="nav-item active drowpdown">
+              <a
+                href="#"
+                class="rpg-box p-3 text-light nav-link dropdown-toggle"
+                onclick="toggleMenu(event,this)"
+              ></a>
+              <ul class="dropdown-menu rpg-box">
+                <li class="dropdown-submenu">
+                  <a
+                    href="#"
+                    class="dropdown-item dropdown-toggle"
+                    onclick="toggleMenu(event,this)"
+                    >File</a
+                  >
+                  <ul class="dropdown-menu rpg-box">
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="loadFile(event)"
+                        >Load File</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="downloadFile(event)"
+                        >Download File</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="showImageDownload(event)"
+                        >Download Image</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown-submenu">
+                  <a
+                    href="#"
+                    class="dropdown-item dropdown-toggle"
+                    onclick="toggleMenu(event,this)"
+                    >Palette</a
+                  >
+                  <ul class="dropdown-menu rpg-box">
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="addColor(event)"
+                        >Add Color</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="removeColor(event)"
+                        >Remove Color</a
+                      >
+                    </li>
+                    <li class="">
+                      <label for="backgroundColor" class="dropdown-item"
+                        >Background Color:
+                        <button
+                          class="rounded-pill"
+                          id="backgroundColor"
+                          onclick="setBackgroundColor(this)"
+                        >
+                          ____
+                        </button></label
+                      >
+                    </li>
+                    <li class="">
+                      <label for="makeTransparent" class="dropdown-item"
+                        >Make Transparent?
+                        <input
+                          id="makeTransparent"
+                          type="checkbox"
+                          checked
+                          onchange="makeTransparent(this)"
+                      /></label>
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown-submenu">
+                  <a
+                    href="#"
+                    class="dropdown-item dropdown-toggle"
+                    onclick="toggleMenu(event,this)"
+                    >Transform</a
+                  >
+                  <ul class="dropdown-menu rpg-box">
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'turnLeft')"
+                        >Turn Left</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'turnRight')"
+                        >Turn Right</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'flipOver')"
+                        >Flip Over</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'flipDown')"
+                        >Flip Down</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'shiftLeft')"
+                        >Shift Left</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'shiftRight')"
+                        >Shift Right</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'shiftUp')"
+                        >Shift Up</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="transform(event,'shiftDown')"
+                        >Shift Down</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="">
+                  <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                    >About</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <a href="index.html" class="navbar-brand text-light"
+          >Scullery Plateau:</a
+        >
+        <span class="navbar-brand">Spritely</span>
+      </div>
+      <div
+        class="rpg-title-box m-3 d-flex justify-content-between"
+        title="Palette"
       >
-        X
-      </button>
+        <button class="btn btn-success" title="Add Color" onclick="addColor()">
+          +
+        </button>
+        <div id="palette"></div>
+        <button
+          class="btn btn-danger"
+          title="Remove Selected Color"
+          onclick="removeColor()"
+        >
+          X
+        </button>
+      </div>
+      <div
+        id="canvas"
+        class="rpg-title-box m-3"
+        title="click to paint a pixel"
+      ></div>
     </div>
-    <div
-      id="canvas"
-      class="rpg-title-box m-3"
-      title="click to paint a pixel"
-    ></div>
+    <footer>
+      <div class="jumbotronn text-center">
+        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+        <p>See the code on GitHub.</p>
+      </div>
+    </footer>
     <div style="display: none">
       <div id="paletteDefs"></div>
       <input
@@ -418,11 +434,5 @@
         </div>
       </div>
     </div>
-    <footer>
-      <div class="jumbotronn text-center">
-        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
-        <p>See the code on GitHub.</p>
-      </div>
-    </footer>
   </body>
 </html>
