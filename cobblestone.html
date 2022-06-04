@@ -17,6 +17,26 @@
     <link href="style/rpg.css" rel="stylesheet" />
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
+    <style type="text/css">
+      #canvas {
+        min-width: 90%;
+        min-height: 80%;
+        position: relative;
+      }
+      #canvas > svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .tile {
+        border: 2px solid black;
+      }
+      .selected-tile {
+        border: 4px solid white;
+      }
+    </style>
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
     <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
@@ -31,11 +51,11 @@
     'imageLoad',
     'about',
     'imageDownload',
-    'imageDisplay',
+    'imageScale',
     'htmlcanvas',
     'imageFileName',
-    'imageScale',
-    'imageLink'
+    'imageLink',
+    'imageDisplay'
   )">
     <div class="container">
       <div class="navbar justify-content-start">
