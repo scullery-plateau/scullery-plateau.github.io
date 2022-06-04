@@ -17,24 +17,147 @@
     <link href="style/rpg.css" rel="stylesheet" />
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/cobblestone.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
   </head>
-  <body class="bg-dark text-light">
-    <div class="navbar justify-content-start">
-      <div class="mr-3">
-        <ul class="navbar-nav">
-          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
-            <a
-              href="#"
-              class="text-light nav-link dropdown-toggle"
-              onclick="toggleMenu(event,this)"
-            ></a>
-            <ul class="dropdown-menu rpg-box"></ul>
-          </li>
-        </ul>
+  <body class="bg-dark text-light" onload="initCobblestone();">
+    <div class="container">
+      <div class="navbar justify-content-start">
+        <div class="mr-3">
+          <ul class="navbar-nav">
+            <li class="nav-item active drowpdown">
+              <a
+                href="#"
+                class="rpg-box p-3 text-light nav-link dropdown-toggle"
+                onclick="toggleMenu(event,this)"
+              ></a>
+              <ul class="dropdown-menu rpg-box">
+                <li class="dropdown-submenu">
+                  <a
+                    href="#"
+                    class="dropdown-item dropdown-toggle"
+                    onclick="toggleMenu(event,this)"
+                    >File</a
+                  >
+                  <ul class="dropdown-menu rpg-box">
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="loadFile(event)"
+                        >Load File</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="downloadFile(event)"
+                        >Download File</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="showImageDownload(event)"
+                        >Download Image</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="showPrintable(event)"
+                        >Publish Printable</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="dropdown-submenu">
+                  <a
+                    href="#"
+                    class="dropdown-item dropdown-toggle"
+                    onclick="toggleMenu(event,this)"
+                    >Tiles</a
+                  >
+                  <ul class="dropdown-menu rpg-box">
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="addImage(event)"
+                        >Add Image</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="showTileTransform(event)"
+                        >Transform Tile</a
+                      >
+                    </li>
+                    <li class="">
+                      <a
+                        href="#"
+                        class="dropdown-item"
+                        onclick="removeTile(event)"
+                        >Remove Selected Tile</a
+                      >
+                    </li>
+                    <li>
+                      <p>Orientation:</p>
+                      <p>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="portrait">
+                            <input type="radio" class="form-check-input" name="orientation" id="portrait" value="portrait" onchange="setOrientation(this)">Portrait
+                          </label>
+                        </div>
+                        <div class="form-check-inline">
+                          <label class="form-check-label" for="landscape">
+                            <input type="radio" class="form-check-input" name="orientation" id="landscape" value="landscape" onchange="setOrientation(this)">Landscape
+                          </label>
+                        </div>
+                      </p>
+                    </li>
+                  </ul>
+                </li>
+                <li class="">
+                  <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                    >About</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <a href="index.html" class="navbar-brand text-light"
+          >Scullery Plateau:</a
+        >
+        <span class="navbar-brand">Cobblestone</span>
       </div>
-      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
-      <span class="navbar-brand">Cobblestone</span>
+      <div
+        class="rpg-title-box m-3 d-flex justify-content-between"
+        title="Palette"
+      >
+        <button class="btn btn-success" title="Add Image" onclick="addImage()">
+          +
+        </button>
+        <div id="palette"></div>
+        <button
+          class="btn btn-danger"
+          title="Remove Selected Tile"
+          onclick="removeTile()"
+        >
+          X
+        </button>
+      </div>
+      <div
+        id="canvas"
+        class="rpg-title-box m-3"
+        title="click to place a tile"
+      ></div>
     </div>
     <footer>
       <div class="jumbotronn text-center">
@@ -42,5 +165,6 @@
         <p>See the code on GitHub.</p>
       </div>
     </footer>
+    <div class="display: none;"></div>
   </body>
 </html>
