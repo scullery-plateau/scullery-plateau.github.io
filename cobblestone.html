@@ -32,9 +32,14 @@
       }
       .tile {
         border: 2px solid black;
+        max-width: 3.5em;
+        min-width: 3.5em;
       }
       .selected-tile {
         border: 4px solid white;
+      }
+      #tileSet {
+        overflow-x: scroll;
       }
     </style>
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
@@ -180,7 +185,7 @@
         <button class="btn btn-success" title="Add Image" onclick="addImage()">
           +
         </button>
-        <div id="tileSet"></div>
+        <div id="tileSet" class="ml-2 mr-2 w-100 d-flex flex-nowrap"></div>
         <button
           class="btn btn-danger"
           title="Remove Selected Tile"

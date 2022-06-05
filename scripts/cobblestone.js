@@ -48,7 +48,7 @@
       placements: {},
       orientation: 'portrait',
     };
-    let selectedTile;
+    let selectedTile = [];
     let getTileID = function (filename, tf) {
       return [filename].concat(tf.split(',')).join('.');
     };
@@ -66,6 +66,7 @@
       }" width="${tileDim}" height="${tileDim}" ${transform}/>`;
     };
     let drawTileDef = function ([filename, transforms]) {
+      console.log('drawTileDef');
       return Object.keys(transforms)
         .map((tf) => {
           return drawTileTFDef(filename, tf);
@@ -73,18 +74,34 @@
         .join('');
     };
     let drawTileDefs = function () {
+      console.log('drawTileDefs');
       let content = Object.entries(data.tiles).map(drawTileDef).join('');
+      console.log('drawTileDefs drawing svg');
       let svg = `<svg width="0" height="0"><defs>${content}</defs></svg>`;
       document.getElementById(tileImageDefsId).innerHTML = svg;
     };
-    let selectTile = function (filename, tf) {};
-    let editTile = function (filename, tf) {};
+    let selectTile = function (filename, tf) {
+      if (selectedTile.length == 2) {
+        console.log(selectedTile);
+        document
+          .getElementById(`btn.${getTileID(selectedTile[0], selectedTile[1])}`)
+          .classList.remove('selected-tile');
+      }
+      selectedTile = [filename, tf];
+      document
+        .getElementById(`btn.${getTileID(filename, tf)}`)
+        .classList.add('selected-tile');
+    };
+    let editTile = function (filename, tf) {
+      // todo
+    };
     let buildTileButton = function (filename, tf) {
       let button = document.createElement('button');
       button.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${getTileID(
         filename,
         tf
       )}"></svg>`;
+      button.setAttribute('id', `btn.${getTileID(filename, tf)}`);
       button.setAttribute(
         'class',
         'tile m-2 p-0' +
@@ -96,7 +113,6 @@
         'title',
         'click to select, double click or right click to edit'
       );
-      setColorButtonColor(button, color);
       button.addEventListener('click', () => {
         selectTile(filename, tf);
       });
@@ -110,7 +126,9 @@
       return button;
     };
     let drawTileButtons = function () {
+      console.log('drawTileButtons');
       let tileButtons = document.getElementById(tileSetId);
+      tileButtons.innerHTML = '';
       Object.entries(data.tiles).forEach(([filename, transforms]) => {
         Object.keys(transforms).forEach((tf) => {
           tileButtons.appendChild(buildTileButton(filename, tf));
@@ -124,6 +142,7 @@
       });
       drawTileDefs();
       drawTileButtons();
+      console.log('completed drawing tiles');
     };
     let paintCanvas = function () {
       console.log({
@@ -151,6 +170,7 @@
       data.images[filename] = results;
       data.tiles[filename] = { '': true };
       drawTiles();
+      selectTile(filename, '');
       paintCanvas();
     };
     let processFileLoadError = function (filename, error) {
