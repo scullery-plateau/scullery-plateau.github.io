@@ -127,6 +127,7 @@
       let tileEditRowTpl = localStorage.getItem('tileEditRowTpl');
       let rows = tileEditorRows
         .map((transform, rowIndex) => {
+          let buttonTile = buildButtonTile('tileToEdit', tf);
           let isChecked = transforms[transform];
           return eval('`' + tileEditRowTpl + '`');
         })
@@ -167,12 +168,14 @@
         },
       ]);
     };
-    let buildTileButton = function (filename, tf) {
-      let button = document.createElement('button');
-      button.innerHTML = `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${getTileID(
-        filename,
+    let buildButtonTile = function (tileRef, tf) {
+      return `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${tileRef} ${buildTransformAttr(
         tf
       )}"></svg>`;
+    };
+    let buildTileButton = function (filename, tf) {
+      let button = document.createElement('button');
+      button.innerHTML = buildButtonTile(getTileID(filename, tf), tf);
       button.setAttribute('id', `btn.${getTileID(filename, tf)}`);
       button.setAttribute(
         'class',
