@@ -140,7 +140,7 @@
           buildTileEditorButton(
             transform,
             transforms[transform],
-            buildButtonTile('tileToEdit', transform)
+            buildButtonTile('tileToEdit', transform, true)
           )
         )
         .join('');
@@ -151,15 +151,15 @@
           button.classList.remove('active-tile');
           button.classList.add('inactive-tile');
         } else {
-          transforms[tranform] = true;
+          transforms[transform] = true;
           button.classList.remove('inactive-tile');
           button.classList.add('active-tile');
         }
       };
       return [
         `${wrapSvgDefs(
-          svgImage('tileToEdit', 'dataURL', '')
-        )}<p>${tileEditorHelp}</p><div class="row">${rows}</div>`,
+          svgImage('tileToEdit', dataURL, '')
+        )}<p>${tileEditorHelp}</p><div class="row w-75 justify-content-center">${rows}</div>`,
         () => {
           tileEditorRows.forEach((tf) => {
             if (transforms[tf]) {
@@ -192,10 +192,10 @@
         },
       ]);
     };
-    let buildButtonTile = function (tileRef, tf) {
-      return `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${tileRef}" ${buildTransformAttr(
-        tf
-      )}></svg>`;
+    let buildButtonTile = function (tileRef, tf, applyTransform) {
+      return `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${tileRef}" ${
+        applyTransform ? buildTransformAttr(tf) : ''
+      }></svg>`;
     };
     let buildTileButton = function (filename, tf) {
       let button = document.createElement('button');
@@ -218,10 +218,12 @@
       button.addEventListener('dblclick', () => {
         editTile(filename);
       });
+      /*
       button.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         editTile(filename);
       });
+      */
       return button;
     };
     let drawTileButtons = function () {
