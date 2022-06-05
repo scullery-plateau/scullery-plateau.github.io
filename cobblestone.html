@@ -62,6 +62,31 @@
     'imageLink',
     'imageDisplay'
   )">
+    <svg width="0%" height="0%">
+      <defs>
+        <linearGradient
+          id="clearedGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop offset="5%" style="stop-color: #ff0000; stop-opacity: 0.2" />
+          <stop offset="23%" style="stop-color: #ffff00; stop-opacity: 0.2" />
+          <stop offset="41%" style="stop-color: #00ff00; stop-opacity: 0.2" />
+          <stop offset="59%" style="stop-color: #00ffff; stop-opacity: 0.2" />
+          <stop offset="77%" style="stop-color: #0000ff; stop-opacity: 0.2" />
+          <stop offset="95%" style="stop-color: #ff00ff; stop-opacity: 0.2" />
+        </linearGradient>
+        <rect
+          id="emptyCell"
+          width="30"
+          height="30"
+          fill="url(#clearedGradient)"
+        />
+      </defs>
+    </svg>
+    <span id="tileImageDefs"></span>
     <div class="container">
       <div class="navbar justify-content-start">
         <div class="mr-3">
@@ -207,7 +232,6 @@
       </div>
     </footer>
     <div style="display: none;">
-      <div id="tileImageDefs"></div>
       <input
         id="fileLoad"
         type="file"

@@ -1,5 +1,6 @@
 (function () {
   let tileDim = 30;
+  let emptyCellId = 'emptyCell';
   let tileTransforms = {
     flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
     flipOver: `matrix(-1 0 0 1 ${tileDim} 0)`,
@@ -75,7 +76,11 @@
     };
     let drawTileDefs = function () {
       console.log('drawTileDefs');
-      let content = Object.entries(data.tiles).map(drawTileDef).join('');
+      let content = [
+        `<rect id="${emptyCellId}" width="${tileDim}" height="${tileDim}" fill="url(#clearedGradient)"/>`,
+      ]
+        .concat(Object.entries(data.tiles).map(drawTileDef))
+        .join('');
       console.log('drawTileDefs drawing svg');
       let svg = `<svg width="0" height="0"><defs>${content}</defs></svg>`;
       document.getElementById(tileImageDefsId).innerHTML = svg;
@@ -144,12 +149,34 @@
       drawTileButtons();
       console.log('completed drawing tiles');
     };
+    let getCoordinateId = function (x, y) {
+      return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
+    };
     let paintCanvas = function () {
       console.log({
         placements: data.placements,
         orientation: data.orientation,
       });
-      // todo -
+      let dim = dimensionsByOrientation[data.orientation];
+      let content = [];
+      for (let x = 0; x < dim.width; x++) {
+        for (let y = 0; y < dim.height; y++) {
+          let tile = data.placements[getCoordinateId(x, y)];
+          let tileId = tile ? getTileID(tile[0], tile[1]) : emptyCellId;
+          content.push(
+            `<a href="#" onclick="toggleTile(event,${x},${y})"><use x="${
+              tileDim * x
+            }" y="${
+              tileDim * y
+            }" href="#${tileId}" stroke="black" stroke-width="2"/></a>`
+          );
+        }
+      }
+      document.getElementById(
+        canvasId
+      ).innerHTML = `<svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox="0 0 ${
+        dim.width * tileDim
+      } ${dim.height * tileDim}">${content.join('')}</svg>`;
     };
     let validateLoadFileJson = function (data) {
       // todo - call validation
@@ -229,5 +256,18 @@
       drawTiles();
       paintCanvas();
     };
+    window.toggleTile = function (e, x, y) {
+      e.preventDefault();
+      console.log(`toggling tile ${x},${y}`);
+      let coordId = getCoordinateId(x, y);
+      console.log(`coordId ${coordId}`);
+      if (coordId in data.placements) {
+        delete data.placements[coordId];
+      } else {
+        data.placements[coordId] = selectedTile;
+      }
+      paintCanvas();
+    };
+    paintCanvas();
   };
 })();
