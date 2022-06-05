@@ -127,7 +127,7 @@
       let tileEditRowTpl = localStorage.getItem('tileEditRowTpl');
       let rows = tileEditorRows
         .map((transform, rowIndex) => {
-          let isChecked = transforms[filename][transform];
+          let isChecked = transforms[transform];
           return eval('`' + tileEditRowTpl + '`');
         })
         .join('');
