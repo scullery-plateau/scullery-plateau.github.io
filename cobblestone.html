@@ -45,6 +45,7 @@
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
     <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/template.js"></script>
   </head>
   <body class="bg-dark text-light" onload="initCobblestone(
     'portraitRadio',
@@ -264,7 +265,7 @@
             </span>
           </td>
           <td>
-            <label for="${rowId}"><input id="${rowId}" text="checkbox" value="${transform}" checked="${isChecked}" onchange="applyTransform(this)"/>${transform}</label>
+            <label for="row${rowIndex}"><input id="row${rowIndex}" text="checkbox" value="${transform}" checked="${isChecked}" onchange="applyTransform(this)"/>${transform}</label>
           </td>
         </tr>
       </div>

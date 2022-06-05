@@ -21,6 +21,16 @@
       height: 8,
     },
   };
+  let tileEditorRows = [
+    '',
+    'flipDown',
+    'flipOver',
+    'turnLeft',
+    'turnRight',
+    'flipDown,flipOver',
+    'flipOver,turnLeft',
+    'flipOver,turnRight',
+  ];
   let arbitrateEvent = function (e) {
     if (e) {
       e.preventDefault();
@@ -45,6 +55,8 @@
     tileEditTplId,
     tileEditRowTplId
   ) {
+    initTemplate('tileEditTpl', tileEditTplId);
+    initTemplate('tileEditRowTpl', tileEditRowTplId);
     let data = {
       images: {},
       tiles: {},
@@ -102,8 +114,58 @@
         .getElementById(`btn.${getTileID(filename, tf)}`)
         .classList.add('selected-tile');
     };
-    let editTile = function (filename, tf) {
-      // todo
+    let buildTileEditor = function (filename) {
+      let dataURL = data.images[filename];
+      let transforms = Object.entries(data.tiles[filename]).reduce(
+        (out, [transform, isChecked]) => {
+          out[transform] = isChecked;
+          return out;
+        },
+        {}
+      );
+      let tileEditTpl = localStorage.getItem('tileEditTpl');
+      let tileEditRowTpl = localStorage.getItem('tileEditRowTpl');
+      let rows = tileEditorRows
+        .map((transform, rowIndex) => {
+          let isChecked = transforms[filename][transform];
+          return eval('`' + tileEditRowTpl + '`');
+        })
+        .join('');
+      window.applyTransform = function (input) {
+        let tf = input.value;
+        if (input.checked) {
+          transforms[input.value] = true;
+        } else {
+          delete transforms[input.value];
+        }
+      };
+      return [
+        eval('`' + tileEditTpl + '`'),
+        () => {
+          delete window.applyTransform;
+          data.tiles[filename] = transforms;
+          drawTiles();
+          paintCanvas();
+        },
+        () => {
+          delete window.applyTransform;
+        },
+      ];
+    };
+    let editTile = function (filename) {
+      let [html, onApply, onCancel] = buildTileEditor(filename);
+      initPopup(html, [
+        {
+          label: 'Apply',
+          class: 'success',
+          handler: onApply,
+        },
+        {
+          label: 'Cancel',
+          class: 'danger',
+          handler: onCancel,
+        },
+      ]);
     };
     let buildTileButton = function (filename, tf) {
       let button = document.createElement('button');
@@ -127,11 +189,11 @@
         selectTile(filename, tf);
       });
       button.addEventListener('dblclick', () => {
-        editTile(filename, tf);
+        editTile(filename);
       });
       button.addEventListener('contextmenu', (e) => {
         e.preventDefault();
-        editTile(filename, tf);
+        editTile(filename);
       });
       return button;
     };
