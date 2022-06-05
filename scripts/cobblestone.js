@@ -71,10 +71,10 @@
       return tileTransforms[tf];
     };
     let buildTransformAttr = function (tf) {
-      let tfs = tf.split(',').map(svgTF);
+      let tfs = tf.split(',').map(svgTF).join(' ');
       let transform = '';
       if (tfs.length > 0) {
-        transform = `transform="${tfs.join(' ')}"`;
+        transform = `transform="${tfs}"`;
       }
       return transform;
     };
@@ -125,9 +125,10 @@
       );
       let tileEditTpl = localStorage.getItem('tileEditTpl');
       let tileEditRowTpl = localStorage.getItem('tileEditRowTpl');
+      console.log({ tileEdit: tileEditTpl, tileEditRow: tileEditRowTpl });
       let rows = tileEditorRows
         .map((transform, rowIndex) => {
-          let buttonTile = buildButtonTile('tileToEdit', tf);
+          let buttonTile = buildButtonTile('tileToEdit', transform);
           let isChecked = transforms[transform];
           return eval('`' + tileEditRowTpl + '`');
         })
@@ -169,9 +170,9 @@
       ]);
     };
     let buildButtonTile = function (tileRef, tf) {
-      return `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${tileRef} ${buildTransformAttr(
+      return `<svg width="100%" height="100%" viewBox="0 0 ${tileDim} ${tileDim}"><use href="#${tileRef}" ${buildTransformAttr(
         tf
-      )}"></svg>`;
+      )}></svg>`;
     };
     let buildTileButton = function (filename, tf) {
       let button = document.createElement('button');

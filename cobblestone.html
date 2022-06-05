@@ -45,6 +45,7 @@
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
     <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/popup.js"></script>
     <script type="text/javascript" src="scripts/template.js"></script>
   </head>
   <body class="bg-dark text-light" onload="initCobblestone(
@@ -253,17 +254,20 @@
             <image id="tileToEdit" width="${tileDim}" height="${tileDim}" href="${dataURL}"/>
           </defs>
         </svg>
-        <table>${rows}</table>
+        <div>${rows}</div>
       </div>
       <div id="tileEditRow">
-        <tr>
-          <td>
-            <span class="tile">${buttonTile}</span>
-          </td>
-          <td>
-            <label for="row${rowIndex}"><input id="row${rowIndex}" text="checkbox" value="${transform}" checked="${isChecked}" onchange="applyTransform(this)"/>${transform}</label>
-          </td>
-        </tr>
+        <div class="row">
+          <div class="col-3">
+            <p class="tile">${buttonTile}</p>
+          </div>
+          <div class="col-7">
+            <div class="form-check">
+              <input class="form-check-input" id="row${rowIndex}" type="checkBox" value="${transform}" checked="${isChecked}" onchange="applyTransform(this)"/>
+              <label class="form-check-label" for="row${rowIndex}">${transform}</label>
+            </div>
+          </div>
+        </div>
       </div>
       <div id="about">
         <p>Cobblestone is a map-building tool.</p>
