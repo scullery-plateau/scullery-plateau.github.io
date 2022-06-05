@@ -1,4 +1,6 @@
 (function () {
+  let tileEditorHelp =
+    'Click on the variation of the given tile shown below to include (green) or exclude (red) them in the main app.';
   let tileDim = 30;
   let emptyCellId = 'emptyCell';
   let tileTransforms = {
@@ -51,12 +53,8 @@
     imgDlCanvasId,
     imgDlFileNameId,
     imgDlLinkId,
-    imgDlDisplayId,
-    tileEditTplId,
-    tileEditRowTplId
+    imgDlDisplayId
   ) {
-    initTemplate('tileEditTpl', tileEditTplId);
-    initTemplate('tileEditRowTpl', tileEditRowTplId);
     let data = {
       images: {},
       tiles: {},
@@ -78,10 +76,15 @@
       }
       return transform;
     };
+    let svgImage = function (id, href, addlAttrs) {
+      return `<image id="${id}" xlink:href="${href}" width="${tileDim}" height="${tileDim}" ${addlAttrs}/>`;
+    };
     let drawTileTFDef = function (filename, tf) {
-      return `<image id="${getTileID(filename, tf)}" xlink:href="${
-        data.images[filename]
-      }" width="${tileDim}" height="${tileDim}" ${buildTransformAttr(tf)}/>`;
+      return svgImage(
+        getTileID(filename, tf),
+        data.images[filename],
+        buildTransformAttr(tf)
+      );
     };
     let drawTileDef = function ([filename, transforms]) {
       console.log('drawTileDef');
@@ -91,6 +94,9 @@
         })
         .join('');
     };
+    let wrapSvgDefs = function (content) {
+      return `<svg width="0" height="0"><defs>${content}</defs></svg>`;
+    };
     let drawTileDefs = function () {
       console.log('drawTileDefs');
       let content = [
@@ -99,8 +105,7 @@
         .concat(Object.entries(data.tiles).map(drawTileDef))
         .join('');
       console.log('drawTileDefs drawing svg');
-      let svg = `<svg width="0" height="0"><defs>${content}</defs></svg>`;
-      document.getElementById(tileImageDefsId).innerHTML = svg;
+      document.getElementById(tileImageDefsId).innerHTML = wrapSvgDefs(content);
     };
     let selectTile = function (filename, tf) {
       if (selectedTile.length == 2) {
@@ -114,6 +119,13 @@
         .getElementById(`btn.${getTileID(filename, tf)}`)
         .classList.add('selected-tile');
     };
+    let buildTileEditorButton = function (transform, isActive, buttonTile) {
+      return `<div class="col-3"><button class="tile ${
+        isActive ? 'active-tile' : 'inactive-tile'
+      }" title="${
+        transform == '' ? 'Original' : transform
+      }" onclick="toggleTransform(this,'${transform}')">${buttonTile}</button></div>`;
+    };
     let buildTileEditor = function (filename) {
       let dataURL = data.images[filename];
       let transforms = Object.entries(data.tiles[filename]).reduce(
@@ -123,31 +135,42 @@
         },
         {}
       );
-      let tileEditTpl = localStorage.getItem('tileEditTpl');
-      let tileEditRowTpl = localStorage.getItem('tileEditRowTpl');
-      console.log({ tileEdit: tileEditTpl, tileEditRow: tileEditRowTpl });
       let rows = tileEditorRows
-        .map((transform, rowIndex) => {
-          let buttonTile = buildButtonTile('tileToEdit', transform);
-          let isChecked = transforms[transform];
-          return eval('`' + tileEditRowTpl + '`');
-        })
+        .map((transform) =>
+          buildTileEditorButton(
+            transform,
+            transforms[transform],
+            buildButtonTile('tileToEdit', transform)
+          )
+        )
         .join('');
-      window.applyTransform = function (input) {
-        let tf = input.value;
-        if (input.checked) {
-          transforms[input.value] = true;
+      window.toggleTransform = function (button, transform) {
+        let isActive = transforms[transform];
+        if (isActive) {
+          delete transforms[transform];
+          button.classList.remove('active-tile');
+          button.classList.add('inactive-tile');
         } else {
-          delete transforms[input.value];
+          transforms[tranform] = true;
+          button.classList.remove('inactive-tile');
+          button.classList.add('active-tile');
         }
       };
       return [
-        eval('`' + tileEditTpl + '`'),
+        `${wrapSvgDefs(
+          svgImage('tileToEdit', 'dataURL', '')
+        )}<p>${tileEditorHelp}</p><div class="row">${rows}</div>`,
         () => {
-          delete window.applyTransform;
-          data.tiles[filename] = transforms;
+          tileEditorRows.forEach((tf) => {
+            if (transforms[tf]) {
+              data.tiles[filename][tf] = true;
+            } else {
+              delete data.tiles[filename][tf];
+            }
+          });
           drawTiles();
           paintCanvas();
+          delete window.applyTransform;
         },
         () => {
           delete window.applyTransform;
