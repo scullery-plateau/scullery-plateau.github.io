@@ -60,7 +60,9 @@
     'htmlcanvas',
     'imageFileName',
     'imageLink',
-    'imageDisplay'
+    'imageDisplay',
+    'tileEdit',
+    'tileEditRow'
   )">
     <svg width="0%" height="0%">
       <defs>
@@ -86,7 +88,7 @@
         />
       </defs>
     </svg>
-    <span id="tileImageDefs"></span>
+    <span id="tileImageDefs" style="display: none;"></span>
     <div class="container">
       <div class="navbar justify-content-start">
         <div class="mr-3">
@@ -244,6 +246,28 @@
         accept=".png,image/png,.jpg,image/jpg"
         onchange="loadImages(event)"
       />
+      <div id="tileEdit">
+        <svg width="0" height="0">
+          <defs>
+            <image id="tileToEdit" width="${tileDim}" height="${tileDim}" href="${dataURL}"/>
+          </defs>
+        </svg>
+        <table>${rows}</table>
+      </div>
+      <div id="tileEditRow">
+        <tr>
+          <td>
+            <span class="tile">
+              <svg width="100%" height="100%" viewbox="0 0 ${tileDim} ${tileDim}">
+                <use href="#tileToEdit" ${buildTransformAttr(transform)}/>
+              </svg>
+            </span>
+          </td>
+          <td>
+            <label for="${rowId}"><input id="${rowId}" text="checkbox" value="${transform}" checked="${isChecked}" onchange="applyTransform(this)"/>${transform}</label>
+          </td>
+        </tr>
+      </div>
       <div id="about">
         <p>Cobblestone is a map-building tool.</p>
         <p>Build your map a page at a time. Publish them as printable or download them as images.</p>

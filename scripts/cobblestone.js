@@ -41,7 +41,9 @@
     imgDlCanvasId,
     imgDlFileNameId,
     imgDlLinkId,
-    imgDlDisplayId
+    imgDlDisplayId,
+    tileEditTplId,
+    tileEditRowTplId
   ) {
     let data = {
       images: {},
@@ -56,15 +58,18 @@
     let svgTF = function (tf) {
       return tileTransforms[tf];
     };
-    let drawTileTFDef = function (filename, tf) {
+    let buildTransformAttr = function (tf) {
       let tfs = tf.split(',').map(svgTF);
       let transform = '';
       if (tfs.length > 0) {
         transform = `transform="${tfs.join(' ')}"`;
       }
+      return transform;
+    };
+    let drawTileTFDef = function (filename, tf) {
       return `<image id="${getTileID(filename, tf)}" xlink:href="${
         data.images[filename]
-      }" width="${tileDim}" height="${tileDim}" ${transform}/>`;
+      }" width="${tileDim}" height="${tileDim}" ${buildTransformAttr(tf)}/>`;
     };
     let drawTileDef = function ([filename, transforms]) {
       console.log('drawTileDef');
