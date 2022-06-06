@@ -160,61 +160,27 @@
                     href="#"
                     class="dropdown-item dropdown-toggle"
                     onclick="toggleMenu(event,this)"
-                    >Tiles</a
+                    >Orientation</a
                   >
-                  <ul class="dropdown-menu rpg-box">
+                  <ul class="dropdown-menu rpg-box" id="orientationPicker">
                     <li class="">
                       <a
+                        id="orientation-portrait"
                         href="#"
-                        class="dropdown-item"
-                        onclick="addImage(event)"
-                        >Add Image</a
+                        class="dropdown-item disabled"
+                        disabled
+                        onclick="setOrientation('portrait',event)"
+                        >Portrait</a
                       >
                     </li>
                     <li class="">
                       <a
+                        id="orientation-landscape"
                         href="#"
                         class="dropdown-item"
-                        onclick="showTileTransform(event)"
-                        >Transform Tile</a
+                        onclick="setOrientation('landscape',event)"
+                        >Landscape</a
                       >
-                    </li>
-                    <li class="">
-                      <a
-                        href="#"
-                        class="dropdown-item"
-                        onclick="removeTile(event)"
-                        >Remove Selected Tile</a
-                      >
-                    </li>
-                    <li class="dropdown-submenu">
-                      <a
-                        href="#"
-                        class="dropdown-item dropdown-toggle"
-                        onclick="toggleMenu(event,this)"
-                        >Orientation</a
-                      >
-                      <ul class="dropdown-menu rpg-box" id="orientationPicker">
-                        <li class="">
-                          <a
-                            id="orientation-portrait"
-                            href="#"
-                            class="dropdown-item disabled"
-                            disabled
-                            onclick="setOrientation('portrait',event)"
-                            >Portrait</a
-                          >
-                        </li>
-                        <li class="">
-                          <a
-                            id="orientation-landscape"
-                            href="#"
-                            class="dropdown-item"
-                            onclick="setOrientation('landscape',event)"
-                            >Landscape</a
-                          >
-                        </li>
-                      </ul>
                     </li>
                   </ul>
                 </li>
@@ -239,14 +205,7 @@
         <button class="btn btn-success" title="Add Image" onclick="addImage()">
           +
         </button>
-        <div id="tileSet" class="ml-2 mr-2 w-100 d-flex flex-nowrap"></div>
-        <button
-          class="btn btn-danger"
-          title="Remove Selected Tile"
-          onclick="removeTile()"
-        >
-          X
-        </button>
+        <div id="tileSet" class="ml-2 w-100 d-flex flex-nowrap"></div>
       </div>
       <div
         id="canvas"
