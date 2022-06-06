@@ -348,14 +348,14 @@
         '.png',
         'spritely'
       );
-      let dataURL = drawCanvas(
+      drawCanvas(
         imgDlDisplayId,
         scale,
         imgWidth,
         imgHeight,
         data.images,
         data.placements,
-        () => {
+        (dataURL) => {
           document.getElementById(imgDlLinkId).innerHTML = applyImgLinkTemplate(
             filename,
             dataURL,
