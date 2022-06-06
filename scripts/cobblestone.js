@@ -87,7 +87,6 @@
       );
     };
     let drawTileDef = function ([filename, transforms]) {
-      console.log('drawTileDef');
       return Object.keys(transforms)
         .map((tf) => {
           return drawTileTFDef(filename, tf);
@@ -98,18 +97,15 @@
       return `<svg width="0" height="0"><defs>${content}</defs></svg>`;
     };
     let drawTileDefs = function () {
-      console.log('drawTileDefs');
       let content = [
         `<rect id="${emptyCellId}" width="${tileDim}" height="${tileDim}" fill="url(#clearedGradient)"/>`,
       ]
         .concat(Object.entries(data.tiles).map(drawTileDef))
         .join('');
-      console.log('drawTileDefs drawing svg');
       document.getElementById(tileImageDefsId).innerHTML = wrapSvgDefs(content);
     };
     let selectTile = function (filename, tf) {
       if (selectedTile.length == 2) {
-        console.log(selectedTile);
         document
           .getElementById(`btn.${getTileID(selectedTile[0], selectedTile[1])}`)
           .classList.remove('selected-tile');
@@ -168,6 +164,13 @@
               delete data.tiles[filename][tf];
             }
           });
+          let activeTiles = Object.keys(data.tiles[filename]);
+          activeTiles.sort();
+          if (activeTiles.length > 0) {
+            selectedTile = [filename, activeTiles[0]];
+          } else {
+            selectedTile = [];
+          }
           drawTiles();
           paintCanvas();
           delete window.applyTransform;
@@ -227,7 +230,6 @@
       return button;
     };
     let drawTileButtons = function () {
-      console.log('drawTileButtons');
       let tileButtons = document.getElementById(tileSetId);
       tileButtons.innerHTML = '';
       Object.entries(data.tiles).forEach(([filename, transforms]) => {
@@ -237,22 +239,13 @@
       });
     };
     let drawTiles = function () {
-      console.log({
-        images: data.images,
-        tiles: data.tiles,
-      });
       drawTileDefs();
       drawTileButtons();
-      console.log('completed drawing tiles');
     };
     let getCoordinateId = function (x, y) {
       return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
     };
     let paintCanvas = function () {
-      console.log({
-        placements: data.placements,
-        orientation: data.orientation,
-      });
       let dim = dimensionsByOrientation[data.orientation];
       let content = [];
       for (let x = 0; x < dim.width; x++) {
@@ -354,9 +347,7 @@
     };
     window.toggleTile = function (e, x, y) {
       e.preventDefault();
-      console.log(`toggling tile ${x},${y}`);
       let coordId = getCoordinateId(x, y);
-      console.log(`coordId ${coordId}`);
       if (coordId in data.placements) {
         delete data.placements[coordId];
       } else {
