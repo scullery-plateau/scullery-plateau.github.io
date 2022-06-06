@@ -23,6 +23,10 @@
       height: 8,
     },
   };
+  let oppositeOrientation = {
+    portrait: 'landscape',
+    landscape: 'portrait',
+  };
   let tileEditorRows = [
     '',
     'flipDown',
@@ -40,8 +44,6 @@
     }
   };
   window.initCobblestone = function (
-    portraitRadioId,
-    landscapeRadioId,
     tileSetId,
     canvasId,
     tileImageDefsId,
@@ -170,7 +172,16 @@
             selectedTile = [filename, activeTiles[0]];
           } else {
             selectedTile = [];
+            delete data.tiles[filename];
+            delete data.images[filename];
           }
+          Object.entries(data.placements).forEach(
+            ([coordId, [fName, tForm]]) => {
+              if (!(fName in data.tiles) || !(tForm in data.tiles[fName])) {
+                delete data.placements[coordId];
+              }
+            }
+          );
           drawTiles();
           paintCanvas();
           delete window.applyTransform;
@@ -245,22 +256,28 @@
     let getCoordinateId = function (x, y) {
       return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
     };
-    let paintCanvas = function () {
+    let walkCanvas = function (fn) {
       let dim = dimensionsByOrientation[data.orientation];
-      let content = [];
       for (let x = 0; x < dim.width; x++) {
         for (let y = 0; y < dim.height; y++) {
-          let tile = data.placements[getCoordinateId(x, y)];
-          let tileId = tile ? getTileID(tile[0], tile[1]) : emptyCellId;
-          content.push(
-            `<a href="#" onclick="toggleTile(event,${x},${y})"><use x="${
-              tileDim * x
-            }" y="${
-              tileDim * y
-            }" href="#${tileId}" stroke="black" stroke-width="2"/></a>`
-          );
+          fn(x, y, dim.width, dim.height);
         }
       }
+      return dim;
+    };
+    let paintCanvas = function () {
+      let content = [];
+      let dim = walkCanvas((x, y) => {
+        let tile = data.placements[getCoordinateId(x, y)];
+        let tileId = tile ? getTileID(tile[0], tile[1]) : emptyCellId;
+        content.push(
+          `<a href="#" onclick="toggleTile(event,${x},${y})"><use x="${
+            tileDim * x
+          }" y="${
+            tileDim * y
+          }" href="#${tileId}" stroke="black" stroke-width="2"/></a>`
+        );
+      });
       document.getElementById(
         canvasId
       ).innerHTML = `<svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox="0 0 ${
@@ -340,8 +357,26 @@
       arbitrateEvent(e);
       alert('About is not yet implemented');
     };
-    window.setOrientation = function (radioButton) {
-      data.orientation = radioButton.value;
+    window.setOrientation = function (orientation, e) {
+      arbitrateEvent(e);
+      let currentAnchor = document.getElementById(
+        'orientation-' + data.orientation
+      );
+      currentAnchor.disabled = false;
+      currentAnchor.classList.remove('disabled');
+      let nextAnchor = document.getElementById('orientation-' + orientation);
+      nextAnchor.disabled = true;
+      nextAnchor.classList.add('disabled');
+      data.orientation = orientation;
+      let allCoords = [];
+      walkCanvas((x, y) => {
+        allCoords.push(getCoordinateId(x, y));
+      });
+      Object.keys(data.placements)
+        .filter((p) => allCoords.indexOf(p) < 0)
+        .forEach((p) => {
+          delete data.placements[p];
+        });
       drawTiles();
       paintCanvas();
     };

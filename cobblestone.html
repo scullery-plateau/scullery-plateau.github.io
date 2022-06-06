@@ -47,6 +47,12 @@
       #tileSet {
         overflow-x: scroll;
       }
+      #orientationPicker a {
+      }
+      #orientationPicker a.disabled,
+      #orientationPicker a:disabled {
+        color: darkgrey !important;
+      }
     </style>
     <script type="text/javascript" src="scripts/cobblestone.js"></script>
     <script type="text/javascript" src="scripts/fileload.js"></script>
@@ -54,9 +60,9 @@
     <script type="text/javascript" src="scripts/popup.js"></script>
     <script type="text/javascript" src="scripts/template.js"></script>
   </head>
-  <body class="bg-dark text-light" onload="initCobblestone(
-    'portraitRadio',
-    'landscapeRadio',
+  <body
+    class="bg-dark text-light"
+    onload="initCobblestone(
     'tileSet',
     'canvas',
     'tileImageDefs',
@@ -69,7 +75,8 @@
     'imageFileName',
     'imageLink',
     'imageDisplay',
-  )">
+  )"
+  >
     <svg width="0%" height="0%">
       <defs>
         <linearGradient
@@ -94,7 +101,7 @@
         />
       </defs>
     </svg>
-    <span id="tileImageDefs" style="display: none;"></span>
+    <span id="tileImageDefs" style="display: none"></span>
     <div class="container">
       <div class="navbar justify-content-start">
         <div class="mr-3">
@@ -180,20 +187,34 @@
                         >Remove Selected Tile</a
                       >
                     </li>
-                    <li>
-                      <p class="dropdown-item">Orientation:</p>
-                      <p>
-                        <div class="form-check-inline">
-                          <label class="form-check-label" for="portrait">
-                            <input type="radio" class="form-check-input" name="orientation" id="portraitRadio" value="portrait" onchange="setOrientation(this)">Portrait
-                          </label>
-                        </div>
-                        <div class="form-check-inline">
-                          <label class="form-check-label" for="landscape">
-                            <input type="radio" class="form-check-input" name="orientation" id="landscapeRadio" value="landscape" onchange="setOrientation(this)">Landscape
-                          </label>
-                        </div>
-                      </p>
+                    <li class="dropdown-submenu">
+                      <a
+                        href="#"
+                        class="dropdown-item dropdown-toggle"
+                        onclick="toggleMenu(event,this)"
+                        >Orientation</a
+                      >
+                      <ul class="dropdown-menu rpg-box" id="orientationPicker">
+                        <li class="">
+                          <a
+                            id="orientation-portrait"
+                            href="#"
+                            class="dropdown-item disabled"
+                            disabled
+                            onclick="setOrientation('portrait',event)"
+                            >Portrait</a
+                          >
+                        </li>
+                        <li class="">
+                          <a
+                            id="orientation-landscape"
+                            href="#"
+                            class="dropdown-item"
+                            onclick="setOrientation('landscape',event)"
+                            >Landscape</a
+                          >
+                        </li>
+                      </ul>
                     </li>
                   </ul>
                 </li>
@@ -239,7 +260,7 @@
         <p>See the code on GitHub.</p>
       </div>
     </footer>
-    <div style="display: none;">
+    <div style="display: none">
       <input
         id="fileLoad"
         type="file"
@@ -254,8 +275,14 @@
       />
       <div id="about">
         <p>Cobblestone is a map-building tool.</p>
-        <p>Build your map a page at a time. Publish them as printable or download them as images.</p>
-        <p>Import images as tiles, flip or rotate them to your desired orientation, and arrange them as you wish.</p>
+        <p>
+          Build your map a page at a time. Publish them as printable or download
+          them as images.
+        </p>
+        <p>
+          Import images as tiles, flip or rotate them to your desired
+          orientation, and arrange them as you wish.
+        </p>
       </div>
       <div id="imageDownload">
         <div>
