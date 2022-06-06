@@ -293,9 +293,12 @@
       if (error) {
         throw error;
       }
-      ['images', 'tiles', 'placements', 'orientation'].forEach((field) => {
+      ['images', 'tiles', 'placements'].forEach((field) => {
         data[field] = jsonData[field];
       });
+      if (jsonData.orientation != data.orientation) {
+        setOrientation(jsonData.orientation);
+      }
       drawTiles();
       paintCanvas();
     };
@@ -323,7 +326,7 @@
     };
     window.downloadFile = function (e) {
       arbitrateEvent(e);
-      alert('Download File is not yet implemented');
+      initDownloadJsonPopup('cobblestoneFileDownload', 'cobblestone', data);
     };
     window.showImageDownload = function (e) {
       arbitrateEvent(e);
@@ -345,17 +348,9 @@
         processFileLoadError
       );
     };
-    window.showTileTransform = function (e) {
-      arbitrateEvent(e);
-      alert('Transform Tile is not yet implemented');
-    };
-    window.removeTile = function (e) {
-      arbitrateEvent(e);
-      alert('Remove Selected Tile is not yet implemented');
-    };
     window.showAbout = function (e) {
       arbitrateEvent(e);
-      alert('About is not yet implemented');
+      initPopup(document.getElementById(aboutId).innerHTML);
     };
     window.setOrientation = function (orientation, e) {
       arbitrateEvent(e);
