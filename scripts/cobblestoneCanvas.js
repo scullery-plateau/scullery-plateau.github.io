@@ -95,8 +95,5 @@
         });
       }
     }
-    while (Object.entries(state).length > 0) {}
-    console.log('state cleared');
-    onCompleteFn(canvas.toDataURL());
   };
 })();

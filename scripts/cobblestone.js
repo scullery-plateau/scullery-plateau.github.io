@@ -346,7 +346,7 @@
       let filename = normalizeFilename(
         document.getElementById(imgDlFileNameId).value,
         '.png',
-        'spritely'
+        'cobblestone'
       );
       drawCanvas(
         imgDlDisplayId,
