@@ -52,11 +52,12 @@
     aboutId,
     imageDownloadPopupId,
     imgDlScaleId,
-    imgDlCanvasId,
     imgDlFileNameId,
     imgDlLinkId,
     imgDlDisplayId
   ) {
+    initTemplate('imgLinkTemplate', imgDlLinkId);
+    initTemplate('imageDownloadPopup', imageDownloadPopupId);
     let data = {
       images: {},
       tiles: {},
@@ -328,9 +329,49 @@
       arbitrateEvent(e);
       initDownloadJsonPopup('cobblestoneFileDownload', 'cobblestone', data);
     };
+    let applyImgLinkTemplate = function (
+      filename,
+      dataURL,
+      imgWidth,
+      imgHeight
+    ) {
+      let downloadTpl = localStorage.getItem('imgLinkTemplate');
+      return eval('`' + downloadTpl + '`');
+    };
+    window.repaintImage = function () {
+      let scale = document.getElementById(imgDlScaleId).value;
+      let [imgWidth, imgHeight] = ['width', 'height'].map((d) => {
+        return dimensionsByOrientation[data.orientation][d];
+      });
+      let filename = normalizeFilename(
+        document.getElementById(imgDlFileNameId).value,
+        '.png',
+        'spritely'
+      );
+      let dataURL = drawCanvas(
+        imgDlDisplayId,
+        scale,
+        imgWidth,
+        imgHeight,
+        data.images,
+        data.placements,
+        () => {
+          document.getElementById(imgDlLinkId).innerHTML = applyImgLinkTemplate(
+            filename,
+            dataURL,
+            imgWidth * scale,
+            imgHeight * scale
+          );
+        }
+      );
+    };
     window.showImageDownload = function (e) {
       arbitrateEvent(e);
-      alert('Download Image is not yet implemented');
+      setUpOneTimeEvent(document, 'ModalShown', () => {
+        document.getElementById(imgDlScaleId).value = tileDim;
+        repaintImage();
+      });
+      initPopup(localStorage.getItem('imageDownloadPopup'));
     };
     window.showPrintable = function (e) {
       arbitrateEvent(e);

@@ -53,11 +53,10 @@
     blueColorInputId,
     hexColorDisplayId
   ) {
-    localStorage.setItem(
-      'colorPickerTpl',
-      document.getElementById(colorPickerTplId).innerHTML
-    );
-    document.getElementById(colorPickerTplId).innerHTML = '';
+    initTemplate('colorPickerTpl', colorPickerTplId);
+    initTemplate('canvasTemplate', imgDlDisplayId);
+    initTemplate('imgLinkTemplate', imgDlLinkId);
+    initTemplate('imageDownloadPopup', imageDownloadPopupId);
     setColorButtonColor(document.getElementById(bgColorId), defaultColor);
     document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
@@ -264,28 +263,8 @@
     window.showImageDownload = function (e) {
       e.preventDefault();
       document.dispatchEvent(new Event('CloseMenus'));
-      localStorage.setItem(
-        'canvasTemplate',
-        document.getElementById(imgDlDisplayId).innerHTML
-      );
-      document.getElementById(imgDlDisplayId).innerHTML = '';
-      localStorage.setItem(
-        'imgLinkTemplate',
-        document.getElementById(imgDlLinkId).innerHTML
-      );
-      document.getElementById(imgDlLinkId).innerHTML = '';
-      let popupContent = document.getElementById(imageDownloadPopupId);
-      let rawPopupContent = popupContent.innerHTML;
-      popupContent.innerHTML = '';
       setUpOneTimeEvent(document, 'ModalShown', repaintImage);
-      setUpOneTimeEvent(document, 'ModalClosed', () => {
-        popupContent.innerHTML = rawPopupContent;
-        document.getElementById(imgDlDisplayId).innerHTML =
-          localStorage.getItem('canvasTemplate');
-        document.getElementById(imgDlLinkId).innerHTML =
-          localStorage.getItem('imgLinkTemplate');
-      });
-      initPopup(rawPopupContent);
+      initPopup(localStorage.getItem('imageDownloadPopup'));
     };
     window.addColor = function (e) {
       if (e) {
