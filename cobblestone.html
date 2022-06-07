@@ -60,6 +60,7 @@
     <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
     <script type="text/javascript" src="scripts/popup.js"></script>
+    <script type="text/javascript" src="scripts/print.js"></script>
     <script type="text/javascript" src="scripts/template.js"></script>
     <script type="text/javascript" src="scripts/triggers.js"></script>
   </head>
@@ -77,6 +78,7 @@
     'imageFileName',
     'imageLink',
     'imageDisplay',
+    'canvasPlaceholder'
   )"
   >
     <svg width="0%" height="0%">
@@ -222,6 +224,8 @@
       </div>
     </footer>
     <div style="display: none">
+      <iframe src="print.html" onload="initTpl(this)"></iframe>
+      <div id="canvasPlaceholder"></div>
       <input
         id="fileLoad"
         type="file"

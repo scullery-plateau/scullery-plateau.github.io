@@ -9,10 +9,6 @@
     turnLeft: `rotate(-90,${tileDim / 2},${tileDim / 2})`,
     turnRight: `rotate(90,${tileDim / 2},${tileDim / 2})`,
   };
-  let tileTransformExcludes = {
-    turnLeft: 'turnRight',
-    turnRight: 'turnLeft',
-  };
   let dimensionsByOrientation = {
     portrait: {
       width: 8,
@@ -54,7 +50,8 @@
     imgDlScaleId,
     imgDlFileNameId,
     imgDlLinkId,
-    imgDlDisplayId
+    imgDlDisplayId,
+    canvasDivId
   ) {
     initTemplate('imgLinkTemplate', imgDlLinkId);
     initTemplate('imageDownloadPopup', imageDownloadPopupId);
@@ -233,12 +230,10 @@
       button.addEventListener('dblclick', () => {
         editTile(filename);
       });
-      /*
       button.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         editTile(filename);
       });
-      */
       return button;
     };
     let drawTileButtons = function () {
@@ -375,7 +370,18 @@
     };
     window.showPrintable = function (e) {
       arbitrateEvent(e);
-      alert('Publish Printable is not yet implemented');
+      let dim = dimensionsByOrientation[data.orientation];
+      drawCanvas(
+        canvasDivId,
+        tileDim,
+        dim.width,
+        dim.height,
+        data.images,
+        data.placements,
+        (dataURL) => {
+          printTemplate(data.orientation, dataURL);
+        }
+      );
     };
     window.addImage = function (e) {
       arbitrateEvent(e);
