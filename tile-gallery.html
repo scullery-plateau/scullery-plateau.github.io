@@ -22,19 +22,21 @@
     <script type="text/javascript" src="tile-gallery/tiles.js"></script>
     <script type="text/javascript">
       function initPageApp(aboutId, tileGalleryId, jsonLink) {
+        let fullPath = 'https://scullery-plateau.github.io/tile-gallery';
         let downloadLink = document.getElementById(jsonLink);
         window.showAbout = function (e) {
           e.preventDefault();
           document.dispatchEvent(new Event('CloseMenus'));
           initPopup(document.getElementById(aboutId).innerHTML);
         };
-        window.downloadJson = function (tileName) {
-          downloadLink.setAttribute('href', `.\\tile-gallery${tileName}.json`);
+        window.downloadJson = function (e, tileName) {
+          e.preventDefault();
+          downloadLink.setAttribute('href', `${fullPath}/${tileName}.json`);
           downloadLink.setAttribute('download', tileName + '.json');
           downloadLink.click();
         };
         let buildThumbnail = function (tileName) {
-          return `<a href="tile-gallery/${tileName}.png" download="${tileName}.png" onclick="downloadJson('${tileName}')"><img src="tile-gallery/${tileName}.png" height="64px"/><a>`;
+          return `<a class="m-2" href="#" onclick="downloadJson(event,'${tileName}')"><img src="${fullPath}/${tileName}.png" height="64px"/><a>`;
         };
         document.getElementById(tileGalleryId).innerHTML = listTiles()
           .map(buildThumbnail)
@@ -84,8 +86,8 @@
           Cobblestone.
         </p>
         <p>
-          Click on the tile of your choice to download both the PNG image and
-          the accompanying JSON datafile for Spritely.
+          Click on the tile of your choice to download JSON datafile for
+          Spritely.
         </p>
         <p>
           Use the tiles to build maps in Cobblestone, or load the datafile in
