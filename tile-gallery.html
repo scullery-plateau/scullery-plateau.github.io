@@ -48,30 +48,34 @@
     class="bg-dark text-light"
     onload="initPageApp('about','tileGallery','jsonLink')"
   >
-    <div class="navbar justify-content-start">
-      <div class="mr-3">
-        <ul class="navbar-nav">
-          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
-            <a
-              href="#"
-              class="text-light nav-link dropdown-toggle"
-              onclick="toggleMenu(event,this)"
-            ></a>
-            <ul class="dropdown-menu rpg-box">
-              <li class="">
-                <a href="#" class="dropdown-item" onclick="showAbout(event)"
-                  >About</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
+    <div class="container">
+      <div class="navbar justify-content-start">
+        <div class="mr-3">
+          <ul class="navbar-nav">
+            <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+              <a
+                href="#"
+                class="text-light nav-link dropdown-toggle"
+                onclick="toggleMenu(event,this)"
+              ></a>
+              <ul class="dropdown-menu rpg-box">
+                <li class="">
+                  <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                    >About</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <a href="index.html" class="navbar-brand text-light"
+          >Scullery Plateau:</a
+        >
+        <span class="navbar-brand">Tile Gallery</span>
       </div>
-      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
-      <span class="navbar-brand">Tile Gallery</span>
-    </div>
-    <div>
-      <div class="rpg-box m-3 d-flex flex-wrap" id="tileGallery"></div>
+      <div>
+        <div class="rpg-box m-3 d-flex flex-wrap" id="tileGallery"></div>
+      </div>
     </div>
     <footer>
       <div class="jumbotronn text-center">
