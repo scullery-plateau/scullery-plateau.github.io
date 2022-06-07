@@ -18,14 +18,34 @@
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
     <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/popup.js"></script>
+    <script type="text/javascript" src="tile-gallery/tiles.js"></script>
     <script type="text/javascript">
-      function initPageApp(aboutId, tileGalleryId) {}
-      function showAbout(e) {
-        e.preventDefault()
+      function initPageApp(aboutId, tileGalleryId, jsonLink) {
+        let downloadLink = document.getElementById(jsonLink);
+        window.showAbout = function (e) {
+          e.preventDefault();
+          document.dispatchEvent(new Event('CloseMenus'));
+          initPopup(document.getElementById(aboutId).innerHTML);
+        };
+        window.downloadJson = function (tileName) {
+          downloadLink.setAttribute('href', `tile-gallery/${tileName}.json`);
+          downloadLink.setAttribute('download', tileName);
+          downloadLink.click();
+        };
+        let buildThumbnail = function (tileName) {
+          return `<img src=".tile-gallery/${tileName}.png" height="64px"/>`;
+        };
+        document.getElementById(tileGalleryId).innerHTML = listTiles()
+          .map(buildThumbnail)
+          .join('');
       }
     </script>
   </head>
-  <body class="bg-dark text-light" onload="initPageApp('about','tileGallery')">
+  <body
+    class="bg-dark text-light"
+    onload="initPageApp('about','tileGallery','jsonLink')"
+  >
     <div class="navbar justify-content-start">
       <div class="mr-3">
         <ul class="navbar-nav">
@@ -49,7 +69,7 @@
       <span class="navbar-brand">Tile Gallery</span>
     </div>
     <div>
-      <div class="rpg-box m-3" id="tileGallery"></div>
+      <div class="rpg-box m-3 d-flex flex-wrap" id="tileGallery"></div>
     </div>
     <footer>
       <div class="jumbotronn text-center">
@@ -59,8 +79,20 @@
     </footer>
     <div style="display: none">
       <div id="about">
-        <p></p>
+        <p>
+          This is a Gallery of sample tiles to be used with Spritely and/or
+          Cobblestone.
+        </p>
+        <p>
+          Click on the tile of your choice to download both the PNG image and
+          the accompanying JSON datafile for Spritely.
+        </p>
+        <p>
+          Use the tiles to build maps in Cobblestone, or load the datafile in
+          Spritely to make adjustments first.
+        </p>
       </div>
+      <a id="jsonLink"></a>
     </div>
   </body>
 </html>
