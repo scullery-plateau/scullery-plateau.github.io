@@ -29,12 +29,12 @@
           initPopup(document.getElementById(aboutId).innerHTML);
         };
         window.downloadJson = function (tileName) {
-          downloadLink.setAttribute('href', `tile-gallery/${tileName}.json`);
-          downloadLink.setAttribute('download', tileName);
+          downloadLink.setAttribute('href', `.\\tile-gallery${tileName}.json`);
+          downloadLink.setAttribute('download', tileName + '.json');
           downloadLink.click();
         };
         let buildThumbnail = function (tileName) {
-          return `<img src=".tile-gallery/${tileName}.png" height="64px"/>`;
+          return `<a href="tile-gallery/${tileName}.png" download="${tileName}.png" onclick="downloadJson('${tileName}')"><img src="tile-gallery/${tileName}.png" height="64px"/><a>`;
         };
         document.getElementById(tileGalleryId).innerHTML = listTiles()
           .map(buildThumbnail)
