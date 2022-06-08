@@ -29,12 +29,23 @@
               class="text-light nav-link dropdown-toggle"
               onclick="toggleMenu(event,this)"
             ></a>
-            <ul class="dropdown-menu rpg-box"></ul>
+            <ul class="dropdown-menu rpg-box">
+              <li class="">
+                <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                  >About</a
+                >
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
       <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
       <span class="navbar-brand">Outfitter</span>
+    </div>
+    <div>
+      <div class="rpg-box m-3">
+        <p>Outfitter coming soon!</p>
+      </div>
     </div>
     <footer>
       <div class="jumbotronn text-center">
@@ -42,5 +53,10 @@
         <p>See the code on GitHub.</p>
       </div>
     </footer>
+    <div style="display: none">
+      <div id="about">
+        <p></p>
+      </div>
+    </div>
   </body>
 </html>
