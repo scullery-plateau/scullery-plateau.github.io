@@ -1,21 +1,8 @@
 (function () {
   initKeyEventWrapper();
-  let dim = 16;
   let pixelDim = 10;
   let defaultColor = '#999999';
   let bgColorPixelId = 'bgColorPixel';
-  let applyNode = function (parent, childSpec, attrs) {
-    attrs = attrs || {};
-    let node = document.createElement(childSpec.tag);
-    Object.entries(childSpec.attrs).forEach((entry) => {
-      node.setAttribute(entry[0], entry[1]);
-    });
-    Object.entries(attrs).forEach((entry) => {
-      node.setAttribute(entry[0], entry[1]);
-    });
-    parent.appendChild(node);
-    return node;
-  };
   let getPaletteId = function (index) {
     return 'palette' + index;
   };
@@ -23,10 +10,16 @@
     return 'paletteBtn' + index;
   };
   let getPixelId = function (x, y) {
-    return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
+    return [x, y].map((i) => i.toString(32).toUpperCase()).join('x');
   };
   let setColorButtonColor = function (button, color) {
     button.setAttribute('style', `color:${color};background-color:${color};`);
+  };
+  let arbitrateEvent = function (e) {
+    if (e) {
+      e.preventDefault();
+      document.dispatchEvent(new Event('CloseMenus'));
+    }
   };
   window.init = function (
     transparentColorId,
@@ -64,6 +57,7 @@
       pixels: {},
       backgroundColor: defaultColor,
       isTransparent: true,
+      size: 16,
     };
     let selectedColorIndex = 0;
     let selectColor = function (index) {
@@ -74,6 +68,13 @@
       document
         .getElementById(getPaletteButtonId(selectedColorIndex))
         .classList.add('selected-color');
+    };
+    let walkCanvas = function (fn) {
+      for (let x = 0; x < data.size; x++) {
+        for (let y = 0; y < data.size; y++) {
+          fn(x, y);
+        }
+      }
     };
     let initColorPicker = function (color, callback) {
       setUpOneTimeEvent(document, 'ModalShown', () => {
@@ -99,16 +100,6 @@
           },
         },
       ]);
-    };
-    let initColorPicker2 = function (color, callback) {
-      let colorInput = document.getElementById(paletteColorInputId);
-      colorInput.value = color;
-      setUpOneTimeEvent(colorInput, 'change', () => {
-        callback(colorInput.value);
-        drawPalette();
-        paintCanvas();
-      });
-      colorInput.click();
     };
     let setPaletteColor = function (index) {
       selectColor(index);
@@ -141,11 +132,6 @@
         setPaletteColor(index);
       });
       return button;
-    };
-    let setPaletteButtonColor = function (color) {
-      document
-        .getElementById(getPaletteButtonId(selectedColorIndex))
-        .setAttribute('style', `color:${color};background-color:${color};`);
     };
     let drawPaletteButtons = function () {
       let paletteButtons = document.getElementById(paletteId);
@@ -198,22 +184,19 @@
     };
     let paintCanvas = function () {
       let content = [];
-      for (let x = 0; x < dim; x++) {
-        for (let y = 0; y < dim; y++) {
-          content.push(
-            drawPixel(x, y, getColorId(getPixelId(x, y), data.isTransparent))
-          );
-        }
-      }
+      walkCanvas((x, y) => {
+        content.push(
+          drawPixel(x, y, getColorId(getPixelId(x, y), data.isTransparent))
+        );
+      });
       document.getElementById(
         canvasId
       ).innerHTML = `<svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox="0 0 ${
-        dim * pixelDim
-      } ${dim * pixelDim}">${content.join('')}</svg>`;
+        data.size * pixelDim
+      } ${data.size * pixelDim}">${content.join('')}</svg>`;
     };
     window.loadFile = function (e) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+      arbitrateEvent(e);
       document.getElementById(fileLoaderId).click();
     };
     let validateLoadFileJson = function (data) {
@@ -225,7 +208,7 @@
       if (error) {
         throw error;
       }
-      ['palette', 'pixels', 'backgroundColor', 'isTransparent'].forEach(
+      ['palette', 'pixels', 'backgroundColor', 'isTransparent', 'size'].forEach(
         (field) => {
           delete data[field];
         }
@@ -248,38 +231,43 @@
         processFileLoadError
       );
     };
-    window.downloadFile = function (e) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+    let prepDownloadData = function () {
       let jsonData = {
         palette: data.palette,
         pixels: data.pixels,
+        size: data.size,
       };
       if (!data.isTransparent) {
         jsonData.backgroundColor = data.backgroundColor;
       }
-      initDownloadJsonPopup('spritelyFileDownload', 'spritely', jsonData);
+      return jsonData;
     };
     window.showImageDownload = function (e) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+      arbitrateEvent(e);
       setUpOneTimeEvent(document, 'ModalShown', repaintImage);
-      initPopup(localStorage.getItem('imageDownloadPopup'));
+      initPopup(localStorage.getItem('imageDownloadPopup'), [
+        {
+          label: 'Download Datafile',
+          class: 'success',
+          handler: () => {
+            triggerDownload(imgDlFileNameId, 'spritely', prepDownloadData());
+          },
+        },
+        {
+          label: 'Cancel',
+          class: 'danger',
+          handler: () => {},
+        },
+      ]);
     };
     window.addColor = function (e) {
-      if (e) {
-        e.preventDefault();
-        document.dispatchEvent(new Event('CloseMenus'));
-      }
+      arbitrateEvent(e);
       data.palette.push(defaultColor);
       drawPalette();
       setPaletteColor(data.palette.length - 1);
     };
     window.removeColor = function (e) {
-      if (e) {
-        e.preventDefault();
-        document.dispatchEvent(new Event('CloseMenus'));
-      }
+      arbitrateEvent(e);
       data.palette.splice(selectedColorIndex, 1);
       Object.entries(data.pixels)
         .filter(([key, value]) => value >= data.palette.length)
@@ -328,22 +316,17 @@
       },
     };
     window.transform = function (tfType, e) {
-      if (e) {
-        e.preventDefault();
-        document.dispatchEvent(new Event('CloseMenus'));
-      }
+      arbitrateEvent(e);
       let transformFn = transforms[tfType];
       let newPixels = {};
       let commonKeys = [];
-      for (let x = 0; x < 16; x++) {
-        for (let y = 0; y < 16; y++) {
-          let currentKey = getPixelId(x, y);
-          commonKeys.push(currentKey);
-          if (currentKey in data.pixels) {
-            newPixels[transformFn(x, y)] = data.pixels[currentKey];
-          }
+      walkCanvas((x, y) => {
+        let currentKey = getPixelId(x, y);
+        commonKeys.push(currentKey);
+        if (currentKey in data.pixels) {
+          newPixels[transformFn(x, y)] = data.pixels[currentKey];
         }
-      }
+      });
       Object.keys(newPixels).forEach((k) => {
         if (commonKeys.indexOf(k) < 0) {
           delete newPixels[k];
@@ -354,13 +337,11 @@
       paintCanvas();
     };
     window.showAbout = function (e) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+      arbitrateEvent(e);
       initPopup(document.getElementById(aboutId).innerHTML);
     };
     window.toggleColor = function (e, x, y) {
-      e.preventDefault();
-      document.dispatchEvent(new Event('CloseMenus'));
+      arbitrateEvent(e);
       console.log('toggle color');
       let pixelId = getPixelId(x, y);
       if (isNaN(data.pixels[pixelId])) {
@@ -384,20 +365,18 @@
         ctx.fillStyle = data.backgroundColor;
         ctx.fillRect(0, 0, imgDim, imgDim);
       }
-      for (let x = 0; x < 16; x++) {
-        for (let y = 0; y < 16; y++) {
-          let pixelId = getPixelId(x, y);
-          if (pixelId in data.pixels) {
-            ctx.fillStyle = data.palette[data.pixels[pixelId]];
-            ctx.fillRect(scale * x, scale * y, scale, scale);
-          }
+      walkCanvas((x, y) => {
+        let pixelId = getPixelId(x, y);
+        if (pixelId in data.pixels) {
+          ctx.fillStyle = data.palette[data.pixels[pixelId]];
+          ctx.fillRect(scale * x, scale * y, scale, scale);
         }
-      }
+      });
       return canvasElem.toDataURL('image/png');
     };
     window.repaintImage = function () {
       let scale = document.getElementById(imgDlScaleId).value;
-      let imgDim = dim * scale;
+      let imgDim = data.size * scale;
       let filename = normalizeFilename(
         document.getElementById(imgDlFileNameId).value,
         '.png',
@@ -414,6 +393,27 @@
         '`' + downloadTpl + '`'
       );
     };
+    window.setSize = function (size, e) {
+      arbitrateEvent(e);
+      let currentAnchor = document.getElementById('size' + data.size);
+      currentAnchor.disabled = false;
+      currentAnchor.classList.remove('disabled');
+      let nextAnchor = document.getElementById('size' + size);
+      nextAnchor.disabled = true;
+      nextAnchor.classList.add('disabled');
+      data.size = size;
+      let allCoords = [];
+      walkCanvas((x, y) => {
+        allCoords.push(getPixelId(x, y));
+      });
+      Object.keys(data.pixels)
+        .filter((p) => allCoords.indexOf(p) < 0)
+        .forEach((p) => {
+          delete data.pixels[p];
+        });
+      drawPalette();
+      paintCanvas();
+    };
     let arrowTriggerEvents = {
       ctrlarrowlefthold: 'turnLeft',
       ctrlarrowrighthold: 'turnRight',
@@ -424,21 +424,25 @@
       shiftarrowuphold: 'shiftUp',
       shiftarrowdownhold: 'shiftDown',
     };
-    let arrowTrigger = function (e) {
-      console.log(e);
-      let event =
-        (e.detail.ctrlKey ? 'ctrl' : '') +
-        (e.detail.shiftKey ? 'shift' : '') +
-        e.type;
-      let tf = arrowTriggerEvents[event];
-      if (tf) {
+    let triggerTransform = function (tf) {
+      return () => {
         transform(tf);
-      }
+      };
     };
     paintCanvas();
-    document.addEventListener('arrowlefthold', arrowTrigger);
-    document.addEventListener('arrowrighthold', arrowTrigger);
-    document.addEventListener('arrowuphold', arrowTrigger);
-    document.addEventListener('arrowdownhold', arrowTrigger);
+    Object.entries(arrowTriggerEvents).forEach(([event, tf]) => {
+      document.addEventListener(event, triggerTransform(tf));
+    });
+    document.addEventListener('escapehold', () => {
+      document.dispatchEvent(new Event('CloseMenus'));
+    });
+    document.addEventListener('ctrlkeyshold', (e) => {
+      e.detail.original.preventDefault();
+      showImageDownload();
+    });
+    document.addEventListener('ctrlkeyohold', (e) => {
+      e.detail.original.preventDefault();
+      document.getElementById(fileLoaderId).click();
+    });
   };
 })();
