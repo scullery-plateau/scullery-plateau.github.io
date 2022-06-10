@@ -17,9 +17,23 @@
     <link href="style/rpg.css" rel="stylesheet" />
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/ajax.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript">
+      function loadSvgDefs(defsId, displayId, e) {
+        e.preventDefault();
+        getLocalStaticFileAsText(
+          './outfitter-datasets/fit.svg',
+          (responseText) => {
+            document.getElementById(defsId).innerHTML = responseText;
+            document.getElementById(displayId).style.display = 'block';
+          }
+        );
+      }
+    </script>
   </head>
   <body class="bg-dark text-light">
+    <div style="display: none" id="svg-defs"></div>
     <div class="navbar justify-content-start">
       <div class="mr-3">
         <ul class="navbar-nav">
@@ -44,7 +58,98 @@
     </div>
     <div>
       <div class="rpg-box m-3">
-        <p>Outfitter coming soon!</p>
+        <p>
+          <a href="#" onclick="loadSvgDefs('svgDefs','svgDisplay',event)"
+            >Outfitter coming soon!</a
+          >
+        </p>
+        <div id="svgDisplay" style="display: none">
+          <svg
+            width="309.59999999999997"
+            height="624.525"
+            viewBox="-103.19999999999999 -149.95 206.39999999999998 416.34999999999997"
+          >
+            <rect
+              x="-103.19999999999999"
+              y="-149.95"
+              width="206.39999999999998"
+              height="416.34999999999997"
+              stroke="none"
+              fill="#cccccc"
+            ></rect>
+            <rect
+              x="-103.19999999999999"
+              y="-149.95"
+              width="206.39999999999998"
+              height="416.34999999999997"
+              stroke="black"
+              stroke-width="2"
+              fill="none"
+            ></rect>
+            <g>
+              <a
+                href="#"
+                onclick="selectOutfitterLayer(event,'selectedLayer',0)"
+              >
+                <g transform="matrix(1,0.0,0.0,1,0,0)" opacity="1">
+                  <use xlink:href="#torso-12" fill="white"></use>
+                  <g fill="url(#shading-00)">
+                    <use xlink:href="#torso-12"></use>
+                  </g>
+                  <use xlink:href="#torso-27" stroke="black"></use>
+                </g>
+              </a>
+              <a
+                href="#"
+                onclick="selectOutfitterLayer(event,'selectedLayer',1)"
+              >
+                <g transform="matrix(1,0.0,0.0,1,0,0)" opacity="1">
+                  <use xlink:href="#legs-12" fill="white"></use>
+                  <g fill="url(#shading-00)">
+                    <use xlink:href="#legs-12"></use>
+                  </g>
+                  <use xlink:href="#legs-66" stroke="black"></use>
+                </g>
+              </a>
+              <a
+                href="#"
+                onclick="selectOutfitterLayer(event,'selectedLayer',2)"
+              >
+                <g transform="matrix(1,0.0,0.0,1,0,0)" opacity="1">
+                  <use xlink:href="#arm-12" fill="white"></use>
+                  <g fill="url(#shading-00)">
+                    <use xlink:href="#arm-12"></use>
+                  </g>
+                  <use xlink:href="#arm-44" stroke="black"></use>
+                </g>
+              </a>
+              <a
+                href="#"
+                onclick="selectOutfitterLayer(event,'selectedLayer',3)"
+              >
+                <g transform="matrix(-1,0.0,0.0,1,0,0)" opacity="1">
+                  <use xlink:href="#arm-12" fill="white"></use>
+                  <g fill="url(#shading-00)">
+                    <use xlink:href="#arm-12"></use>
+                  </g>
+                  <use xlink:href="#arm-44" stroke="black"></use>
+                </g>
+              </a>
+              <a
+                href="#"
+                onclick="selectOutfitterLayer(event,'selectedLayer',4)"
+              >
+                <g transform="matrix(1,0.0,0.0,1,0,0)" opacity="1">
+                  <use xlink:href="#head-12" fill="white"></use>
+                  <g fill="url(#shading-00)">
+                    <use xlink:href="#head-12"></use>
+                  </g>
+                  <use xlink:href="#head-144" stroke="black"></use>
+                </g>
+              </a>
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
     <footer>
