@@ -20,7 +20,7 @@
         }
       }
     };
-    xhttp.open('GET', filepath);
+    xhttp.open('GET', filepath,);
     xhttp.send();
   };
 })();
