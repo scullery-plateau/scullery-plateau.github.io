@@ -20,12 +20,16 @@
     <script type="text/javascript" src="scripts/ajax.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
     <script type="text/javascript">
-      function loadSvgDefs(defsId, displayId, e) {
+      function loadSvgDefs(link, defsId, loadingId, displayId, e) {
         e.preventDefault();
+        link.disabled = true;
+        let spinner = document.getElementById(loadingId);
+        spinner.style.display = 'block';
         getLocalStaticFileAsText(
           './outfitter-datasets/fit.svg',
           (responseText) => {
             document.getElementById(defsId).innerHTML = responseText;
+            spinner.style.display = 'none';
             document.getElementById(displayId).style.display = 'block';
           }
         );
@@ -59,10 +63,15 @@
     <div>
       <div class="rpg-box m-3">
         <p>
-          <a href="#" onclick="loadSvgDefs('svgDefs','svgDisplay',event)"
+          <a
+            href="#"
+            onclick="loadSvgDefs(this,'svgDefs','loadingDisplay','svgDisplay',event)"
             >Outfitter coming soon!</a
           >
         </p>
+        <div id="loadingDisplay" style="display: none">
+          <p>Loading display configuration data, please wait....</p>
+        </div>
         <div id="svgDisplay" style="display: none">
           <svg
             width="309.59999999999997"
