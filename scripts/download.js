@@ -13,7 +13,7 @@
     filename = filename + ext;
     return filename;
   };
-  let triggerDownload = function (fieldId, defaultFilename, jsonData) {
+  window.triggerDownload = function (fieldId, defaultFilename, jsonData) {
     let filename = normalizeFilename(
       document.getElementById(fieldId).value,
       '.json',

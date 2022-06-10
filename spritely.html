@@ -36,11 +36,14 @@
       .selected-color {
         border: 4px solid white;
       }
+      #sizePicker a {
+      }
+      #sizePicker a.disabled,
+      #sizePicker a:disabled {
+        color: darkgrey !important;
+      }
     </style>
-    <script
-      type="text/javascript"
-      src="https://voltron42.github.io/gizmo-atheneum/util/keyeventwrapper.js"
-    ></script>
+    <script type="text/javascript" src="scripts/keyeventwrapper.js"></script>
     <script type="text/javascript" src="scripts/colorPicker.js"></script>
     <script type="text/javascript" src="scripts/colors.js"></script>
     <script type="text/javascript" src="scripts/download.js"></script>
@@ -125,16 +128,8 @@
                       <a
                         href="#"
                         class="dropdown-item"
-                        onclick="downloadFile(event)"
-                        >Download File</a
-                      >
-                    </li>
-                    <li class="">
-                      <a
-                        href="#"
-                        class="dropdown-item"
                         onclick="showImageDownload(event)"
-                        >Download Image</a
+                        >Download</a
                       >
                     </li>
                   </ul>
@@ -144,46 +139,28 @@
                     href="#"
                     class="dropdown-item dropdown-toggle"
                     onclick="toggleMenu(event,this)"
-                    >Palette</a
+                    >Size</a
                   >
-                  <ul class="dropdown-menu rpg-box">
+                  <ul class="dropdown-menu rpg-box" id="sizePicker">
                     <li class="">
                       <a
+                        id="size16"
                         href="#"
-                        class="dropdown-item"
-                        onclick="addColor(event)"
-                        >Add Color</a
+                        class="dropdown-item disabled"
+                        disabled
+                        onclick="setSize(16,event)"
+                        >16 x 16</a
                       >
                     </li>
                     <li class="">
                       <a
+                        id="size32"
                         href="#"
                         class="dropdown-item"
-                        onclick="removeColor(event)"
-                        >Remove Color</a
+                        disabled
+                        onclick="setSize(32,event)"
+                        >32 x 32</a
                       >
-                    </li>
-                    <li class="">
-                      <label for="backgroundColor" class="dropdown-item"
-                        >Background Color:
-                        <button
-                          class="rounded-pill"
-                          id="backgroundColor"
-                          onclick="setBackgroundColor(this)"
-                        >
-                          ____
-                        </button></label
-                      >
-                    </li>
-                    <li class="">
-                      <label for="makeTransparent" class="dropdown-item"
-                        >Make Transparent?
-                        <input
-                          id="makeTransparent"
-                          type="checkbox"
-                          checked
-                          onchange="makeTransparent(this)"
-                      /></label>
                     </li>
                   </ul>
                 </li>
@@ -200,7 +177,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('turnLeft',event)"
-                        >Turn Left</a
+                        >Turn Left (CTRL + Left Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -208,7 +185,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('turnRight',event)"
-                        >Turn Right</a
+                        >Turn Right (CTRL + Right Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -216,7 +193,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('flipOver',event)"
-                        >Flip Over</a
+                        >Flip Over (CTRL + Up Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -224,7 +201,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('flipDown',event)"
-                        >Flip Down</a
+                        >Flip Down (CTRL + Down Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -232,7 +209,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('shiftLeft',event)"
-                        >Shift Left</a
+                        >Shift Left (SHIFT + Left Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -240,7 +217,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('shiftRight',event)"
-                        >Shift Right</a
+                        >Shift Right (SHIFT + Right Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -248,7 +225,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('shiftUp',event)"
-                        >Shift Up</a
+                        >Shift Up (SHIFT + Up Arrow)</a
                       >
                     </li>
                     <li class="">
@@ -256,7 +233,7 @@
                         href="#"
                         class="dropdown-item"
                         onclick="transform('shiftDown',event)"
-                        >Shift Down</a
+                        >Shift Down (SHIFT + Down Arrow)</a
                       >
                     </li>
                   </ul>
@@ -274,6 +251,26 @@
           >Scullery Plateau:</a
         >
         <span class="navbar-brand">Spritely</span>
+      </div>
+      <div class="d-flex justify-content-center">
+        <label for="backgroundColor" class="rpg-box mr-2 mt-2"
+          >Background Color:
+          <button
+            class="rounded-pill"
+            id="backgroundColor"
+            onclick="setBackgroundColor(this)"
+          >
+            ____
+          </button></label
+        >
+        <label for="makeTransparent" class="rpg-box ml-2 mt-2"
+          >Make Transparent?
+          <input
+            id="makeTransparent"
+            type="checkbox"
+            checked
+            onchange="makeTransparent(this)"
+        /></label>
       </div>
       <div
         class="rpg-title-box m-3 d-flex justify-content-between"

@@ -1,16 +1,18 @@
 (function () {
+  let buildButtonHandler = function (buttonSpec, popup) {
+    return () => {
+      buttonSpec.handler();
+      popup.close();
+      popup.parentNode.removeChild(popup);
+      document.dispatchEvent(new Event('ModalClosed'));
+    };
+  };
   let appendPopupMenuButton = function (popup) {
     return function (menu, buttonSpec) {
       let button = document.createElement('button');
       button.innerHTML = buttonSpec.label;
       button.setAttribute('class', 'btn btn-' + buttonSpec.class);
-      let listener = () => {
-        buttonSpec.handler();
-        popup.close();
-        popup.parentNode.removeChild(popup);
-        document.dispatchEvent(new Event('ModalClosed'));
-      };
-      button.addEventListener('click', listener);
+      button.addEventListener('click', buildButtonHandler(buttonSpec, popup));
       menu.appendChild(button);
       return menu;
     };
@@ -33,6 +35,18 @@
       });
     }
     buttonSpecs.reduce(appendPopupMenuButton(popup), menu);
+    let escapeListener = (function(){
+      let escapeFunction = buildButtonHandler({handler:()=>{
+        document.removeEventListener("keyup",escapeListener);
+      }},popup);
+      return (e) => {
+        if (e.key == "Escape") {
+          e.preventDefault();
+          escapeFunction();
+        }
+      }
+    })();
+    document.addEventListener("keyup",escapeListener);
     document.getElementsByTagName('body')[0].appendChild(popup);
     popup.showModal();
     document.dispatchEvent(new Event('ModalShown'));
