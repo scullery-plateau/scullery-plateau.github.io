@@ -34,26 +34,29 @@
         let spinner = document.getElementById(loadingId);
         spinner.style.display = 'block';
         let progressBar = document.getElementById(progressBarId);
-        getLocalStaticFileAsText('./outfitter-datasets/fit.svg', {
-          success: (responseText) => {
-            document.getElementById(defsId).innerHTML = responseText;
-            spinner.style.display = 'none';
-            document.getElementById(displayId).style.display = 'block';
-            let content = document.getElementById(svgTempId).innerHTML;
-            document.getElementById(svgTempId).innerHTML = "";
-            document.getElementById(displayId).innerHTML = 
-          },
-          failure: (resp) => {
-            console.log(resp);
-            throw resp;
-          },
-          stateChange: (state) => {
-            console.log(state);
-            let percent = (100 * state.state) / state.max + '%';
-            progressBar.innerHTML = percent;
-            progressBar.style = 'width: ' + percent;
-          },
-        });
+        getLocalStaticFileAsText(
+          'https://scullery-plateau.github.io/outfitter-datasets/fit.svg',
+          {
+            success: (responseText) => {
+              document.getElementById(defsId).innerHTML = responseText;
+              spinner.style.display = 'none';
+              document.getElementById(displayId).style.display = 'block';
+              let content = document.getElementById(svgTempId).innerHTML;
+              document.getElementById(svgTempId).innerHTML = '';
+              document.getElementById(displayId).innerHTML = content;
+            },
+            failure: (resp) => {
+              console.log(resp);
+              throw resp;
+            },
+            stateChange: (state) => {
+              console.log(state);
+              let percent = (100 * state.state) / state.max + '%';
+              progressBar.innerHTML = percent;
+              progressBar.style = 'width: ' + percent;
+            },
+          }
+        );
       }
     </script>
   </head>
