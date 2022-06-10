@@ -20,7 +20,14 @@
     <script type="text/javascript" src="scripts/ajax.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
     <script type="text/javascript">
-      function loadSvgDefs(link, defsId, progressBarId, loadingId, displayId, e) {
+      function loadSvgDefs(
+        link,
+        defsId,
+        progressBarId,
+        loadingId,
+        displayId,
+        e
+      ) {
         e.preventDefault();
         link.disabled = true;
         let spinner = document.getElementById(loadingId);
@@ -38,16 +45,16 @@
           },
           stateChange: (state) => {
             console.log(state);
-            let percent = (100 * state.state / state.max) + '%';
+            let percent = (100 * state.state) / state.max + '%';
             progressBar.innerHTML = percent;
-            progressBar.style = "width: " + percent
-          }
+            progressBar.style = 'width: ' + percent;
+          },
         });
       }
     </script>
   </head>
   <body class="bg-dark text-light">
-    <div style="display: none" id="svg-defs"></div>
+    <div style="display: none" id="svgDefs"></div>
     <div class="navbar justify-content-start">
       <div class="mr-3">
         <ul class="navbar-nav">
