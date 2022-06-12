@@ -23,7 +23,7 @@
       };
     }
   };
-  let getForegroundColor = function (hex) {
+  window.getForegroundColor = function (hex) {
     let rgb = rgbFromHex(hex);
     let luminosity = Math.sqrt(
       Math.pow(rgb['red'], 2) * 0.299 +

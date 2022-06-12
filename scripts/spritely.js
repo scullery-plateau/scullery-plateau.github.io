@@ -15,6 +15,9 @@
   let setColorButtonColor = function (button, color) {
     button.setAttribute('style', `color:${color};background-color:${color};`);
   };
+  let setBackgroundColorButtonColor = function (button, color) {
+    button.setAttribute('style', `color:${getForegroundColor(color)};background-color:${color};`);
+  };
   let arbitrateEvent = function (e) {
     if (e) {
       e.preventDefault();
@@ -50,7 +53,19 @@
     initTemplate('canvasTemplate', imgDlDisplayId);
     initTemplate('imgLinkTemplate', imgDlLinkId);
     initTemplate('imageDownloadPopup', imageDownloadPopupId);
-    setColorButtonColor(document.getElementById(bgColorId), defaultColor);
+    let setTransparentButtonState = function(isTransparent) {
+      let button = document.getElementById(makeTransparentId);
+      if (!isTransparent) {
+        button.classList.remove("btn-outline-light");
+        button.classList.add("btn-dark");
+        button.innerHTML = "Opaque"
+      } else {
+        button.classList.remove("btn-dark");
+        button.classList.add("btn-outline-light");
+        button.innerHTML = "Transparent"
+      }
+    }
+    setBackgroundColorButtonColor(document.getElementById(bgColorId), defaultColor);
     document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
       palette: [],
@@ -59,6 +74,7 @@
       isTransparent: true,
       size: 16,
     };
+    setTransparentButtonState(data.isTransparent);
     let selectedColorIndex = 0;
     let selectColor = function (index) {
       document
@@ -217,6 +233,8 @@
       data.pixels = jsonData.pixels;
       data.backgroundColor = jsonData.backgroundColor;
       data.isTransparent = !('backgroundColor' in jsonData);
+      setBackgroundColor(document.getElementById(bgColorId));
+      setTransparentButtonState(data.isTransparent);
       drawPalette();
       paintCanvas();
     };
@@ -281,11 +299,13 @@
     window.setBackgroundColor = function (bgButton) {
       initColorPicker(data.backgroundColor, (newColor) => {
         data.backgroundColor = newColor;
-        setColorButtonColor(document.getElementById(bgColorId), newColor);
+        setBackgroundColorButtonColor(document.getElementById(bgColorId), newColor);
       });
     };
-    window.makeTransparent = function (checkbox) {
-      data.isTransparent = document.getElementById(makeTransparentId).checked;
+    window.toggleTransparent = function (button) {
+      console.log(data.isTransparent)
+      data.isTransparent = !data.isTransparent;
+      setTransparentButtonState(data.isTransparent);
       drawPalette();
       paintCanvas();
     };

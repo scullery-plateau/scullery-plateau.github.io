@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html>
   <head>
     <title>Scullery Plateau: Spritely</title>
@@ -14,6 +13,25 @@
       href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
       rel="stylesheet"
     />
+    <!-- flair -->
+    <!--
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/background.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/btn.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/core.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/container.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/drop.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/flex.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/form.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/frame.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/input-group.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/jumbotron.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/marginpadding.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/nav.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/navbar.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/text.css"/>
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/bootstrap_4_redux/background.css"/>
+    -->
+    <!-- local style -->
     <link rel="stylesheet" href="style/rpg.css" />
     <link rel="stylesheet" href="style/font.css" />
     <link rel="stylesheet" href="style/menu.css" />
@@ -71,14 +89,14 @@
       )"
     onclick="closeStrayMenu(event)"
   >
-    <svg width="0%" height="0%">
+    <svg width="0" height="0">
       <defs>
         <linearGradient
-          id="clearedGradient"
-          x1="0%"
-          y1="0%"
-          x2="100%"
-          y2="100%"
+                id="clearedGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
         >
           <stop offset="5%" style="stop-color: #ff0000; stop-opacity: 0.2" />
           <stop offset="23%" style="stop-color: #ffff00; stop-opacity: 0.2" />
@@ -88,12 +106,12 @@
           <stop offset="95%" style="stop-color: #ff00ff; stop-opacity: 0.2" />
         </linearGradient>
         <rect
-          id="clearedPixel"
-          width="10"
-          height="10"
-          stroke-width="1"
-          stroke="black"
-          fill="url(#clearedGradient)"
+                id="clearedPixel"
+                width="10"
+                height="10"
+                stroke-width="1"
+                stroke="black"
+                fill="url(#clearedGradient)"
         />
       </defs>
     </svg>
@@ -262,34 +280,26 @@
         >
         <span class="navbar-brand">Spritely</span>
       </div>
-      <div class="d-flex justify-content-center">
-        <label for="backgroundColor" class="rpg-box mr-2 mt-2"
-          >Background Color:
-          <button
-            class="rounded-pill"
-            id="backgroundColor"
-            onclick="setBackgroundColor(this)"
-          >
-            ____
-          </button></label
-        >
-        <label for="makeTransparent" class="rpg-box ml-2 mt-2"
-          >Make Transparent?
-          <input
-            id="makeTransparent"
-            type="checkbox"
-            checked
-            onchange="makeTransparent(this)"
-        /></label>
+      <div class="d-flex justify-content-center rpg-box m-3">
+        <button
+          class="rounded w-25"
+          id="backgroundColor"
+          onclick="setBackgroundColor(this)">BG Color</button>
+        <span class="m-3"></span>
+        <button
+          class="rounded w-25 btn btn-outline-light"
+          id="makeTransparent"
+          onclick="toggleTransparent(this)"
+        >Transparent</button>
       </div>
       <div
-        class="rpg-title-box m-3 d-flex justify-content-between"
+        class="rpg-box m-3 d-flex justify-content-between"
         title="Palette"
       >
         <button class="btn btn-success" title="Add Color" onclick="addColor()">
           +
         </button>
-        <div id="palette"></div>
+        <div id="palette" class="ml-2 w-100 d-flex flex-wrap"></div>
         <button
           class="btn btn-danger"
           title="Remove Selected Color"
@@ -304,19 +314,17 @@
         title="click to paint a pixel"
       ></div>
     </div>
-    <footer>
-      <div class="jumbotronn text-center">
-        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
-        <p>
-          <a
-            href="https://github.com/scullery-plateau/scullery-plateau.github.io"
-            class="btn btn-outline-info"
-            >See the code on GitHub.</a
-          >
-        </p>
-      </div>
+    <footer class="text-center">
+      <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+      <p>
+        <a
+          href="https://github.com/scullery-plateau/scullery-plateau.github.io"
+          class="btn btn-outline-info"
+          >See the code on GitHub.</a
+        >
+      </p>
     </footer>
-    <div style="display: none">
+    <div style="display: none;">
       <div id="paletteDefs"></div>
       <input
         id="fileLoad"
