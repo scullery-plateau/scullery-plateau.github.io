@@ -133,47 +133,51 @@
         </g>
       </svg>
     </div>
-    <div class="navbar justify-content-start">
-      <div class="mr-3">
-        <ul class="navbar-nav">
-          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
-            <a
-              href="#"
-              class="text-light nav-link dropdown-toggle"
-              onclick="toggleMenu(event,this)"
-            ></a>
-            <ul class="dropdown-menu rpg-box">
-              <li class="">
-                <a href="#" class="dropdown-item" onclick="showAbout(event)"
-                  >About</a
-                >
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
-      <span class="navbar-brand">Outfitter</span>
-    </div>
-    <div>
-      <div class="rpg-box m-3 text-center">
-        <a
-          href="#"
-          class="btn btn-info"
-          onclick="loadSvgDefs(this,'svgDefs','progressBar','loadingDisplay','svgTemp','svgDisplay',event)"
-          >Outfitter coming soon!</a
-        >
-      </div>
-      <div id="loadingDisplay" style="display: none" class="rpg-title-box">
-        <p>Loading display configuration data, please wait....</p>
-        <div class="progress">
-          <div class="progress-bar" id="progressBar"></div>
+    <div class="container">
+      <div class="navbar justify-content-start">
+        <div class="mr-3">
+          <ul class="navbar-nav">
+            <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+              <a
+                href="#"
+                class="text-light nav-link dropdown-toggle"
+                onclick="toggleMenu(event,this)"
+              ></a>
+              <ul class="dropdown-menu rpg-box">
+                <li class="">
+                  <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                    >About</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
         </div>
+        <a href="index.html" class="navbar-brand text-light"
+          >Scullery Plateau:</a
+        >
+        <span class="navbar-brand">Outfitter</span>
       </div>
-      <div id="svgDisplay" style="display: none" class="rpg-title-box"></div>
+      <div>
+        <div class="rpg-box m-3 text-center">
+          <a
+            href="#"
+            class="btn btn-info"
+            onclick="loadSvgDefs(this,'svgDefs','progressBar','loadingDisplay','svgTemp','svgDisplay',event)"
+            >Outfitter coming soon!</a
+          >
+        </div>
+        <div id="loadingDisplay" style="display: none" class="rpg-title-box">
+          <p>Loading display configuration data, please wait....</p>
+          <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+        </div>
+        <div id="svgDisplay" style="display: none" class="rpg-title-box"></div>
+      </div>
     </div>
     <footer>
-      <div class="jumbotronn text-center">
+      <div class="text-center">
         <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
         <p>
           <a
