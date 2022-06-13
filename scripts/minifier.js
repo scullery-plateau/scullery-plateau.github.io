@@ -46,7 +46,7 @@
       if (error) {
         throw error;
       }
-      ['images', 'tiles', 'placements'].forEach((field) => {
+      ['size', 'minis'].forEach((field) => {
         data[field] = jsonData[field];
       });
       refreshGallery();
@@ -66,9 +66,29 @@
       arbitrateEvent(e);
       initDownloadJsonPopup('minifierFileDownload', 'minifier', data);
     };
+    let pageBuilders = {
+      1: function (minis) {
+        
+        // todo
+      },
+      2: function (minis) {
+        // todo
+      },
+      3: function (minis) {
+        // todo
+      },
+      4: function (minis) {
+        // todo
+      },
+    };
     window.showPrintable = function (e) {
       arbitrateEvent(e);
-      // todo
+      let minis = data.minis.reduce((out, m) => {
+        return out.concat(Array(m.count).fill(m.url));
+      }, []);
+      let pageBuilderFn = pageBuilders[data.size];
+      let pages = pageBuilderFn(minis);
+      printSvgPages('Minifier', 'portrait', pages);
     };
     window.removeZeroCount = function (e) {
       arbitrateEvent(e);
