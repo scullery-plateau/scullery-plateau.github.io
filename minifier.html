@@ -16,6 +16,16 @@
     <link href="style/rpg.css" rel="stylesheet" />
     <link href="style/font.css" rel="stylesheet" />
     <link href="style/menu.css" rel="stylesheet" />
+    <style type="text/css">
+      .thumbnail .frame {
+        width: 6em;
+        height: 6em;
+        border: 1px solid black;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
+    </style>
     <script type="text/javascript" src="scripts/fileload.js"></script>
     <script type="text/javascript" src="scripts/menues.js"></script>
     <script type="text/javascript" src="scripts/minifier.js"></script>
@@ -149,7 +159,7 @@
       <div>
         <div
           id="gallery"
-          class="rpg-box m-3 d-flex justify-content-around"
+          class="m-3 d-flex flex-wrap justify-content-around"
         ></div>
       </div>
     </div>
@@ -193,12 +203,20 @@
         </p>
       </div>
       <div id="thumbnailTemplate">
-        <div class="thumbnail">
-          <p>filename-i</p>
-          <div id="thumb-i" class="frame"></div>
+        <div
+          class="
+            thumbnail
+            rpg-box
+            d-flex
+            flex-column
+          "
+        >
+          <span class="align-self-center">filename-i</span>
+          <div id="thumb-i" class="frame align-self-center"></div>
           <input
             id="count-i"
-            class="form-control"
+            class="form-control align-self-center"
+            style="width: 5em"
             type="number"
             min="0"
             onchange="updateCount(this,index-i)"
