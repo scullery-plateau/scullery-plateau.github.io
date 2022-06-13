@@ -379,7 +379,7 @@
         data.images,
         data.placements,
         (dataURL) => {
-          printTemplate(data.orientation, dataURL);
+          printImageUrlAsPage(data.orientation, dataURL);
         }
       );
     };

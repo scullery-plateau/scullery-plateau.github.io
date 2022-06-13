@@ -6,7 +6,7 @@
     );
     iframe.parentNode.removeChild(iframe);
   };
-  window.printTemplate = function (orientation, dataURL) {
+  window.printImageUrlAsPage = function (orientation, dataURL) {
     let obj = {
       printTitle: 'Print ' + orientation.toUpperCase(),
       orientation,
