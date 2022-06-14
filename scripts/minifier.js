@@ -66,19 +66,90 @@
       arbitrateEvent(e);
       initDownloadJsonPopup('minifierFileDownload', 'minifier', data);
     };
+    let partition = function (myArray, partitionSize) {
+      let incoming = Array.from(myArray);
+      let partitions = [];
+      while (incoming.length > 0) {
+        partitions.push(incoming.splice(0, partitionSize));
+      }
+      return partitions;
+    };
+    let svgFrame = function (content) {
+      return `<svg width="8in" height="10in" viewBox="0 0 80 100">${content}</svg>`;
+    };
+    let miniFrames = {
+      1: {
+        width: 40,
+        height: 10,
+        svg: [
+          ['rect', 5, 0, 15, 10],
+          ['rect', 20, 0, 15, 10],
+          ['path', [35, 0], [40, 5], [35, 10]],
+          ['path', [35, 0], [40, 5], [35, 10]],
+          ['image', 5, 0, 15, 10, ['rotate'], ['translate']],
+          ['image', 20, 0, 10, 15, ['rotate'], ['translate']],
+        ],
+      },
+      2: {},
+      3: {},
+      4: {},
+    };
+    let buildOneInchMinisPage = function (pageMinis) {
+      return svgFrame(
+        pageMinis
+          .map((url, index) => {
+            // todo
+            return ``;
+          })
+          .join('\n')
+      );
+    };
+    let buildTwoInchMinisPage = function (pageMinis) {
+      return svgFrame(
+        pageMinis
+          .map((url, index) => {
+            // todo
+            return ``;
+          })
+          .join('\n')
+      );
+    };
+    let buildThreeInchMinisPage = function (pageMinis) {
+      return svgFrame(
+        pageMinis
+          .map((url, index) => {
+            // todo
+            return ``;
+          })
+          .join('\n')
+      );
+    };
+    let buildFourInchMinisPage = function (pageMinis) {
+      return svgFrame(
+        pageMinis
+          .map((url, index) => {
+            // todo
+            return ``;
+          })
+          .join('\n')
+      );
+    };
     let pageBuilders = {
       1: function (minis) {
-        
-        // todo
+        let pagePartitions = partition(minis, 20);
+        return pagePartitions.map(buildOneInchMinisPage);
       },
       2: function (minis) {
-        // todo
+        let pagePartitions = partition(minis, 5);
+        return pagePartitions.map(buildTwoInchMinisPage);
       },
       3: function (minis) {
-        // todo
+        let pagePartitions = partition(minis, 3);
+        return pagePartitions.map(buildThreeInchMinisPage);
       },
       4: function (minis) {
-        // todo
+        let pagePartitions = partition(minis, 2);
+        return pagePartitions.map(buildFourInchMinisPage);
       },
     };
     window.showPrintable = function (e) {
