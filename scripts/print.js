@@ -18,7 +18,7 @@
     var win = window.open('', '_blank');
     win.document.getElementsByTagName('html')[0].innerHTML = html;
   };
-  window.printSvgPages = function (title, orientation, pages) {
+  window.printSvgPages = function (title, orientation, defs, pages) {
     let html = `<html>
       <head>
         <title>${title}</title>
@@ -28,10 +28,11 @@
         />
       </head>
       <body>
+        ${defs}
         ${pages
           .map((page) => {
             return `<div class="page">
-          <div class="canvas data-url">${page}</div>
+          <div class="canvas">${page}</div>
         </div>`;
           })
           .join('\n')}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+        <link rel="stylesheet" href="https://voltron42.github.io/flair/print/portrait.css"/>
+        <style>
+            .canvas > svg {
+                width: 4in;
+                height: 5in;
+            }
+            @media print {
+                .canvas > svg {
+                    width: 8in;
+                    height: 10in;
+                }
+            }
+        </style>
+        <script type="text/javascript" src="scripts/testdata.js"></script>
+        <script type="text/javascript" src="scripts/print-minis.js"></script>
+        <script type="text/javascript">
+            function runTest() {
+                let root = document.getElementsByTagName('body')[0];
+                let sizes = [1,2,3,4];
+                let counts = [20,5,3,2];
+                let {filename,url} = getTestData();
+                let obj = {};
+                obj[filename] = url;
+                let defs = sizes.map((s) => {
+                    return buildDefs(s, obj);
+                });
+                let pages = counts.map((c,i) => {
+                    let page = buildPages(sizes[i], Array(c).fill(filename));
+                    return `<div class="page"><div class="canvas">${page}</div></div>`;
+                });
+                root.innerHTML = defs.join('\n') + pages.join('\n');
+            }
+        </script>
+    </head>
+    <body onload="runTest()">
+    </body>
+</html>
