@@ -1,3 +1,17 @@
+## How To D&D?
+
+- Build Page as blog post
+  - statement of purpose
+  - glossary
+  - resource links
+  - site artifact resources
+    - cobblestone maps
+    - Outfitter builds for mini-images
+      - images for all monsters for adventure
+      - images for all character sheets on Wizards of the Coast site
+    - Minifier minis of Outfitter images
+
+
 ## Spritely
 
 - "trim to image"
