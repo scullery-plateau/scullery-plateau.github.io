@@ -3,6 +3,7 @@
 - Build Page as blog post
   - statement of purpose
   - glossary
+  - embedded player for Matt Colville's Running The Game on YouTube
   - resource links
   - site artifact resources
     - cobblestone maps

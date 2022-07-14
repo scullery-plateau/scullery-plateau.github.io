@@ -35,6 +35,7 @@
     aboutId,
     imageDownloadPopupId,
     imgDlScaleId,
+    trimToImageId,
     imgDlCanvasId,
     imgDlFileNameId,
     imgDlLinkId,
@@ -395,6 +396,7 @@
       return canvasElem.toDataURL('image/png');
     };
     window.repaintImage = function () {
+      let trimToImage = document.getElementById(trimToImageId).checked;
       let scale = document.getElementById(imgDlScaleId).value;
       let imgDim = data.size * scale;
       let filename = normalizeFilename(
