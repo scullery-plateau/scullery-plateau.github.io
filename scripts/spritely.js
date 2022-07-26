@@ -16,7 +16,10 @@
     button.setAttribute('style', `color:${color};background-color:${color};`);
   };
   let setBackgroundColorButtonColor = function (button, color) {
-    button.setAttribute('style', `color:${getForegroundColor(color)};background-color:${color};`);
+    button.setAttribute(
+      'style',
+      `color:${getForegroundColor(color)};background-color:${color};`
+    );
   };
   let arbitrateEvent = function (e) {
     if (e) {
@@ -54,19 +57,22 @@
     initTemplate('canvasTemplate', imgDlDisplayId);
     initTemplate('imgLinkTemplate', imgDlLinkId);
     initTemplate('imageDownloadPopup', imageDownloadPopupId);
-    let setTransparentButtonState = function(isTransparent) {
+    let setTransparentButtonState = function (isTransparent) {
       let button = document.getElementById(makeTransparentId);
       if (!isTransparent) {
-        button.classList.remove("btn-outline-light");
-        button.classList.add("btn-dark");
-        button.innerHTML = "Opaque"
+        button.classList.remove('btn-outline-light');
+        button.classList.add('btn-dark');
+        button.innerHTML = 'Opaque';
       } else {
-        button.classList.remove("btn-dark");
-        button.classList.add("btn-outline-light");
-        button.innerHTML = "Transparent"
+        button.classList.remove('btn-dark');
+        button.classList.add('btn-outline-light');
+        button.innerHTML = 'Transparent';
       }
-    }
-    setBackgroundColorButtonColor(document.getElementById(bgColorId), defaultColor);
+    };
+    setBackgroundColorButtonColor(
+      document.getElementById(bgColorId),
+      defaultColor
+    );
     document.getElementById(paletteColorInputId).value = defaultColor;
     let data = {
       palette: [],
@@ -300,11 +306,14 @@
     window.setBackgroundColor = function (bgButton) {
       initColorPicker(data.backgroundColor, (newColor) => {
         data.backgroundColor = newColor;
-        setBackgroundColorButtonColor(document.getElementById(bgColorId), newColor);
+        setBackgroundColorButtonColor(
+          document.getElementById(bgColorId),
+          newColor
+        );
       });
     };
     window.toggleTransparent = function (button) {
-      console.log(data.isTransparent)
+      console.log(data.isTransparent);
       data.isTransparent = !data.isTransparent;
       setTransparentButtonState(data.isTransparent);
       drawPalette();
@@ -380,7 +389,7 @@
       drawPalette();
       paintCanvas();
     };
-    let drawImageInCanvas = function (canvasElem, scale, imgDim) {
+    let drawImageInCanvas = function (canvasElem, scale, imgDim, trimToImage) {
       let ctx = canvasElem.getContext('2d');
       if (!data.isTransparent) {
         ctx.fillStyle = data.backgroundColor;
@@ -409,7 +418,7 @@
         '`' + canvasTpl + '`'
       );
       let canvasElem = document.getElementById(imgDlCanvasId);
-      let dataURL = drawImageInCanvas(canvasElem, scale, imgDim);
+      let dataURL = drawImageInCanvas(canvasElem, scale, imgDim, trimToImage);
       let downloadTpl = localStorage.getItem('imgLinkTemplate');
       document.getElementById(imgDlLinkId).innerHTML = eval(
         '`' + downloadTpl + '`'
