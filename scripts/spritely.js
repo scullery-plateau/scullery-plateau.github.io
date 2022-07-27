@@ -12,6 +12,10 @@
   let getPixelId = function (x, y) {
     return [x, y].map((i) => i.toString(32).toUpperCase()).join('x');
   };
+  let parsePixelId = function (id) {
+    let [x, y] = id.split('x').map((n) => parseInt(n, 32));
+    return { x, y };
+  };
   let setColorButtonColor = function (button, color) {
     button.setAttribute('style', `color:${color};background-color:${color};`);
   };
@@ -92,9 +96,12 @@
         .getElementById(getPaletteButtonId(selectedColorIndex))
         .classList.add('selected-color');
     };
-    let walkCanvas = function (fn) {
-      for (let x = 0; x < data.size; x++) {
-        for (let y = 0; y < data.size; y++) {
+    let walkCanvas = function (fn, dim) {
+      let { width, height } = dim || {};
+      width = width || data.size;
+      height = height || data.size;
+      for (let x = 0; x < width; x++) {
+        for (let y = 0; y < height; y++) {
           fn(x, y);
         }
       }
@@ -395,13 +402,45 @@
         ctx.fillStyle = data.backgroundColor;
         ctx.fillRect(0, 0, imgDim, imgDim);
       }
-      walkCanvas((x, y) => {
-        let pixelId = getPixelId(x, y);
-        if (pixelId in data.pixels) {
-          ctx.fillStyle = data.palette[data.pixels[pixelId]];
-          ctx.fillRect(scale * x, scale * y, scale, scale);
-        }
-      });
+      let [offsetX, offsetY, width, height] = [0, 0, data.size, data.size];
+      if (trimToImage) {
+        let { xs, ys } = Object.keys(data.pixels).reduce(
+          (acc, k) => {
+            let { x, y } = parsePixelId(k);
+            acc.xs.push(x);
+            acc.ys.push(y);
+            return acc;
+          },
+          { xs: [], ys: [] }
+        );
+        let [minX, minY] = [xs, ys].map((ns) =>
+          ns.reduce((a, b) => Math.min(a, b), 0)
+        );
+        let [maxX, maxY] = [xs, ys].map((ns) =>
+          ns.reduce((a, b) => Math.max(a, b), data.size - 1)
+        );
+        [offsetX, offsetY, width, height] = [
+          minX,
+          minY,
+          maxX + 1 - minX,
+          maxY + 1 - minY,
+        ];
+      }
+      walkCanvas(
+        (x, y) => {
+          let pixelId = getPixelId(x, y);
+          if (pixelId in data.pixels) {
+            ctx.fillStyle = data.palette[data.pixels[pixelId]];
+            ctx.fillRect(
+              scale * (x - offsetX),
+              scale * (y - offsetY),
+              scale,
+              scale
+            );
+          }
+        },
+        { width, height }
+      );
       return canvasElem.toDataURL('image/png');
     };
     window.repaintImage = function () {
