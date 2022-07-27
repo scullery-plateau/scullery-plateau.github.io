@@ -53,8 +53,8 @@
     return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
   };
   let parseCoordinateId = function (id) {
-    let [x,y] = id.split('x').map(n => parseInt(n,16));
-    return {x,y};
+    let [x, y] = id.split('x').map((n) => parseInt(n, 16));
+    return { x, y };
   };
   let drawImage = function (ctx, dataURL, tileDim, x, y, tf, state, callback) {
     let img = document.createElement('img');
@@ -81,7 +81,13 @@
     placements,
     onCompleteFn
   ) {
-    let [offsetX, offsetY] = [0, 0];
+    let { offsetX, offsetY, width, height } = calcTrimBounds(
+      trimToImage,
+      width,
+      height,
+      Object.keys(placements),
+      parseCoordinateId
+    );
     let canvasWrapper = document.getElementById(canvasId);
     canvasWrapper.innerHTML = '';
     let canvas = document.createElement('canvas');
@@ -96,9 +102,18 @@
         state[coordId] = true;
         let [filename, tf] = placements[coordId];
         let dataURL = images[filename];
-        drawImage(ctx, dataURL, tileDim, x, y, tf, state, () => {
-          onCompleteFn(canvas.toDataURL());
-        });
+        drawImage(
+          ctx,
+          dataURL,
+          tileDim,
+          x - offsetX,
+          y - offsetY,
+          tf,
+          state,
+          () => {
+            onCompleteFn(canvas.toDataURL());
+          }
+        );
       }
     }
   };

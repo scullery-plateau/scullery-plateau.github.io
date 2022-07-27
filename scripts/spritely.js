@@ -408,30 +408,13 @@
         ctx.fillStyle = data.backgroundColor;
         ctx.fillRect(0, 0, imgDim, imgDim);
       }
-      let [offsetX, offsetY, width, height] = [0, 0, data.size, data.size];
-      if (trimToImage) {
-        let { xs, ys } = Object.keys(data.pixels).reduce(
-          (acc, k) => {
-            let { x, y } = parsePixelId(k);
-            acc.xs.push(x);
-            acc.ys.push(y);
-            return acc;
-          },
-          { xs: [], ys: [] }
-        );
-        let [minX, minY] = [xs, ys].map((ns) =>
-          ns.reduce((a, b) => Math.min(a, b), 0)
-        );
-        let [maxX, maxY] = [xs, ys].map((ns) =>
-          ns.reduce((a, b) => Math.max(a, b), data.size - 1)
-        );
-        [offsetX, offsetY, width, height] = [
-          minX,
-          minY,
-          maxX + 1 - minX,
-          maxY + 1 - minY,
-        ];
-      }
+      let { offsetX, offsetY, width, height } = calcTrimBounds(
+        trimToImage,
+        data.size,
+        data.size,
+        Object.keys(data.pixels),
+        parsePixelId
+      );
       walkCanvas(
         (x, y) => {
           let pixelId = getPixelId(x, y);

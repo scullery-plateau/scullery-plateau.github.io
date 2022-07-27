@@ -62,6 +62,7 @@
     <script type="text/javascript" src="scripts/print.js"></script>
     <script type="text/javascript" src="scripts/template.js"></script>
     <script type="text/javascript" src="scripts/triggers.js"></script>
+    <script type="text/javascript" src="scripts/trim-bounds.js"></script>
   </head>
   <body
     class="bg-dark text-light"
@@ -280,12 +281,13 @@
             />
           </div>
           <div class="form-check">
-            <label for="trimToImage" class="form-check-label">Trim To Image?
+            <label for="trimToImage" class="form-check-label"
+              >Trim To Image?
               <input
-                      type="checkbox"
-                      class="form-check-input"
-                      id="trimToImage"
-                      onchange="repaintImage()"
+                type="checkbox"
+                class="form-check-input"
+                id="trimToImage"
+                onchange="repaintImage()"
               />
             </label>
           </div>
