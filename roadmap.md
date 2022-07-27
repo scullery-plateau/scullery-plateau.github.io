@@ -15,7 +15,7 @@
 ## Cobblestone
 
 - "trim to image"
-- Multiple pages
+- Multiple pagesc
 - print.json
 - map from pages
 
