@@ -52,6 +52,10 @@
   let getCoordinateId = function (x, y) {
     return [x, y].map((i) => i.toString(16).toUpperCase()).join('x');
   };
+  let parseCoordinateId = function (id) {
+    let [x,y] = id.split('x').map(n => parseInt(n,16));
+    return {x,y};
+  };
   let drawImage = function (ctx, dataURL, tileDim, x, y, tf, state, callback) {
     let img = document.createElement('img');
     img.onload = () => {
@@ -69,6 +73,7 @@
   };
   window.drawCanvas = function (
     canvasId,
+    trimToImage,
     tileDim,
     width,
     height,
@@ -76,6 +81,7 @@
     placements,
     onCompleteFn
   ) {
+    let [offsetX, offsetY] = [0, 0];
     let canvasWrapper = document.getElementById(canvasId);
     canvasWrapper.innerHTML = '';
     let canvas = document.createElement('canvas');

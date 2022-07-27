@@ -74,6 +74,7 @@
     'about',
     'imageDownload',
     'imageScale',
+    'trimToImage',
     'imageFileName',
     'imageLink',
     'imageDisplay',
@@ -277,6 +278,16 @@
               id="imageScale"
               onchange="repaintImage()"
             />
+          </div>
+          <div class="form-check">
+            <label for="trimToImage" class="form-check-label">Trim To Image?
+              <input
+                      type="checkbox"
+                      class="form-check-input"
+                      id="trimToImage"
+                      onchange="repaintImage()"
+              />
+            </label>
           </div>
           <p>Click on the image to download.</p>
           <div id="imageLink">

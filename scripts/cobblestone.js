@@ -48,6 +48,7 @@
     aboutId,
     imageDownloadPopupId,
     imgDlScaleId,
+    trimToImageId,
     imgDlFileNameId,
     imgDlLinkId,
     imgDlDisplayId,
@@ -334,6 +335,7 @@
       return eval('`' + downloadTpl + '`');
     };
     window.repaintImage = function () {
+      let trimToImage = document.getElementById(trimToImageId).checked;
       let scale = document.getElementById(imgDlScaleId).value;
       let [imgWidth, imgHeight] = ['width', 'height'].map((d) => {
         return dimensionsByOrientation[data.orientation][d];
@@ -345,6 +347,7 @@
       );
       drawCanvas(
         imgDlDisplayId,
+        trimToImage,
         scale,
         imgWidth,
         imgHeight,
