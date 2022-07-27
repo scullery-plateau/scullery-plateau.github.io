@@ -302,9 +302,15 @@
       arbitrateEvent(e);
       data.palette.splice(selectedColorIndex, 1);
       Object.entries(data.pixels)
-        .filter(([key, value]) => value >= data.palette.length)
+        .filter(([key, value]) => value == selectedColorIndex)
         .reduce((out, [key, value]) => {
           delete out[key];
+          return out;
+        }, data.pixels);
+      Object.entries(data.pixels)
+        .filter(([key, value]) => value > selectedColorIndex)
+        .reduce((out, [key, value]) => {
+          out[key]--;
           return out;
         }, data.pixels);
       drawPalette();
