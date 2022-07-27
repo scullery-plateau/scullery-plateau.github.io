@@ -12,12 +12,6 @@
       - images for all character sheets on Wizards of the Coast site
     - Minifier minis of Outfitter images
 
-
-## Spritely
-
-- "trim to image"
-- color shift on delete color
-
 ## Cobblestone
 
 - "trim to image"
