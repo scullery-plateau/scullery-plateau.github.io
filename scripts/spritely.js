@@ -3,6 +3,20 @@
   let pixelDim = 10;
   let defaultColor = '#999999';
   let bgColorPixelId = 'bgColorPixel';
+  let colorSpec = Jval.patternMatches(/^[#][0-9a-fA-F]{6}$/);
+  let dataSpec = Jval.objectOf({
+    fields:{
+      palette:Jval.everyIs(colorSpec),
+      pixels:Jval.mapOf({
+        eachKey:Jval.patternMatches(/^[0-9a-vA-V]+[x][0-9a-vA-V]+$/),
+        eachValue:Jval.intOf({min:0})
+      }),
+      backgroundColor:colorSpec,
+      isTransparent:Jval.bool(),
+      size:Jval.isEnum(16,32,48)
+    },
+    required:['palette','pixels']
+  });
   let getPaletteId = function (index) {
     return 'palette' + index;
   };
@@ -230,7 +244,11 @@
       document.getElementById(fileLoaderId).click();
     };
     let validateLoadFileJson = function (data) {
-      // todo - call validation
+      return dataSpec(data);
+    };
+    let processFileLoadError = function (filename, error) {
+      console.log({filename,error});
+      alert(filename + " failed to load. See console for error.")
     };
     let loadFileResultsAsJsonData = function (results, filename) {
       let jsonData = JSON.parse(results);
@@ -247,13 +265,13 @@
       data.pixels = jsonData.pixels;
       data.backgroundColor = jsonData.backgroundColor;
       data.isTransparent = !('backgroundColor' in jsonData);
-      setBackgroundColor(document.getElementById(bgColorId));
+      data.size = jsonData.size || 16;
+      if (data.backgroundColor) {
+        setBackgroundColorButtonColor(document.getElementById(bgColorId),data.backgroundColor);
+      }
       setTransparentButtonState(data.isTransparent);
       drawPalette();
       paintCanvas();
-    };
-    let processFileLoadError = function (filename, error) {
-      // todo -
     };
     window.loadFiles = function (e) {
       loadFilesAs(

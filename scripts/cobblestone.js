@@ -284,6 +284,9 @@
     let validateLoadFileJson = function (data) {
       // todo - call validation
     };
+    let processFileLoadError = function (filename, error) {
+      // todo -
+    };
     let loadFileResultsAsJsonData = function (results, filename) {
       let jsonData = JSON.parse(results);
       let error = validateLoadFileJson(jsonData);
@@ -305,9 +308,6 @@
       drawTiles();
       selectTile(filename, '');
       paintCanvas();
-    };
-    let processFileLoadError = function (filename, error) {
-      // todo -
     };
     window.loadFile = function (e) {
       arbitrateEvent(e);
