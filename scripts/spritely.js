@@ -451,6 +451,7 @@
       return canvasElem.toDataURL('image/png');
     };
     window.repaintImage = function () {
+      console.log("repaintImage" + Date());
       let trimToImage = document.getElementById(trimToImageId).checked;
       let scale = document.getElementById(imgDlScaleId).value;
       let imgDim = data.size * scale;
@@ -459,6 +460,7 @@
         '.png',
         'spritely'
       );
+      console.log({trimToImage,scale,imgDim,filename});
       let canvasTpl = localStorage.getItem('canvasTemplate');
       document.getElementById(imgDlDisplayId).innerHTML = eval(
         '`' + canvasTpl + '`'
