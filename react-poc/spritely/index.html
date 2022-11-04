@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Scullery Plateau: Spritely</title>
+
+        <!-- external styles -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
+        <link href="https://fonts.googleapis.com/css?family=Caudex" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/css?family=Modern+Antiqua" rel="stylesheet"/>
+
+        <!-- local styles -->
+        <link rel="stylesheet" href="../../style/rpg.css" />
+        <link rel="stylesheet" href="../../style/font.css" />
+        <link rel="stylesheet" href="../../style/menu.css" />
+        <link rel="stylesheet" href="./style.css" />
+
+        <!-- external scripts -->
+        <script src="https://voltron42.github.io/gizmo-atheneum/structure/importnamespace/script.js"></script>
+        <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+        <!-- local scripts -->
+        <script type="text/babel" src="../js-util/dialog.js"></script>
+
+        <!-- namespaces -->
+        <script type="text/babel" src="./scripts/about.js"></script>
+        <script type="text/babel" src="./scripts/canvas.js"></script>
+        <script type="text/babel" src="./scripts/colorPicker.js"></script>
+        <script type="text/babel" src="./scripts/colors.js"></script>
+        <script type="text/babel" src="./scripts/constants.js"></script>
+        <script type="text/babel" src="./scripts/fileLoader.js"></script>
+        <script type="text/babel" src="./scripts/imageDownload.js"></script>
+        <script type="text/babel" src="./scripts/menues.js"></script>
+        <script type="text/babel" src="./scripts/palette.js"></script>
+        <script type="text/babel" src="./scripts/paletteDefs.js"></script>
+        <script type="text/babel" src="./scripts/sizePicker.js"></script>
+        <script type="text/babel" src="./scripts/spritely.js"></script>
+        <script type="text/babel" src="./scripts/utilities.js"></script>
+
+        <script type="text/babel">
+            (function(){
+                const { Spritely, ColorPicker, ImageDownload, About } = imports(["Spritely","ColorPicker","ImageDownload","About"]);
+                const aboutElem = document.getElementById("about");
+                const about = new Dialog(aboutElem);
+                const imageDownloadElem = document.getElementById("imageDownload");
+                const imageDownload = new Dialog(imageDownloadElem);
+                const colorPickerElem = document.getElementById("colorPicker");
+                const colorPicker = new Dialog(colorPickerElem);
+                const bgColorPickerElem = document.getElementById("bgColorPicker");
+                const bgColorPicker = new Dialog(bgColorPickerElem);
+                const modals = { about, imageDownload, colorPicker, bgColorPicker };
+                ReactDOM.createRoot(document.getElementById("spritely")).render(<Spritely modals={ modals } clearedPixelId={'clearedPixel'}/>);
+                ReactDOM.createRoot(aboutElem).render(<About modal={ about } />);
+                ReactDOM.createRoot(imageDownloadElem).render(<ImageDownload modal={ imageDownload } defaultFilename={"spritely"} />);
+                ReactDOM.createRoot(colorPickerElem).render(<ColorPicker modal={ colorPicker } />);
+                ReactDOM.createRoot(bgColorPickerElem).render(<ColorPicker modal={ bgColorPicker } />);
+            })();
+        </script>
+    </head>
+    <body class="bg-dark text-light">
+        <svg width="0" height="0">
+            <defs>
+                <linearGradient id="clearedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="5%" style="stop-color: #ff0000; stop-opacity: 0.2" />
+                    <stop offset="23%" style="stop-color: #ffff00; stop-opacity: 0.2" />
+                    <stop offset="41%" style="stop-color: #00ff00; stop-opacity: 0.2" />
+                    <stop offset="59%" style="stop-color: #00ffff; stop-opacity: 0.2" />
+                    <stop offset="77%" style="stop-color: #0000ff; stop-opacity: 0.2" />
+                    <stop offset="95%" style="stop-color: #ff00ff; stop-opacity: 0.2" />
+                </linearGradient>
+                <rect id="clearedPixel" width="10" height="10" stroke-width="1" stroke="black" fill="url(#clearedGradient)"/>
+            </defs>
+        </svg>
+        <div id="spritely" class="container"></div>
+        <footer class="text-center">
+            <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+            <p><a href="https://github.com/scullery-plateau/scullery-plateau.github.io" class="btn btn-outline-info" >See the code on GitHub.</a></p>
+        </footer>
+        <dialog class="rpg-box text-light w-75" id="about"></dialog>
+        <dialog class="rpg-box text-light w-75" id="bgColorPicker"></dialog>
+        <dialog class="rpg-box text-light w-75" id="colorPicker"></dialog>
+        <dialog class="rpg-box text-light w-75" id="imageDownload"></dialog>
+    </body>
+</html>
