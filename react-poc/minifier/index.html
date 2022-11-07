@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Scullery Plateau: Spritely</title>
+        <title>Scullery Plateau: Minifier</title>
 
         <!-- external styles -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
@@ -27,38 +27,24 @@
         <script type="text/babel" src="../js-util/dialog.js"></script>
         <script type="text/babel" src="../js-util/fileLoader.js"></script>
         <script type="text/babel" src="../js-util/menu.js"></script>
+        <script type="text/babel" src="../js-util/print.js"></script>
         <script type="text/babel" src="../js-util/utilities.js"></script>
 
         <!-- local namespaces -->
         <script type="text/babel" src="./scripts/about.js"></script>
-        <script type="text/babel" src="./scripts/constants.js"></script>
-        <script type="text/babel" src="./scripts/imageDownload.js"></script>
-        <script type="text/babel" src="./scripts/spritely.js"></script>
-        <script type="text/babel" src="./scripts/spritelyUtil.js"></script>
+        <script type="text/babel" src="./scripts/minifier.js"></script>
+        <script type="text/babel" src="./scripts/print-minis.js"></script>
 
         <!-- bind app root -->
         <script type="text/babel">
             (function(){
-                const Spritely = importNamespace("Spritely");
-                ReactDOM.createRoot(document.getElementById("spritely")).render(<Spritely/>);
+                const Minifier = importNamespace("Minifier");
+                ReactDOM.createRoot(document.getElementById("app-root")).render(<Minifier/>);
             })();
         </script>
     </head>
     <body class="bg-dark text-light">
-        <svg width="0" height="0">
-            <defs>
-                <linearGradient id="clearedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="5%" style="stop-color: #ff0000; stop-opacity: 0.2" />
-                    <stop offset="23%" style="stop-color: #ffff00; stop-opacity: 0.2" />
-                    <stop offset="41%" style="stop-color: #00ff00; stop-opacity: 0.2" />
-                    <stop offset="59%" style="stop-color: #00ffff; stop-opacity: 0.2" />
-                    <stop offset="77%" style="stop-color: #0000ff; stop-opacity: 0.2" />
-                    <stop offset="95%" style="stop-color: #ff00ff; stop-opacity: 0.2" />
-                </linearGradient>
-                <rect id="clearedPixel" width="10" height="10" stroke-width="1" stroke="black" fill="url(#clearedGradient)"/>
-            </defs>
-        </svg>
-        <div id="spritely" class="container"></div>
+        <div id="app-root" class="container"></div>
         <footer class="text-center">
             <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
             <p><a href="https://github.com/scullery-plateau/scullery-plateau.github.io" class="btn btn-outline-info" >See the code on GitHub.</a></p>

@@ -9,7 +9,7 @@ namespace("About",() => {
         return <>
             <h3>About Spritely...</h3>
             {about.map((p,i) => <p key={`about-${i}`}>{p}</p>)}
-            <div className="d-flex justify-content-end"><button className="btn btn-info" onClick={ () => props.modal.close() }>OK</button></div>
+            <div className="d-flex justify-content-end"><button className="btn btn-info" onClick={ () => props.onClose() }>OK</button></div>
         </>;
     }
 })

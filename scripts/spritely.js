@@ -158,7 +158,7 @@
       button.setAttribute(
         'class',
         'palette-color rounded-pill mr-2 ml-2' +
-          (index == selectedColorIndex ? ' selected-color' : '')
+          (index === selectedColorIndex ? ' selected-color' : '')
       );
       button.setAttribute(
         'title',

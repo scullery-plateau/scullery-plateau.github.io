@@ -1,8 +1,10 @@
 namespace("Constants",() => {
     const constants = {
-        pixelDim:10,
+        bgColorPixelId:'bgColorPixel',
+        clearedPixelId: 'clearedPixel',
         defaultColor:'#999999',
-        bgColorPixelId:'bgColorPixel'
+        defaultFilename:"spritely",
+        pixelDim:10
     }
     return Object.entries(constants).reduce((out,[k,v]) => {
         out[k] = (() => v);

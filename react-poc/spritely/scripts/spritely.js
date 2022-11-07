@@ -1,6 +1,8 @@
 namespace("Spritely",[
-    "Canvas","Palette","PaletteDefs","SizePickerMenu","Menues","Utilities","Constants","LoadFile"
-],({Canvas,Palette,PaletteDefs,SizePickerMenu,Menues,Utilities,Constants,LoadFile}) => {
+    "About","ColorPicker","Constants","Dialog","ImageDownload","LoadFile","Menu","SpritelyUtil","Utilities"
+],({
+    About,ColorPicker,Constants,Dialog,ImageDownload,LoadFile,Menu,SpritelyUtil,Utilities
+}) => {
     const validateLoadFileJson = function (data) {}
     const getTransforms = {
         turnLeft: (size) => ((x,y) => [y, (size - 1) - x]),
@@ -12,27 +14,93 @@ namespace("Spritely",[
         shiftUp: () => ((x,y) => [x, y - 1]),
         shiftDown: () => ((x,y) => [x, y + 1]),
     };
+    const drawPaletteDef = function (color,id) {
+        return <rect key={id} id={id} width="10" height="10" strokeWidth="1" stroke="black" fill={color}/>;
+    };
     return class Spritely extends React.Component {
         constructor(props) {
             super(props);
-            this.modals = props.modals;
             this.state = {
                 palette:[],
                 pixels:{},
                 size:16,
                 selectedPaletteIndex:-1,
                 isTransparent: true,
-                clearedPixelId: props.clearedPixelId,
                 bgColor: Constants.defaultColor()
             };
-            this.modals.colorPicker.setSetter(({color,index}) => {
-                const palette = Array.from(this.state.palette);
-                palette[index] = color;
-                this.setState({ palette, selectedPaletteIndex: index });
+            this.modals = Dialog.factory({
+                about: {
+                    templateClass: About,
+                    attrs:{ class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
+                imageDownload: {
+                    templateClass: ImageDownload,
+                    attrs:{ class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
+                colorPicker: {
+                    templateClass: ColorPicker,
+                    attrs:{ class: 'rpg-box text-light w-75' },
+                    onClose: ({color,index}) => {
+                        const palette = Array.from(this.state.palette);
+                        palette[index] = color;
+                        this.setState({ palette, selectedPaletteIndex: index });
+                    }
+                },
+                bgColorPicker: {
+                    templateClass: ColorPicker,
+                    attrs:{ class: 'rpg-box text-light w-75' },
+                    onClose: ({color}) => { this.setState({ bgColor: color }); }
+                }
             });
-            this.modals.bgColorPicker.setSetter(({color}) => {
-                this.setState({ bgColor: color });
-            });
+            this.menuItems = [{
+                id: "fileMenu",
+                label: "File",
+                items:[{
+                    id: "loadFile",
+                    label: "Load File",
+                    callback: () => { this.loadFile() }
+                },{
+                    id: "download",
+                    label: "Download",
+                    callback: () => { this.modals.imageDownload.open(this.state) }
+                }]
+            }, {
+                id: "sizeMenu",
+                label: "Size",
+                groupClassName: "size-picker",
+                getter: (() => this.state.size ),
+                setter: (size) => {
+                    this.setState({ size });
+                },
+                options: [16, 32, 48].map(value => {
+                    return {label: `${value} X ${value}`, value};
+                })
+            }, {
+                id: "transformMenu",
+                label: "Transform",
+                items: [
+                    ['turnLeft','Turn Left'],
+                    ['turnRight','Turn Right'],
+                    ['flipOver','Flip Over'],
+                    ['flipDown','Flip Down'],
+                    ['shiftLeft','Shift Left'],
+                    ['shiftRight','Shift Right'],
+                    ['shiftUp','Shift Up'],
+                    ['shiftDown','Shift Down'],
+                ].map(([id,label]) => {
+                    return {
+                        id: `transform-${id}`,
+                        label,
+                        callback: () => { this.transform(id); }
+                    }
+                })
+            }, {
+                id: "about",
+                label: "About",
+                callback: () => { this.modals.about.open() }
+            }];
         }
         loadFile(){
             LoadFile(false,"text",(fileContent) => {
@@ -54,10 +122,10 @@ namespace("Spritely",[
             const size = this.state.size;
             const transformFn = getTransforms[transformType](size);
             const pixels = Object.entries(this.state.pixels).reduce((out,[pixelId,paletteIndex]) => {
-                const { x, y } = Utilities.parsePixelId(pixelId);
+                const { x, y } = SpritelyUtil.parsePixelId(pixelId);
                 const [ x1, y1 ] = transformFn(x,y);
                 if (x1 >= 0 && x1 < size && y1 >= 0 && y1 < size) {
-                    const newPixelId = Utilities.getPixelId(x,y);
+                    const newPixelId = SpritelyUtil.getPixelId(x,y);
                     out[newPixelId] = paletteIndex;
                 }
                 return out;
@@ -76,58 +144,10 @@ namespace("Spritely",[
             }
         }
 
-        menuItem(label,callback) {
-            return <a
-                href="react-poc/spritely/scripts/spritely#" className="dropdown-item" onClick={ (e) => {
-                    e.preventDefault();
-                    callback();
-                    Menues.closeMenus();
-                }}>{label}</a>;
-        }
-
         render() {
-            return <div className="container">
+            return <>
                 <div className="navbar d-flex justify-content-start">
-                    <div className="menu-root">
-                        <ul className="navbar-nav">
-                            <li className="nav-item active drowpdown">
-                                <a href="react-poc/spritely/scripts/spritely#" className="rpg-box p-3 text-light nav-link dropdown-toggle" onClick={(e) => { Menues.toggleMenu(e) }}></a>
-                                <ul className="dropdown-menu rpg-box">
-                                    <li className="dropdown-submenu">
-                                        <a href="react-poc/spritely/scripts/spritely#" className="dropdown-item dropdown-toggle" onClick={(e) => { Menues.toggleMenu(e) }}>File</a>
-                                        <ul className="dropdown-menu rpg-box">
-                                            <li>{this.menuItem("Load File", () => { this.loadFile() })}</li>
-                                            <li>{this.menuItem("Download", () => { this.modals.imageDownload.open(this.state) })}</li>
-                                        </ul>
-                                    </li>
-                                    <li className="dropdown-submenu">
-                                        <a href="react-poc/spritely/scripts/spritely#" className="dropdown-item dropdown-toggle" onClick={(e) => { Menues.toggleMenu(e) }}>Size</a>
-                                        <ul className="dropdown-menu rpg-box size-picker">
-                                            <SizePickerMenu setSize={size => { this.setState({ size }); }} options={[16,32,48]}/>
-                                        </ul>
-                                    </li>
-                                    <li className="dropdown-submenu">
-                                        <a href="react-poc/spritely/scripts/spritely#" className="dropdown-item dropdown-toggle" onClick={(e) => { Menues.toggleMenu(e) }}>Transform</a>
-                                        <ul className="dropdown-menu rpg-box">
-                                            {[
-                                                ["Turn Left", () => { this.transform('turnLeft'); }],
-                                                ["Turn Right", () => { this.transform('turnRight'); }],
-                                                ["Flip Over", () => { this.transform('flipOver'); }],
-                                                ["Flip Down", () => { this.transform('flipDown'); }],
-                                                ["Shift Left", () => { this.transform('shiftLeft'); }],
-                                                ["Shift Right", () => { this.transform('shiftRight'); }],
-                                                ["Shift Up", () => { this.transform('shiftUp'); }],
-                                                ["Shift Down", () => { this.transform('shiftDown'); }]
-                                            ].map(([label,callback],i) => {
-                                                return <li key={`transform${i}`}>{this.menuItem(label, callback)}</li>
-                                            })}
-                                        </ul>
-                                    </li>
-                                    <li id="about">{this.menuItem("About", () => { this.modals.about.open() })}</li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                    <Menu items={ this.menuItems }/>
                     <a href="../../index.html" className="navbar-brand text-light">Scullery Plateau:</a>
                     <span className="navbar-brand">Spritely</span>
                 </div>
@@ -135,7 +155,7 @@ namespace("Spritely",[
                     <button className="rounded w-25" style={{
                         backgroundColor: this.state.bgColor,
                         color:Utilities.getForegroundColor(this.state.bgColor)
-                    }} onClick={(index) => {
+                    }} onClick={() => {
                         this.modals.bgColorPicker.open({color: this.state.bgColor})}}>BG Color</button>
                     <span className="m-3"></span>
                     <button className={`rounded w-25 btn ${this.state.isTransparent?'btn-outline-light':'btn-dark'}`} onClick={ () => {
@@ -149,11 +169,19 @@ namespace("Spritely",[
                         this.setState({ palette, selectedPaletteIndex });
                     }}>+</button>
                     <div className="ml-2 w-100 d-flex flex-wrap">
-                        <Palette state={ this.state } selectColor={ (index) => {
-                            this.setState({selectedPaletteIndex: index})
-                        } } setColor={ (index) => {
-                            this.modals.colorPicker.open({index, color: this.state.palette[index]});
-                        } }/>
+                        { this.state.palette.map((color, index) => {
+                            const id = SpritelyUtil.getPaletteButtonId(index);
+                            return <button
+                                key={id} id={id}
+                                className={`palette-color rounded-pill mr-2 ml-2${(index === this.state.selectedPaletteIndex ? ' selected-color' : '')}`}
+                                title="click to select, double click or right click to change this color"
+                                style={{color, backgroundColor: color}}
+                                onClick={ () => { this.setState({selectedPaletteIndex: index}); }}
+                                onDoubleClick={ () => { this.modals.colorPicker.open({index, color: this.state.palette[index]}); }}
+                                onContextMenu={ (e) => {
+                                    e.preventDefault();
+                                    this.modals.colorPicker.open({index, color: this.state.palette[index]});
+                                }}>----</button> })}
                     </div>
                     <button className="btn btn-danger" title="Remove Color" onClick={ () => {
                         const palette = Array.from(this.state.palette);
@@ -163,12 +191,38 @@ namespace("Spritely",[
                     }}>X</button>
                 </div>
                 <div className="rpg-title-box m-3" title="click to paint a pixel">
-                    <Canvas state={this.state} togglePixelColor={ (pixelId) => this.togglePixelColor(pixelId) }/>
+                    <svg
+                        width="100%"
+                        height="100%"
+                        preserveAspectRatio="xMidYMin meet"
+                        viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
+                        {
+                            Utilities.range(this.state.size).map(y => {
+                                return Utilities.range(this.state.size).map(x => {
+                                    const pixelId = SpritelyUtil.getPixelId(x,y);
+                                    const pixel = this.state.pixels[pixelId];
+                                    const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
+                                    const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
+                                    return <a key={pixelId} href="#" onClick={ (e) => {
+                                        e.preventDefault();
+                                        this.togglePixelColor(pixelId);
+                                    } }>
+                                        <use id={pixelId} x={x* Constants.pixelDim()} y={y * Constants.pixelDim()} href={colorId}/>
+                                    </a>;
+                                });
+                            })
+                        }
+                    </svg>
                 </div>
                 <div style={{display: "none"}}>
-                    <PaletteDefs state={this.state}/>
+                    <svg width="0" height="0">
+                        <defs>
+                            { drawPaletteDef(this.state.bgColor,Constants.bgColorPixelId()) }
+                            { this.state.palette.map((c,i) => drawPaletteDef(c,SpritelyUtil.getPaletteId(i))) }
+                        </defs>
+                    </svg>
                 </div>
-            </div>;
+            </>;
         }
     }
 });

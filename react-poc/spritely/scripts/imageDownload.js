@@ -1,26 +1,40 @@
-namespace('ImageDownload',["Utilities"],({Utilities}) => {
-    const triggerDownload = function (fileName, defaultFilename, { pixels, palette, size, bgColor, isTransparent }) {
+namespace('ImageDownload',["Utilities","Constants"],({Utilities,Constants}) => {
+    const triggerSpritelyDownload = function (fileName, { pixels, palette, size, bgColor, isTransparent }) {
         const jsonData = { pixels, palette, size};
         if (!isTransparent) {
             jsonData.bgColor = bgColor;
         }
-        const dataStr =
-            'data:text/json;charset=utf-8,' +
-            encodeURIComponent(JSON.stringify(jsonData));
-        const body = document.getElementsByTagName('body')[0];
-        const link = document.createElement('a');
-        body.appendChild(link);
-        link.setAttribute('href', dataStr);
-        link.setAttribute('download', normalizeFilename(fileName,".json",defaultFilename));
-        link.click();
-        body.removeChild(link);
+        Utilities.triggerJSONDownload(fileName,Constants.defaultFilename,jsonData);
     }
+    const calcTrimBounds = function(trimToImage, width, height, keys, parseIdFn) {
+        let [offsetX, offsetY] = [0, 0];
+        if (trimToImage) {
+            const { xs, ys } = keys.reduce(
+                (acc, k) => {
+                    let { x, y } = parseIdFn(k);
+                    acc.xs.push(x);
+                    acc.ys.push(y);
+                    return acc;
+                },
+                { xs: [], ys: [] }
+            );
+            const [minX, minY] = [xs, ys].map((ns) => Math.min.apply(null, ns));
+            const [maxX, maxY] = [xs, ys].map((ns) => Math.max.apply(null, ns));
+            [offsetX, offsetY, width, height] = [
+                minX,
+                minY,
+                maxX + 1 - minX,
+                maxY + 1 - minY,
+            ];
+        }
+        return { offsetX, offsetY, width, height };
+    };
     const drawRect = function(ctx,color,coords) {
         ctx.fillStyle = color;
         ctx.fillRect.apply(ctx, coords);
     }
     const drawImageInCanvas = function (data, scale, imgDim, trimToImage) {
-        let { offsetX, offsetY, width, height } = Utilities.calcTrimBounds(
+        let { offsetX, offsetY, width, height } = calcTrimBounds(
             trimToImage,
             data.size,
             data.size,
@@ -33,60 +47,43 @@ namespace('ImageDownload',["Utilities"],({Utilities}) => {
         canvasElem.setAttribute("style","border: 1px solid black")
         const ctx = canvasElem.getContext('2d');
         if (!data.isTransparent) {
-            drawRect(ctx,data.bgColor,[0, 0, imgDim, imgDim]);
+            const coords = [0, 0, imgDim, imgDim];
+            drawRect(ctx,data.bgColor,coords);
         }
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
-                const pixelId = Utilities.getPixelId(x, y);
+                const pixelId = Utilities.getPixelId(x + offsetX, y + offsetY);
                 if (pixelId in data.pixels) {
-                    drawRect(ctx,data.palette[data.pixels[pixelId]],[scale * (x - offsetX), scale * (y - offsetY), scale, scale]);
+                    const coords = [scale * x, scale * y, scale, scale]
+                    drawRect(ctx,data.palette[data.pixels[pixelId]],coords);
                 }
             }
         }
         const dataURL = canvasElem.toDataURL('image/png')
         return {dataURL, width, height, canvasElem};
     };
-    const normalizeFilename = function (filename, ext, defaultFilename) {
-        if (filename.endsWith(ext)) {
-            filename = filename.replace(ext, '');
-        }
-        filename = encodeURIComponent(filename);
-        if (filename.length === 0) {
-            return defaultFilename;
-        }
-        return filename + ext;
-    }
     const repaintImage = function(me, update) {
         const newState = Utilities.merge(me.state,update);
         const imgDim = me.appState.size * newState.scale;
-        const download = normalizeFilename( newState.filename, '.png', me.defaultFilename );
-        const moreUpdates = drawImageInCanvas(me.appState, newState.scale, imgDim, me.state.trimToImage);
+        const download = Utilities.normalizeFilename( newState.filename, '.png', Constants.defaultFilename );
+        const moreUpdates = drawImageInCanvas(me.appState, newState.scale, imgDim, newState.trimToImage);
         me.setState(Utilities.merge(newState,moreUpdates,{download}));
     }
     return class extends React.Component {
         constructor(props) {
             super(props);
-            this.modal = props.modal;
-            this.defaultFilename = props.defaultFilename;
             this.state = {
                 dataURL: "",
-                filename: this.defaultFilename,
+                filename: Constants.defaultFilename(),
                 scale: 5,
                 trimToImage: false
             };
-            props.modal.setGetter(({ pixels, palette, size, bgColor, isTransparent }) => {
+            props.setOnOpen(({ pixels, palette, size, bgColor, isTransparent }) => {
                 this.appState = { pixels, palette, size, bgColor, isTransparent };
                 repaintImage(this,{ width: size, height: size })
             });
+            this.onClose = props.onClose;
         }
-        /*
-        <div ref={(elem) => {
-            if (elem instanceof HTMLElement && this.state.canvasElem instanceof HTMLCanvasElement) {
-                elem.innerHTML = "";
-                elem.appendChild(this.state.canvasElem)
-            }
-        }}></div>
-        */
         render() {
             return <div>
                 <div className="form-group">
@@ -94,7 +91,7 @@ namespace('ImageDownload',["Utilities"],({Utilities}) => {
                     <input
                         type="text"
                         className="form-control"
-                        value={this.state.filename}
+                        value={ this.state.filename }
                         onChange={(e) => repaintImage(this, { filename: e.target.value })}
                     />
                 </div>
@@ -132,10 +129,10 @@ namespace('ImageDownload',["Utilities"],({Utilities}) => {
                 }
                 <div>
                     <button className={'btn btn-success'} onClick={ () => {
-                        triggerDownload(this.state.filename, this.defaultFilename, this.appState);
-                        this.modal.close();
+                        triggerSpritelyDownload(this.state.filename, this.appState);
+                        this.onClose();
                     }}>Download</button>
-                    <button className={'btn btn-danger'} onClick={ () => this.modal.close() }>Cancel</button>
+                    <button className={'btn btn-danger'} onClick={ () => this.onClose() }>Cancel</button>
                 </div>
             </div>;
         }

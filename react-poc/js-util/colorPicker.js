@@ -1,31 +1,9 @@
 namespace('ColorPicker',["Utilities","Colors"],({Utilities,Colors}) => {
-    const buildInitState = function() {
-        return {
-            hex: "",
-            red: 0,
-            green: 0,
-            blue: 0
-        }
-    }
-    const hexFromRGB = function (r, g, b) {
-        return (
-            '#' +
-            [r, g, b]
-                .map((c) => {
-                    let h = Number(c).toString(16);
-                    if (h.length === 1) {
-                        h = '0' + h;
-                    }
-                    return h;
-                })
-                .join('')
-        );
-    };
     const hexFromXY = function (x, y) {
         const r = 3 * Math.floor(x / 6) + Math.floor(y / 6);
         const g = x % 6;
         const b = y % 6;
-        return hexFromRGB.apply(null,[r, g, b].map((c) => {
+        return Utilities.hexFromRGB.apply(null,[r, g, b].map((c) => {
             c *= 3;
             return c + c * 16;
         }));
@@ -40,18 +18,26 @@ namespace('ColorPicker',["Utilities","Colors"],({Utilities,Colors}) => {
     const setColorPart = function(state, colorPart, colorValue) {
         const newState = Utilities.merge(state);
         newState[colorPart] = colorValue;
-        newState.hex = hexFromRGB(newState.red, newState.green, newState.blue);
+        newState.hex = Utilities.hexFromRGB(newState.red, newState.green, newState.blue);
         return newState;
+    }
+    const buildInitState = function() {
+        return {
+            hex: "",
+            red: 0,
+            green: 0,
+            blue: 0
+        }
     }
     return class extends React.Component {
         constructor(props) {
             super(props);
             this.state = buildInitState();
-            this.modal = props.modal;
-            this.modal.setGetter(({color, index}) => {
+            props.setOnOpen(({color, index}) => {
                 this.setState(setRGB(color));
                 this.index = index;
             });
+            this.onClose = props.onClose;
         }
         render() {
             return <div className="d-flex justify-content-center color-picker">
@@ -153,8 +139,8 @@ namespace('ColorPicker',["Utilities","Colors"],({Utilities,Colors}) => {
                     </div>
                     <hr/>
                     <div>
-                        <button className="btn btn-info" onClick={ () => this.modal.close({color:this.state.hex,index:this.index}) }>Use Color</button>
-                        <button className="btn btn-secondary" onClick={ () => this.modal.close() }>Cancel</button>
+                        <button className="btn btn-info" onClick={ () => this.onClose({color:this.state.hex,index:this.index}) }>Use Color</button>
+                        <button className="btn btn-secondary" onClick={ () => this.onClose() }>Cancel</button>
                     </div>
                 </div>
             </div>;

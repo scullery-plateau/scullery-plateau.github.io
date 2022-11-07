@@ -16,13 +16,13 @@
 .selected-color {
     border: 4px solid white;
 }
-.size-picker a.disabled {
-    color: darkgrey !important;
-}
 .color-picker input, .color-picker select {
     margin: 0;
     padding: 2px;
     text-align: center;
+}
+.size-picker a.disabled {
+    color: darkgrey !important;
 }
 .menu-root {
     margin-left: 1rem;
