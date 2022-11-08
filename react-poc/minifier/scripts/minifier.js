@@ -1,9 +1,16 @@
-namespace('Minifier',["About","Dialog","LoadFile","Menu","PrintMinis"],({About,Dialog,LoadFile,Menu,PrintMinis}) => {
+namespace('Minifier',
+    ["About","Dialog","FileDownload","LoadFile","Menu","PrintMinis"],
+    ({About,Dialog,FileDownload,LoadFile,Menu,PrintMinis}) => {
     const validateLoadFileJson = function (data) {}
     return function() {
         const modals = Dialog.factory({
             about: {
                 templateClass: About,
+                attrs:{ class: 'rpg-box text-light w-75' },
+                onClose: () => {}
+            },
+            fileDownload: {
+                templateClass: FileDownload,
                 attrs:{ class: 'rpg-box text-light w-75' },
                 onClose: () => {}
             }
@@ -54,7 +61,7 @@ namespace('Minifier',["About","Dialog","LoadFile","Menu","PrintMinis"],({About,D
             },{
                 id: "download",
                 label: "Download File",
-                callback: () => { console.log("Download File") }
+                callback: () => { modals.fileDownload.open() }
             },{
                 id: "publish",
                 label: "Publish Printable",
