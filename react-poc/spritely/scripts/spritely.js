@@ -1,9 +1,8 @@
 namespace("Spritely",[
-    "About","ColorPicker","Constants","Dialog","ImageDownload","LoadFile","Menu","SpritelyUtil","Utilities"
+    "About","ColorPicker","Constants","Dialog","Header","ImageDownload","LoadFile","Schema","SpritelyUtil","Utilities"
 ],({
-    About,ColorPicker,Constants,Dialog,ImageDownload,LoadFile,Menu,SpritelyUtil,Utilities
+    About,ColorPicker,Constants,Dialog,Header,ImageDownload,LoadFile,Schema,SpritelyUtil,Utilities
 }) => {
-    const validateLoadFileJson = function (data) {}
     const getTransforms = {
         turnLeft: (size) => ((x,y) => [y, (size - 1) - x]),
         turnRight: (size) => ((x,y) => [(size - 1) - y, x]),
@@ -105,7 +104,7 @@ namespace("Spritely",[
         loadFile(){
             LoadFile(false,"text",(fileContent) => {
                 const jsonData = JSON.parse(fileContent);
-                const error = validateLoadFileJson(jsonData);
+                const error = Schema.validate(jsonData);
                 if (error) {
                     throw error;
                 }
@@ -146,11 +145,7 @@ namespace("Spritely",[
 
         render() {
             return <>
-                <div className="navbar d-flex justify-content-start">
-                    <Menu items={ this.menuItems }/>
-                    <a href="../../index.html" className="navbar-brand text-light">Scullery Plateau:</a>
-                    <span className="navbar-brand">Spritely</span>
-                </div>
+                <Header menuItems={ this.menuItems } appTitle={ "Spritely" }/>
                 <div className="d-flex justify-content-center rpg-box m-3">
                     <button className="rounded w-25" style={{
                         backgroundColor: this.state.bgColor,

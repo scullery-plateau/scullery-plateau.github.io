@@ -1,6 +1,6 @@
 namespace('Minifier',
-    ["About","Dialog","FileDownload","LoadFile","Menu","PrintMinis"],
-    ({About,Dialog,FileDownload,LoadFile,Menu,PrintMinis}) => {
+    ["About","Dialog","FileDownload","Header","LoadFile","Menu","PrintMinis"],
+    ({About,Dialog,FileDownload,Header,LoadFile,Menu,PrintMinis}) => {
     const validateLoadFileJson = function (data) {}
     return function() {
         const modals = Dialog.factory({
@@ -88,11 +88,7 @@ namespace('Minifier',
             callback: () => { modals.about.open() }
         }];
         return <>
-            <div className="navbar d-flex justify-content-start">
-                <Menu items={ menuItems }/>
-                <a href="../../index.html" className="navbar-brand text-light">Scullery Plateau:</a>
-                <span className="navbar-brand">Minifier</span>
-            </div>
+            <Header menuItems={ menuItems } appTitle={"Minifier"}/>
             <div className="d-flex justify-content-center">
                 <button className="btn btn-success" onClick={ () => { loadImage() } }>Add Image To Minify</button>
             </div>

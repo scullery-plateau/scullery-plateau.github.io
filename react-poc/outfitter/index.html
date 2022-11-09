@@ -22,12 +22,13 @@
         <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
         <!-- project namespaces -->
-        <script type="text/babel" src="../js-util/colorPicker.js"></script>
-        <script type="text/babel" src="../js-util/colors.js"></script>
-        <script type="text/babel" src="../js-util/dialog.js"></script>
-        <script type="text/babel" src="../js-util/fileLoader.js"></script>
-        <script type="text/babel" src="../js-util/menu.js"></script>
-        <script type="text/babel" src="../js-util/utilities.js"></script>
+        <script type="text/babel" src="../common/colorPicker.js"></script>
+        <script type="text/babel" src="../common/colors.js"></script>
+        <script type="text/babel" src="../common/dialog.js"></script>
+        <script type="text/babel" src="../common/fileLoader.js"></script>
+        <script type="text/babel" src="../common/footer.js"></script>
+        <script type="text/babel" src="../common/menu.js"></script>
+        <script type="text/babel" src="../common/utilities.js"></script>
 
         <!-- local namespaces -->
         <script type="text/babel" src="./scripts/outfitter.js"></script>
@@ -35,16 +36,14 @@
         <!-- bind app root -->
         <script type="text/babel">
             (function(){
-                const Outfitter = importNamespace("Outfitter");
+                const {Outfitter,Footer} = imports(["Outfitter","Footer"]);
                 ReactDOM.createRoot(document.getElementById("app-root")).render(<Outfitter/>);
+                ReactDOM.createRoot(document.getElementById("footer")).render(<Footer/>);
             })();
         </script>
     </head>
     <body class="bg-dark text-light">
         <div id="app-root" class="container"></div>
-        <footer class="text-center">
-            <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
-            <p><a href="https://github.com/scullery-plateau/scullery-plateau.github.io" class="btn btn-outline-info" >See the code on GitHub.</a></p>
-        </footer>
+        <footer id="footer" class="text-center"></footer>
     </body>
 </html>
