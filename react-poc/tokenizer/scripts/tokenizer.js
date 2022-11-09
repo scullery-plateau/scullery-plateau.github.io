@@ -1,5 +1,9 @@
-namespace('Tokenizer',() => {
-    return function(props) {
-        return <></>;
-    }
-})
+namespace('Tokenizer', ['Header'], ({ Header }) => {
+  return function (props) {
+    return (
+      <>
+        <Header menuItems={[]} appTitle={'Tokenizer'} />
+      </>
+    );
+  };
+});
