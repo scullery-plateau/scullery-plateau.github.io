@@ -135,30 +135,28 @@ namespace(
               Add Image To Minify
             </button>
           </div>
-          <div>
-            <div className="gallery m-3 d-flex flex-wrap justify-content-around">
-              {state.minis.map((thumb, index) => {
-                return (
-                  <div className="thumbnail rpg-box d-flex flex-column">
-                    <span className="align-self-center">{thumb.filename}</span>
-                    <div
-                      className="frame align-self-center"
-                      style={{ backgroundImage: `url(${thumb.dataURL})` }}
-                    ></div>
-                    <input
-                      className="form-control align-self-center"
-                      style={{ width: '5em' }}
-                      type="number"
-                      min="0"
-                      value={thumb.count}
-                      onChange={(e) => {
-                        updateCount(e.target.value, index);
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
+          <div className="gallery m-3 d-flex flex-wrap justify-content-around">
+            {state.minis.map((thumb, index) => {
+              return (
+                <div className="thumbnail rpg-box d-flex flex-column">
+                  <span className="align-self-center">{thumb.filename}</span>
+                  <div
+                    className="frame align-self-center"
+                    style={{ backgroundImage: `url(${thumb.dataURL})` }}
+                  ></div>
+                  <input
+                    className="form-control align-self-center"
+                    style={{ width: '5em' }}
+                    type="number"
+                    min="0"
+                    value={thumb.count}
+                    onChange={(e) => {
+                      updateCount(e.target.value, index);
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
         </>
       );
