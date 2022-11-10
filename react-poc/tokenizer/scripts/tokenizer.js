@@ -3,6 +3,7 @@ namespace(
   {
     'sp.common.Dialog': 'Dialog',
     'sp.common.Header': 'Header',
+    'sp.tokenizer.About': 'About',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
   ({ Dialog, Header, TokenFrame }) => {
@@ -59,6 +60,13 @@ namespace(
                       updateCount(e.target.value, index);
                     }}
                   />
+                  <a
+                    className="btn btn-success"
+                    href={token.thumbnail}
+                    download={`token-${token.filename}`}
+                  >
+                    Download Token
+                  </a>
                 </div>
               );
             })}
