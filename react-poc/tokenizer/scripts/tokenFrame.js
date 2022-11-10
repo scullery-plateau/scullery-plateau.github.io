@@ -1,4 +1,4 @@
-namespace('TokenFrame', () => {
+namespace('sp.tokenizer.TokenFrame', () => {
   return function (props) {
     return (
       <div class="rpg-box m-3 d-flex">

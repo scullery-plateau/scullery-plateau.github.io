@@ -1,6 +1,13 @@
 namespace(
-  'Minifier',
-  ['About', 'Dialog', 'FileDownload', 'Header', 'LoadFile', 'PrintMinis'],
+  'sp.minifier.Minifier',
+  {
+    'sp.minifier.About': 'About',
+    'sp.common.Dialog': 'Dialog',
+    'sp.common.FileDownload': 'FileDownload',
+    'sp.common.Header': 'Header',
+    'sp.common.LoadFile': 'LoadFile',
+    'sp.minifier.PrintMinis': 'PrintMinis',
+  },
   ({ About, Dialog, FileDownload, Header, LoadFile, PrintMinis }) => {
     const validateLoadFileJson = function (data) {};
     return function () {

@@ -54,7 +54,10 @@
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { Tokenizer, Footer } = imports(['Tokenizer', 'Footer']);
+        const { Tokenizer, Footer } = imports({
+          'sp.tokenizer.Tokenizer': 'Tokenizer',
+          'sp.common.Footer': 'Footer',
+        });
         ReactDOM.createRoot(document.getElementById('app-root')).render(
           <Tokenizer />
         );

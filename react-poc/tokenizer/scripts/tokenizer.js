@@ -1,6 +1,10 @@
 namespace(
-  'Tokenizer',
-  ['Dialog', 'Header', 'TokenFrame'],
+  'sp.tokenizer.Tokenizer',
+  {
+    'sp.common.Dialog': 'Dialog',
+    'sp.common.Header': 'Header',
+    'sp.tokenizer.TokenFrame': 'TokenFrame',
+  },
   ({ Dialog, Header, TokenFrame }) => {
     return function (props) {
       const [state, setState] = React.useState({ size: 1, tokens: [] });

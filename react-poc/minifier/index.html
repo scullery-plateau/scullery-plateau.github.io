@@ -54,7 +54,7 @@
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { Minifier, Footer } = imports(['Minifier', 'Footer']);
+        const { Minifier, Footer } = imports({'sp.minifier.Minifier', 'sp.common.Footer'});
         ReactDOM.createRoot(document.getElementById('app-root')).render(
           <Minifier />
         );

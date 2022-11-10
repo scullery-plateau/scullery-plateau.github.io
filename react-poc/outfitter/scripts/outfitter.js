@@ -1,5 +1,5 @@
-namespace('Outfitter',() => {
-    return function(props) {
-        return <></>;
-    }
-})
+namespace('sp.outfitter.Outfitter', () => {
+  return function (props) {
+    return <></>;
+  };
+});
