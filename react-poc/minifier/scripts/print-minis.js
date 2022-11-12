@@ -146,7 +146,8 @@ namespace(
         return out;
       }, {});
       const minis = minisList.reduce((out, m) => {
-        return out.concat(Array(m.count).fill(m.filename));
+        const step = Array(m.count).fill(m.filename);
+        return [].concat(out,step);
       }, []);
       const defs = buildDefs(size, files);
       const pages = buildPages(size, minis);

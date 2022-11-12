@@ -39,7 +39,7 @@ namespace(
                   );
                   this.onClose();
                 }}
-              ></button>
+              >Download & Close</button>
             </div>
           </>
         );

@@ -67,6 +67,12 @@ namespace('sp.common.Utilities', () => {
     link.click();
     document.body.removeChild(link);
   };
+  const buildImmutable = function (obj) {
+    return Object.entries(obj).reduce((out, [k, v]) => {
+      out[k] = () => v;
+      return out;
+    }, {});
+  }
   return {
     range,
     merge,
@@ -75,5 +81,6 @@ namespace('sp.common.Utilities', () => {
     rgbFromHex,
     normalizeFilename,
     triggerJSONDownload,
+    buildImmutable
   };
 });

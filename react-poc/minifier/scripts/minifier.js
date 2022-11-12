@@ -1,11 +1,11 @@
 namespace(
   'sp.minifier.Minifier',
   {
-    'sp.minifier.About': 'About',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
+    'sp.minifier.About': 'About',
     'sp.minifier.PrintMinis': 'PrintMinis',
   },
   ({ About, Dialog, FileDownload, Header, LoadFile, PrintMinis }) => {
@@ -64,7 +64,6 @@ namespace(
         );
       };
       const updateCount = function (newCount, index) {
-        console.log({ newCount, index });
         const { size } = state;
         const minis = Array.from(state.minis);
         minis[index].count = newCount;
@@ -143,7 +142,7 @@ namespace(
             </button>
           </div>
           <div className="gallery m-3 d-flex flex-wrap justify-content-around">
-            {state.minis.map((thumb, index) => {
+            { state.minis.map((thumb, index) => {
               return (
                 <div className="thumbnail rpg-box d-flex flex-column">
                   <span className="align-self-center">{thumb.filename}</span>
@@ -158,7 +157,7 @@ namespace(
                     min="0"
                     value={thumb.count}
                     onChange={(e) => {
-                      updateCount(e.target.value, index);
+                      updateCount(parseInt(e.target.value), index);
                     }}
                   />
                 </div>
