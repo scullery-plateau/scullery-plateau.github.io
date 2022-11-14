@@ -7,9 +7,10 @@ namespace(
     'sp.common.LoadFile': 'LoadFile',
     'sp.tokenizer.About': 'About',
     'sp.tokenizer.PrintTokens': 'PrintTokens',
+    'sp.tokenizer.Token': 'Token',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
-  ({Dialog, FileDownload, Header, LoadFile, About, PrintTokens, TokenFrame}) => {
+  ({Dialog, FileDownload, Header, LoadFile, About, PrintTokens, Token, TokenFrame}) => {
     return function () {
       const validateLoadFileJson = function (data) {};
       const [state, setState] = React.useState({size: 1, tokens: []});
@@ -67,9 +68,7 @@ namespace(
           (dataURL, filename) => {
             setState({
               size,
-              tokens: [].concat(state.tokens, [
-                {filename, dataURL, tokenURL: dataURL, count: 1},
-              ]),
+              tokens: [].concat(state.tokens, [Token.buildInitState(dataURL,filename,1)]),
             });
           },
           (filename, error) => {
@@ -161,14 +160,12 @@ namespace(
               return (
                 <div className="token rpg-box d-flex flex-column">
                   <span className="align-self-center">{token.filename}</span>
-                  <button
-                    className="frame align-self-center"
-                    style={{backgroundImage: `url(${token.tokenURL})`}}
-                    onClick={ modals.tokenFrame.open({ index, token }) }
-                  ></button>
+                  <div className="thumbnail-frame">
+                    <Token token={token} index={index}/>
+                  </div>
                   <input
                     className="form-control align-self-center"
-                    style={{width: '5em'}}
+                    style={{ width: '5em' }}
                     type="number"
                     min="0"
                     value={token.count}
@@ -176,13 +173,15 @@ namespace(
                       updateCount(e.target.value, index);
                     }}
                   />
+                  <button
+                    className="btn btn-info"
+                    onClick={ () => { modals.tokenFrame.open({ index, token }) } }
+                  >Apply Frame</button>
                   <a
                     className="btn btn-success"
-                    href={token.tokenURL}
-                    download={`token-${token.filename}`}
-                  >
-                    Download Token
-                  </a>
+                    href={ token.url }
+                    download={`token-${ token.filename }`}
+                  >Download Token</a>
                 </div>
               );
             })}

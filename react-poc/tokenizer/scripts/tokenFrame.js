@@ -2,8 +2,9 @@ namespace('sp.tokenizer.TokenFrame',{
   "sp.common.Utilities":"util",
   "sp.common.Dialog":"Dialog",
   "sp.common.ColorPicker":"ColorPicker",
-  "sp.common.Constants":"c"
-}, ({util,c,ColorPicker,Dialog}) => {
+  "sp.common.Constants":"c",
+  "sp.tokenizer.Token":"Token"
+}, ({util,c,ColorPicker,Dialog,Token}) => {
   return function (props) {
     const context = {};
     const [formToken, setFormToken] = React.useState({
@@ -70,7 +71,7 @@ namespace('sp.tokenizer.TokenFrame',{
                 step="0.01"
                 className="form-control"
                 id="scale"
-                onChange={(e) => {applyToToken({scale:parseInt(e.target.value)})}}
+                onChange={(e) => {applyToToken({scale:parseFloat(e.target.value)})}}
               />
             </div>
             <div className="form-group">
@@ -82,8 +83,7 @@ namespace('sp.tokenizer.TokenFrame',{
                 value={ formToken.sideCount }
                 className="form-control"
                 id="sideCount"
-                onChange={(e) => {applyToToken({sideCount:parseInt(e.target.value)})}}
-              />
+                onChange={(e) => {applyToToken({sideCount:parseInt(e.target.value)})}}/>
             </div>
             <button className="btn btn-light" onClick={ () => {
               modals.frameColorPicker.open({
@@ -96,7 +96,9 @@ namespace('sp.tokenizer.TokenFrame',{
               });
             }}>Background Color</button>
           </div>
-          <div className="canvas"></div>
+          <div className="frame-editor">
+            <Token token={ formToken } index={ context.index }/>
+          </div>
         </div>
         <div className="d-flex justify-content-end">
           <button
