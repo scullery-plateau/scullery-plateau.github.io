@@ -1,7 +1,11 @@
 namespace(
   'sp.spritely.ImageDownload',
-  { 'sp.common.Utilities': 'Utilities', 'sp.spritely.Constants': 'Constants' },
-  ({ Utilities, Constants }) => {
+  { 
+    'sp.common.Utilities': 'Utilities', 
+    'sp.spritely.Constants': 'Constants', 
+    'sp.spritely.SpritelyUtil': 'SpritelyUtil', 
+  },
+  ({ Utilities, Constants, SpritelyUtil }) => {
     const triggerSpritelyDownload = function (
       fileName,
       { pixels, palette, size, bgColor, isTransparent }
@@ -55,7 +59,7 @@ namespace(
         data.size,
         data.size,
         Object.keys(data.pixels),
-        Utilities.parsePixelId
+        SpritelyUtil.parsePixelId
       );
       const canvasElem = document.createElement('canvas');
       canvasElem.setAttribute('width', (width * scale).toString());
@@ -68,7 +72,7 @@ namespace(
       }
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const pixelId = Utilities.getPixelId(x + offsetX, y + offsetY);
+          const pixelId = SpritelyUtil.getPixelId(x + offsetX, y + offsetY);
           if (pixelId in data.pixels) {
             const coords = [scale * x, scale * y, scale, scale];
             drawRect(ctx, data.palette[data.pixels[pixelId]], coords);
