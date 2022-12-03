@@ -1,3 +1,25 @@
+## Tokenizer
+
+- Finish REACT MVP
+- individual sizes & printing best fit
+
+## Cobblestone
+
+- to REACT
+  - offer larger dimensions
+
+## Outfitter
+
+1. _impl_ (with REACT)
+
+## SVG Canvas - **Iconoclast**
+
+1. _impl_ (with REACT)
+
+## Hex Map builder - **Overlander**
+
+1. _impl_ (with REACT)
+
 ## How To D&D?
 
 - Build Page as blog post
@@ -12,38 +34,20 @@
       - images for all character sheets on Wizards of the Coast site
     - Minifier minis of Outfitter images
 
-## Cobblestone
+## Card Builder - **Svengali**
 
-- "trim to image"
-- Multiple pagesc
-- print.json
-- map from pages
+- Define layout / template
+  - borders / lines / shapes / images / icons
+  - size (business card to full page)
+- apply data
+
+## Spritely
+
+- hot keys
 
 ## Minifier
 
-- individual sizes
-- print.json
-- printing best fit
-
-## Tokenizer
-
-1. _impl_
-
-- frame side count
-  - #2 -> circle
-  - #3+ -> polygon
-- individual sizes
-- print.json
-- printing best fit
-
-## Outfitter
-
-1. _impl_
-
-## Publisher
-
-- load multiple print.json
-- printing best fit
+- individual sizes & printing best fit
 
 ## Gary's Almanac
 
@@ -70,16 +74,3 @@
 - Printable (using svg pattern)
 - Rollable (w/ Yahtzee-style rolling)
 
-## Card Builder
-
-- App Name
-- Define layout / template
-  - borders / lines / shapes / images / icons
-  - size (business card to full page)
-- apply data
-
-## Document Builder
-
-- App Name
-- text as markdown
-- apply formatting
