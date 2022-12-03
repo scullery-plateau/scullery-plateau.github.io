@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <title>Scullery Plateau: Tile Gallery</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+    <link href="../style/rpg.css" rel="stylesheet" />
+    <link href="../style/font.css" rel="stylesheet" />
+    <link href="../style/menu.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/popup.js"></script>
+    <script type="text/javascript" src="../tile-gallery/tiles.js"></script>
+    <script type="text/javascript">
+      function initPageApp(aboutId, tileGalleryId, jsonLink) {
+        let fullPath = 'https://scullery-plateau.github.io/tile-gallery';
+        let downloadLink = document.getElementById(jsonLink);
+        window.showAbout = function (e) {
+          e.preventDefault();
+          document.dispatchEvent(new Event('CloseMenus'));
+          initPopup(document.getElementById(aboutId).innerHTML);
+        };
+        window.downloadJson = function (e, tileName) {
+          e.preventDefault();
+          downloadLink.setAttribute('href', `${fullPath}/${tileName}.json`);
+          downloadLink.setAttribute('download', tileName + '.json');
+          downloadLink.click();
+        };
+        let buildThumbnail = function (tileName) {
+          return `<a class="m-2" href="#" onclick="downloadJson(event,'${tileName}')"><img src="${fullPath}/${tileName}.png" height="64px"/><a>`;
+        };
+        document.getElementById(tileGalleryId).innerHTML = listTiles()
+          .map(buildThumbnail)
+          .join('');
+      }
+    </script>
+  </head>
+  <body
+    class="bg-dark text-light"
+    onload="initPageApp('about','tileGallery','jsonLink')"
+  >
+    <div class="container">
+      <div class="navbar justify-content-start">
+        <div class="mr-3">
+          <ul class="navbar-nav">
+            <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+              <a
+                href="#"
+                class="text-light nav-link dropdown-toggle"
+                onclick="toggleMenu(event,this)"
+              ></a>
+              <ul class="dropdown-menu rpg-box">
+                <li class="">
+                  <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                    >About</a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+        <a href="index.html" class="navbar-brand text-light"
+          >Scullery Plateau:</a
+        >
+        <span class="navbar-brand">Tile Gallery</span>
+      </div>
+      <div>
+        <div
+          class="rpg-box m-3 d-flex flex-wrap justify-content-center"
+          id="tileGallery"
+        ></div>
+      </div>
+    </div>
+    <footer>
+      <div class="text-center">
+        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+        <p>
+          <a
+            href="https://github.com/scullery-plateau/scullery-plateau.github.io"
+            class="btn btn-outline-info"
+            >See the code on GitHub.</a
+          >
+        </p>
+      </div>
+    </footer>
+    <div style="display: none">
+      <div id="about">
+        <p>
+          This is a Gallery of sample tiles to be used with Spritely and/or
+          Cobblestone.
+        </p>
+        <p>
+          Click on the tile of your choice to download JSON datafile for
+          Spritely.
+        </p>
+        <p>
+          Use the tiles to build maps in Cobblestone, or load the datafile in
+          Spritely to make adjustments first.
+        </p>
+      </div>
+      <a id="jsonLink"></a>
+    </div>
+  </body>
+</html>
