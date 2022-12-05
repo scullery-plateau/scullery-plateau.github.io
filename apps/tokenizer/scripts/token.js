@@ -12,7 +12,7 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
       scale: 1.0,
       sideCount: 2,
       frameColor: c.defaultColor(),
-      backgroundColor: undefined,
+      backgroundColor: c.defaultColor(),
       isTransparent: true,
     }
   }

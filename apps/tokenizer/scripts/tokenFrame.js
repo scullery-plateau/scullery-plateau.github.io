@@ -5,22 +5,20 @@ namespace('sp.tokenizer.TokenFrame',{
   "sp.common.Constants":"c",
   "sp.tokenizer.Token":"Token"
 }, ({util,c,ColorPicker,Dialog,Token}) => {
+  const context = {};
   return function (props) {
-    const context = {};
-    const [formToken, setFormToken] = React.useState({
-      xOffset:0,
-      yOffset:0,
-      scale:1,
-      sideCount:2,
-      frameColor:c.defaultColor(),
-      backgroundColor:undefined
-    });
+    const [formToken, setFormToken] = React.useState(Token.buildInitState());
     props.setOnOpen(({index,token}) => {
+      console.log({index,token});
       context.index = index;
+      console.log(context);
       setFormToken(util.merge(formToken,token));
     });
     const applyToToken = function(update) {
-      setFormToken(util.merge(formToken,update));
+      let merged = util.merge(formToken,update);
+      console.log({formToken,update,merged});
+      setFormToken(merged);
+      console.log({formToken});
     }
     const modals = Dialog.factory({
       frameColorPicker: {
@@ -85,15 +83,27 @@ namespace('sp.tokenizer.TokenFrame',{
                 id="sideCount"
                 onChange={(e) => {applyToToken({sideCount:parseInt(e.target.value)})}}/>
             </div>
-            <button className="btn btn-light" onClick={ () => {
-              modals.frameColorPicker.open({
-                color: formToken.frameColor
-              });
+            <button 
+              className="btn btn-light" 
+              style={{
+                color: util.getForegroundColor(formToken.frameColor),
+                backgroundColor: formToken.frameColor
+              }}
+              onClick={ () => {
+                modals.frameColorPicker.open({
+                  color: formToken.frameColor
+                });
             }}>Frame Color</button>
-            <button className="btn btn-light" onClick={ () => {
-              modals.bgColorPicker.open({
-                color: formToken.backgroundColor
-              });
+            <button 
+              className="btn btn-light" 
+              style={{
+                color: util.getForegroundColor(formToken.backgroundColor),
+                backgroundColor: formToken.backgroundColor
+              }}
+              onClick={ () => {
+                modals.bgColorPicker.open({
+                  color: formToken.backgroundColor
+                });
             }}>Background Color</button>
           </div>
           <div className="frame-editor">
@@ -103,10 +113,10 @@ namespace('sp.tokenizer.TokenFrame',{
         <div className="d-flex justify-content-end">
           <button
             className={'btn btn-success'}
-            onClick={() => { props.onClose({
-              index: context.index,
-              token: formToken
-            }); }}>Confirm</button>
+            onClick={() => { 
+              console.log({ context, formToken });
+              props.onClose({ index: context.index, token: formToken }); 
+            }}>Confirm</button>
           <button
             className={'btn btn-danger'}
             onClick={() => props.onClose()}

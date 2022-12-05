@@ -34,7 +34,9 @@ namespace(
             const { size } = state;
             const tokens = Array.from(state.tokens);
             tokens[index] = token;
+            console.log({index,token});
             setState({ size, tokens });
+            console.log(state);
           },
         },
       });
