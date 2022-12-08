@@ -49,6 +49,7 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
     const [shape, points] = drawShape(sideCount,patternId,frameColor,backgroundColor, isTransparent);
     const [canvasURL, setCanvasURL] = React.useState("");
     drawCanvas(url,points,setCanvasURL);
+    console.log({ props, dim, });
     return <a href={canvasURL.length>0?canvasURL:"#"} download={canvasURL.length>0?`token-${filename}`:''} onClick={ (e) => {
       if (canvasURL.length > 0) {
         e.preventDefault();
@@ -57,7 +58,7 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
       <svg width="100%" height="100%" viewBox={`0 0 ${baseScale} ${baseScale}`}>
         <defs>
           <pattern id={ patternId } x="0" y="0" width="100%" height="100%">
-            <image x={x} y={y} width={dim} height={dim} href={url}/>
+            <image x={0} y={0} width={dim} height={dim} href={url}/>
           </pattern>
         </defs>
         { shape }
