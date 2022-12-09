@@ -57,8 +57,8 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
     }}>
       <svg width="100%" height="100%" viewBox={`0 0 ${baseScale} ${baseScale}`}>
         <defs>
-          <pattern id={ patternId } x="0" y="0" width="100%" height="100%">
-            <image x={0} y={0} width={dim} height={dim} href={url}/>
+          <pattern id={ patternId } x={x} y={y} width={`${scale * 100}%`} height={`${scale * 100}%`}>
+            <image x="0" y="0" width={baseScale} height={baseScale} href={url}/>
           </pattern>
         </defs>
         { shape }
