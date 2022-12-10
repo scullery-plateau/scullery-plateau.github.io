@@ -48,7 +48,7 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
       this.state = {canvasURL:""};
     }
     render() {
-      const { index, token } = this.props;
+      const { index, token, frameSize } = this.props;
       const { url, xOffset, yOffset, scale, sideCount, frameColor, backgroundColor, isTransparent, filename } = token;
       const [x, y] = [xOffset, yOffset].map((offset) => ((cxy * (1 - scale)) + offset));
       const dim = scale * baseScale;
@@ -62,10 +62,10 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
             e.preventDefault();
           }
         }}>
-          <svg width="100%" height="100%" viewBox={`0 0 ${baseScale} ${baseScale}`}>
+          <svg width={frameSize} height={frameSize} viewBox={`0 0 ${baseScale} ${baseScale}`}>
             <defs>
               <pattern id={ patternId } x="0" y="0" width="100%" height="100%">
-                <image x={x} y={y} width={dim} height={dim} href={url}/>
+                <image x="0" y="0" width={baseScale} height={baseScale} href={url} transform={`translate(${x}, ${y}) scale(${scale})`}/>
               </pattern>
             </defs>
             { shape }

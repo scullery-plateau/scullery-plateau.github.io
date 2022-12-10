@@ -107,7 +107,7 @@ namespace('sp.tokenizer.TokenFrame',{
               }}>Background Color</button>
             </div>
             <div className="frame-editor">
-              <Token token={ this.state.formToken } index={ this.state.index }/>
+              <Token token={ this.state.formToken } index={ this.state.index } frameSize={"20em"}/>
             </div>
           </div>
           <div className="d-flex justify-content-end">
