@@ -1,0 +1,388 @@
+<html>
+  <head>
+    <title>Scullery Plateau: Outfitter</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/d550ee8263.js"
+      crossorigin="anonymous"
+    ></script>
+    <link href="style/rpg.css" rel="stylesheet" />
+    <link href="style/font.css" rel="stylesheet" />
+    <link href="style/menu.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript" src="scripts/pop.js"></script>
+  </head>
+  <body class="bg-dark text-light">
+    <div class="navbar justify-content-start">
+      <div class="mr-3">
+        <ul class="navbar-nav">
+          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+            <a
+              href="#"
+              class="text-light nav-link dropdown-toggle"
+              onclick="toggleMenu(event,this)"
+            ></a>
+            <ul class="dropdown-menu rpg-box"></ul>
+          </li>
+        </ul>
+      </div>
+      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
+      <span class="navbar-brand">Minifier</span>
+    </div>
+    <div>
+      <div class="rpg-box m-3 text-center">
+        <ul class="nav justify-content-center">
+          <li class="nav-item">
+            <a
+              id="tab-0"
+              class="nav-link disabled"
+              href="#"
+              onclick="selectTab(event,0)"
+              disabled
+              >Layer</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="tab-1"
+              class="nav-link"
+              href="#"
+              onclick="selectTab(event,1)"
+              disabled
+              >Part</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="tab-2"
+              class="nav-link"
+              href="#"
+              onclick="selectTab(event,2)"
+              disabled
+              >Color</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="tab-3"
+              class="nav-link"
+              href="#"
+              onclick="selectTab(event,3)"
+              disabled
+              >Transform</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="tab-4"
+              class="nav-link"
+              href="#"
+              onclick="selectTab(event,4)"
+              disabled
+              >Lighting</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="tab-5"
+              class="nav-link"
+              href="#"
+              onclick="selectTab(event,5)"
+              disabled
+              >Background</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div id="tab-content-0" class="rpg-box m-3 d-flex justify-content-around">
+        <button
+          title="Add Layer"
+          class="btn btn-success p-2 m-1"
+          style="width: 3em"
+          onclick="addLayer()"
+        >
+          +
+        </button>
+        <div class="d-flex justify-content-center">
+          <div class="form-inline m-1">
+            <label for="layer-select" class="m-1">Layer:</label>
+            <select id="layer-select" class="form-control">
+              <option value="0">0: torso 0</option>
+              <option value="1">1: legs 0</option>
+              <option value="2">2: arm 0</option>
+              <option value="3">3: arm 0</option>
+              <option value="4">4: head 0</option>
+            </select>
+          </div>
+          <button
+            title="Move To Back"
+            class="btn btn-secondary p-2 m-1"
+            onclick="moveLayerToBack()"
+          >
+            <i class="fas fa-fast-backward"></i>
+          </button>
+          <button
+            title="Move Back"
+            class="btn btn-secondary p-2 m-1"
+            onclick="moveLayerBack()"
+          >
+            <i class="fas fa-step-backward"></i>
+          </button>
+          <button
+            title="Move Forward"
+            class="btn btn-secondary p-2 m-1"
+            onclick="moveLayerForward()"
+          >
+            <i class="fas fa-step-forward"></i>
+          </button>
+          <button
+            title="Move To Front"
+            class="btn btn-secondary p-2 m-1"
+            onclick="moveLayerToFront()"
+          >
+            <i class="fas fa-fast-forward"></i>
+          </button>
+          <button
+            id="flip-button"
+            class="btn btn-secondary p-2 m-1"
+            onclick="flipLayer()"
+          >
+            Flip?
+          </button>
+        </div>
+        <button
+          title="Remove Layer"
+          class="btn btn-danger p-2 m-1"
+          style="width: 3em"
+          onclick="removeLayer()"
+        >
+          -
+        </button>
+      </div>
+      <div
+        id="tab-content-1"
+        class="rpg-box m-3 d-flex justify-content-center form-inline"
+      >
+        <label for="part-type" class="m-1">Part Type:</label>
+        <select class="p-2 form-control" id="part-type">
+          <option disabled hidden selected value>Select Part Type</option>
+          <optgroup label="Body">
+            <option value="arm">Arm</option>
+            <option value="head">Head</option>
+            <option value="legs">Legs</option>
+            <option value="torso">Torso</option>
+          </optgroup>
+          <optgroup label="Face">
+            <option value="beard">Beard</option>
+            <option value="ears">Ears</option>
+            <option value="eyebrows">Eyebrows</option>
+            <option value="eyes">Eyes</option>
+            <option value="hair">Hair</option>
+            <option value="mouth">Mouth</option>
+            <option value="nose">Nose</option>
+          </optgroup>
+          <optgroup label="Tights">
+            <option value="gloves">Gloves</option>
+            <option value="mask">Mask</option>
+            <option value="shirt">Shirt</option>
+            <option value="stockings">Stockings</option>
+            <option value="tights">Leggings</option>
+          </optgroup>
+          <optgroup label="Clothing">
+            <option value="belt">Belt</option>
+            <option value="boots">Boots</option>
+            <option value="chest">Chest</option>
+            <option value="collar">Collar</option>
+            <option value="gauntlets">Gauntlets</option>
+            <option value="hat">Hat</option>
+            <option value="pants">Pants</option>
+            <option value="sholders">Shoulders</option>
+          </optgroup>
+          <optgroup label="Back">
+            <option value="back">Back</option>
+            <option value="wings_and_tails">Wings &amp; Tails</option>
+          </optgroup>
+          <optgroup label="Accessories">
+            <option value="accessories_and_shields">
+              Accessories &amp; Shields
+            </option>
+            <option value="guns">Guns</option>
+            <option value="melee_weapons">Melee Weapons</option>
+            <option value="ranged_weapons">Ranged Weapons</option>
+            <option value="swords">Swords</option>
+            <option value="symbol_A">Symbol A</option>
+            <option value="symbol_B">Symbol B</option>
+          </optgroup>
+        </select>
+        <span class="m-3"></span>
+        <label for="part-index" class="m-1">Part Type:</label>
+        <input
+          id="part-index"
+          type="number"
+          class="form-control"
+          min="0"
+          style="width: 4em"
+        />
+      </div>
+      <div id="tab-content-2" class="rpg-box m-3 d-flex justify-content-around">
+        <button
+          id="base-color"
+          class="rounded p-2 m-1 w-25"
+          onclick="launchColorPicker('base')"
+        >
+          Base
+        </button>
+        <button
+          id="detail-color"
+          class="rounded p-2 m-1 w-25"
+          onclick="launchColorPicker('detail')"
+        >
+          Detail
+        </button>
+        <button
+          id="outline-color"
+          class="rounded p-2 m-1 w-25"
+          onclick="launchColorPicker('outline')"
+        >
+          Outline
+        </button>
+      </div>
+      <div
+        id="tab-content-3"
+        class="rpg-box m-3 d-flex justify-content-center form-inline"
+      >
+        <span class="m-2">Resize:</span>
+        <label for="resize-x" class="m-1">X:</label>
+        <input
+          id="resize-x"
+          type="number"
+          class="form-control"
+          value="1"
+          step="0.01"
+          style="width: 4em"
+        />
+        <label for="resize-y" class="m-1">Y:</label>
+        <input
+          id="resize-y"
+          type="number"
+          class="form-control"
+          value="1"
+          step="0.01"
+          style="width: 4em"
+        />
+        <span class="m-2"></span>
+        <span class="m-2">Move:</span>
+        <label for="move-x" class="m-1">X:</label>
+        <input
+          id="move-x"
+          type="number"
+          class="form-control"
+          value="0"
+          style="width: 4em"
+        />
+        <label for="move-y" class="m-1">Y:</label>
+        <input
+          id="move-y"
+          type="number"
+          class="form-control"
+          value="0"
+          style="width: 4em"
+        />
+      </div>
+      <div
+        id="tab-content-4"
+        class="rpg-box m-3 d-flex justify-content-center form-inline"
+      >
+        <label for="opacity" class="m-1">Opacity:</label>
+        <input
+          id="opacity"
+          type="number"
+          class="form-control"
+          value="1"
+          step="0.01"
+          style="width: 4em"
+        />
+        <span class="m-2"></span>
+        <label for="pattern" class="m-1">Pattern:</label>
+        <input
+          id="pattern"
+          type="number"
+          class="form-control"
+          value="-1"
+          min="-1"
+          style="width: 4em"
+        />
+        <span class="m-2"></span>
+        <label for="opacity" class="m-1">Shading:</label>
+        <input
+          id="opacity"
+          type="number"
+          class="form-control"
+          value="0"
+          min="-1"
+          style="width: 4em"
+        />
+      </div>
+      <div
+        id="tab-content-5"
+        class="rpg-box m-3 d-flex justify-content-center form-inline"
+      >
+        <label for="body-scale" class="m-1">Body Scale:</label>
+        <select id="body-scale" class="form-control">
+          <option>default</option>
+          <option>lanky</option>
+          <option>thin</option>
+          <option>teen</option>
+          <option>stocky</option>
+          <option>petite</option>
+        </select>
+        <span class="m-2"></span>
+        <button
+          id="bg-color"
+          class="rounded p-2 m-1 w-25"
+          onclick="launchColorPicker('background')"
+        >
+          BG Color
+        </button>
+        <span class="m-2"></span>
+        <label for="bg-pattern" class="m-1">BG Pattern:</label>
+        <input
+          id="bg-pattern"
+          type="number"
+          class="form-control"
+          value="-1"
+          min="-1"
+          style="width: 4em"
+        />
+      </div>
+    </div>
+    <footer>
+      <div class="jumbotronn text-center">
+        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+        <p>
+          <a
+            href="https://github.com/scullery-plateau/scullery-plateau.github.io"
+            class="btn btn-outline-info"
+            >See the code on GitHub.</a
+          >
+        </p>
+      </div>
+    </footer>
+    <div style="display: none">
+      <div id="about">
+        <p>Outfitter coming soon!</p>
+      </div>
+    </div>
+  </body>
+</html>

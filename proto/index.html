@@ -1,0 +1,161 @@
+<html>
+  <head>
+    <title>Scullery Plateau: Outfitter</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+    <link href="style/rpg.css" rel="stylesheet" />
+    <link href="style/font.css" rel="stylesheet" />
+    <link href="style/menu.css" rel="stylesheet" />
+    <script type="text/javascript" src="scripts/ajax.js"></script>
+    <script type="text/javascript" src="scripts/outfitter-display.js"></script>
+    <script type="text/javascript" src="scripts/svg.js"></script>
+    <script type="text/javascript" src="scripts/xy.js"></script>
+    <script type="text/javascript" src="scripts/menues.js"></script>
+    <script type="text/javascript">
+      let data = {};
+      let defaultSchematic = {
+        bodyType: 'fit',
+        bgColor: '#cccccc',
+        layers: [
+          { part: 'torso', index: 0, shading: 0 },
+          { part: 'legs', index: 0, shading: 0 },
+          { part: 'arm', index: 0, shading: 0 },
+          { part: 'arm', index: 0, shading: 0, flip: true },
+          { part: 'head', index: 0, shading: 0 },
+        ],
+      };
+      let bodytypes = ['fit', 'superman', 'hulk', 'woman'];
+      function loadSvgDefs(defsId, progressBarId, loadingId, displayId) {
+        let bodyType = bodytypes[3];
+        data.spinner = document.getElementById(loadingId);
+        data.spinner.style.display = 'block';
+        data.progressBar = document.getElementById(progressBarId);
+        getLocalStaticFileAsText(
+          `https://scullery-plateau.github.io/outfitter-datasets/${bodyType}.svg`,
+          {
+            success: (responseText) => {
+              console.log('svg success');
+              let [h, defs, t] = responseText.split('defs');
+              data.fullDefs = responseText;
+              data.defs = defs.substring(1, defs.length - 2);
+              getLocalStaticFileAsText(
+                `https://scullery-plateau.github.io/outfitter-datasets/${bodyType}.json`,
+                {
+                  success: (responseText) => {
+                    console.log('json success');
+                    data.metadata = JSON.parse(responseText);
+                    console.log(data.metadata);
+                    console.log(defaultSchematic);
+                    let spec = defaultSchematic.layers.map((layer) => {
+                      return Object.entries(
+                        data.metadata.parts[layer.part][layer.index]
+                      ).reduce(
+                        (out, [k, v]) => {
+                          out[k] = v;
+                          return out;
+                        },
+                        { shading: layer.shading }
+                      );
+                    });
+                    console.log(spec);
+                    let content2 = buildSVG(defaultSchematic, data.metadata);
+                    console.log(content2);
+                    document.getElementById(displayId).style.display = 'block';
+                    document.getElementById(displayId).innerHTML =
+                      data.fullDefs + content2;
+                    data.spinner.style.display = 'none';
+                  },
+                  failure: (resp) => {
+                    console.log(resp);
+                    throw resp;
+                  },
+                }
+              );
+            },
+            failure: (resp) => {
+              console.log(resp);
+              throw resp;
+            },
+            stateChange: (state) => {
+              let percent = (100 * state.state) / state.max + '%';
+              progressBar.innerHTML = percent;
+              progressBar.style = 'width: ' + percent;
+            },
+          }
+        );
+      }
+      function loadDemoDisplay(link, e, displayId) {
+        e.preventDefault();
+        document.getElementById(displayId).style.display = 'block';
+        document.getElementById(displayId).innerHTML = data.content;
+      }
+    </script>
+  </head>
+  <body
+    class="bg-dark text-light"
+    onload="loadSvgDefs('svgDefs','progressBar','loadingDisplay','svgDisplay','demoDisplayButton')"
+  >
+    <div style="display: none" id="svgDefs"></div>
+    <div class="navbar justify-content-start">
+      <div class="mr-3">
+        <ul class="navbar-nav">
+          <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+            <a
+              href="#"
+              class="text-light nav-link dropdown-toggle"
+              onclick="toggleMenu(event,this)"
+            ></a>
+            <ul class="dropdown-menu rpg-box">
+              <li class="">
+                <a href="#" class="dropdown-item" onclick="showAbout(event)"
+                  >About</a
+                >
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
+      <span class="navbar-brand">Outfitter</span>
+    </div>
+    <div>
+      <div class="rpg-box m-3 text-center">
+        <p>Outfitter coming soon!</p>
+      </div>
+      <div id="loadingDisplay" style="display: none" class="rpg-title-box">
+        <p>Loading display configuration data, please wait....</p>
+        <div class="progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+      </div>
+      <div id="svgDisplay" style="display: none" class="rpg-title-box"></div>
+    </div>
+    <footer>
+      <div class="jumbotronn text-center">
+        <p>Built by Daniel Allen Johnson &#169; 2019 - 2022</p>
+        <p>
+          <a
+            href="https://github.com/scullery-plateau/scullery-plateau.github.io"
+            class="btn btn-outline-info"
+            >See the code on GitHub.</a
+          >
+        </p>
+      </div>
+    </footer>
+    <div style="display: none">
+      <div id="about">
+        <p>Outfitter coming soon!</p>
+      </div>
+    </div>
+  </body>
+</html>
