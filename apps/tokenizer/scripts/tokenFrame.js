@@ -8,7 +8,7 @@ namespace('sp.tokenizer.TokenFrame',{
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { index: -1, formToken: Token.buildInitState() };
+      this.state = { index: -1, formToken: Token.buildInitState("myFrame") };
       this.onClose = props.onClose;
       props.setOnOpen(({index,token}) => {
         this.setState({index,formToken:util.merge(this.state.formToken,token)});
@@ -107,7 +107,7 @@ namespace('sp.tokenizer.TokenFrame',{
               }}>Background Color</button>
             </div>
             <div className="frame-editor">
-              <Token token={ this.state.formToken } index={ this.state.index } frameSize={"20em"}/>
+              <Token token={ this.state.formToken } frameSize={"20em"}/>
             </div>
           </div>
           <div className="d-flex justify-content-end">

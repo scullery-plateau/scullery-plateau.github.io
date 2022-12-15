@@ -2,8 +2,9 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
   const baseScale = 100;
   const r = (baseScale / 2) - 1;
   const cxy = baseScale / 2;
-  const buildInitState = function(url,filename,count) {
+  const buildInitState = function(patternId,url,filename,count) {
     return {
+      patternId,
       url,
       filename,
       count,
@@ -18,10 +19,10 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
   }
   const drawShape = function(n, patternId, frameColor, backgroundColor, isTransparent ) {
     if (n <= 2 || n>= 50) {
-      return [<>
+      return <>
         { !isTransparent && <circle cx={cxy} cy={cxy} r={r} fill={backgroundColor}/>}
         <circle cx={cxy} cy={cxy} r={r} fill={`url(#${patternId})`} stroke={frameColor} strokeWidth={1}/>
-      </>];
+      </>;
     } else {
       const a = (Math.PI * 2) / n;
       const first = a / 2;
@@ -32,46 +33,28 @@ namespace("sp.tokenizer.Token",{"sp.common.Constants":"c"},({c}) => {
           cxy + r * Math.cos(ai),
         ].join(',');
       }).join(' ');
-      return [<>
+      return <>
         { !isTransparent && <polygon points={points} fill={backgroundColor}/>}
         <polygon points={points} fill={`url(#${patternId})`} stroke={frameColor} strokeWidth={1}/>
-      </>, points];
+      </>;
     }
   }
-  const drawCanvas = function(url,point,setter) {
-
-  }
-  const Token = class extends React.Component {
-    constructor(props) {
-      super(props);
-      this.props = props;
-      this.state = {canvasURL:""};
-    }
-    render() {
-      const { index, token, frameSize } = this.props;
-      const { url, xOffset, yOffset, scale, sideCount, frameColor, backgroundColor, isTransparent, filename } = token;
-      const [x, y] = [xOffset, yOffset].map((offset) => ((cxy * (1 - scale)) + offset));
-      const dim = scale * baseScale;
-      const patternId = `pattern-${index}`;
-      const [shape, points] = drawShape(sideCount,patternId,frameColor,backgroundColor, isTransparent);
-      drawCanvas(url,points,((canvasUrl) => { this.setState({ canvasURL }); }));
-      console.log({ index, token, dim, });
-      if (url) {
-        return <a href={this.state.canvasURL.length>0?this.state.canvasURL:"#"} download={this.state.canvasURL.length>0?`token-${filename}`:''} onClick={ (e) => {
-          if (this.state.canvasURL.length > 0) {
-            e.preventDefault();
-          }
-        }}>
-          <svg width={frameSize} height={frameSize} viewBox={`0 0 ${baseScale} ${baseScale}`}>
-            <defs>
-              <pattern id={ patternId } x="0" y="0" width="100%" height="100%">
-                <image x="0" y="0" width={baseScale} height={baseScale} href={url} transform={`translate(${x}, ${y}) scale(${scale})`}/>
-              </pattern>
-            </defs>
-            { shape }
-          </svg>
-        </a>;
-      }
+  const Token = function(props) {
+    const { token, frameSize } = props;
+    const { patternId, url, xOffset, yOffset, scale, sideCount, frameColor, backgroundColor, isTransparent } = token;
+    const [x, y] = [xOffset, yOffset].map((offset) => ((cxy * (1 - scale)) + offset));
+    const dim = scale * baseScale;
+    const shape = drawShape(sideCount,patternId,frameColor,backgroundColor, isTransparent);
+    console.log({ token, dim, });
+    if (url) {
+      return <svg width={frameSize} height={frameSize} viewBox={`0 0 ${baseScale} ${baseScale}`}>
+        <defs>
+          <pattern id={ patternId } x="0" y="0" width="100%" height="100%">
+            <image x="0" y="0" width={baseScale} height={baseScale} href={url} transform={`translate(${x}, ${y}) scale(${scale})`}/>
+          </pattern>
+        </defs>
+        { shape }
+      </svg>;
     }
   }
   Token.buildInitState = buildInitState;

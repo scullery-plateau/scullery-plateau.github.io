@@ -125,7 +125,7 @@ namespace(
           'dataURL',
           (dataURL, filename) => {
             this.setState({
-              tokens: [].concat(this.state.tokens, [Token.buildInitState(dataURL,filename,1)]),
+              tokens: [].concat(this.state.tokens, [Token.buildInitState(`pattern-${this.state.tokens.length}`,dataURL,filename,1)]),
             });
           },
           (filename, error) => {
@@ -159,7 +159,7 @@ namespace(
                   <div className="token rpg-box d-flex flex-column">
                     <span className="align-self-center">{token.filename}</span>
                     <div className="thumbnail-frame">
-                      <Token token={token} index={index} frameSize={"6em"}/>
+                      <Token token={token} frameSize={"6em"}/>
                     </div>
                     <input
                       className="form-control align-self-center"
