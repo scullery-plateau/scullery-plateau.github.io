@@ -7,12 +7,18 @@
 
 - to REACT
   - offer larger dimensions
+    - 25 x 25 
+    - 24 x 30
+    - 48 x 30
+    - 25 x 50
+    - 50 x 50
+    - 48 x 60
 
 ## Outfitter
 
 1. _impl_ (with REACT)
 
-## SVG Canvas - **Iconoclast**
+## SVG Canvas - **Mondrian**
 
 1. _impl_ (with REACT)
 
