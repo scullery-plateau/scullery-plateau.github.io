@@ -1,79 +1,93 @@
 <html>
-  <head>
-    <title>Scullery Plateau: Tokenizer</title>
+<head>
+  <title>Scullery Plateau: Tokenizer</title>
 
-    <!-- external styles -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Caudex"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
-      rel="stylesheet"
-    />
+  <!-- external styles -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Caudex"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+    rel="stylesheet"
+  />
 
-    <!-- project styles -->
-    <link rel="stylesheet" href="../../style/rpg.css" />
-    <link rel="stylesheet" href="../../style/font.css" />
-    <link rel="stylesheet" href="../../style/menu.css" />
+  <!-- project styles -->
+  <link rel="stylesheet" href="../../style/rpg.css" />
+  <link rel="stylesheet" href="../../style/font.css" />
+  <link rel="stylesheet" href="../../style/menu.css" />
 
-    <!-- local styles -->
-    <link rel="stylesheet" href="./style.css" />
+  <script type="text/javascript" src="scripts/test-image.js"></script>
 
-    <!-- external scripts -->
-    <script src="https://voltron42.github.io/gizmo-atheneum/structure/importnamespace/script.js"></script>
-    <script
-      src="https://unpkg.com/react@18/umd/react.development.js"
-      crossorigin
-    ></script>
-    <script
-      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
-      crossorigin
-    ></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <!-- external scripts -->
+  <script src="https://voltron42.github.io/gizmo-atheneum/structure/importnamespace/script.js"></script>
+  <script
+    src="https://unpkg.com/react@18/umd/react.development.js"
+    crossorigin
+  ></script>
+  <script
+    src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    crossorigin
+  ></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- project namespaces -->
-    <script type="text/babel" src="../common/colorPicker.js"></script>
-    <script type="text/babel" src="../common/colors.js"></script>
-    <script type="text/babel" src="../common/constants.js"></script>
-    <script type="text/babel" src="../common/dialog.js"></script>
-    <script type="text/babel" src="../common/fileDownload.js"></script>
-    <script type="text/babel" src="../common/fileLoader.js"></script>
-    <script type="text/babel" src="../common/footer.js"></script>
-    <script type="text/babel" src="../common/header.js"></script>
-    <script type="text/babel" src="../common/menu.js"></script>
-    <script type="text/babel" src="../common/print.js"></script>
-    <script type="text/babel" src="../common/utilities.js"></script>
+  <!-- project namespaces -->
+  <script type="text/babel" src="../common/colorPicker.js"></script>
+  <script type="text/babel" src="../common/colors.js"></script>
+  <script type="text/babel" src="../common/constants.js"></script>
+  <script type="text/babel" src="../common/dialog.js"></script>
+  <script type="text/babel" src="../common/fileDownload.js"></script>
+  <script type="text/babel" src="../common/fileLoader.js"></script>
+  <script type="text/babel" src="../common/footer.js"></script>
+  <script type="text/babel" src="../common/header.js"></script>
+  <script type="text/babel" src="../common/menu.js"></script>
+  <script type="text/babel" src="../common/print.js"></script>
+  <script type="text/babel" src="../common/utilities.js"></script>
 
-    <!-- local namespaces -->
-    <script type="text/babel" src="./scripts/about.js"></script>
-    <script type="text/babel" src="./scripts/printTokens.js"></script>
-    <script type="text/babel" src="./scripts/token.js"></script>
-    <script type="text/babel" src="./scripts/tokenFrame.js"></script>
-    <script type="text/babel" src="./scripts/tokenizer.js"></script>
+  <!-- local namespaces -->
+  <script type="text/babel" src="./scripts/about.js"></script>
+  <script type="text/babel" src="./scripts/printTokens.js"></script>
+  <script type="text/babel" src="./scripts/token.js"></script>
+  <script type="text/babel" src="./scripts/tokenFrame.js"></script>
 
-    <!-- bind app root -->
-    <script type="text/babel">
-      (function () {
-        const { Tokenizer, Footer } = imports({
-          'sp.tokenizer.Tokenizer': 'Tokenizer',
-          'sp.common.Footer': 'Footer',
-        });
-        ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <Tokenizer />
-        );
-        ReactDOM.createRoot(document.getElementById('footer')).render(
-          <Footer />
-        );
-      })();
-    </script>
-  </head>
-  <body class="bg-dark text-light">
-    <div id="app-root" class="container"></div>
-    <footer id="footer" class="text-center"></footer>
-  </body>
+  <script type="text/babel">
+    (function(){
+      const { TokenFrame, Token, Footer } = imports({
+        'sp.common.Footer': 'Footer',
+        'sp.tokenizer.TokenFrame':'TokenFrame',
+        'sp.tokenizer.Token':'Token'
+      });
+      ReactDOM.createRoot(document.getElementById('tokenFrame'))
+        .render(<TokenFrame token={Token.initTokenState(getTestImage())} index={Math.PI}/>);
+      ReactDOM.createRoot(document.getElementById('footer')).render(
+        <Footer />
+      );
+    })();
+  </script>
+</head>
+<body class="bg-dark text-light">
+<div class="navbar justify-content-start">
+  <div class="mr-3">
+    <ul class="navbar-nav">
+      <li class="rpg-box pl-3 pr-3 nav-item active drowpdown">
+        <a
+          href="#"
+          class="text-light nav-link dropdown-toggle"
+          onclick="toggleMenu(event,this)"
+        ></a>
+        <ul class="dropdown-menu rpg-box"></ul>
+      </li>
+    </ul>
+  </div>
+  <a href="index.html" class="navbar-brand text-light">Scullery Plateau:</a>
+  <span class="navbar-brand">Tokenizer</span>
+</div>
+<div id="tokenFrame"></div>
+
+<footer id="footer" class="text-center"></footer>
+</body>
 </html>
