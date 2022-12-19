@@ -1,6 +1,26 @@
 <html>
   <head>
     <title>Canvas Test</title>
+
+    <!-- external styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+
+    <!-- project styles -->
+    <link rel="stylesheet" href="../../style/rpg.css" />
+    <link rel="stylesheet" href="../../style/font.css" />
+    <link rel="stylesheet" href="../../style/menu.css" />
+
     <script src="scripts/test-image.js"></script>
     <script
       src="https://unpkg.com/react@18/umd/react.development.js"
@@ -19,40 +39,50 @@
             frameColor: 'red',
             backgroundColor: 'black',
             isTransparent: true,
-            scale: 1.5,
+            scale: 1,
             frameWidth: 1,
             sideCount: 2,
             xOffset: 0,
             yOffset: 0
           }
         }
+        const getConstants = function(dim) {
+          const [width, height, cx, cy, r, lineWidthMult] = [dim, dim, dim / 2, dim / 2, dim / 2, 5];
+          return { width, height, cx, cy, r, lineWidthMult };
+        }
+        const drawCircle = function(ctx,dimObj,token) {
+          ctx.arc(dimObj.cx, dimObj.cy, dimObj.r - 1 - ( dimObj.lineWidthMult * token.frameWidth / 2 ), 0, Math.PI*2);
+        }
+        const drawShape = function(ctx,dimObj,token) {
+          drawCircle(ctx,dimObj,token);
+        }
         const drawCanvasURL = function(img,token) {
           // todo - use token props for math
           const c = document.getElementById("canvas");
           const ctx = c.getContext('2d');
-          c.width = 500;
-          c.height = 500;
+          const dimObj = getConstants(500);
+          c.width = dimObj.width;
+          c.height = dimObj.height;
 
           // default gCO is source-over
           ctx.beginPath();
-          ctx.arc(250, 250, 250, 0, Math.PI*2);
-          ctx.fillStyle = "#222222";
+          drawShape(ctx,dimObj,token);
+          ctx.fillStyle = token.backgroundColor;
           ctx.fill();
-          ctx.drawImage(img,0,0, img.width, img.height);
+          ctx.drawImage(img,token.xOffset,token.yOffset, img.width * token.scale, img.height * token.scale);
           // now we change the gCO
           ctx.globalCompositeOperation='destination-in';
           ctx.beginPath();
-          ctx.arc(250, 250, 250, 0, Math.PI*2);
-          ctx.fillStyle = "#222222";
+          drawShape(ctx,dimObj,token);
+          ctx.fillStyle = token.backgroundColor;
           ctx.fill();
           // reset to default
           ctx.globalCompositeOperation='source-over';
           ctx.beginPath();
-          ctx.arc(250, 250, 247, 0, Math.PI*2);
-          ctx.lineWidth = 5;
-          ctx.strokeStyle = "#FF0000";
+          drawShape(ctx,dimObj,token);
+          ctx.lineWidth = dimObj.lineWidthMult * token.frameWidth;
+          ctx.strokeStyle = token.frameColor;
           ctx.stroke();
-          ctx.arc(250, 250, 250, 0, Math.PI*2);
 
           // closePath is useless here
           //ctx.closePath();
@@ -68,18 +98,94 @@
             });
             this.baseImg.src = this.state.url;
           }
+          updateState(update) {
+            const token = Object.entries(this.state).reduce((out,[k, v]) => {
+              out[k] = v;
+              return out;
+            }, {});
+            Object.entries(update).forEach(([k,v]) => {
+              token[k] = v;
+            });
+            token.canvasURL = drawCanvasURL(this.baseImg,token);
+            this.setState(token);
+          }
           render() {
-            return (<>
-              { this.state.canvasURL && <img style={{ width:"6em", height:"6em"}} src={this.state.canvasURL}/>}
-              { this.state.canvasURL && <img style={{ width:"25em", height:"25em"}} src={this.state.canvasURL}/>}
-            </>);
+            return <div className="m-3 d-flex justify-content-center">
+              <div className="rpg-box text-light w-75 d-flex justify-content-around">
+                <div className="d-flex flex-column w-25 controls">
+                  <div className="form-group">
+                    <label htmlFor="xOffset">X-Offset:</label>
+                    <input
+                      type="number"
+                      value={ this.state.xOffset }
+                      className="form-control"
+                      id="xOffset"
+                      onChange={(e) => { this.updateState({ xOffset: parseInt(e.target.value) }); }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="yOffset">Y-Offset:</label>
+                    <input
+                      type="number"
+                      value={ this.state.yOffset }
+                      className="form-control"
+                      id="yOffset"
+                      onChange={(e) => { this.updateState({ yOffset: parseInt(e.target.value) }); }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="scale">Scale:</label>
+                    <input
+                      type="number"
+                      min="0"
+                      value={ this.state.scale }
+                      step="0.01"
+                      className="form-control"
+                      id="scale"
+                      onChange={(e) => { this.updateState({ scale: parseFloat(e.target.value) }); }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="frameWidth">Frame Width:</label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={ this.state.frameWidth }
+                      className="form-control"
+                      id="frameWidth"
+                      onChange={(e) => { this.updateState({ frameWidth: parseInt(e.target.value) }); }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="sideCount">Side Count:</label>
+                    <input
+                      type="number"
+                      min="2"
+                      max="50"
+                      value={ this.state.sideCount }
+                      className="form-control"
+                      id="sideCount"
+                      onChange={(e) => { this.updateState({ sideCount: parseInt(e.target.value) }); }}
+                    />
+                  </div>
+                  <button
+                    className={`rounded btn ${ this.state.isTransparent ? 'btn-outline-light' : 'btn-dark' }`}
+                    onClick={() => { this.updateState({ isTransparent: !this.state.isTransparent }); }}>
+                    {this.state.isTransparent ? 'Transparent' : 'Opaque'}
+                  </button>
+                </div>
+                <div className="d-flex flex-column justify-content-center">
+                  { this.state.canvasURL && <img style={{ width:"25em", height:"25em"}} src={this.state.canvasURL}/>}
+                </div>
+              </div>
+            </div>;
           }
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(<Root/>);
       })();
     </script>
   </head>
-  <body>
+  <body class="bg-dark text-light">
     <div id="app-root"></div>
     <canvas style="display: none;" id="canvas"></canvas>
   </body>
