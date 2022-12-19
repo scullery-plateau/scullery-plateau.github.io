@@ -36,8 +36,8 @@
         const initState = function(url) {
           return {
             url,
-            frameColor: 'red',
-            backgroundColor: 'black',
+            frameColor: '#FF0000',
+            backgroundColor: '#000000',
             isTransparent: true,
             scale: 1,
             frameWidth: 1,
@@ -80,13 +80,18 @@
             drawCircle(ctx,dimObj,token);
           }
         }
+        const dim = 500;
         const drawCanvasURL = function(img,token) {
           // todo - use token props for math
           const c = document.getElementById("canvas");
           const ctx = c.getContext('2d');
-          const dimObj = getConstants(500);
+          const dimObj = getConstants(dim);
           c.width = dimObj.width;
           c.height = dimObj.height;
+
+          // img math
+          const imgDim = Math.max(img.width,img.height);
+          const imgScale = dim / imgDim;
 
           // default gCO is source-over
           if (!token.isTransparent) {
@@ -96,7 +101,7 @@
             ctx.fill();
           }
 
-          ctx.drawImage(img,token.xOffset,token.yOffset, img.width * token.scale, img.height * token.scale);
+          ctx.drawImage(img, token.xOffset, token.yOffset, img.width * token.scale * imgScale, img.height * token.scale * imgScale);
           // now we change the gCO
           ctx.globalCompositeOperation='destination-in';
           ctx.fillStyle = token.backgroundColor;
