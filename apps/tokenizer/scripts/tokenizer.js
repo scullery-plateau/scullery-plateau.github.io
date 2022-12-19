@@ -31,11 +31,11 @@ namespace(
             templateClass: TokenFrame,
             attrs: {class: 'rpg-box text-light w-75'},
             onClose: ({index,token}) => {
-              const tokens = Array.from(this.state.tokens);
-              tokens[index] = token;
-              console.log({index,token});
-              this.setState({ tokens });
-              console.log(this.state);
+              this.applyCanvasUrlToToken(token,(t) => {
+                const tokens = Array.from(this.state.tokens);
+                tokens[index] = t;
+                this.setState({ tokens });
+              });
             },
           },
         });
@@ -119,13 +119,18 @@ namespace(
       removeZeroCount() {
         this.setState({tokens: this.state.tokens.filter((t) => t.count > 0)});
       }
+      applyCanvasUrlToToken(token,callback) {
+        // todo - draw in canvas and apply url from canvas as "canvasURL"
+        callback(token);
+      }
       loadImage() {
         LoadFile(
           true,
           'dataURL',
           (dataURL, filename) => {
-            this.setState({
-              tokens: [].concat(this.state.tokens, [Token.buildInitState(`pattern-${this.state.tokens.length}`,dataURL,filename,1)]),
+            const token = Token.initTokenState(`pattern-${this.state.tokens.length}`,dataURL,filename,1);
+            this.applyCanvasUrlToToken(token,(t) => {
+              this.setState({ tokens: [].concat(this.state.tokens, [t]) });
             });
           },
           (filename, error) => {
@@ -136,7 +141,7 @@ namespace(
       }
       updateCount(newCount, index) {
         const tokens = Array.from(this.state.tokens);
-        tokens[index].count = newCount;
+        tokens[index].copyCount = newCount;
         this.setState({ tokens });
       }
       render() {
@@ -158,7 +163,7 @@ namespace(
                 return (
                   <div className="token rpg-box d-flex flex-column">
                     <span className="align-self-center">{token.filename}</span>
-                    <div className="thumbnail-frame">
+                    <div className="thumbnail-frame d-flex justify-content-center">
                       <Token token={token} frameSize={"6em"}/>
                     </div>
                     <input
@@ -166,20 +171,20 @@ namespace(
                       style={{ width: '5em' }}
                       type="number"
                       min="0"
-                      value={token.count}
+                      value={token.copyCount}
                       onChange={(e) => {
-                        updateCount(e.target.value, index);
+                        this.updateCount(e.target.value, index);
                       }}
                     />
                     <button
                       className="btn btn-info"
                       onClick={ () => { this.modals.tokenFrame.open({ index, token }) } }
                     >Apply Frame</button>
-                    <a
+                    { token.canvasURL && <a
                       className="btn btn-success"
-                      href={ token.url }
+                      href={ token.canvasURL }
                       download={`token-${ token.filename }`}
-                    >Download Token</a>
+                    >Download Token</a> }
                   </div>
                 );
               })}

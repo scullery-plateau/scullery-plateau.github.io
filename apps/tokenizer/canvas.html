@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>Canvas Test</title>
+    <script src="scripts/test-image.js"></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+      (function(){
+        const initState = function(url) {
+          return {
+            url,
+            frameColor: 'red',
+            backgroundColor: 'black',
+            isTransparent: true,
+            scale: 1.5,
+            frameWidth: 1,
+            sideCount: 2,
+            xOffset: 0,
+            yOffset: 0
+          }
+        }
+        const drawCanvasURL = function(img,token) {
+          // todo - use token props for math
+          const c = document.getElementById("canvas");
+          const ctx = c.getContext('2d');
+          c.width = 500;
+          c.height = 500;
+
+          // default gCO is source-over
+          ctx.beginPath();
+          ctx.arc(250, 250, 250, 0, Math.PI*2);
+          ctx.fillStyle = "#222222";
+          ctx.fill();
+          ctx.drawImage(img,0,0, img.width, img.height);
+          // now we change the gCO
+          ctx.globalCompositeOperation='destination-in';
+          ctx.beginPath();
+          ctx.arc(250, 250, 250, 0, Math.PI*2);
+          ctx.fillStyle = "#222222";
+          ctx.fill();
+          // reset to default
+          ctx.globalCompositeOperation='source-over';
+          ctx.beginPath();
+          ctx.arc(250, 250, 247, 0, Math.PI*2);
+          ctx.lineWidth = 5;
+          ctx.strokeStyle = "#FF0000";
+          ctx.stroke();
+          ctx.arc(250, 250, 250, 0, Math.PI*2);
+
+          // closePath is useless here
+          //ctx.closePath();
+          return c.toDataURL();
+        }
+        const Root = class extends React.Component {
+          constructor(props) {
+            super(props);
+            this.state = initState(getTestImage());
+            this.baseImg = new Image();
+            this.baseImg.onload = (() => {
+              this.setState({ canvasURL: drawCanvasURL(this.baseImg,this.state)});
+            });
+            this.baseImg.src = this.state.url;
+          }
+          render() {
+            return (<>
+              { this.state.canvasURL && <img style={{ width:"6em", height:"6em"}} src={this.state.canvasURL}/>}
+              { this.state.canvasURL && <img style={{ width:"25em", height:"25em"}} src={this.state.canvasURL}/>}
+            </>);
+          }
+        }
+        ReactDOM.createRoot(document.getElementById('app-root')).render(<Root/>);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="app-root"></div>
+    <canvas style="display: none;" id="canvas"></canvas>
+  </body>
+</html>
