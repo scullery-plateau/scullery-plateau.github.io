@@ -61,8 +61,8 @@
             .map((e, i) => {
               let ai = first + a * i;
               return [
-                token.cx + token.r * Math.sin(ai),
-                token.cy + token.r * Math.cos(ai),
+                dimObj.cx + dimObj.r * Math.sin(ai),
+                dimObj.cy + dimObj.r * Math.cos(ai),
               ];
             });
           const last = points[points.length - 1];
@@ -90,24 +90,26 @@
 
           // default gCO is source-over
           if (!token.isTransparent) {
+            ctx.fillStyle = token.backgroundColor;
             ctx.beginPath();
             drawShape(ctx,dimObj,token);
-            ctx.fillStyle = token.backgroundColor;
             ctx.fill();
           }
+
           ctx.drawImage(img,token.xOffset,token.yOffset, img.width * token.scale, img.height * token.scale);
           // now we change the gCO
           ctx.globalCompositeOperation='destination-in';
+          ctx.fillStyle = token.backgroundColor;
           ctx.beginPath();
           drawShape(ctx,dimObj,token);
-          ctx.fillStyle = token.backgroundColor;
           ctx.fill();
           // reset to default
           ctx.globalCompositeOperation='source-over';
-          ctx.beginPath();
-          drawShape(ctx,dimObj,token);
+
           ctx.lineWidth = dimObj.lineWidthMult * token.frameWidth;
           ctx.strokeStyle = token.frameColor;
+          ctx.beginPath();
+          drawShape(ctx,dimObj,token);
           ctx.stroke();
 
           // closePath is useless here
