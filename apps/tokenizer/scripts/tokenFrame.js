@@ -4,32 +4,49 @@ namespace("sp.tokenizer.TokenFrame",{
   "sp.common.Dialog":"Dialog",
   'sp.common.Utilities':'util',
   'sp.tokenizer.Token':'Token',
-},({ColorPicker,Dialog,util,Token}) => {
+  'sp.tokenizer.TokenCanvas':'TokenCanvas',
+},({ColorPicker,Dialog,util,Token,TokenCanvas}) => {
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = Token.initTokenState();
+      this.state = TokenCanvas.initState();
       this.onClose = props.onClose;
       props.setOnOpen(({token,index}) => {
         this.setState(token);
         this.tokenIndex = index;
+        this.baseImg = new Image();
+        this.baseImg.onload = (() => {
+          this.setState({ canvasURL: TokenCanvas.drawCanvasURL(this.baseImg,this.state)});
+        });
+        this.baseImg.src = this.state.url;
       });
       this.modals = Dialog.factory({
         frameColorPicker: {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color }) => {
-            this.setState({ frameColor: color });
+            this.updateState({ frameColor: color });
           },
         },
         bgColorPicker: {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color }) => {
-            this.setState({ backgroundColor: color });
+            this.updateState({ backgroundColor: color });
           },
         },
       });
+    }
+    updateState(update) {
+      const token = Object.entries(this.state).reduce((out,[k, v]) => {
+        out[k] = v;
+        return out;
+      }, {});
+      Object.entries(update).forEach(([k,v]) => {
+        token[k] = v;
+      });
+      token.canvasURL = TokenCanvas.drawCanvasURL(this.baseImg,token);
+      this.setState(token);
     }
     render() {
       return <div className="d-flex flex-column">
@@ -42,7 +59,7 @@ namespace("sp.tokenizer.TokenFrame",{
                 value={ this.state.xOffset }
                 className="form-control"
                 id="xOffset"
-                onChange={(e) => { this.setState({ xOffset: parseInt(e.target.value) }); }}
+                onChange={(e) => { this.updateState({ xOffset: parseInt(e.target.value) }); }}
               />
             </div>
             <div className="form-group">
@@ -52,7 +69,7 @@ namespace("sp.tokenizer.TokenFrame",{
                 value={ this.state.yOffset }
                 className="form-control"
                 id="yOffset"
-                onChange={(e) => { this.setState({ yOffset: parseInt(e.target.value) }); }}
+                onChange={(e) => { this.updateState({ yOffset: parseInt(e.target.value) }); }}
               />
             </div>
             <div className="form-group">
@@ -64,7 +81,7 @@ namespace("sp.tokenizer.TokenFrame",{
                 step="0.01"
                 className="form-control"
                 id="scale"
-                onChange={(e) => { this.setState({ scale: parseFloat(e.target.value) }); }}
+                onChange={(e) => { this.updateState({ scale: parseFloat(e.target.value) }); }}
               />
             </div>
             <div className="form-group">
@@ -76,7 +93,7 @@ namespace("sp.tokenizer.TokenFrame",{
                 value={ this.state.frameWidth }
                 className="form-control"
                 id="frameWidth"
-                onChange={(e) => { this.setState({ frameWidth: parseInt(e.target.value) }); }}
+                onChange={(e) => { this.updateState({ frameWidth: parseInt(e.target.value) }); }}
               />
             </div>
             <div className="form-group">
@@ -88,7 +105,7 @@ namespace("sp.tokenizer.TokenFrame",{
                 value={ this.state.sideCount }
                 className="form-control"
                 id="sideCount"
-                onChange={(e) => { this.setState({ sideCount: parseInt(e.target.value) }); }}
+                onChange={(e) => { this.updateState({ sideCount: parseInt(e.target.value) }); }}
               />
             </div>
             <button
@@ -117,7 +134,7 @@ namespace("sp.tokenizer.TokenFrame",{
               >Background Color</button>
             <button
               className={`rounded btn ${ this.state.isTransparent ? 'btn-outline-light' : 'btn-dark' }`}
-              onClick={() => { this.setState({ isTransparent: !this.state.isTransparent }); }}>
+              onClick={() => { this.updateState({ isTransparent: !this.state.isTransparent }); }}>
               {this.state.isTransparent ? 'Transparent' : 'Opaque'}
             </button>
           </div>

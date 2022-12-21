@@ -8,6 +8,7 @@ namespace(
     'sp.tokenizer.About': 'About',
     'sp.tokenizer.PrintTokens': 'PrintTokens',
     'sp.tokenizer.Token': 'Token',
+    'sp.tokenizer.TokenCanvas': 'TokenCanvas',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
   ({Dialog, FileDownload, Header, LoadFile, About, PrintTokens, Token, TokenFrame}) => {
