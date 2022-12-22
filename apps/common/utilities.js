@@ -12,6 +12,14 @@ namespace('sp.common.Utilities', () => {
       }, acc);
     }, {});
   };
+  const partition = function (myArray, partitionSize) {
+    const incoming = Array.from(myArray);
+    const partitions = [];
+    while (incoming.length > 0) {
+      partitions.push(incoming.splice(0, partitionSize));
+    }
+    return partitions;
+  };
   const rgbFromHex = function (hex) {
     if (typeof hex === 'string') {
       const [red, green, blue] = [1, 3, 5].map((i) =>
@@ -81,6 +89,7 @@ namespace('sp.common.Utilities', () => {
     rgbFromHex,
     normalizeFilename,
     triggerJSONDownload,
-    buildImmutable
+    buildImmutable,
+    partition
   };
 });
