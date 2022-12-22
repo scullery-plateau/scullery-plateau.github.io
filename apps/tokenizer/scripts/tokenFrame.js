@@ -11,14 +11,11 @@ namespace("sp.tokenizer.TokenFrame",{
       super(props);
       this.state = TokenCanvas.initState();
       this.onClose = props.onClose;
-      props.setOnOpen(({token,index}) => {
+      props.setOnOpen(({baseImg,token,index}) => {
         this.setState(token);
         this.tokenIndex = index;
-        this.baseImg = new Image();
-        this.baseImg.onload = (() => {
-          this.setState({ canvasURL: TokenCanvas.drawCanvasURL(this.baseImg,this.state)});
-        });
-        this.baseImg.src = this.state.url;
+        this.baseImg = baseImg;
+        this.setState({ canvasURL: TokenCanvas.drawCanvasURL(this.baseImg,this.state)});
       });
       this.modals = Dialog.factory({
         frameColorPicker: {
@@ -89,7 +86,6 @@ namespace("sp.tokenizer.TokenFrame",{
               <input
                 type="number"
                 min="1"
-                max={ (this.state.baseScale / 2) - 1 }
                 value={ this.state.frameWidth }
                 className="form-control"
                 id="frameWidth"
@@ -139,7 +135,7 @@ namespace("sp.tokenizer.TokenFrame",{
             </button>
           </div>
           <div className="d-flex flex-column justify-content-center">
-            <Token token={ this.state } frameSize="20em"/>
+            { this.state.canvasURL && <img style={{ width:"25em", height:"25em"}} src={this.state.canvasURL}/>}
           </div>
         </div>
         <div className="d-flex justify-content-end">
@@ -147,7 +143,8 @@ namespace("sp.tokenizer.TokenFrame",{
             className="btn btn-success"
             onClick={ () => { this.onClose({
               token: this.state,
-              index: this.tokenIndex
+              index: this.tokenIndex,
+              baseImg: this.baseImg
             }); } }
           >Apply Updates</button>
           <button
