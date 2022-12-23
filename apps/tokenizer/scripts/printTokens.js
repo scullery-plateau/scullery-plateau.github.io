@@ -43,13 +43,13 @@ namespace("sp.tokenizer.PrintTokens",{
   const svgFrame = function (content) {
     return `<svg viewBox="0 0 8 10">${content}</svg>`;
   };
-const buildPages = function (size, minis) {
+const buildPages = function (size, tokens) {
   const { yPadding, xPadding, alternatingYOffset, partitionSize, columnLength, columns } = layout[size];
   const [ yPad, xPad, altYOffset ] = [ yPadding || 0, xPadding || 0, alternatingYOffset || 0];
   const isFullAltCol = (pageHeight >= (altYOffset + size + ((columnLength - 1) * (size + yPad))));
   const altColumnLength = columnLength - (isFullAltCol?0:1);
   const colPairs = columns / 2;
-  const partitions = partition(minis, partitionSize);
+  const partitions = util.partition(tokens, partitionSize);
   return partitions.map((p,n) => {
     let i = 0;
     const page = [];
@@ -69,7 +69,7 @@ const printTokenPages = function(title,size,tokens) {
       out[token.filename] = token.canvasURL;
       return out;
     }, {});
-    const countedTokens = minisList.reduce((out, {token}) => {
+    const countedTokens = tokens.reduce((out, {token}) => {
       const step = Array(token.copyCount).fill(token.filename);
       return [].concat(out,step);
     }, []);

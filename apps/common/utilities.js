@@ -52,6 +52,7 @@ namespace('sp.common.Utilities', () => {
     );
   };
   const normalizeFilename = function (filename, ext, defaultFilename) {
+    filename = filename || defaultFilename;
     if (filename.endsWith(ext)) {
       filename = filename.replace(ext, '');
     }

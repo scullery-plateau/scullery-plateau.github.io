@@ -114,7 +114,7 @@ namespace(
               throw error;
             }
             const { size, tokens } = jsonData;
-            tokens.map((token) => {
+            const allTokens = tokens.map((token) => {
               const t = { token };
               TokenCanvas.initImageObj(token.url,(baseImg) => {
                 token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
@@ -122,13 +122,16 @@ namespace(
               });
               return t;
             });
-            const retry = () => {
-              if (tokens.filter(t => !t.baseImg).length > 0) {
+            const retry = (() => {
+              const imgCount = allTokens.filter(t => t.baseImg).length;
+              const tokenCount = allTokens.length;
+              if (imgCount === tokenCount) {
                 setTimeout(retry,500);
               } else {
-                this.setState({size,tokens});
+                this.setState({size,tokens:allTokens});
               }
-            }
+            });
+            retry();
           },
           (filename, error) => {
             console.log({filename, error});
@@ -158,7 +161,7 @@ namespace(
       }
       updateCount(newCount, index) {
         const tokens = Array.from(this.state.tokens);
-        tokens[index].token.copyCount = newCount;
+        tokens[index].token.copyCount = parseInt(newCount);
         this.setState({ tokens });
       }
       render() {

@@ -29,7 +29,6 @@ namespace("sp.tokenizer.Token",{
     return i - (data.frameWidth / 2);
   };
   const drawShape = function (s) {
-    console.log("Drawing shape");
     const n = s.sideCount;
     if (n > 2 && n < 50) {
       const a = (Math.PI * 2) / n;
@@ -56,7 +55,6 @@ namespace("sp.tokenizer.Token",{
     }
   };
   const Token = function(props) {
-    console.log("rendering token");
     const obj = Object.entries(props.token).reduce((out,[k,v]) => {
       out[k] = v;
       return out;
@@ -66,7 +64,6 @@ namespace("sp.tokenizer.Token",{
       r: getFrameRadius(props.token)
     });
     const shape = drawShape(obj);
-    console.log({ shape });
     return <svg width={ props.frameSize } height={ props.frameSize } viewBox={`0 0 ${ props.token.baseScale } ${ props.token.baseScale }`}>
       <defs>
         <pattern id={ props.token.patternId } x="0" y="0" width="100%" height="100%">

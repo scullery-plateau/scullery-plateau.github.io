@@ -1,7 +1,6 @@
-## Tokenizer
+## Bugs
 
-- Finish REACT MVP
-- individual sizes & printing best fit
+- options menu css
 
 ## Cobblestone
 
