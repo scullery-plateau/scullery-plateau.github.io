@@ -6,3 +6,6 @@
     background-repeat: no-repeat;
     background-position: center;
 }
+.size-picker a.disabled {
+    color: darkgrey !important;
+}

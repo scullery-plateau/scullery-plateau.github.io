@@ -86,6 +86,7 @@ namespace(
           {
             id: 'sizePicker',
             label: 'Size',
+            groupClassName: 'size-picker',
             getter: () => this.state.size,
             setter: (size) => {
               this.setState({size});

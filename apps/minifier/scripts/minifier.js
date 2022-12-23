@@ -111,6 +111,7 @@ namespace(
         {
           id: 'sizePicker',
           label: 'Size',
+          groupClassName: 'size-picker',
           getter: () => state.size,
           setter: (size) => {
             const { minis } = state;
