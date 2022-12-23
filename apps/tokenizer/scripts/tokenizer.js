@@ -54,7 +54,13 @@ namespace(
                 id: 'download',
                 label: 'Download File',
                 callback: () => {
-                  this.modals.fileDownload.open();
+                  const {size, tokens} = this.state;
+                  this.modals.fileDownload.open({
+                    fieldId:"tokenizerDataFileName",
+                    placeholder:"tokenizer",
+                    defaultFilename:"tokenizer",
+                    jsonData:{ size, tokens:tokens.map((t) => t.token) }
+                  });
                 },
               },
               {
@@ -107,7 +113,22 @@ namespace(
             if (error) {
               throw error;
             }
-            this.setState(jsonData);
+            const { size, tokens } = jsonData;
+            tokens.map((token) => {
+              const t = { token };
+              TokenCanvas.initImageObj(token.url,(baseImg) => {
+                token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
+                t.baseImg = baseImg;
+              });
+              return t;
+            });
+            const retry = () => {
+              if (tokens.filter(t => !t.baseImg).length > 0) {
+                setTimeout(retry,500);
+              } else {
+                this.setState({size,tokens});
+              }
+            }
           },
           (filename, error) => {
             console.log({filename, error});

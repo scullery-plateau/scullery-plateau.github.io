@@ -57,7 +57,6 @@ namespace("sp.tokenizer.TokenCanvas",{},() => {
     }
     const dim = 500;
     const drawCanvasURL = function(img,token) {
-        // todo - use token props for math
         const c = document.getElementById("canvas");
         const ctx = c.getContext('2d');
         const dimObj = getConstants(dim);
