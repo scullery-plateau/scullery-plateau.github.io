@@ -106,7 +106,7 @@
       document.getElementById(tileImageDefsId).innerHTML = wrapSvgDefs(content);
     };
     let selectTile = function (filename, tf) {
-      if (selectedTile.length == 2) {
+      if (selectedTile.length === 2) {
         document
           .getElementById(`btn.${getTileID(selectedTile[0], selectedTile[1])}`)
           .classList.remove('selected-tile');

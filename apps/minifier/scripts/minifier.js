@@ -1,19 +1,24 @@
 namespace(
   'sp.minifier.Minifier',
   {
+    'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
-    'sp.minifier.About': 'About',
     'sp.minifier.PrintMinis': 'PrintMinis',
   },
-  ({ About, Dialog, FileDownload, Header, LoadFile, PrintMinis }) => {
+  ({ buildAbout, Dialog, FileDownload, Header, LoadFile, PrintMinis }) => {
+    const about = [
+      'Minifier is a tool for turning digital images into printable standing miniatures.',
+      'Import your images and print them as miniatures of 1", 2", 3", or 4".',
+      'Publish sheets of armies, soldiers, or minions by increasing the count of a an image.',
+    ];
     const validateLoadFileJson = function (data) {};
     return function () {
       const modals = Dialog.factory({
         about: {
-          templateClass: About,
+          templateClass: buildAbout("Minifier",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {},
         },

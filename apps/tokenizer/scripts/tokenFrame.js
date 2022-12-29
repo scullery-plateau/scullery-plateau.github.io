@@ -1,11 +1,9 @@
 namespace("sp.tokenizer.TokenFrame",{
   "sp.common.ColorPicker":"ColorPicker",
-  'sp.common.Colors':'colors',
   "sp.common.Dialog":"Dialog",
   'sp.common.Utilities':'util',
-  'sp.tokenizer.Token':'Token',
   'sp.tokenizer.TokenCanvas':'TokenCanvas',
-},({ColorPicker,Dialog,util,Token,TokenCanvas}) => {
+},({ColorPicker,Dialog,util,TokenCanvas}) => {
   return class extends React.Component {
     constructor(props) {
       super(props);

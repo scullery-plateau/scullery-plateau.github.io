@@ -1,29 +1,36 @@
 namespace(
   'sp.spritely.Spritely',
   {
+    'sp.common.BuildAbout': 'buildAbout',
     'sp.common.ColorPicker': 'ColorPicker',
     'sp.common.Dialog': 'Dialog',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'Utilities',
-    'sp.spritely.About': 'About',
     'sp.spritely.Constants': 'Constants',
     'sp.spritely.ImageDownload': 'ImageDownload',
     'sp.spritely.Schema': 'Schema',
     'sp.spritely.SpritelyUtil': 'SpritelyUtil',
   },
   ({
+    buildAbout,
     ColorPicker,
     Dialog,
     Header,
     LoadFile,
     Utilities,
-    About,
     Constants,
     ImageDownload,
     Schema,
     SpritelyUtil,
   }) => {
+    const about = [
+      'Spritely is a canvas for pixel art.',
+      'Build your palette below, then select a color in the palette to paint pixels that color, or to unpaint pixels already that color.',
+      'Changing the color of a slot in the palette will change the color of all matching pixels.',
+      'Deleting a color will unpaint all pixels that matching color.',
+      'Unpainting pixels will return them to the background color.',
+    ];
     const getTransforms = {
       turnLeft: (size) => (x, y) => [y, size - 1 - x],
       turnRight: (size) => (x, y) => [size - 1 - y, x],
@@ -60,7 +67,7 @@ namespace(
         };
         this.modals = Dialog.factory({
           about: {
-            templateClass: About,
+            templateClass: buildAbout("Spritely",about),
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: () => {},
           },

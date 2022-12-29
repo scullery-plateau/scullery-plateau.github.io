@@ -1,17 +1,21 @@
 namespace(
   'sp.tokenizer.Tokenizer',
   {
+    'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
-    'sp.tokenizer.About': 'About',
     'sp.tokenizer.PrintTokens': 'PrintTokens',
-    'sp.tokenizer.Token': 'Token',
     'sp.tokenizer.TokenCanvas': 'TokenCanvas',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
-  ({Dialog, FileDownload, Header, LoadFile, About, PrintTokens, Token, TokenCanvas, TokenFrame}) => {
+  ({ buildAbout, Dialog, FileDownload, Header, LoadFile, PrintTokens, TokenCanvas, TokenFrame}) => {
+    const about = [
+      'Tokenizer is a tool for reframing digital images into printable and downloadable tokens.',
+      'Import your images, apply a frame, and download them or print them as tokens of 1", 2", 3", or 4".',
+      'Publish sheets of currency, potions, scrolls, and conditions by increasing the count of a an image.',
+    ];
     const validateLoadFileJson = function (data) {};
     return class extends React.Component {
       constructor(props) {
@@ -19,7 +23,7 @@ namespace(
         this.state = {size: 1, tokens: []};
         this.modals = Dialog.factory({
           about: {
-            templateClass: About,
+            templateClass: buildAbout("Tokenizer",about),
             attrs: {class: 'rpg-box text-light w-75'},
             onClose: () => { },
           },
