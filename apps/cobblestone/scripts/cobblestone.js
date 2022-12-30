@@ -4,9 +4,19 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
 },({ buildAbout, Dialog, Header, LoadFile }) => {
+    const tileDim = 30;
+    const emptyCellId = 'emptyCell';
     const about = [
         'Cobblestone is a canvas for game boards and battle maps.',
+        'Build your map a page at a time. Publish them as printable or download them as images.',
+        'Import images as tiles, flip or rotate them to your desired orientation, and arrange them as you wish.'
     ];
+    const tileTransforms = {
+        flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
+        flipOver: `matrix(-1 0 0 1 ${tileDim} 0)`,
+        turnLeft: `rotate(-90,${tileDim / 2},${tileDim / 2})`,
+        turnRight: `rotate(90,${tileDim / 2},${tileDim / 2})`,
+    };
     const sizes = [
       "25 x 25"
     ];
@@ -14,7 +24,13 @@ namespace('sp.cobblestone.Cobblestone',{
     return class extends React.Component {
         constructor(props) {
             super(props);
-            this.state = {};
+            this.state = {
+                images: {},
+                tiles: {},
+                placements: {},
+                orientation: 'portrait',
+                size: '25 x 25'
+            };
             this.modals = Dialog.factory({
                 about: {
                     templateClass: buildAbout("Cobblestone",about),
@@ -96,13 +112,35 @@ namespace('sp.cobblestone.Cobblestone',{
             );
         }
         addImage() {}
+        getTileID(filename, tf) {
+            return [filename].concat(tf.split(',')).join('.');
+        };
         render() {
+
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
                     <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
                     <div className="ml-2 w-100 d-flex flex-nowrap">
-                        { /* tileSet */ }
+                        <svg width="0" height="0">
+                            <defs>
+                                <rect id={emptyCellId} width={tileDim} height={tileDim} fill="url(#clearedGradient)"/>
+                                { Object.entries(this.state.tiles).map(([filename, transforms], index) => {
+                                    return Object.keys(transforms)
+                                      .map((tf) => {
+                                          const id = this.getTileID(filename, tf);
+                                          const href = this.state.images[filename];
+                                          const tfs = tf.split(',').map((t) => tileTransforms[t]).join(' ');
+                                          return <image id={id} href={href} width={tileDim} height={tileDim} transform={tfs}/>;
+                                      });
+                                }) }
+                            </defs>
+                        </svg>
+                        { Object.entries(this.state.tiles).map(([filename, transforms]) => {
+                                return Object.keys(transforms).map((tf) => {
+                                    return <></>;
+                                });
+                            }) }
                     </div>
                 </div>
                 <div className="rpg-title-box m-3" title="click to place a tile" >

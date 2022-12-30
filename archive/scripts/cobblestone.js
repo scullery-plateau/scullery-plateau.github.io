@@ -70,7 +70,7 @@
       return tileTransforms[tf];
     };
     let buildTransformAttr = function (tf) {
-      let tfs = tf.split(',').map(svgTF).join(' ');
+      let tfs = tf.split(',').map((tf) => tileTransforms[tf]).join(' ');
       let transform = '';
       if (tfs.length > 0) {
         transform = `transform="${tfs}"`;
