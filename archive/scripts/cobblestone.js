@@ -157,6 +157,7 @@
         `${wrapSvgDefs(
           svgImage('tileToEdit', dataURL, '')
         )}<p>${tileEditorHelp}</p><div class="row w-75 justify-content-center">${rows}</div>`,
+
         () => {
           tileEditorRows.forEach((tf) => {
             if (transforms[tf]) {
@@ -185,6 +186,7 @@
           paintCanvas();
           delete window.applyTransform;
         },
+
         () => {
           delete window.applyTransform;
         },

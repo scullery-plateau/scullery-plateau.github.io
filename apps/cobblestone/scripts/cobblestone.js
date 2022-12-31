@@ -3,7 +3,8 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.common.Dialog': 'Dialog',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
-},({ buildAbout, Dialog, Header, LoadFile }) => {
+    'sp.cobblestone.TileEditor': 'TileEditor'
+},({ buildAbout, Dialog, Header, LoadFile, TileEditor }) => {
     const tileDim = 30;
     const emptyCellId = 'emptyCell';
     const about = [
@@ -29,11 +30,17 @@ namespace('sp.cobblestone.Cobblestone',{
                 tiles: {},
                 placements: {},
                 orientation: 'portrait',
-                size: '25 x 25'
+                size: '25 x 25',
+                selectedTile: []
             };
             this.modals = Dialog.factory({
                 about: {
                     templateClass: buildAbout("Cobblestone",about),
+                    attrs: { class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
+                tileEditor: {
+                    templateClass: TileEditor,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 }
@@ -115,6 +122,9 @@ namespace('sp.cobblestone.Cobblestone',{
         getTileID(filename, tf) {
             return [filename].concat(tf.split(',')).join('.');
         };
+        editTile(filename) {
+            this.modals.tileEditor.open({ filename, context:this.state });
+        }
         render() {
 
             return <>
@@ -138,7 +148,25 @@ namespace('sp.cobblestone.Cobblestone',{
                         </svg>
                         { Object.entries(this.state.tiles).map(([filename, transforms]) => {
                                 return Object.keys(transforms).map((tf) => {
-                                    return <></>;
+                                    const tileRef = this.getTileID(filename, tf);
+                                    return <button
+                                      id={`btn.${tileRef}`}
+                                      className={'tile m-2 p-0'+
+                                        (this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
+                                          ? ' selected-tile'
+                                          : '')}
+                                      title="click to select, double click or right click to edit"
+                                      onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
+                                      onDblClick={ () => this.editTile(filename) }
+                                      contextMenu={ (e) => {
+                                          e.preventDefault();
+                                          this.editTile(filename);
+                                      }}
+                                    >
+                                        <svg width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
+                                            <use href={`#${tileRef}`}/>
+                                        </svg>
+                                    </button>;
                                 });
                             }) }
                     </div>
