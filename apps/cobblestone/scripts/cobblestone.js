@@ -45,7 +45,9 @@ namespace('sp.cobblestone.Cobblestone',{
                 tileEditor: {
                     templateClass: TileEditor,
                     attrs: { class: 'rpg-box text-light w-75' },
-                    onClose: () => {}
+                    onClose: ({filename,dataURL,tiles}) => {
+                        // todo
+                    }
                 }
             })
             this.menuItems = [{
@@ -61,16 +63,19 @@ namespace('sp.cobblestone.Cobblestone',{
                     id: 'downloadFile',
                     label: 'Download File',
                     callback: () => {
+                        // TODO
                     },
                 },{
                     id: 'downloadImage',
                     label: 'Download Image',
                     callback: () => {
+                        // TODO
                     },
                 },{
                     id: 'publishPrintable',
                     label: 'Publish Printable',
                     callback: () => {
+                        // TODO
                     },
                 }]
             },{
@@ -121,18 +126,23 @@ namespace('sp.cobblestone.Cobblestone',{
               }
             );
         }
-        addImage() {}
+        addImage() {
+            // TODO
+        }
         getTileID(filename, tf) {
             return [filename].concat(tf.split(',')).join('.');
         };
         editTile(filename) {
-            this.modals.tileEditor.open({ filename, context:this.state });
+            this.modals.tileEditor.open({ filename, dataURL: this.state.images[filename], tiles: this.state.tiles[filename] });
         }
         width(size) {
           return (this.state.orientation === 'portrait')?size.min:size.max;
         }
         height(size) {
           return (this.state.orientation === 'portrait')?size.max:size.min;
+        }
+        toggleTile(x,y) {
+            // TODO
         }
         render() {
             const width = this.width(this.state.size);
@@ -182,11 +192,11 @@ namespace('sp.cobblestone.Cobblestone',{
                     </div>
                 </div>
                 <div className="rpg-title-box m-3" title="click to place a tile" >
+                    <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${width * tileDim} ${height * tileDim}`}>
                     {
-                        /* canvas */
                         util.range().map((x) => {
                             return util.range(this.height(this.state.size)).map((y) => {
-                                let tile = data.placements[cUtil.getCoordinateId(x, y)];
+                                let tile = this.state.placements[cUtil.getCoordinateId(x, y)];
                                 let tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
                                 return <a href="#" onClick={() => this.toggleTile(x,y)}>
                                     <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
@@ -194,6 +204,7 @@ namespace('sp.cobblestone.Cobblestone',{
                             });
                         })
                     }
+                    </svg>
                 </div>
             </>;
         }

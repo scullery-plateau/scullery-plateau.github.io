@@ -52,7 +52,6 @@
       refreshGallery();
     };
     let processFileLoadError = function (filename, error) {
-      // todo -
     };
     window.loadFiles = function (e) {
       loadFilesAs(

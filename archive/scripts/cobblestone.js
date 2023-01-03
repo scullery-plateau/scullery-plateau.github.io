@@ -284,10 +284,8 @@
       } ${dim.height * tileDim}">${content.join('')}</svg>`;
     };
     let validateLoadFileJson = function (data) {
-      // todo - call validation
     };
     let processFileLoadError = function (filename, error) {
-      // todo -
     };
     let loadFileResultsAsJsonData = function (results, filename) {
       let jsonData = JSON.parse(results);
