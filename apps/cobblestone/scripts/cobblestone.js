@@ -3,8 +3,10 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.common.Dialog': 'Dialog',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
-    'sp.cobblestone.TileEditor': 'TileEditor'
-},({ buildAbout, Dialog, Header, LoadFile, TileEditor }) => {
+    'sp.common.Utilities': 'util',
+    'sp.cobblestone.TileEditor': 'TileEditor',
+    'sp.cobblestone.CobblestoneUtil': 'cUtil'
+},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil }) => {
     const tileDim = 30;
     const emptyCellId = 'emptyCell';
     const about = [
@@ -18,9 +20,10 @@ namespace('sp.cobblestone.Cobblestone',{
         turnLeft: `rotate(-90,${tileDim / 2},${tileDim / 2})`,
         turnRight: `rotate(90,${tileDim / 2},${tileDim / 2})`,
     };
-    const sizes = [
-      "25 x 25"
-    ];
+    const sizes = [{
+      min:25,
+      max:25
+    }];
     const validateLoadFileJson = function() {};
     return class extends React.Component {
         constructor(props) {
@@ -30,7 +33,7 @@ namespace('sp.cobblestone.Cobblestone',{
                 tiles: {},
                 placements: {},
                 orientation: 'portrait',
-                size: '25 x 25',
+                size: sizes[0],
                 selectedTile: []
             };
             this.modals = Dialog.factory({
@@ -79,7 +82,7 @@ namespace('sp.cobblestone.Cobblestone',{
                     this.setState({ size });
                 },
                 options: sizes.map((value) => {
-                    return { label: value, value };
+                    return { label: `${this.width(value)} x ${this.height(value)}`, value };
                 }),
             },{
               id: 'orientationMenu',
@@ -125,8 +128,15 @@ namespace('sp.cobblestone.Cobblestone',{
         editTile(filename) {
             this.modals.tileEditor.open({ filename, context:this.state });
         }
+        width(size) {
+          return (this.state.orientation === 'portrait')?size.min:size.max;
+        }
+        height(size) {
+          return (this.state.orientation === 'portrait')?size.max:size.min;
+        }
         render() {
-
+            const width = this.width(this.state.size);
+            const height = this.height(this.state.size);
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
@@ -172,7 +182,18 @@ namespace('sp.cobblestone.Cobblestone',{
                     </div>
                 </div>
                 <div className="rpg-title-box m-3" title="click to place a tile" >
-                    { /* canvas */ }
+                    {
+                        /* canvas */
+                        util.range().map((x) => {
+                            return util.range(this.height(this.state.size)).map((y) => {
+                                let tile = data.placements[cUtil.getCoordinateId(x, y)];
+                                let tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
+                                return <a href="#" onClick={() => this.toggleTile(x,y)}>
+                                    <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
+                                </a>;
+                            });
+                        })
+                    }
                 </div>
             </>;
         }
