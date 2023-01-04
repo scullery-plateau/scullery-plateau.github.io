@@ -4,9 +4,10 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'util',
+    'sp.cobblestone.CobblestoneUtil': 'cUtil',
+    'sp.cobblestone.PublishDownload': 'PublishDownload',
     'sp.cobblestone.TileEditor': 'TileEditor',
-    'sp.cobblestone.CobblestoneUtil': 'cUtil'
-},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil }) => {
+},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil, PublishDownload }) => {
     const tileDim = 30;
     const emptyCellId = 'emptyCell';
     const about = [
@@ -42,11 +43,21 @@ namespace('sp.cobblestone.Cobblestone',{
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
+                publishDownload: {
+                    templateClass: PublishDownload,
+                    attrs: { class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
                 tileEditor: {
                     templateClass: TileEditor,
                     attrs: { class: 'rpg-box text-light w-75' },
-                    onClose: ({filename,dataURL,tiles}) => {
-                        // todo
+                    onClose: ({filename,tiles}) => {
+                        const copiedTiles = Object.entries(this.state.tiles).reduce((out,[k,v]) => {
+                            out[k] = util.merge(v);
+                            return out;
+                        }, {});
+                        copiedTiles[filename] = util.merge(tiles);
+                        this.setState({ tiles: copiedTiles });
                     }
                 }
             })
@@ -60,23 +71,11 @@ namespace('sp.cobblestone.Cobblestone',{
                         this.loadFile();
                     },
                 },{
-                    id: 'downloadFile',
-                    label: 'Download File',
+                    id: 'publishDownload',
+                    label: 'Download Or Publish',
                     callback: () => {
-                        // TODO
-                    },
-                },{
-                    id: 'downloadImage',
-                    label: 'Download Image',
-                    callback: () => {
-                        // TODO
-                    },
-                },{
-                    id: 'publishPrintable',
-                    label: 'Publish Printable',
-                    callback: () => {
-                        // TODO
-                    },
+                        this.modals.publishDownload.open(this.state);
+                    }
                 }]
             },{
                 id: 'sizeMenu',
@@ -84,7 +83,7 @@ namespace('sp.cobblestone.Cobblestone',{
                 groupClassName: 'size-picker',
                 getter: () => this.state.size,
                 setter: (size) => {
-                    this.setState({ size });
+                    this.reframePlacements({ size });
                 },
                 options: sizes.map((value) => {
                     return { label: `${this.width(value)} x ${this.height(value)}`, value };
@@ -95,7 +94,7 @@ namespace('sp.cobblestone.Cobblestone',{
               groupClassName: 'size-picker',
               getter: () => this.state.orientation,
               setter: (orientation) => {
-                this.setState({ orientation });
+                  this.reframePlacements({ orientation });
               },
               options: ['Portrait','Landscape'].map((value) => {
                 return { label: value, value: value.toLowerCase() };
@@ -126,8 +125,37 @@ namespace('sp.cobblestone.Cobblestone',{
               }
             );
         }
+        reframePlacements(update) {
+            const width = this.width(this.state.size);
+            const height = this.height(this.state.size);
+            const placements = util.range(width).reduce((acc,x) => {
+                return util.range(height).reduce((out,y) => {
+                    const coordId = cUtil.getCoordinateId(x,y);
+                    const placement = this.state.placements[coordId];
+                    if (placement) {
+                        out[coordId] = placement;
+                    }
+                    return out;
+                }, acc);
+            }, {});
+            this.setState(util.merge(update,{ placements }));
+        }
         addImage() {
-            // TODO
+            LoadFile(
+              true,
+              'dataURL',
+              (dataURL, filename) => {
+                  const images = util.merge(this.state.images);
+                  const tiles = util.merge(this.state.tiles);
+                  images[filename] = dataURL;
+                  tiles[filename][''] = true;
+                  this.setState({ images, tiles });
+              },
+              (filename, error) => {
+                  console.log({ filename, error });
+                  alert(filename + ' failed to load. See console for error.');
+              }
+            );
         }
         getTileID(filename, tf) {
             return [filename].concat(tf.split(',')).join('.');
@@ -142,7 +170,17 @@ namespace('sp.cobblestone.Cobblestone',{
           return (this.state.orientation === 'portrait')?size.max:size.min;
         }
         toggleTile(x,y) {
-            // TODO
+            if (this.state.selectedTile) {
+                const placements = util.merge(this.state.placements);
+                const coordId = cUtil.getCoordinateId(x, y);
+                const tile = placements[coordId];
+                if (tile) {
+                    delete placements[coordId];
+                } else {
+                    placements[coordId] = this.state.selectedTile.map(st => st);
+                }
+                this.setState({placements});
+            }
         }
         render() {
             const width = this.width(this.state.size);
@@ -194,10 +232,10 @@ namespace('sp.cobblestone.Cobblestone',{
                 <div className="rpg-title-box m-3" title="click to place a tile" >
                     <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${width * tileDim} ${height * tileDim}`}>
                     {
-                        util.range().map((x) => {
-                            return util.range(this.height(this.state.size)).map((y) => {
-                                let tile = this.state.placements[cUtil.getCoordinateId(x, y)];
-                                let tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
+                        util.range(width).map((x) => {
+                            return util.range(height).map((y) => {
+                                const tile = this.state.placements[cUtil.getCoordinateId(x, y)];
+                                const tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
                                 return <a href="#" onClick={() => this.toggleTile(x,y)}>
                                     <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
                                 </a>;

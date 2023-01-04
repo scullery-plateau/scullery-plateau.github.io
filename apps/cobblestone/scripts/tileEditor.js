@@ -23,20 +23,24 @@ namespace("sp.cobblestone.TileEditor",{},() => {
       this.state = {tiles:{}};
       this.onClose = props.onClose;
       props.setOnOpen(({filename,dataURL,tiles}) => {
-        this.setState({filename,dataURL,tiles});
+        this.setState({filename,dataURL,tiles:this.copyTiles(tiles)});
       });
     }
+    copyTiles(tiles) {
+      return Object.entries(tiles).reduce(
+        (out, [transform, isChecked]) => {
+          out[transform] = isChecked;
+          return out;
+        },{})
+    }
     toggleTransform(transform) {
-      // todo
+      const tiles = this.copyTiles(this.state.tiles);
+      tiles[transform] = !tiles[transform];
+      this.setState({ tiles });
     }
     render() {
-      const tileMap = this.state.tiles[this.state.filename];
-      if (tileMap) {
-        const transforms = Object.entries(tileMap).reduce(
-          (out, [transform, isChecked]) => {
-            out[transform] = isChecked;
-            return out;
-          },{});
+      const transforms = this.state.tiles;
+      if (transforms) {
         return <div className="d-flex flex-column">
           <div className="d-flex flex-column">
             <svg width="0" height="0">
@@ -45,7 +49,7 @@ namespace("sp.cobblestone.TileEditor",{},() => {
               </defs>
             </svg>
             <p>{tileEditorHelp}</p>
-            <div class="row w-75 justify-content-center">
+            <div className="row w-75 justify-content-center">
               {
                 tileEditorRows.map((transform) => {
                   const isActive = transforms[transform];
@@ -53,8 +57,8 @@ namespace("sp.cobblestone.TileEditor",{},() => {
                   return <div className="col-3">
                     <button 
                       className={`tile ${isActive ? 'active-tile' : 'inactive-tile'}`} 
-                      title={transform == '' ? 'Original' : transform} 
-                      onclick={() => this.toggleTransform(transform)}>
+                      title={transform === '' ? 'Original' : transform}
+                      onClick={() => this.toggleTransform(transform)}>
                       <svg width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
                         <use href="#tileToEdit" transform={tfs}/>
                       </svg>
