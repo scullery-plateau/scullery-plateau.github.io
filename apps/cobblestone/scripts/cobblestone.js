@@ -5,9 +5,10 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'util',
     'sp.cobblestone.CobblestoneUtil': 'cUtil',
-    'sp.cobblestone.PublishDownload': 'PublishDownload',
+    'sp.cobblestone.Download': 'Download',
+    'sp.cobblestone.Publish': 'Publish',
     'sp.cobblestone.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil, PublishDownload }) => {
+},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil, Publish, Download }) => {
     const tileDim = 30;
     const emptyCellId = 'emptyCell';
     const about = [
@@ -43,8 +44,13 @@ namespace('sp.cobblestone.Cobblestone',{
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
-                publishDownload: {
-                    templateClass: PublishDownload,
+                download: {
+                    templateClass: Download,
+                    attrs: { class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
+                publish: {
+                    templateClass: Publish,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
@@ -71,10 +77,16 @@ namespace('sp.cobblestone.Cobblestone',{
                         this.loadFile();
                     },
                 },{
-                    id: 'publishDownload',
-                    label: 'Download Or Publish',
+                    id: 'download',
+                    label: 'Download',
                     callback: () => {
-                        this.modals.publishDownload.open(this.state);
+                        this.modals.download.open(this.state);
+                    }
+                },{
+                    id: 'publish',
+                    label: 'Publish',
+                    callback: () => {
+                        this.modals.publish.open(this.state);
                     }
                 }]
             },{

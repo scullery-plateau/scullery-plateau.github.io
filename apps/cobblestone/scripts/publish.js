@@ -1,4 +1,4 @@
-namespace('sp.cobblestone.PublishDownload',{},() => {
+namespace('sp.cobblestone.Publish',{},() => {
   return class extends React.Component {
     constructor(props) {
       super(props);
