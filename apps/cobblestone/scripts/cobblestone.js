@@ -9,19 +9,13 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.cobblestone.Publish': 'Publish',
     'sp.cobblestone.TileEditor': 'TileEditor',
 },({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil, Publish, Download }) => {
-    const tileDim = 30;
-    const emptyCellId = 'emptyCell';
+    const tileDim = cUtil.getTileDim();
+    const emptyCellId = cUtil.getEmptyCellId();
     const about = [
         'Cobblestone is a canvas for game boards and battle maps.',
         'Build your map a page at a time. Publish them as printable or download them as images.',
         'Import images as tiles, flip or rotate them to your desired orientation, and arrange them as you wish.'
     ];
-    const tileTransforms = {
-        flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
-        flipOver: `matrix(-1 0 0 1 ${tileDim} 0)`,
-        turnLeft: `rotate(-90,${tileDim / 2},${tileDim / 2})`,
-        turnRight: `rotate(90,${tileDim / 2},${tileDim / 2})`,
-    };
     const sizes = [{
       min:25,
       max:25
@@ -52,7 +46,9 @@ namespace('sp.cobblestone.Cobblestone',{
                 publish: {
                     templateClass: Publish,
                     attrs: { class: 'rpg-box text-light w-75' },
-                    onClose: () => {}
+                    onClose: ({ pages }) => {
+                        this.setState({ pages });
+                    }
                 },
                 tileEditor: {
                     templateClass: TileEditor,
@@ -195,8 +191,6 @@ namespace('sp.cobblestone.Cobblestone',{
             }
         }
         render() {
-            const width = this.width(this.state.size);
-            const height = this.height(this.state.size);
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
@@ -210,7 +204,7 @@ namespace('sp.cobblestone.Cobblestone',{
                                       .map((tf) => {
                                           const id = this.getTileID(filename, tf);
                                           const href = this.state.images[filename];
-                                          const tfs = tf.split(',').map((t) => tileTransforms[t]).join(' ');
+                                          const tfs = tf.split(',').map((t) => cUtil.getTileTransform(t)).join(' ');
                                           return <image id={id} href={href} width={tileDim} height={tileDim} transform={tfs}/>;
                                       });
                                 }) }
