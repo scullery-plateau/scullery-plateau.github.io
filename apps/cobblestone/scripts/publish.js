@@ -71,6 +71,9 @@ namespace('sp.cobblestone.Publish',{
     publish() {
       /* todo */
     }
+    getTileImage(x,y,coordId,tileDim) {
+      /* todo */
+    }
     render() {
       const tileDim = cUtil.getTileDim();
       const current = ((this.state.selectedIndex >= 0)?this.state.pages[this.state.selectedIndex]:undefined);
@@ -172,8 +175,7 @@ namespace('sp.cobblestone.Publish',{
                   <>
                     {
                       util.range(current.width).map((x) => util.range(current.height).map((y) => {
-                        /* todo - tile image*/
-                        return <></>;
+                        return this.getTileImage(x,y,cUtil.getCoordinateId(current.x + x, current.y + y),tileDim);
                       }))
                     }
                   </>
@@ -185,8 +187,7 @@ namespace('sp.cobblestone.Publish',{
             <svg width="40%" height="40%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
               { 
                 util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
-                  /* todo - tile image*/
-                  return <></>;
+                  return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
                 }))
               }
               {
