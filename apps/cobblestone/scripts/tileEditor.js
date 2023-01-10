@@ -1,22 +1,8 @@
-namespace("sp.cobblestone.TileEditor",{},() => {
+namespace("sp.cobblestone.TileEditor",{
+  "sp.cobblestone.CobblestoneUtil": 'cUtil'
+},({ cUtil }) => {
   const tileEditorHelp = 'Click on the variation of the given tile shown below to include (green) or exclude (red) them in the main app.';
-  const tileDim = 30;
-  const tileEditorRows = [
-    '',
-    'flipDown',
-    'flipOver',
-    'turnLeft',
-    'turnRight',
-    'flipDown,flipOver',
-    'flipOver,turnLeft',
-    'flipOver,turnRight',
-  ];
-  let tileTransforms = {
-    flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
-    flipOver: `matrix(-1 0 0 1 ${tileDim} 0)`,
-    turnLeft: `rotate(-90,${tileDim / 2},${tileDim / 2})`,
-    turnRight: `rotate(90,${tileDim / 2},${tileDim / 2})`,
-  };
+  const tileDim = cUtil.getTileDim();
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -51,9 +37,9 @@ namespace("sp.cobblestone.TileEditor",{},() => {
             <p>{tileEditorHelp}</p>
             <div className="row w-75 justify-content-center">
               {
-                tileEditorRows.map((transform) => {
+                cUtil.mapTransformOptions((transform) => {
                   const isActive = transforms[transform];
-                  const tfs = transform.split(',').map((t) => tileTransforms[t]).join(' ');
+                  const tfs = cUtil.buildImageTransform(transform);
                   return <div className="col-3">
                     <button 
                       className={`tile ${isActive ? 'active-tile' : 'inactive-tile'}`} 

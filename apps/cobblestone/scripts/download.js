@@ -1,30 +1,37 @@
 namespace('sp.cobblestone.Download',{
   'sp.common.Utilities': 'util',
-},({ util }) => {
+  'sp.cobblestone.CobblestoneUtil': 'cUtil'
+},({ util, cUtil }) => {
   const defaultFilename = "cobblestone";
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.context =
+      this.context = {}
       this.state = {scale:5,filename:defaultFilename};
       this.onClose = props.onClose();
       props.setOnOpen((context) => {
         this.context = context;
-        this.repaintImage({});
+        this.repaintImage({
+          width:cUtil.getWidth(context.size,context.orientation),
+          height:cUtil.getHeight(context.size,context.orientation)
+        });
       });
     }
     repaintImage(updates) {
-      // todo - draw image in canvas, setState { canvasURL }
-    }
-    downloadData() {
-      Utilities.triggerJSONDownload(
-        this.state.filename,
-        defaultFilename,
-        this.context
-      );
+      updates = util.merge(this.state,updates);
+      cUtil.drawCanvas(
+        updates.trimToImage,
+        updates.scale,
+        updates.width,
+        updates.height,
+        this.context.images,
+        this.context.placements,
+        (dataURL) => {
+          this.setState(util.merge(updates,{ canvasURL: dataURL }));
+        }
+      )
     }
     render() {
-      // todo - width and height
       return <div className="d-flex flex-columns">
         <div>
           <div className="form-group">
@@ -85,7 +92,6 @@ namespace('sp.cobblestone.Download',{
           )}
         </div>
         <div className="d-flex justify-content-end">
-          <button className="btn btn-info" onClick={() => { this.downloadData() }}>Download Datafile</button>
           <button className="btn btn-warning" onClick={() => { this.onClose() }}>Close</button>
         </div>
       </div>;

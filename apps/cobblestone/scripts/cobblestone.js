@@ -1,6 +1,7 @@
 namespace('sp.cobblestone.Cobblestone',{
     'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
+    'sp.common.FileDownload': 'FileDownload',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'util',
@@ -8,7 +9,7 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.cobblestone.Download': 'Download',
     'sp.cobblestone.Publish': 'Publish',
     'sp.cobblestone.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, Header, LoadFile, TileEditor, util, cUtil, Publish, Download }) => {
+},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileEditor, util, cUtil, Publish, Download }) => {
     const tileDim = cUtil.getTileDim();
     const emptyCellId = cUtil.getEmptyCellId();
     const about = [
@@ -38,7 +39,12 @@ namespace('sp.cobblestone.Cobblestone',{
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
-                download: {
+                fileDownload: {
+                    templateClass: FileDownload,
+                    attrs: { class: 'rpg-box text-light w-75' },
+                    onClose: () => {}
+                },
+                imageDownload: {
                     templateClass: Download,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
@@ -73,10 +79,20 @@ namespace('sp.cobblestone.Cobblestone',{
                         this.loadFile();
                     },
                 },{
-                    id: 'download',
-                    label: 'Download',
+                    id: 'downloadFile',
+                    label: 'Download File',
                     callback: () => {
-                        this.modals.download.open(this.state);
+                        const { images, tiles, placements, size, orientation, pages } = this.state;
+                        this.modals.fileDownload.open({
+                            defaultFilename:"cobblestone",
+                            state:{ images, tiles, placements, size, orientation, pages }
+                        });
+                    }
+                },{
+                    id: 'downloadImage',
+                    label: 'Download Image',
+                    callback: () => {
+                        this.modals.imageDownload.open(this.state);
                     }
                 },{
                     id: 'publish',
@@ -191,6 +207,8 @@ namespace('sp.cobblestone.Cobblestone',{
             }
         }
         render() {
+            const width = cUtil.getWidth(this.state.size, this.state.orientation);
+            const height = cUtil.getHeight(this.state.size, this.state.orientation);
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
@@ -204,7 +222,7 @@ namespace('sp.cobblestone.Cobblestone',{
                                       .map((tf) => {
                                           const id = this.getTileID(filename, tf);
                                           const href = this.state.images[filename];
-                                          const tfs = tf.split(',').map((t) => cUtil.getTileTransform(t)).join(' ');
+                                          const tfs = cUtil.buildImageTransform(tf);
                                           return <image id={id} href={href} width={tileDim} height={tileDim} transform={tfs}/>;
                                       });
                                 }) }

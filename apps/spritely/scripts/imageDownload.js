@@ -20,41 +20,12 @@ namespace(
         jsonData
       );
     };
-    const calcTrimBounds = function (
-      trimToImage,
-      width,
-      height,
-      keys,
-      parseIdFn
-    ) {
-      let [offsetX, offsetY] = [0, 0];
-      if (trimToImage) {
-        const { xs, ys } = keys.reduce(
-          (acc, k) => {
-            let { x, y } = parseIdFn(k);
-            acc.xs.push(x);
-            acc.ys.push(y);
-            return acc;
-          },
-          { xs: [], ys: [] }
-        );
-        const [minX, minY] = [xs, ys].map((ns) => Math.min.apply(null, ns));
-        const [maxX, maxY] = [xs, ys].map((ns) => Math.max.apply(null, ns));
-        [offsetX, offsetY, width, height] = [
-          minX,
-          minY,
-          maxX + 1 - minX,
-          maxY + 1 - minY,
-        ];
-      }
-      return { offsetX, offsetY, width, height };
-    };
     const drawRect = function (ctx, color, coords) {
       ctx.fillStyle = color;
       ctx.fillRect.apply(ctx, coords);
     };
     const drawImageInCanvas = function (data, scale, imgDim, trimToImage) {
-      let { offsetX, offsetY, width, height } = calcTrimBounds(
+      let { offsetX, offsetY, width, height } = Utilities.calcTrimBounds(
         trimToImage,
         data.size,
         data.size,
