@@ -4,7 +4,8 @@ namespace('sp.cobblestone.Publish',{
   "sp.common.Dialog":'Dialog',
   "sp.common.Utilities":"util",
   "sp.cobblestone.CobblestoneUtil":'cUtil'
-},({ ColorPicker, Dialog, util }) => {
+},({ ColorPicker, Dialog, util, cUtil }) => {
+  const emptyCellId = cUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
     '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
@@ -72,7 +73,9 @@ namespace('sp.cobblestone.Publish',{
       /* todo */
     }
     getTileImage(x,y,coordId,tileDim) {
-      /* todo */
+      const tile = this.state.placements[coordId];
+      const tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
+      return <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>;
     }
     render() {
       const tileDim = cUtil.getTileDim();
