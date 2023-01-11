@@ -10,6 +10,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
   const tileDim = 30
   const getTileDim = (() => tileDim);
   const getEmptyCellId = (() => 'emptyCell');
+  const getTileId = ((filename, tf) => [filename].concat(tf.split(',')).join('.'));
   const tileTransforms = {
     flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
     flipOver: `matrix(-1 0 0 1 ${tileDim} 0)`,

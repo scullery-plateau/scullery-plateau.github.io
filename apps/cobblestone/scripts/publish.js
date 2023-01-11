@@ -165,6 +165,7 @@ namespace('sp.cobblestone.Publish',{
             </div>
           </div>
         }
+          <TileDefs tiles={this.state.tiles} tileDim={tileDim}/>
         <div className="d-flex justify-content-center">
           <div className="d-flex flex-columns">
             <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>

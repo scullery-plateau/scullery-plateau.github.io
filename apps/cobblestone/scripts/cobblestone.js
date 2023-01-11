@@ -8,8 +8,9 @@ namespace('sp.cobblestone.Cobblestone',{
     'sp.cobblestone.CobblestoneUtil': 'cUtil',
     'sp.cobblestone.Download': 'Download',
     'sp.cobblestone.Publish': 'Publish',
+    'sp.cobblestone.TileDefs': 'TileDefs',
     'sp.cobblestone.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileEditor, util, cUtil, Publish, Download }) => {
+},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, util, cUtil, Publish, Download }) => {
     const tileDim = cUtil.getTileDim();
     const emptyCellId = cUtil.getEmptyCellId();
     const about = [
@@ -110,7 +111,7 @@ namespace('sp.cobblestone.Cobblestone',{
                     this.reframePlacements({ size });
                 },
                 options: sizes.map((value) => {
-                    return { label: `${this.width(value)} x ${this.height(value)}`, value };
+                    return { label: `${cUtil.getWidth(value,this.state.orientation)} x ${cUtil.getHeight(value,this.state.orientation)}`, value };
                 }),
             },{
               id: 'orientationMenu',
@@ -150,8 +151,8 @@ namespace('sp.cobblestone.Cobblestone',{
             );
         }
         reframePlacements(update) {
-            const width = this.width(this.state.size);
-            const height = this.height(this.state.size);
+            const width = cUtil.getWidth(this.state.size,this.state.orientation);
+            const height = cUtil.getHeight(this.state.size,this.state.orientation);
             const placements = util.range(width).reduce((acc,x) => {
                 return util.range(height).reduce((out,y) => {
                     const coordId = cUtil.getCoordinateId(x,y);
@@ -181,9 +182,6 @@ namespace('sp.cobblestone.Cobblestone',{
               }
             );
         }
-        getTileID(filename, tf) {
-            return [filename].concat(tf.split(',')).join('.');
-        };
         editTile(filename) {
             this.modals.tileEditor.open({ filename, dataURL: this.state.images[filename], tiles: this.state.tiles[filename] });
         }
@@ -214,23 +212,10 @@ namespace('sp.cobblestone.Cobblestone',{
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
                     <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
                     <div className="ml-2 w-100 d-flex flex-nowrap">
-                        <svg width="0" height="0">
-                            <defs>
-                                <rect id={emptyCellId} width={tileDim} height={tileDim} fill="url(#clearedGradient)"/>
-                                { Object.entries(this.state.tiles).map(([filename, transforms], index) => {
-                                    return Object.keys(transforms)
-                                      .map((tf) => {
-                                          const id = this.getTileID(filename, tf);
-                                          const href = this.state.images[filename];
-                                          const tfs = cUtil.buildImageTransform(tf);
-                                          return <image id={id} href={href} width={tileDim} height={tileDim} transform={tfs}/>;
-                                      });
-                                }) }
-                            </defs>
-                        </svg>
+                        <TileDefs tiles={this.state.tiles} tileDim={tileDim}/>
                         { Object.entries(this.state.tiles).map(([filename, transforms]) => {
                                 return Object.keys(transforms).map((tf) => {
-                                    const tileRef = this.getTileID(filename, tf);
+                                    const tileRef = cUtil.getTileId(filename, tf);
                                     return <button
                                       id={`btn.${tileRef}`}
                                       className={'tile m-2 p-0'+
@@ -259,7 +244,7 @@ namespace('sp.cobblestone.Cobblestone',{
                         util.range(width).map((x) => {
                             return util.range(height).map((y) => {
                                 const tile = this.state.placements[cUtil.getCoordinateId(x, y)];
-                                const tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
+                                const tileId = tile ? cUtil.getTileId(tile[0], tile[1]) : emptyCellId;
                                 return <a href="#" onClick={() => this.toggleTile(x,y)}>
                                     <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
                                 </a>;
