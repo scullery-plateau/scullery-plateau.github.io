@@ -4,14 +4,15 @@ namespace('sp.cobblestone.Publish',{
   "sp.common.Dialog":'Dialog',
   "sp.common.Utilities":"util",
   "sp.cobblestone.CobblestoneUtil":'cUtil'
-},({ ColorPicker, Dialog, util }) => {
+},({ ColorPicker, Dialog, util, cUtil }) => {
+  const emptyCellId = cUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
     '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
+    '#FF77FF', '#77FFFF' ];
     '#FF00FF', '#00FFFF', '#FF7700', '#FF0077',
     '#77FF00', '#00FF77', '#7700FF', '#0077FF',
     '#FF7777', '#77FF77', '#7777FF', '#FFFF77',
-    '#FF77FF', '#77FFFF' ];
   const pageSize = { min: 8, max: 10 };
   return class extends React.Component {
     constructor(props) {
@@ -72,7 +73,9 @@ namespace('sp.cobblestone.Publish',{
       /* todo */
     }
     getTileImage(x,y,coordId,tileDim) {
-      /* todo */
+      const tile = this.state.placements[coordId];
+      const tileId = tile ? this.getTileID(tile[0], tile[1]) : emptyCellId;
+      return <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>;
     }
     render() {
       const tileDim = cUtil.getTileDim();
