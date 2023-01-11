@@ -19,9 +19,7 @@ namespace('sp.common.Dialog', () => {
           }
           dialog.close();
           document.body.removeChild(dialog);
-        }}
-      />
-    );
+        }}/>);
     this.open = function (detail) {
       document.body.appendChild(dialog);
       dialog.showModal();
@@ -29,13 +27,10 @@ namespace('sp.common.Dialog', () => {
     };
   };
   Dialog.factory = function (dialogMap) {
-    return Object.entries(dialogMap).reduce(
-      (out, [dialogName, { templateClass, onClose, attrs }]) => {
-        out[dialogName] = new Dialog(dialogName, templateClass, onClose, attrs);
-        return out;
-      },
-      {}
-    );
+    return Object.entries(dialogMap).reduce((out, [dialogName, { templateClass, onClose, attrs }]) => {
+      out[dialogName] = new Dialog(dialogName, templateClass, onClose, attrs);
+      return out;
+    }, {});
   };
   return Dialog;
 });

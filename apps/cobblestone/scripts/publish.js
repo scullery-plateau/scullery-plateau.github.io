@@ -9,10 +9,10 @@ namespace('sp.cobblestone.Publish',{
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
     '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
-    '#FF77FF', '#77FFFF' ];
     '#FF00FF', '#00FFFF', '#FF7700', '#FF0077',
     '#77FF00', '#00FF77', '#7700FF', '#0077FF',
     '#FF7777', '#77FF77', '#7777FF', '#FFFF77',
+    '#FF77FF', '#77FFFF' ];
   const pageSize = { min: 8, max: 10 };
   return class extends React.Component {
     constructor(props) {

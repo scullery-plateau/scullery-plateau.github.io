@@ -96,18 +96,11 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     };
     img.src = dataURL;
   };
-  const drawCanvas = function(
-    trimToImage,
-    tileDim,
-    width,
-    height,
-    images,
-    placements,
-    onCompleteFn) {
-    const { offsetX, offsetY, width, height } = util.calcTrimBounds(
+  const drawCanvas = function(trimToImage, tileDim, w, h, images, placements, onCompleteFn) {
+    let { offsetX, offsetY, width, height } = util.calcTrimBounds(
       trimToImage,
-      width,
-      height,
+      w,
+      h,
       Object.keys(placements),
       parseCoordinateId
     );
