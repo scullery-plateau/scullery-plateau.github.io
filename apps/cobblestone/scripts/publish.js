@@ -3,8 +3,9 @@ namespace('sp.cobblestone.Publish',{
   "sp.common.Colors":'colors',
   "sp.common.Dialog":'Dialog',
   "sp.common.Utilities":"util",
-  "sp.cobblestone.CobblestoneUtil":'cUtil'
-},({ ColorPicker, Dialog, util, cUtil }) => {
+  "sp.cobblestone.CobblestoneUtil":'cUtil',
+  "sp.cobblestone.TileDefs":"TileDefs"
+},({ ColorPicker, Dialog, util, cUtil, TileDefs }) => {
   const emptyCellId = cUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
@@ -18,6 +19,8 @@ namespace('sp.cobblestone.Publish',{
     constructor(props) {
       super(props);
       this.state = {
+        pages:[],
+        placements:{},
         printOrientation:'portrait',
         selectedIndex:-1
       };

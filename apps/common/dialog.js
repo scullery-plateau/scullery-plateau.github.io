@@ -18,7 +18,9 @@ namespace('sp.common.Dialog', () => {
             onClose(value);
           }
           dialog.close();
-          document.body.removeChild(dialog);
+          if (dialog.parentElement) {
+            dialog.parentElement.removeChild(dialog);
+          }
         }}/>);
     this.open = function (detail) {
       document.body.appendChild(dialog);

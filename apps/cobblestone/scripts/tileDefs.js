@@ -6,7 +6,7 @@ namespace("sp.cobblestone.TileDefs",{
             <defs>
                 <rect id={cUtil.getBlankCellId()} width={props.tileDim} height={props.tileDim} fill="none"/>
                 <rect id={cUtil.getEmptyCellId()} width={props.tileDim} height={props.tileDim} fill="url(#clearedGradient)"/>
-                { Object.entries(props.tiles).map(([filename, transforms]) => {
+                { Object.entries(props.tiles||{}).map(([filename, transforms]) => {
                     return Object.keys(transforms)
                     .map((tf) => {
                         const id = cUtil.getTileId(filename, tf);

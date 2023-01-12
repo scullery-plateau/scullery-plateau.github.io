@@ -1,4 +1,4 @@
-namespace('sp.cobblestone.Cobblestone',{
+  namespace('sp.cobblestone.Cobblestone',{
     'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
@@ -224,12 +224,13 @@ namespace('sp.cobblestone.Cobblestone',{
                                           : '')}
                                       title="click to select, double click or right click to edit"
                                       onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
-                                      onDblClick={ () => this.editTile(filename) }
+                                      onDblClick={ () => {
+                                          this.editTile(filename)
+                                      }}
                                       contextMenu={ (e) => {
                                           e.preventDefault();
                                           this.editTile(filename);
-                                      }}
-                                    >
+                                      }}>
                                         <svg width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
                                             <use href={`#${tileRef}`}/>
                                         </svg>

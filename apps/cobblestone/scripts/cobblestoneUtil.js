@@ -9,6 +9,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
   };
   const tileDim = 30
   const getTileDim = (() => tileDim);
+  const getBlankCellId = (() => 'blankCell');
   const getEmptyCellId = (() => 'emptyCell');
   const getTileId = ((filename, tf) => [filename].concat(tf.split(',')).join('.'));
   const tileTransforms = {
@@ -133,7 +134,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
       }
     }
   };
-  return { getCoordinateId, parseCoordinateId, getTileDim, getEmptyCellId, getTileTransform, getWidth, getHeight,
+  return { getCoordinateId, parseCoordinateId, getTileDim, getEmptyCellId, getBlankCellId, getTileTransform, getWidth, getHeight,
     buildImageTransform, mapTransformOptions, transformCanvas, drawImage, drawCanvas
   };
 });
