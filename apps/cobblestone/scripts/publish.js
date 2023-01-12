@@ -22,7 +22,9 @@ namespace('sp.cobblestone.Publish',{
         pages:[],
         placements:{},
         printOrientation:'portrait',
-        selectedIndex:-1
+        selectedIndex:-1,
+        fullWidth:0,
+        fullHeight:0,
       };
       this.onClose = props.onClose();
       props.setOnOpen(({images,tiles,placements,size,orientation,pages}) => {
@@ -83,134 +85,137 @@ namespace('sp.cobblestone.Publish',{
     render() {
       const tileDim = cUtil.getTileDim();
       const current = ((this.state.selectedIndex >= 0)?this.state.pages[this.state.selectedIndex]:undefined);
-      const [pageWidth, pageHeight] = [cUtil.getWidth, cUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
-      const pageDim = {
-        x: -tileDim/2,
-        y: -tileDim/2,
-        w: tileDim * (pageWidth + 0.5),
-        h: tileDim * (pageHeight + 0.5)
-      };
-      return <div className="d-flex flex-columns">
-        <div className="d-flex justify-content-center">
-          <button className="btn btn-success" onClick={ () => this.addPage() }>Add</button>
-          <div className="form-inline m-1">
-            <label htmlFor="page-select" className="m-1">Page:</label>
-            <select id="page-select" className="form-control" onChange={(e) => {
-              this.setState({ selectedIndex: e.target.value });
-            }}>
-              { this.state.pages.map((p,i) => <option key={`page-option-${i}`} value={i}>{i}: { this.pageDisplay(p) }</option>) }
-            </select>
-          </div>
-          <button className="btn btn-danger" onClick={ () => this.removePage() }>Remove</button>
-        </div>
-        { this.state.selectedIndex >= 0 &&
+      if (current) {
+        const [pageWidth, pageHeight] = [cUtil.getWidth, cUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
+        const pageDim = {
+          x: -tileDim/2,
+          y: -tileDim/2,
+          w: tileDim * (pageWidth + 0.5),
+          h: tileDim * (pageHeight + 0.5)
+        };
+        console.log({ tileDim, current, pageDim, pageWidth, pageHeight, fullWidth:this.state.fullWidth, fullHeight:this.state.fullHeight});
+        return <div className="d-flex flex-columns">
           <div className="d-flex justify-content-center">
-            <button
-              className="rounded w-25"
-              style={{
-                backgroundColor: current.pageOutlineColor,
-                color: util.getForegroundColor(current.pageOutlineColor),
-              }}
-              onClick={() => {
-                this.modals.bgColorPicker.open({
-                  color: current.pageOutlineColor,
-                  index: this.state.selectedIndex
-                });
-              }}>Page Outline Color</button>
-            <div className="form-inline">
-              <label htmlFor="current-x">X:</label>
-              <input
-                type="number"
-                min="0"
-                max={ this.state.fullWidth - 1 }
-                className="form-control"
-                id="current-x"
-                value={ current.x }
-                onChange={(e) => {
-                  this.updateCurrentPage({ x: e.target.value });
-                }}/>
+            <button className="btn btn-success" onClick={ () => this.addPage() }>Add</button>
+            <div className="form-inline m-1">
+              <label htmlFor="page-select" className="m-1">Page:</label>
+              <select id="page-select" className="form-control" onChange={(e) => {
+                this.setState({ selectedIndex: e.target.value });
+              }}>
+                { this.state.pages.map((p,i) => <option key={`page-option-${i}`} value={i}>{i}: { this.pageDisplay(p) }</option>) }
+              </select>
             </div>
-            <div className="form-inline">
-              <label htmlFor="current-y">Y:</label>
-              <input
-                type="number"
-                min="0"
-                max={ this.state.fullHeight - 1 }
-                className="form-control"
-                id="current-y"
-                value={ current.y }
-                onChange={(e) => {
-                  this.updateCurrentPage({ y: e.target.value });
-                }}/>
-            </div>
-            <div className="form-inline">
-              <label htmlFor="current-width">Width:</label>
-              <input
-                type="number"
-                min="0"
-                max={ Math.min(util.getWidth( pageSize, this.state.printOrientation ), this.state.fullWidth - current.x) }
-                className="form-control"
-                id="current-width"
-                value={ current.width }
-                onChange={(e) => {
-                  this.updateCurrentPage({ width: e.target.value });
-                }}/>
-            </div>
-            <div className="form-inline">
-              <label htmlFor="current-height">Height:</label>
-              <input
-                type="number"
-                min="0"
-                max={ Math.min(util.getHeight( pageSize, this.state.printOrientation ), this.state.fullHeight - current.y) }
-                className="form-control"
-                id="current-height"
-                value={ current.height }
-                onChange={(e) => {
-                  this.updateCurrentPage({ height: e.target.value });
-                }}/>
-            </div>
+            <button className="btn btn-danger" onClick={ () => this.removePage() }>Remove</button>
           </div>
-        }
+          { this.state.selectedIndex >= 0 &&
+            <div className="d-flex justify-content-center">
+              <button
+                className="rounded w-25"
+                style={{
+                  backgroundColor: current.pageOutlineColor,
+                  color: util.getForegroundColor(current.pageOutlineColor),
+                }}
+                onClick={() => {
+                  this.modals.bgColorPicker.open({
+                    color: current.pageOutlineColor,
+                    index: this.state.selectedIndex
+                  });
+                }}>Page Outline Color</button>
+              <div className="form-inline">
+                <label htmlFor="current-x">X:</label>
+                <input
+                  type="number"
+                  min="0"
+                  max={ this.state.fullWidth - 1 }
+                  className="form-control"
+                  id="current-x"
+                  value={ current.x }
+                  onChange={(e) => {
+                    this.updateCurrentPage({ x: e.target.value });
+                  }}/>
+              </div>
+              <div className="form-inline">
+                <label htmlFor="current-y">Y:</label>
+                <input
+                  type="number"
+                  min="0"
+                  max={ this.state.fullHeight - 1 }
+                  className="form-control"
+                  id="current-y"
+                  value={ current.y }
+                  onChange={(e) => {
+                    this.updateCurrentPage({ y: e.target.value });
+                  }}/>
+              </div>
+              <div className="form-inline">
+                <label htmlFor="current-width">Width:</label>
+                <input
+                  type="number"
+                  min="0"
+                  max={ Math.min(util.getWidth( pageSize, this.state.printOrientation ), this.state.fullWidth - current.x) }
+                  className="form-control"
+                  id="current-width"
+                  value={ current.width }
+                  onChange={(e) => {
+                    this.updateCurrentPage({ width: e.target.value });
+                  }}/>
+              </div>
+              <div className="form-inline">
+                <label htmlFor="current-height">Height:</label>
+                <input
+                  type="number"
+                  min="0"
+                  max={ Math.min(util.getHeight( pageSize, this.state.printOrientation ), this.state.fullHeight - current.y) }
+                  className="form-control"
+                  id="current-height"
+                  value={ current.height }
+                  onChange={(e) => {
+                    this.updateCurrentPage({ height: e.target.value });
+                  }}/>
+              </div>
+            </div>
+          }
           <TileDefs tiles={this.state.tiles} tileDim={tileDim}/>
-        <div className="d-flex justify-content-center">
-          <div className="d-flex flex-columns">
-            <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
+          <div className="d-flex justify-content-center">
+            <div className="d-flex flex-columns">
+              <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
+              <div className="">
+                <svg key="svg.pagecanvas" width="40%" height="40%" viewBox={`${pageDim.x} ${pageDim.y} ${pageDim.w} ${pageDim.h}`}>
+                  <rect x={pageDim.x} y={pageDim.y} width={pageDim.w} height={pageDim.h} fill="white" stroke="none"/>
+                  { this.state.selectedIndex >= 0 && 
+                    <>
+                      {
+                        util.range(current.width).map((x) => util.range(current.height).map((y) => {
+                          return this.getTileImage(x,y,cUtil.getCoordinateId(current.x + x, current.y + y),tileDim);
+                        }))
+                      }
+                    </>
+                  }
+                </svg>
+              </div>
+            </div>
             <div className="">
-              <svg width="40%" height="40%" viewBox={`${pageDim.x} ${pageDim.y} ${pageDim.w} ${pageDim.h}`}>
-                <rect x={pageDim.x} y={pageDim.y} width={pageDim.w} height={pageDim.h} fill="white" stroke="none"/>
-                { this.state.selectedIndex >= 0 && 
-                  <>
-                    {
-                      util.range(current.width).map((x) => util.range(current.height).map((y) => {
-                        return this.getTileImage(x,y,cUtil.getCoordinateId(current.x + x, current.y + y),tileDim);
-                      }))
-                    }
-                  </>
+              <svg key="svg.mapcanvas" width="40%" height="40%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
+                { 
+                  util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
+                    return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
+                  }))
+                }
+                {
+                  this.state.pages.map((p) => {
+                    return <rect x={current.x * tileDim} y={current.y * tileDim} width={current.width * tileDim} height={current.height * tileDim} fill="none" stroke={current.pageOutlineColor} stroke-width={tileDim/10}/>
+                  })
                 }
               </svg>
             </div>
           </div>
-          <div className="">
-            <svg width="40%" height="40%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
-              { 
-                util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
-                  return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
-                }))
-              }
-              {
-                this.state.pages.map((p) => {
-                  return <rect x={current.x * tileDim} y={current.y * tileDim} width={current.width * tileDim} height={current.height * tileDim} fill="none" stroke={current.pageOutlineColor} stroke-width={tileDim/10}/>
-                })
-              }
-            </svg>
+          <div className="d-flex justify-content-end">
+            <button className="btn btn-info" onClick={() => this.publish() }>Publish</button>
+            <button className="btn btn-success" onClick={() => this.onClose({ pages: this.state.pages }) }>Apply Pages</button>
+            <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
           </div>
-        </div>
-        <div className="d-flex justify-content-end">
-          <button className="btn btn-info" onClick={() => this.publish() }>Publish</button>
-          <button className="btn btn-success" onClick={() => this.onClose({ pages: this.state.pages }) }>Apply Pages</button>
-          <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
-        </div>
-      </div>;
+        </div>;
+      }
     }
   }
 });

@@ -103,11 +103,12 @@ namespace('sp.common.Menu', () => {
   const DropDownItem = function (item) {
     if ('items' in item) {
       const { id, label, items } = item;
-      return <SubMenu id={id} label={label} items={items} />;
+      return <SubMenu key={`${id}-submenu`} id={id} label={label} items={items} />;
     } else if ('options' in item) {
       const { id, label, groupClassName, options, getter, setter } = item;
       return (
         <GroupMenu
+          key={`${id}-groupmenu`} 
           id={id}
           label={label}
           groupClassName={groupClassName}
@@ -118,7 +119,7 @@ namespace('sp.common.Menu', () => {
       );
     } else if ('callback' in item) {
       const { id, label, callback } = item;
-      return <MenuItem id={id} label={label} callback={callback} />;
+      return <MenuItem key={`${id}-menuitem`} id={id} label={label} callback={callback} />;
     }
   };
   const DropDownMenu = function (props) {

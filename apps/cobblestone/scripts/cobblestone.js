@@ -207,6 +207,9 @@
         render() {
             const width = cUtil.getWidth(this.state.size, this.state.orientation);
             const height = cUtil.getHeight(this.state.size, this.state.orientation);
+            const fullWidth = width * tileDim;
+            const fullHeight = height * tileDim;
+            console.log({tileDim, width, height, fullWidth, fullHeight})
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
@@ -217,6 +220,7 @@
                                 return Object.keys(transforms).map((tf) => {
                                     const tileRef = cUtil.getTileId(filename, tf);
                                     return <button
+                                      key={`btn.${tileRef}.key`}
                                       id={`btn.${tileRef}`}
                                       className={'tile m-2 p-0'+
                                         (this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
@@ -231,7 +235,7 @@
                                           e.preventDefault();
                                           this.editTile(filename);
                                       }}>
-                                        <svg width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
+                                        <svg key={`btn.${tileRef}.svg.key`} width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
                                             <use href={`#${tileRef}`}/>
                                         </svg>
                                     </button>;
@@ -240,7 +244,7 @@
                     </div>
                 </div>
                 <div className="rpg-title-box m-3" title="click to place a tile" >
-                    <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${width * tileDim} ${height * tileDim}`}>
+                    <svg key="svg-canvas" width="100%" height="100%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${fullWidth} ${fullHeight}`}>
                     {
                         util.range(width).map((x) => {
                             return util.range(height).map((y) => {
