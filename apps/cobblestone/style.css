@@ -1,0 +1,10 @@
+button.tile {
+    width: 5rem;
+    height: 5rem;
+}
+.tile.active-tile {
+    border: 5px solid green;
+}
+.tile.inactive-tile {
+    border: 5px solid red;
+}

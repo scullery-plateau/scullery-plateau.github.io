@@ -173,7 +173,7 @@
                   const images = util.merge(this.state.images);
                   const tiles = util.merge(this.state.tiles);
                   images[filename] = dataURL;
-                  tiles[filename][''] = true;
+                  tiles[filename] = { '': true };
                   this.setState({ images, tiles });
               },
               (filename, error) => {
@@ -215,7 +215,7 @@
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
                     <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
                     <div className="ml-2 w-100 d-flex flex-nowrap">
-                        <TileDefs tiles={this.state.tiles} tileDim={tileDim}/>
+                        <TileDefs tiles={this.state.tiles} images={this.state.images} tileDim={tileDim}/>
                         { Object.entries(this.state.tiles).map(([filename, transforms]) => {
                                 return Object.keys(transforms).map((tf) => {
                                     const tileRef = cUtil.getTileId(filename, tf);
@@ -228,10 +228,10 @@
                                           : '')}
                                       title="click to select, double click or right click to edit"
                                       onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
-                                      onDblClick={ () => {
+                                      onDoubleClick={ () => {
                                           this.editTile(filename)
                                       }}
-                                      contextMenu={ (e) => {
+                                      onContextMenu={ (e) => {
                                           e.preventDefault();
                                           this.editTile(filename);
                                       }}>

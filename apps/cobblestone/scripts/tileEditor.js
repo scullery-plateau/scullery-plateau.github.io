@@ -31,7 +31,7 @@ namespace("sp.cobblestone.TileEditor",{
           <div className="d-flex flex-column">
             <svg key="tileToEditSVG" width="0" height="0">
               <defs>
-                <image id="tileToEdit" href="${this.state.dataURL}" width={tileDim} height={tileDim}/>
+                <image id="tileToEdit" href={this.state.dataURL} width={tileDim} height={tileDim}/>
               </defs>
             </svg>
             <p>{tileEditorHelp}</p>

@@ -10,7 +10,7 @@ namespace("sp.cobblestone.TileDefs",{
                     return Object.keys(transforms)
                     .map((tf) => {
                         const id = cUtil.getTileId(filename, tf);
-                        const href = this.state.images[filename];
+                        const href = props.images[filename];
                         const tfs = cUtil.buildImageTransform(tf);
                         return <image id={id} href={href} width={props.tileDim} height={props.tileDim} transform={tfs}/>;
                     });

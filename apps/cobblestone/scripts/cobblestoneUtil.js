@@ -135,6 +135,6 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     }
   };
   return { getCoordinateId, parseCoordinateId, getTileDim, getEmptyCellId, getBlankCellId, getTileTransform, getWidth, getHeight,
-    buildImageTransform, mapTransformOptions, transformCanvas, drawImage, drawCanvas
+    buildImageTransform, mapTransformOptions, transformCanvas, drawImage, drawCanvas, getTileId
   };
 });
