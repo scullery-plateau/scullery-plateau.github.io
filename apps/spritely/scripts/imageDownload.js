@@ -104,8 +104,8 @@ namespace(
                 type="number"
                 min="1"
                 className="form-control"
-                value={this.state.scale}
-                onChange={(e) => repaintImage(this, { scale: e.target.value })}
+                value={ this.state.scale }
+                onChange={(e) => repaintImage(this, { scale: parseInt(e.target.value) })}
               />
             </div>
             <div className="form-check">

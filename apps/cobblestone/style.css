@@ -1,10 +1,18 @@
 button.tile {
-    width: 5rem;
-    height: 5rem;
+    min-width: 60px!important;
+    min-height: 60px!important;
+    width: 60px!important;
+    height: 60px!important;
+}
+.tile-buttons {
+    overflow-x: scroll;
 }
 .tile.active-tile {
     border: 5px solid green;
 }
 .tile.inactive-tile {
     border: 5px solid red;
+}
+.tile.selected-tile {
+    border: 5px solid white;
 }

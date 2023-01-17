@@ -40,6 +40,12 @@ namespace(
                   this.onClose();
                 }}
               >Download & Close</button>
+              <button
+                className="btn btn-danger"
+                onClick={() => {
+                  this.onClose();
+                }}
+              >Close</button>
             </div>
           </>
         );

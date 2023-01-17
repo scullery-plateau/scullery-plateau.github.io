@@ -28,7 +28,8 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     'flipOver,turnLeft',
     'flipOver,turnRight',
   ];
-  let canvasTransforms = {
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const canvasTransforms = {
     '': (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
       ctx.drawImage(img, 0, 0, tileDim, tileDim);
@@ -90,9 +91,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
       transformCanvas(tf,ctx, img, tileDim, x, y);
       ctx.restore();
       delete state[getCoordinateId(x, y)];
-      console.log(`remaining coords: ${Object.entries(state).length}`);
       if (Object.keys(state).length === 0) {
-        console.log('calling callback');
         callback();
       }
     };
@@ -115,22 +114,25 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
         const coordId = getCoordinateId(x, y);
-        state[coordId] = true;
-        const [filename, tf] = placements[coordId];
-        const dataURL = images[filename];
-        drawImage(
-          ctx,
-          dataURL,
-          tileDim,
-          x - offsetX,
-          y - offsetY,
-          tf,
-          state,
-          () => {
-            onCompleteFn(canvas.toDataURL());
-            document.body.removeChild(canvas);
-          }
-        );
+        const placement = placements[coordId];
+        if (placement) {
+          state[coordId] = true;
+          const [filename, tf] = placement;
+          const dataURL = images[filename];
+          drawImage(
+            ctx,
+            dataURL,
+            tileDim,
+            x - offsetX,
+            y - offsetY,
+            tf,
+            state,
+            () => {
+              onCompleteFn(canvas.toDataURL());
+              document.body.removeChild(canvas);
+            }
+          );
+        }
       }
     }
   };

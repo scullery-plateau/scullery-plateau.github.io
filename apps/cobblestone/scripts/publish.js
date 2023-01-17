@@ -31,8 +31,8 @@ namespace('sp.cobblestone.Publish',{
         pages = pages || [];
         const printOrientation = orientation;
         const selectedIndex = ((pages.length > 0) ? 0 : -1);
-        const fullWidth = util.getWidth(size, orientation);
-        const fullHeight = util.getHeight(size, orientation);
+        const fullWidth = cUtil.getWidth(size, orientation);
+        const fullHeight = cUtil.getHeight(size, orientation);
         this.setState({images,tiles,placements,size,orientation,pages,fullWidth,fullHeight,printOrientation,selectedIndex});
       });
       this.modals = Dialog.factory({

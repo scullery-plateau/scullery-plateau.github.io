@@ -185,7 +185,7 @@ namespace(
             const { x, y } = SpritelyUtil.parsePixelId(pixelId);
             const [x1, y1] = transformFn(x, y);
             if (x1 >= 0 && x1 < size && y1 >= 0 && y1 < size) {
-              const newPixelId = SpritelyUtil.getPixelId(x, y);
+              const newPixelId = SpritelyUtil.getPixelId(x1, y1);
               out[newPixelId] = paletteIndex;
             }
             return out;
