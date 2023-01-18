@@ -49,9 +49,11 @@ namespace('sp.cobblestone.Publish',{
     togglePrintOrientation() {
       this.setState({ printOrientation: oppositeOrientation[this.state.printOrientation] })
     }
-    displayPrintOrientation() {
-      const p = this.state.printOrientation;
+    displayOrientation(p) {
       return p.charAt(0).toUpperCase() + p.slice(1);
+    }
+    displayPrintOrientation() {
+      return this.displayOrientation(this.state.printOrientation);
     }
     pageDisplay(page) {
       return [page.pageOutlineColor, page.x, page.y, page.width, page.height].join(", ");
@@ -59,9 +61,11 @@ namespace('sp.cobblestone.Publish',{
     addPage() {
       const pages = Array.from(this.state.pages);
       const selectedIndex = pages.length;
+      const width = cUtil.getWidth(pageSize,this.state.printOrientation);
+      const height = cUtil.getHeight(pageSize,this.state.printOrientation);
       pages.push({
         pageOutlineColor: defaultColors[pages.length % defaultColors.length],
-        x:0, y:0, width:0, height:0, orientation: 'portrait'
+        x:0, y:0, width, height
       });
       this.setState({ pages, selectedIndex });
     }
@@ -88,16 +92,26 @@ namespace('sp.cobblestone.Publish',{
     render() {
       const tileDim = cUtil.getTileDim();
       const current = ((this.state.selectedIndex >= 0)?this.state.pages[this.state.selectedIndex]:undefined);
+      const [pageWidth, pageHeight] = [cUtil.getWidth, cUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
+      const pageDim = {
+        x: -tileDim/2,
+        y: -tileDim/2,
+        w: tileDim * (pageWidth + 1),
+        h: tileDim * (pageHeight + 1)
+      };
+      console.log({ tileDim, current, pageDim, pageWidth, pageHeight, fullWidth:this.state.fullWidth, fullHeight:this.state.fullHeight});
       return <div className="d-flex flex-column">
         <div className="d-flex justify-content-center">
           <button className="btn btn-success" onClick={ () => this.addPage() }>Add</button>
-          <div className="form-group m-1">
-            <select id="page-select" className="form-control" onChange={(e) => {
-              this.setState({ selectedIndex: e.target.value });
-            }}>
-              { this.state.pages.map((p,i) => <option key={`page-option-${i}`} value={i}>{i}: { this.pageDisplay(p) }</option>) }
-            </select>
-          </div>
+          { this.state.pages.length > 0 && 
+            <div className="form-inline m-1">
+              <select id="page-select" className="form-control" value={ this.state.selectedIndex } onChange={(e) => {
+                this.setState({ selectedIndex: parseInt(e.target.value) });
+              }}>
+                { this.state.pages.map((p,i) => <option key={`page-option-${i}`} value={i}>{i}: { this.pageDisplay(p) }</option>) }
+              </select>
+            </div>
+          }
           <button className="btn btn-danger" onClick={ () => this.removePage() }>Remove</button>
         </div>
         { this.state.selectedIndex >= 0 &&
@@ -124,7 +138,7 @@ namespace('sp.cobblestone.Publish',{
                 id="current-x"
                 value={ current.x }
                 onChange={(e) => {
-                  this.updateCurrentPage({ x: e.target.value });
+                  this.updateCurrentPage({ x: parseInt(e.target.value) });
                 }}/>
             </div>
             <div className="form-inline">
@@ -137,7 +151,7 @@ namespace('sp.cobblestone.Publish',{
                 id="current-y"
                 value={ current.y }
                 onChange={(e) => {
-                  this.updateCurrentPage({ y: e.target.value });
+                  this.updateCurrentPage({ y: parseInt(e.target.value) });
                 }}/>
             </div>
             <div className="form-inline">
@@ -150,7 +164,7 @@ namespace('sp.cobblestone.Publish',{
                 id="current-width"
                 value={ current.width }
                 onChange={(e) => {
-                  this.updateCurrentPage({ width: e.target.value });
+                  this.updateCurrentPage({ width: parseInt(e.target.value)});
                 }}/>
             </div>
             <div className="form-inline">
@@ -163,56 +177,36 @@ namespace('sp.cobblestone.Publish',{
                 id="current-height"
                 value={ current.height }
                 onChange={(e) => {
-                  this.updateCurrentPage({ height: e.target.value });
+                  this.updateCurrentPage({ height: parseInt(e.target.value) });
                 }}/>
             </div>
-            <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
           </div>
         }
         <TileDefs tiles={this.state.tiles} images={this.state.images} tileDim={tileDim}/>
         <div className="d-flex justify-content-center">
-          <div className="d-flex flex-column">
-            <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
-            <div className="">
-              {this.state.current &&
-                (() => {
-                  const [pageWidth, pageHeight] = [cUtil.getWidth, cUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
-                  const pageDim = {
-                    x: -tileDim/2,
-                    y: -tileDim/2,
-                    w: tileDim * (pageWidth + 0.5),
-                    h: tileDim * (pageHeight + 0.5)
-                  };
-                  console.log({ tileDim, current, pageDim, pageWidth, pageHeight, fullWidth:this.state.fullWidth, fullHeight:this.state.fullHeight});
-                  return <svg key="svg.pagecanvas" width="40%" height="40%"
-                              viewBox={`${pageDim.x} ${pageDim.y} ${pageDim.w} ${pageDim.h}`}>
-                    <rect x={pageDim.x} y={pageDim.y} width={pageDim.w} height={pageDim.h} fill="white" stroke="none"/>
-                    {
-                      util.range(current.width).map((x) => util.range(current.height).map((y) => {
-                        return this.getTileImage(x, y, cUtil.getCoordinateId(current.x + x, current.y + y), tileDim);
-                      }))
-                    }
-                  </svg>
-                })()
-              }
-            </div>
-          </div>
-          <div className="">
-            <svg key="svg.mapcanvas" width="40%" height="40%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
-              {
-                util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
-                  return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
-                }))
-              }
-              {
-                this.state.pages.map((p) => {
-                  return <rect x={p.x * tileDim} y={p.y * tileDim} width={p.width * tileDim} height={p.height * tileDim} fill="none" stroke={p.pageOutlineColor} strokeWidth={tileDim/10}/>
-                })
-              }
+          <svg key="svg.pagecanvas" width="100%" height="100%" viewBox={`${pageDim.x} ${pageDim.y} ${pageDim.w} ${pageDim.h}`}>
+            <rect x={pageDim.x} y={pageDim.y} width={pageDim.w} height={pageDim.h} fill="white" stroke="black" strokeWidth="3"/>
+            { current &&
+              util.range(current.width).map((x) => util.range(current.height).map((y) => {
+                return this.getTileImage(x, y, cUtil.getCoordinateId(current.x + x, current.y + y), tileDim);
+              }))
+            }
             </svg>
-          </div>
+          <svg key="svg.mapcanvas" width="100%" height="100%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
+            {
+              util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
+                return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
+              }))
+            }
+            {
+              this.state.pages.map((p) => {
+                return <rect x={p.x * tileDim} y={p.y * tileDim} width={p.width * tileDim} height={p.height * tileDim} fill="none" stroke={p.pageOutlineColor} strokeWidth={tileDim/10}/>
+              })
+            }
+          </svg>
         </div>
         <div className="d-flex justify-content-end">
+          <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
           <button className="btn btn-info" onClick={() => this.publish() }>Publish</button>
           <button className="btn btn-success" onClick={() => this.onClose({ pages: this.state.pages }) }>Apply Pages</button>
           <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
