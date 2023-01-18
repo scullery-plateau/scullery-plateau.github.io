@@ -34,6 +34,7 @@
                 tiles: {},
                 placements: {},
                 orientation: 'portrait',
+                printOrientation: 'portrait',
                 size: {
                     min: 8,
                     max: 10
@@ -66,8 +67,8 @@
                 publish: {
                     templateClass: Publish,
                     attrs: { class: 'rpg-box text-light w-75' },
-                    onClose: ({ pages }) => {
-                        this.setState({ pages });
+                    onClose: ({ pages, printOrientation }) => {
+                        this.setState({ pages, printOrientation });
                     }
                 },
                 tileEditor: {
@@ -125,14 +126,12 @@
                     callback: () => {
                         this.modals.imageDownload.open(this.state);
                     }
-                    /*
                 },{
                     id: 'publish',
                     label: 'Publish',
                     callback: () => {
                         this.modals.publish.open(this.state);
                     }
-                     */
                 }]
             },{
                 id: 'sizeOrientationMenu',
