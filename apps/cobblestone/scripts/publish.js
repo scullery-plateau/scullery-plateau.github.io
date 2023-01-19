@@ -84,7 +84,8 @@ namespace('sp.cobblestone.Publish',{
     }
     publish() {
       /* todo */
-      Print.printPages("Print Cobblestone", this.state.size, this.state.printOrientation, this.state.images, this.state.placements, this.state.pages);
+      Print.printPages("Print Cobblestone", this.state.size, this.state.orientation, this.state.printOrientation, 
+      this.state.images, this.state.tiles, this.state.placements, this.state.pages);
     }
     getTileImage(x,y,coordId,tileDim) {
       const tile = this.state.placements[coordId];
