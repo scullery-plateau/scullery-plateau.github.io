@@ -7,12 +7,18 @@ namespace('sp.cobblestone.PrintPages',{
   const pageSize = { max: 10, min: 8 };
   const buildDefs = function(images, tiles) {
     return `<svg width="0" height="0"><defs>${
-      Object.entries(tiles).map(([filename,tf]) => {
-        const id = cUtil.getTileId(filename, tf);
-        const href = images[filename];
-        const tfs = cUtil.buildImageTransform(tf);
-        return `<image id="${id}" href="${href}" width="${tileDim}" height="${tileDim}" transform="${tfs}"/>`;
-      }).join('')
+      Object.entries(tiles).reduce((acc,[filename,tfs]) => {
+        return Object.entries(tfs).reduce((out,[tf,isPresent]) => {
+          if (isPresent) {
+            console.log({ filename, tf });
+            const id = cUtil.getTileId(filename, tf);
+            const href = images[filename];
+            const tfs = cUtil.buildImageTransform(tf);
+            out.push(`<image id="${id}" href="${href}" width="${tileDim}" height="${tileDim}" transform="${tfs}"/>`);
+          }
+          return out;
+        },acc);
+      },[]).join('')
     }</defs></svg>`;
   }
   const wrapSVG = function(width, height, content) {
@@ -40,7 +46,7 @@ namespace('sp.cobblestone.PrintPages',{
     return pageSelections.map((page) => {
       let { x, y, width, height } = page;
       [ x, y, width, height ] = [ x, y, width, height ].map(n => (n * tileDim));
-      return `<rect x="${x}" y="${y}" width="${width}" height="${height}" fill="none" stroke="${page.pageOutlineColor}" stroke-width="4"/>`
+      return `<rect x="${offX + x}" y="${offY + y}" width="${width}" height="${height}" fill="none" stroke="${page.pageOutlineColor}" stroke-width="6"/>`
     }).join('');
   }
   const buildPages = function(size, orientation, printOrientation, placements, pageSelections) {
@@ -54,8 +60,8 @@ namespace('sp.cobblestone.PrintPages',{
     const height = Math.max(imageHeight, ratioHeight);
     const offX = tileDim * (width - imageWidth) / 2;
     const offY = tileDim * (height - imageHeight) / 2;
-    const firstPage = wrapSVG(width, height, drawPlacements(placements, offX, offY));
-    const secondPage = wrapSVG(width, height, drawPlacements(placements, offX, offY) + drawPageFrames(pageSelections, offX, offY));
+    const firstPage = wrapSVG(width * tileDim, height * tileDim, drawPlacements(placements, offX, offY));
+    const secondPage = wrapSVG(width * tileDim, height * tileDim, drawPlacements(placements, offX, offY) + drawPageFrames(pageSelections, offX, offY));
     return [firstPage, secondPage].concat(pageSelections.map((page) => {
       return wrapSVG(pageRatioWidth * tileDim, pageRatioHeight * tileDim, drawPlacements(getPagePlacements(page,placements), 0, 0));
     }));

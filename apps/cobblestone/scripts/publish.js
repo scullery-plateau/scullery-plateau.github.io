@@ -203,7 +203,7 @@ namespace('sp.cobblestone.Publish',{
             }
             {
               this.state.pages.map((p) => {
-                return <rect x={p.x * tileDim} y={p.y * tileDim} width={p.width * tileDim} height={p.height * tileDim} fill="none" stroke={p.pageOutlineColor} strokeWidth={tileDim/10}/>
+                return <rect x={p.x * tileDim} y={p.y * tileDim} width={p.width * tileDim} height={p.height * tileDim} fill="none" stroke={p.pageOutlineColor} strokeWidth={tileDim/5}/>
               })
             }
           </svg>
@@ -211,7 +211,12 @@ namespace('sp.cobblestone.Publish',{
         <div className="d-flex justify-content-end">
           <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
           <button className="btn btn-info" onClick={() => this.publish() }>Publish</button>
-          <button className="btn btn-success" onClick={() => this.onClose({ pages: this.state.pages }) }>Apply Pages</button>
+          <button className="btn btn-success" onClick={() => {
+            this.onClose({
+              pages: this.state.pages,
+              printOrientation: this.state.printOrientation
+            });
+          }}>Apply Pages</button>
           <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
         </div>
       </div>;
