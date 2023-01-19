@@ -4,8 +4,9 @@ namespace('sp.cobblestone.Publish',{
   "sp.common.Dialog":'Dialog',
   "sp.common.Utilities":"util",
   "sp.cobblestone.CobblestoneUtil":'cUtil',
+  "sp.cobblestone.PrintPages":"Print",
   "sp.cobblestone.TileDefs":"TileDefs"
-},({ ColorPicker, Dialog, util, cUtil, TileDefs }) => {
+},({ ColorPicker, Dialog, util, cUtil, TileDefs, Print }) => {
   const emptyCellId = cUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
@@ -83,6 +84,7 @@ namespace('sp.cobblestone.Publish',{
     }
     publish() {
       /* todo */
+      Print.printPages("Print Cobblestone", this.state.size, this.state.printOrientation, this.state.images, this.state.placements, this.state.pages);
     }
     getTileImage(x,y,coordId,tileDim) {
       const tile = this.state.placements[coordId];
