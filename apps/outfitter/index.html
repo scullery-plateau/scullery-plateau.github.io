@@ -43,6 +43,7 @@
     <script type="text/babel" src="../common/dialog.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
     <script type="text/babel" src="../common/footer.js"></script>
+    <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
@@ -53,7 +54,7 @@
     <script type="text/babel">
       (function () {
         const { Outfitter, Footer } = imports({
-          'sp.common.Outfitter': 'Outfitter',
+          'sp.outfitter.Outfitter': 'Outfitter',
           'sp.common.Footer': 'Footer',
         });
         ReactDOM.createRoot(document.getElementById('app-root')).render(
