@@ -239,6 +239,7 @@
             return <>
                 <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
                 <TileDefs tiles={this.state.tiles} images={this.state.images} tileDim={tileDim}/>
+                <h4 className="text-center">Click <a href="resources/delian.zip">here</a> to download an example!</h4>
                 <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
                     <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
                     <div className="ml-2 w-100 d-flex flex-nowrap tile-buttons">
