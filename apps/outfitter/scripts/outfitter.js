@@ -14,6 +14,9 @@ namespace('sp.outfitter.Outfitter', {
       if (this.state.bodyType) {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
+          <div className="">
+            
+          </div>
         </>;
       } else {
         return <>
