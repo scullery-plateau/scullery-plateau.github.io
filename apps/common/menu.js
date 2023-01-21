@@ -132,12 +132,12 @@ namespace('sp.common.Menu', () => {
   };
   return function (props) {
     return (
-      <div className="menu-root">
+      <div className="menu-root ms-3">
         <ul className="navbar-nav">
           <li className="nav-item active dropdown">
             <a
               href="#"
-              className="rpg-box p-3 text-light nav-link dropdown-toggle"
+              className="rpg-box p-3 text-light nav-link dropdown-toggle text-center"
               onClick={(e) => {
                 toggleMenu(e);
               }}

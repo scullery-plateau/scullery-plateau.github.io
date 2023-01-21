@@ -1,12 +1,28 @@
 namespace('sp.outfitter.Outfitter', {
+  'sp.common.BuildAbout':'buildAbout',
+  'sp.common.Dialog':'Dialog',
   'sp.common.Header':'Header'
-}, ({ Header }) => {
+}, ({ buildAbout, Dialog, Header }) => {
   const buttonScale = 1/3;
+  const about = [];
   return class extends React.Component {
     constructor(props) {
       super(props);
       this.state = {};
-      this.menuItems = [];
+      this.modals = Dialog.factory({
+        about: {
+          templateClass: buildAbout("Outfitter",about),
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {},
+        }
+      });
+      this.menuItems = [{
+        id: 'about',
+        label: 'About',
+        callback: () => {
+          this.modals.about.open();
+        }
+      }];
     }
     loadNew(bodyType){}
     loadSchematic(){}
@@ -14,7 +30,7 @@ namespace('sp.outfitter.Outfitter', {
       if (this.state.bodyType) {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
-          <div className="">
+          <div className="d-flex flex-column">
             
           </div>
         </>;
@@ -23,7 +39,7 @@ namespace('sp.outfitter.Outfitter', {
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="d-flex flex-column">
             <div className="m-2 d-flex justify-content-center">
-              <button className="btn btn-success" onClick={() => this.loadSchematic()}>Load File</button>
+              <button className="btn btn-success" onClick={ () => this.loadSchematic() }>Load File</button>
             </div>
             <div className="m-2 d-flex justify-content-around">
               <button className="btn btn-primary" onClick={ () => this.loadNew('fit') }>
