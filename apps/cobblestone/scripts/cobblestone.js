@@ -38,8 +38,7 @@
                 size: {
                     min: 8,
                     max: 10
-                },
-                selectedTile: []
+                }
             };
             this.modals = Dialog.factory({
                 about: {
@@ -102,6 +101,9 @@
                                 if (error) {
                                     throw error;
                                 }
+                                const [filename, tfs] = Object.entries(tiles)[0];
+                                const firstTF = Object.keys(tfs);
+                                stateData.selectedTile = [filename, firstTF];
                                 this.setState(stateData);
                             },
                             (fileName, error) => {
@@ -182,21 +184,6 @@
               {}
             );
             this.setState({ placements });
-        }
-        reframePlacements(update) {
-            const width = cUtil.getWidth(this.state.size,this.state.orientation);
-            const height = cUtil.getHeight(this.state.size,this.state.orientation);
-            const placements = util.range(width).reduce((acc,x) => {
-                return util.range(height).reduce((out,y) => {
-                    const coordId = cUtil.getCoordinateId(x,y);
-                    const placement = this.state.placements[coordId];
-                    if (placement) {
-                        out[coordId] = placement;
-                    }
-                    return out;
-                }, acc);
-            }, {});
-            this.setState(util.merge(update,{ placements }));
         }
         addImage() {
             LoadFile(
