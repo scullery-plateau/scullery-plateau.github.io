@@ -1,8 +1,10 @@
 namespace('sp.outfitter.Outfitter', {
   'sp.common.BuildAbout':'buildAbout',
+  'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Dialog':'Dialog',
+  'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header'
-}, ({ buildAbout, Dialog, Header }) => {
+}, ({ buildAbout, ColorPicker, Dialog, FileDownload, Header }) => {
   const buttonScale = 1/3;
   const about = [];
   return class extends React.Component {
@@ -14,9 +16,30 @@ namespace('sp.outfitter.Outfitter', {
           templateClass: buildAbout("Outfitter",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {},
-        }
+        },
+        fileDownload: {
+          templateClass: FileDownload,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {}
+        },
+        colorPicker: {
+          templateClass: ColorPicker,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: ({ color, index }) => {
+            // todo
+          },
+        },
       });
       this.menuItems = [{
+        id: 'downloadFile',
+        label: 'Download File',
+        callback: () => {
+          this.modals.fileDownload.open({
+            defaultFilename:"outfitter",
+            jsonData:this.state.schematic
+          });
+        }
+      },{
         id: 'about',
         label: 'About',
         callback: () => {
