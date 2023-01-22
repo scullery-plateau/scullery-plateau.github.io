@@ -1,21 +1,25 @@
-## Bugs
-
-- options menu css
-
-## Cobblestone
-
-- to REACT
-  - offer larger dimensions
-    - 25 x 25 
-    - 24 x 30
-    - 48 x 30
-    - 25 x 50
-    - 50 x 50
-    - 48 x 60
 
 ## Outfitter
 
 1. _impl_ (with REACT)
+
+## Spritely
+
+- hot keys
+- "load as overlay"
+
+## Tokenizer
+
+- allow users to determine rotation of frame
+- allow users to flip image
+
+## Minifier
+
+- individual sizes & printing best fit
+
+## Cobblestone
+
+1. improved / condensed paging(how??)
 
 ## SVG Canvas - **Mondrian**
 
@@ -45,14 +49,6 @@
   - borders / lines / shapes / images / icons
   - size (business card to full page)
 - apply data
-
-## Spritely
-
-- hot keys
-
-## Minifier
-
-- individual sizes & printing best fit
 
 ## Gary's Almanac
 
