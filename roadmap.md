@@ -1,7 +1,10 @@
-
 ## Outfitter
 
 1. _impl_ (with REACT)
+
+## Overall
+
+- load data validation
 
 ## Spritely
 
