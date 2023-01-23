@@ -4,8 +4,11 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
-  'sp.common.Header':'Header'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header }) => {
+  'sp.common.Header':'Header',
+  'sp.common.LoadFile':'LoadFile',
+  'sp.outfitter.OutfitterSVG':'OutfitterSVG'
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, OutfitterSVG }) => {
+  const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
   const getDefaultSchematic = function(bodyType) {
@@ -40,6 +43,7 @@ namespace('sp.outfitter.Outfitter', {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
+            alert("file load not yet implemented")
             // todo
           },
         },
@@ -98,7 +102,23 @@ namespace('sp.outfitter.Outfitter', {
     loadNew(bodyType){
       this.loadMeta(bodyType,getDefaultSchematic(bodyType));
     }
-    loadSchematic(){}
+    loadSchematic(){
+      LoadFile(
+        false,
+        'text',
+        (fileContent) => {
+          const schematic = JSON.parse(fileContent);
+          const error = validateLoadFileJson(schematic);
+          if (error) {
+            throw error;
+          }
+          this.loadMeta(schematic.bodyType,schematic);
+        },
+        (fileName, error) => {
+          console.log({ fileName, error });
+          alert(fileName + ' failed to load. See console for error.');
+        });
+    }
     render() {
       if (!this.state.schematic) {
         return <>
@@ -136,7 +156,8 @@ namespace('sp.outfitter.Outfitter', {
       } else {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
-          <p>stub</p>
+          <svg width="0" height="0"><defs>{this.state.defs}</defs></svg>
+          <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata }/>
         </>;
       }
     }
