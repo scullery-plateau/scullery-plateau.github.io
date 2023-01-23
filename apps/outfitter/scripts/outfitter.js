@@ -1,12 +1,26 @@
 namespace('sp.outfitter.Outfitter', {
+  'sp.common.Ajax':'Ajax',
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header'
-}, ({ buildAbout, ColorPicker, Dialog, FileDownload, Header }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header }) => {
   const buttonScale = 1/3;
   const about = [];
+  const getDefaultSchematic = function(bodyType) {
+    return {
+      bodyType,
+      bgColor: '#cccccc',
+      layers: [
+        { part: 'torso', index: 0, shading: 0 },
+        { part: 'legs', index: 0, shading: 0 },
+        { part: 'arm', index: 0, shading: 0 },
+        { part: 'arm', index: 0, shading: 0, flip: true },
+        { part: 'head', index: 0, shading: 0 },
+      ],
+    };
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -47,17 +61,46 @@ namespace('sp.outfitter.Outfitter', {
         }
       }];
     }
-    loadNew(bodyType){}
+    loadMeta(bodyType,schematic) {
+      this.setState({schematic, progress: 1});
+      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.svg`,
+        {
+          success: (fullDefs) => {
+            let [h, defs, t] = fullDefs.split('defs');
+            defs = defs.substring(1, defs.length - 2);
+            this.setState({ fullDefs, defs });
+            Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.json`,
+              {
+                success: (responseText) => {
+                  const metadata = JSON.parse(responseText);
+                  this.setState({ metadata, progress: undefined });
+                },
+                failure: (resp) => {
+                  console.log(resp);
+                  throw resp;
+                },
+                stateChange: (state) => {
+                  const progress = (100 * (state.state + 1)) / (state.max + 1);
+                  this.setState({progress})
+                }
+              });
+          },
+          failure: (resp) => {
+            console.log(resp);
+            throw resp;
+          },
+          stateChange: (state) => {
+            const progress = (100 * (state.state + 1)) / (state.max + 1);
+            this.setState({progress})
+          }
+        });
+    }
+    loadNew(bodyType){
+      this.loadMeta(bodyType,getDefaultSchematic(bodyType));
+    }
     loadSchematic(){}
     render() {
-      if (this.state.bodyType) {
-        return <>
-          <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
-          <div className="d-flex flex-column">
-            
-          </div>
-        </>;
-      } else {
+      if (!this.state.schematic) {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="d-flex flex-column">
@@ -79,6 +122,21 @@ namespace('sp.outfitter.Outfitter', {
               </button>
             </div>
           </div>
+        </>;
+      } else if (this.state.progress) {
+        return <>
+          <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
+          <div className="d-flex flex-column">
+            <p>Loading display configuration data, please wait....</p>
+            <div className="progress">
+              <div className="progress-bar" style={{width: `${this.state.progress}%`}}>{this.state.progress}%</div>
+            </div>
+          </div>
+        </>;
+      } else {
+        return <>
+          <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
+          <p>stub</p>
         </>;
       }
     }
