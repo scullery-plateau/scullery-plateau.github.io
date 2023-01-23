@@ -20,6 +20,7 @@
 ## Cobblestone
 
 1. improved / condensed paging(how??)
+2. reload image from tile edit screen
 
 ## SVG Canvas - **Mondrian**
 
