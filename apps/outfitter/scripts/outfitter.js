@@ -6,8 +6,9 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
+  'sp.outfitter.Constants':'c',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, OutfitterSVG }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, c, OutfitterSVG }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -16,11 +17,11 @@ namespace('sp.outfitter.Outfitter', {
       bodyType,
       bgColor: '#cccccc',
       layers: [
-        { part: 'torso', index: 0, shading: 0 },
-        { part: 'legs', index: 0, shading: 0 },
-        { part: 'arm', index: 0, shading: 0 },
-        { part: 'arm', index: 0, shading: 0, flip: true },
-        { part: 'head', index: 0, shading: 0 },
+        { part: 'torso', index: 0, shading: 1 },
+        { part: 'legs', index: 0, shading: 1 },
+        { part: 'arm', index: 0, shading: 1 },
+        { part: 'arm', index: 0, shading: 1, flip: true },
+        { part: 'head', index: 0, shading: 1 },
       ],
     };
   }
@@ -156,8 +157,7 @@ namespace('sp.outfitter.Outfitter', {
       } else {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
-          <svg width="0" height="0"><defs>{this.state.defs}</defs></svg>
-          <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata }/>
+          <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata } defs={ this.state.defs }/>
         </>;
       }
     }
