@@ -30,6 +30,14 @@
 
 1. _impl_ (with REACT)
 
+## Card Builder - **Svengali**
+
+1. _impl_ (with REACT)
+  - Define layout / template
+    - borders / lines / shapes / images / icons
+    - size (business card to full page)
+  - apply data
+
 ## How To D&D?
 
 - Build Page as blog post
@@ -43,13 +51,6 @@
       - images for all monsters for adventure
       - images for all character sheets on Wizards of the Coast site
     - Minifier minis of Outfitter images
-
-## Card Builder - **Svengali**
-
-- Define layout / template
-  - borders / lines / shapes / images / icons
-  - size (business card to full page)
-- apply data
 
 ## Gary's Almanac
 
