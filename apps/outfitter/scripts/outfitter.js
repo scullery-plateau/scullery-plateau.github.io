@@ -59,6 +59,12 @@ namespace('sp.outfitter.Outfitter', {
           });
         }
       },{
+        id: 'downloadImage',
+        label: 'Download Image',
+        callback: () => {
+          alert('"Download Image" is not yet available');
+        }
+      },{
         id: 'about',
         label: 'About',
         callback: () => {
@@ -186,8 +192,9 @@ namespace('sp.outfitter.Outfitter', {
       temp[field] = newValue;
       this.setState({ schematic });
     }
-    fromSelectedLayer(field) {
-      return this.state.schematic.layers[this.state.selectedLayer][field];
+    fromSelectedLayer(field,defaultValue) {
+      const retval = this.state.schematic.layers[this.state.selectedLayer][field];
+      return (retval === undefined)?defaultValue:retval;
     }
     launchColorPicker(field) {
       if (field === 'background') {
@@ -273,7 +280,7 @@ namespace('sp.outfitter.Outfitter', {
                     }}>
                       {
                         this.state.schematic.layers.map((layer, index) => {
-                          return <option value={index}>{index}: {layer.part} {layer.index}</option>;
+                          return <option key={`layer-option-${index}`} value={index}>{index}: {layer.part} {layer.index}</option>;
                         })
                       }
                     </select>
@@ -332,13 +339,13 @@ namespace('sp.outfitter.Outfitter', {
                   <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
                     this.updateLayer('part',e.target.value)
                   }}>
-                    <option disabled hidden selected value>Select Part Type</option>
+                    <option disabled hidden value>Select Part Type</option>
                     {
-                      c.getPartGroups().map((group) => {
-                        return <optgroup label={group}>
+                      c.getPartGroups().map((group,partGroupIndex) => {
+                        return <optgroup key={`part-group-option-${partGroupIndex}`} label={group}>
                           {
-                            c.getPartTypesByGroup(group).map((partType) => {
-                              return <option value={partType.part}>{partType.label}</option>;
+                            c.getPartTypesByGroup(group).map((partType,partTypeIndex) => {
+                              return <option key={`part-type-index-${partGroupIndex}-${partTypeIndex}`} value={partType.part}>{partType.label}</option>;
                             })
                           }
                         </optgroup>;
@@ -366,8 +373,8 @@ namespace('sp.outfitter.Outfitter', {
                           onChange={(e) => this.updateSchematic('bodyScale',e.target.value) }>
                     <option>default</option>
                     {
-                      OutfitterSVG.getBodyScales().map((bodyScale) => {
-                        return <option value={bodyScale}>{bodyScale}</option>;
+                      OutfitterSVG.getBodyScales().map((bodyScale, index) => {
+                        return <option key={`bodyScale-${index}`} value={bodyScale}>{bodyScale}</option>;
                       })
                     }
                   </select>
@@ -382,6 +389,8 @@ namespace('sp.outfitter.Outfitter', {
                       className="form-control"
                       min="-1"
                       style={{width: "3em"}}
+                      value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
+                      onChange={(e) => this.updateSchematic('bgPattern',parseInt(e.target.value))}
                     />
                   </div>
                 </div>
@@ -394,9 +403,9 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-4 d-flex flex-column">
               <div className=" rpg-box text-light m-1 d-flex justify-content-evenly">
-                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') || "#999999"} style={{}}/>
-                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') || "#999999"} style={{}}/>
-                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') || "#999999"} style={{}}/>
+                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base',"#999999") } style={{}}/>
+                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail',"#999999") } style={{}}/>
+                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline',"#999999") } style={{}}/>
               </div>
               <div className=" rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
@@ -441,7 +450,7 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     step="0.01"
                     style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('opacity') }
+                    value={ this.fromSelectedLayer('opacity',1.0) }
                     onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
                   />
                 </div>
@@ -453,7 +462,7 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="-1"
                     style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('pattern') }
+                    value={ this.fromSelectedLayer('pattern',-1) }
                     onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
                   />
                 </div>
@@ -465,7 +474,7 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="-1"
                     style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('shading') }
+                    value={ this.fromSelectedLayer('shading',-1) }
                     onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
                   />
                 </div>

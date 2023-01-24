@@ -85,20 +85,20 @@ namespace('sp.outfitter.OutfitterSVG',{
       let [flipX, flipY] = flip.toJSON();
       let [moveX, moveY] = move.toJSON();
       return <g key={`group-${index}`} opacity={layer.opacity || 1.0} transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
-        { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'}/>}
-        { part.layers.detail && <use href={ '#' + part.layers.detail } stroke={ layer.detail || 'white'}/>}
+        { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
+        { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}
         { isNumber(layer.pattern) && layer.pattern >= 0 && (part.layers.base || part.layers.detail) &&
-          <group fill={`url(#pattern-${layer.pattern >= 10 ? '' : '0'}${ layer.pattern })`}>
-            { part.layers.base && <use href={ '#' + part.layers.base}/>}
-            { part.layers.detail && <use href={ '#' + part.layers.detail}/>}
-          </group>}
+          <>
+            { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#patterns-${layer.pattern >= 10 ? '' : '0'}${ layer.pattern })`} stroke="none"/>}
+            { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#patterns-${layer.pattern >= 10 ? '' : '0'}${ layer.pattern })`} stroke="none"/>}
+          </>}
         { isNumber(layer.shading) && layer.shading >= 0 && (part.layers.base || part.layers.detail) &&
           <>
-            { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#shading-${layer.shading >= 10 ? '' : '0'}${ layer.shading })`}/>}
-            { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#shading-${layer.shading >= 10 ? '' : '0'}${ layer.shading })`}/>}
+            { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#shading-${layer.shading >= 10 ? '' : '0'}${ layer.shading })`} stroke="none"/>}
+            { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#shading-${layer.shading >= 10 ? '' : '0'}${ layer.shading })`} stroke="none"/>}
           </>}
         { part.layers.outline && <use href={ '#' + part.layers.outline } fill="none" stroke={ layer.outline || 'black'} strokeWidth="1"/>}
-        { part.layers.shadow && <use href={ '#' + part.layers.shadow }/> }
+        { part.layers.shadow && <use href={ '#' + part.layers.shadow } stroke="none"/> }
       </g>
     });
     let [minX, minY] = min.toJSON();
@@ -121,7 +121,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       { schematic.bgColor &&
         <rect x={minX} y={minY} width={width} height={height} fill={schematic.bgColor} stroke="none"/>
       }
-      { schematic.bgPattern &&
+      { isNumber(schematic.bgPattern) &&
         <rect x={minX} y={minY} width={width} height={height} fill={
           `url(#patterns-${schematic.bgPattern >= 10 ? '' : '0'}${ schematic.bgPattern })`
         } stroke="none"/>
