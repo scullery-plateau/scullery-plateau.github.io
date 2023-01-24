@@ -29,7 +29,30 @@ namespace('sp.outfitter.OutfitterSVG',{
   const isNumber = function (n) {
     return !isNaN(n);
   };
-
+  const getScreenHeight = (() => {
+    if( typeof( window.innerHeight ) == 'number' ) {
+      //Non-IE
+      return window.innerHeight;
+    } else if( document.documentElement && document.documentElement.clientHeight ) {
+      //IE 6+ in 'standards compliant mode'
+      return document.documentElement.clientHeight;
+    } else if( document.body && document.body.clientHeight ) {
+      //IE 4 compatible
+      return document.body.clientHeight;
+    }
+  });
+  const getScreenWidth = (() => {
+    if( typeof( window.innerWidth ) == 'number' ) {
+      //Non-IE
+      return window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth ) {
+      //IE 6+ in 'standards compliant mode'
+      return document.documentElement.clientWidth;
+    } else if( document.body && document.body.clientWidth ) {
+      //IE 4 compatible
+      return document.body.clientWidth;
+    }
+  });
   return function({ schematic, meta, defs }) {
     console.log(meta);
     let min = new XY([0, 0]);
@@ -85,16 +108,17 @@ namespace('sp.outfitter.OutfitterSVG',{
     let halfWidth = Math.max(Math.abs(maxX), Math.abs(minX));
     min = new XY([-1 * halfWidth, minY]);
     max = new XY([halfWidth, maxY]);
-    [minX, minY] = min.toJSON();
-    [maxX, maxY] = max.toJSON();
-    let padding = [10, 10];
+    const padding = [10, 10];
     min = min.minus(padding);
     max = max.plus(padding);
     [minX, minY] = min.toJSON();
     [maxX, maxY] = max.toJSON();
-    let width = maxX - minX;
-    let height = maxY - minY;
-    return <svg width={1.5 * width} height={1.5 * height} viewBox={`${minX} ${minY} ${width} ${height}`}>
+    const width = maxX - minX;
+    const height = maxY - minY;
+    let frameHeight = getScreenHeight() * 0.75;
+    let frameWidth = getScreenWidth() * 0.25;
+    [frameWidth, frameHeight] = [Math.min(frameWidth,frameHeight * width / height),Math.min(frameHeight,frameWidth * height / width)];
+    return <svg width={ frameWidth } height={ frameHeight } viewBox={`${minX} ${minY} ${width} ${height}`}>
       <defs dangerouslySetInnerHTML={{ __html: defs }}></defs>
       { schematic.bgColor &&
         <rect x={minX} y={minY} width={width} height={height} fill={schematic.bgColor} stroke="none"/>
