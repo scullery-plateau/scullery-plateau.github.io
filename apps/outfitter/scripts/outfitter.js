@@ -209,7 +209,7 @@ namespace('sp.outfitter.Outfitter', {
         this.updateLayer(field,color);
       }
     }
-    ColorPickerButton({label, field, getter, style}) {
+    buildColorPickerButton(label, field, getter, style) {
       const value = getter();
       return <button
         className="btn btn-secondary"
@@ -257,6 +257,9 @@ namespace('sp.outfitter.Outfitter', {
           </div>
         </>;
       } else {
+        const ColorPickerButton = (({label, field, getter, style}) => {
+          return this.buildColorPickerButton(label, field, getter, style);
+        })
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="row">
@@ -270,7 +273,7 @@ namespace('sp.outfitter.Outfitter', {
                     }}>
                       {
                         this.state.schematic.layers.map((layer, index) => {
-                          return <option value={index}>{index}: {layer.partType} {layer.partIndex}</option>;
+                          return <option value={index}>{index}: {layer.part} {layer.index}</option>;
                         })
                       }
                     </select>
@@ -326,8 +329,8 @@ namespace('sp.outfitter.Outfitter', {
               <div className="rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
                   <label htmlFor="part-type" className="input-group-text">Part Type:</label>
-                  <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('partType') } onChange={(e) => {
-                    this.updateLayer('partType',e.target.value)
+                  <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
+                    this.updateLayer('part',e.target.value)
                   }}>
                     <option disabled hidden selected value>Select Part Type</option>
                     {
@@ -351,8 +354,8 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="0"
                     style={{ width: "4em" }}
-                    value={ this.fromSelectedLayer('partIndex') }
-                    onChange={(e) => this.updateLayer('partIndex', parseInt(e.target.value))}
+                    value={ this.fromSelectedLayer('index') }
+                    onChange={(e) => this.updateLayer('index', parseInt(e.target.value))}
                   />
                 </div>
               </div>
@@ -451,7 +454,7 @@ namespace('sp.outfitter.Outfitter', {
                     min="-1"
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('pattern') }
-                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
+                    onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
                   />
                 </div>
                 <div className="input-group">

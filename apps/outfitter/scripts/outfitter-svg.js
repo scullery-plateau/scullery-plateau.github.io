@@ -54,7 +54,6 @@ namespace('sp.outfitter.OutfitterSVG',{
     }
   });
   const OutfitterSVG = function({ schematic, meta, defs }) {
-    console.log(meta);
     let min = new XY([0, 0]);
     let max = new XY([0, 0]);
     const bodyScale = new XY(SCALES[schematic.bodyScale] || [1.0, 1.0]);
@@ -64,7 +63,6 @@ namespace('sp.outfitter.OutfitterSVG',{
       TORSO_TOPS[schematic.bodyType] * 0.99 * (1 - bodyScaleY),
     ]);
     const contents = schematic.layers.map((layer,index) => {
-      console.log(layer);
       let part = meta.parts[layer.part][layer.index];
       layer.resize = layer.resize || XY.identityMultiplier();
       let flip = layer.resize.times([layer.flip ? -1.0 : 1.0, 1.0]);
