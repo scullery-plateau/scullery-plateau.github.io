@@ -53,7 +53,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       return document.body.clientWidth;
     }
   });
-  return function({ schematic, meta, defs }) {
+  const OutfitterSVG = function({ schematic, meta, defs }) {
     console.log(meta);
     let min = new XY([0, 0]);
     let max = new XY([0, 0]);
@@ -134,4 +134,8 @@ namespace('sp.outfitter.OutfitterSVG',{
       </g>
     </svg>;
   }
+  OutfitterSVG.getBodyScales = function() {
+    return Array.from(Object.keys(SCALES));
+  }
+  return OutfitterSVG;
 });

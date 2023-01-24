@@ -6,9 +6,10 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
+  'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, c, OutfitterSVG }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, OutfitterSVG }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -44,7 +45,7 @@ namespace('sp.outfitter.Outfitter', {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
-
+            this.setColorFromPicker(index, color);
           },
         },
       });
@@ -66,7 +67,7 @@ namespace('sp.outfitter.Outfitter', {
       }];
     }
     loadMeta(bodyType,schematic) {
-      this.setState({schematic, progress: 1});
+      this.setState({schematic, progress: 1, selectedLayer: 0});
       Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.svg`,
         {
           success: (fullDefs) => {
@@ -77,7 +78,7 @@ namespace('sp.outfitter.Outfitter', {
               {
                 success: (responseText) => {
                   const metadata = JSON.parse(responseText);
-                  this.setState({ metadata, progress: undefined });
+                  this.setState({ metadata, progress: undefined, selectedLayer: 0});
                 },
                 failure: (resp) => {
                   console.log(resp);
@@ -118,6 +119,108 @@ namespace('sp.outfitter.Outfitter', {
           console.log({ fileName, error });
           alert(fileName + ' failed to load. See console for error.');
         });
+    }
+    updateSchematic(field,value) {
+      const { schematic } = util.merge(this.state);
+      schematic.layers = schematic.layers.map((l) => util.merge(l));
+      schematic[field] = value;
+      this.setState({ schematic });
+    }
+    addLayer(){
+      const { schematic } = util.merge(this.state);
+      schematic.layers = schematic.layers.concat([{ part: 'arm', index: 0, shading: 0 }]);
+      const selectedLayer = schematic.layers.length - 1;
+      this.setState({ schematic, selectedLayer });
+    }
+    removeLayer(){
+      const { schematic } = util.merge(this.state);
+      schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+      const selectedLayer = schematic.layers.length - 1;
+      this.setState({ schematic, selectedLayer });
+    }
+    moveLayerToBack(){
+      const { schematic } = util.merge(this.state);
+      const temp = schematic.layers[this.state.selectedLayer];
+      schematic.layers = [temp].concat(schematic.layers.splice(this.state.selectedLayer,1));
+      const selectedLayer = 0;
+      this.setState({ schematic, selectedLayer });
+    }
+    moveLayerBack(){
+      if(this.state.selectedLayer > 0) {
+        const { schematic } = util.merge(this.state);
+        const temp = schematic.layers[this.state.selectedLayer];
+        schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+        const selectedLayer = this.state.selectedLayer - 1;
+        schematic.layers = schematic.layers.splice(selectedLayer,0,temp);
+        this.setState({ schematic, selectedLayer });
+      }
+    }
+    moveLayerForward(){
+      if(this.state.selectedLayer < this.state.schematic.layers.length - 1) {
+        const { schematic } = util.merge(this.state);
+        const temp = schematic.layers[this.state.selectedLayer];
+        schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+        const selectedLayer = this.state.selectedLayer + 1;
+        schematic.layers = schematic.layers.splice(selectedLayer,0,temp);
+        this.setState({ schematic, selectedLayer });
+      }
+    }
+    moveLayerToFront(){
+      const { schematic } = util.merge(this.state);
+      const temp = schematic.layers[this.state.selectedLayer];
+      schematic.layers = schematic.layers.splice(this.state.selectedLayer,1).concat([temp]);
+      const selectedLayer = schematic.layers.length - 1;
+      this.setState({ schematic, selectedLayer });
+    }
+    flipLayer(){
+      this.updateLayer("flip",(v) => !v);
+    }
+    updateLayer(field,newValue) {
+      const { schematic } = util.merge(this.state);
+      schematic.layers = schematic.layers.map((l) => util.merge(l));
+      const temp = schematic.layers[this.state.selectedLayer];
+      const oldValue = temp[field];
+      if ((typeof newValue) === 'function') {
+        newValue = newValue(oldValue);
+      }
+      temp[field] = newValue;
+      this.setState({ schematic });
+    }
+    fromSelectedLayer(field) {
+      return this.state.schematic.layers[this.state.selectedLayer][field];
+    }
+    launchColorPicker(field) {
+      if (field === 'background') {
+        this.modals.colorPicker.open({
+          color: this.state.schematic.bgColor || "#999999",
+          index: field
+        });
+      } else {
+        this.modals.colorPicker.open({
+          color: this.fromSelectedLayer(field) || "#999999",
+          index: field
+        });
+      }
+    }
+    setColorFromPicker(field,color){
+      if (field === 'background') {
+        this.updateSchematic('bgColor',color);
+      } else {
+        this.updateLayer(field,color);
+      }
+    }
+    ColorPickerButton({label, field, getter, style}) {
+      const value = getter();
+      return <button
+        className="btn btn-secondary"
+        title={`${label}: ${value}`}
+        style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
+        onClick={() => this.launchColorPicker(field)}
+        onDoubleClick={() => this.setColorFromPicker(field,undefined)}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          this.setColorFromPicker(field,undefined)
+        }}>{label}</button>;
     }
     render() {
       if (!this.state.schematic) {
@@ -162,12 +265,14 @@ namespace('sp.outfitter.Outfitter', {
                 <div className="d-flex justify-content-center">
                   <div className="input-group">
                     <label htmlFor="layer-select" className="input-group-text">Layer:</label>
-                    <select id="layer-select" className="form-control">
-                      <option value="0">0: torso 0</option>
-                      <option value="1">1: legs 0</option>
-                      <option value="2">2: arm 0</option>
-                      <option value="3">3: arm 0</option>
-                      <option value="4">4: head 0</option>
+                    <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
+                      this.setState({ selectedLayer: parseInt(e.target.value.toString()) })
+                    }}>
+                      {
+                        this.state.schematic.layers.map((layer, index) => {
+                          return <option value={index}>{index}: {layer.partType} {layer.partIndex}</option>;
+                        })
+                      }
                     </select>
                   </div>
                   <button
@@ -221,55 +326,21 @@ namespace('sp.outfitter.Outfitter', {
               <div className="rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
                   <label htmlFor="part-type" className="input-group-text">Part Type:</label>
-                  <select className="p-2 form-control" id="part-type">
+                  <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('partType') } onChange={(e) => {
+                    this.updateLayer('partType',e.target.value)
+                  }}>
                     <option disabled hidden selected value>Select Part Type</option>
-                    <optgroup label="Body">
-                      <option value="arm">Arm</option>
-                      <option value="head">Head</option>
-                      <option value="legs">Legs</option>
-                      <option value="torso">Torso</option>
-                    </optgroup>
-                    <optgroup label="Face">
-                      <option value="beard">Beard</option>
-                      <option value="ears">Ears</option>
-                      <option value="eyebrows">Eyebrows</option>
-                      <option value="eyes">Eyes</option>
-                      <option value="hair">Hair</option>
-                      <option value="mouth">Mouth</option>
-                      <option value="nose">Nose</option>
-                    </optgroup>
-                    <optgroup label="Tights">
-                      <option value="gloves">Gloves</option>
-                      <option value="mask">Mask</option>
-                      <option value="shirt">Shirt</option>
-                      <option value="stockings">Stockings</option>
-                      <option value="tights">Leggings</option>
-                    </optgroup>
-                    <optgroup label="Clothing">
-                      <option value="belt">Belt</option>
-                      <option value="boots">Boots</option>
-                      <option value="chest">Chest</option>
-                      <option value="collar">Collar</option>
-                      <option value="gauntlets">Gauntlets</option>
-                      <option value="hat">Hat</option>
-                      <option value="pants">Pants</option>
-                      <option value="sholders">Shoulders</option>
-                    </optgroup>
-                    <optgroup label="Back">
-                      <option value="back">Back</option>
-                      <option value="wings_and_tails">Wings &amp; Tails</option>
-                    </optgroup>
-                    <optgroup label="Accessories">
-                      <option value="accessories_and_shields">
-                        Accessories &amp; Shields
-                      </option>
-                      <option value="guns">Guns</option>
-                      <option value="melee_weapons">Melee Weapons</option>
-                      <option value="ranged_weapons">Ranged Weapons</option>
-                      <option value="swords">Swords</option>
-                      <option value="symbol_A">Symbol A</option>
-                      <option value="symbol_B">Symbol B</option>
-                    </optgroup>
+                    {
+                      c.getPartGroups().map((group) => {
+                        return <optgroup label={group}>
+                          {
+                            c.getPartTypesByGroup(group).map((partType) => {
+                              return <option value={partType.part}>{partType.label}</option>;
+                            })
+                          }
+                        </optgroup>;
+                      })
+                    }
                   </select>
                 </div>
                 <div className="input-group">
@@ -280,29 +351,26 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="0"
                     style={{ width: "4em" }}
+                    value={ this.fromSelectedLayer('partIndex') }
+                    onChange={(e) => this.updateLayer('partIndex', parseInt(e.target.value))}
                   />
                 </div>
               </div>
               <div className="rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
                   <label htmlFor="body-scale" className="input-group-text">Body Scale:</label>
-                  <select id="body-scale" className="form-control">
+                  <select id="body-scale" className="form-control" value={ this.state.schematic.bodyScale }
+                          onChange={(e) => this.updateSchematic('bodyScale',e.target.value) }>
                     <option>default</option>
-                    <option>lanky</option>
-                    <option>thin</option>
-                    <option>teen</option>
-                    <option>stocky</option>
-                    <option>petite</option>
+                    {
+                      OutfitterSVG.getBodyScales().map((bodyScale) => {
+                        return <option value={bodyScale}>{bodyScale}</option>;
+                      })
+                    }
                   </select>
                 </div>
                 <div className="d-flex">
-                  <button
-                    id="bg-color"
-                    className="btn btn-secondary"
-                    style={{ minWidth: "6em" }}
-                    onClick={() => this.launchColorPicker('background')}>
-                    BG Color
-                  </button>
+                  <ColorPickerButton label="BG Color" field="background" getter={() => this.state.schematic.bgColor || "#999999"} style={{minWidth:"6em"}}/>
                   <div className="input-group">
                     <label htmlFor="bg-pattern" className="input-group-text">BG Pattern:</label>
                     <input
@@ -323,26 +391,9 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-4 d-flex flex-column">
               <div className=" rpg-box text-light m-1 d-flex justify-content-evenly">
-                <button
-                  id="base-color"
-                  className="btn btn-secondary"
-                  onClick={() => this.launchColorPicker('base')}
-                >
-                  Base
-                </button>
-                <button
-                  id="detail-color"
-                  className="btn btn-secondary"
-                  onClick={() => this.launchColorPicker('detail')}
-                >
-                  Detail
-                </button>
-                <button
-                  id="outline-color"
-                  className="btn btn-secondary"
-                  onClick={() => this.launchColorPicker('outline')}>
-                  Outline
-                </button>
+                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') || "#999999"} style={{}}/>
+                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') || "#999999"} style={{}}/>
+                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') || "#999999"} style={{}}/>
               </div>
               <div className=" rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
@@ -387,6 +438,8 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     step="0.01"
                     style={{width: "4em"}}
+                    value={ this.fromSelectedLayer('opacity') }
+                    onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
                   />
                 </div>
                 <div className="input-group">
@@ -397,6 +450,8 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="-1"
                     style={{width: "4em"}}
+                    value={ this.fromSelectedLayer('pattern') }
+                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
                   />
                 </div>
                 <div className="input-group">
@@ -407,6 +462,8 @@ namespace('sp.outfitter.Outfitter', {
                     className="form-control"
                     min="-1"
                     style={{width: "4em"}}
+                    value={ this.fromSelectedLayer('shading') }
+                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
                   />
                 </div>
               </div>
