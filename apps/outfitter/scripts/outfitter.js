@@ -140,14 +140,15 @@ namespace('sp.outfitter.Outfitter', {
     }
     removeLayer(){
       const { schematic } = util.merge(this.state);
-      schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+      schematic.layers.splice(this.state.selectedLayer,1);
       const selectedLayer = schematic.layers.length - 1;
       this.setState({ schematic, selectedLayer });
     }
     moveLayerToBack(){
       const { schematic } = util.merge(this.state);
       const temp = schematic.layers[this.state.selectedLayer];
-      schematic.layers = [temp].concat(schematic.layers.splice(this.state.selectedLayer,1));
+      schematic.layers.splice(this.state.selectedLayer,1);
+      schematic.layers = [temp].concat(schematic.layers);
       const selectedLayer = 0;
       this.setState({ schematic, selectedLayer });
     }
@@ -155,9 +156,9 @@ namespace('sp.outfitter.Outfitter', {
       if(this.state.selectedLayer > 0) {
         const { schematic } = util.merge(this.state);
         const temp = schematic.layers[this.state.selectedLayer];
-        schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+        schematic.layers.splice(this.state.selectedLayer,1);
         const selectedLayer = this.state.selectedLayer - 1;
-        schematic.layers = schematic.layers.splice(selectedLayer,0,temp);
+        schematic.layers.splice(selectedLayer,0,temp);
         this.setState({ schematic, selectedLayer });
       }
     }
@@ -165,16 +166,17 @@ namespace('sp.outfitter.Outfitter', {
       if(this.state.selectedLayer < this.state.schematic.layers.length - 1) {
         const { schematic } = util.merge(this.state);
         const temp = schematic.layers[this.state.selectedLayer];
-        schematic.layers = schematic.layers.splice(this.state.selectedLayer,1);
+        schematic.layers.splice(this.state.selectedLayer,1);
         const selectedLayer = this.state.selectedLayer + 1;
-        schematic.layers = schematic.layers.splice(selectedLayer,0,temp);
+        schematic.layers.splice(selectedLayer,0,temp);
         this.setState({ schematic, selectedLayer });
       }
     }
     moveLayerToFront(){
       const { schematic } = util.merge(this.state);
       const temp = schematic.layers[this.state.selectedLayer];
-      schematic.layers = schematic.layers.splice(this.state.selectedLayer,1).concat([temp]);
+      schematic.layers.splice(this.state.selectedLayer,1);
+      schematic.layers = schematic.layers.concat([temp]);
       const selectedLayer = schematic.layers.length - 1;
       this.setState({ schematic, selectedLayer });
     }
