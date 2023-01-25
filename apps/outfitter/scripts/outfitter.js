@@ -63,11 +63,12 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
+          this.modals.fileDownload.open({isImage:true,defaultFilename:"outfitter",imageURL});
           const svgObj = OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs);
           console.log(svgObj);
-          const imageURL = oUtil.convertSVGtoBase64(svgObj);
-          console.log(imageURL);
-          this.modals.fileDownload.open({isImage:true,defaultFilename:"outfitter",imageURL});
+          oUtil.convertSVGtoBase64(svgObj,(imageURL) => {
+            console.log(imageURL);
+          });
         }
       },{
         id: 'about',
