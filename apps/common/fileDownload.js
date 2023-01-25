@@ -28,15 +28,18 @@ namespace(
                 onChange={(e) => this.setState({ filename: e.target.value })}
               />
             </div>
+            { this.state.isImage &&
+              <img src={this.state.imageURL}/>
+            }
             <div className="justify-content-end">
               <button
                 className="btn btn-info"
                 onClick={() => {
-                  Utilities.triggerJSONDownload(
-                    this.state.filename,
-                    this.state.defaultFilename,
-                    this.state.jsonData
-                  );
+                  if (this.state.isImage) {
+                    Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
+                  } else {
+                    Utilities.triggerJSONDownload(this.state.filename,this.state.defaultFilename,this.state.jsonData);
+                  }
                   this.onClose();
                 }}
               >Download & Close</button>

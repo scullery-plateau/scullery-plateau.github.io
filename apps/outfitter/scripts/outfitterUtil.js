@@ -7,5 +7,5 @@ namespace('sp.outfitter.OutfitterUtil',{},() => {
     svgElement.innerHTML = content;
     return `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(new XMLSerializer().serializeToString(svgElement))))}`;
   }
-  return {};
+  return { convertSVGtoBase64 };
 });

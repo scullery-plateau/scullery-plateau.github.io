@@ -76,6 +76,16 @@ namespace('sp.common.Utilities', () => {
     link.click();
     document.body.removeChild(link);
   };
+  const triggerPNGDownload = function (fileName, defaultFilename, imageURL) {
+    const link = document.createElement('a');
+    document.body.appendChild(link);
+    link.setAttribute('href', imageURL);
+    link.setAttribute(
+      'download',
+      normalizeFilename(fileName, '.png', defaultFilename));
+    link.click();
+    document.body.removeChild(link);
+  };
   const buildImmutable = function (obj) {
     return Object.entries(obj).reduce((out, [k, v]) => {
       out[k] = () => v;
@@ -119,6 +129,7 @@ namespace('sp.common.Utilities', () => {
     rgbFromHex,
     normalizeFilename,
     triggerJSONDownload,
+    triggerPNGDownload,
     buildImmutable,
     partition,
     calcTrimBounds

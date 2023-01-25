@@ -8,8 +8,9 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
-  'sp.outfitter.OutfitterSVG':'OutfitterSVG'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, OutfitterSVG }) => {
+  'sp.outfitter.OutfitterSVG':'OutfitterSVG',
+  'sp.outfitter.OutfitterUtil':'oUtil'
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, OutfitterSVG, oUtil }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -62,7 +63,11 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          alert('"Download Image" is not yet available');
+          const svgObj = OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs);
+          console.log(svgObj);
+          const imageURL = oUtil.convertSVGtoBase64(svgObj);
+          console.log(imageURL);
+          this.modals.fileDownload.open({isImage:true,defaultFilename:"outfitter",imageURL});
         }
       },{
         id: 'about',
@@ -361,7 +366,8 @@ namespace('sp.outfitter.Outfitter', {
                     id="part-index"
                     type="number"
                     className="form-control"
-                    min="0"
+                    min={0}
+                    max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
                     style={{ width: "4em" }}
                     value={ this.fromSelectedLayer('index') }
                     onChange={(e) => this.updateLayer('index', parseInt(e.target.value))}
@@ -389,7 +395,8 @@ namespace('sp.outfitter.Outfitter', {
                       id="bg-pattern"
                       type="number"
                       className="form-control"
-                      min="-1"
+                      min={-1}
+                      max={ this.state.metadata["pattern-count"] }
                       style={{width: "3em"}}
                       value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
                       onChange={(e) => this.updateSchematic('bgPattern',parseInt(e.target.value))}
@@ -418,6 +425,8 @@ namespace('sp.outfitter.Outfitter', {
                     type="number"
                     className="form-control"
                     step="0.01"
+                    value={ this.fromSelectedLayer('resizeX',1.00) }
+                    onChange={(e) => this.updateLayer('resizeX',parseFloat(e.target.value))}
                   />
                   <label htmlFor="resize-y" className="input-group-text">Y</label>
                   <input
@@ -425,6 +434,8 @@ namespace('sp.outfitter.Outfitter', {
                     type="number"
                     className="form-control"
                     step="0.01"
+                    value={ this.fromSelectedLayer('resizeY',1.00) }
+                    onChange={(e) => this.updateLayer('resizeY',parseFloat(e.target.value))}
                   />
                 </div>
                 <div className="input-group">
@@ -434,12 +445,16 @@ namespace('sp.outfitter.Outfitter', {
                     id="move-x"
                     type="number"
                     className="form-control"
+                    value={ this.fromSelectedLayer('moveX',0) }
+                    onChange={(e) => this.updateLayer('moveX',parseFloat(e.target.value))}
                   />
                   <label htmlFor="move-y" className="input-group-text">Y</label>
                   <input
                     id="move-y"
                     type="number"
                     className="form-control"
+                    value={ this.fromSelectedLayer('moveY',0) }
+                    onChange={(e) => this.updateLayer('moveY',parseFloat(e.target.value))}
                   />
                 </div>
               </div>
@@ -450,7 +465,9 @@ namespace('sp.outfitter.Outfitter', {
                     id="opacity"
                     type="number"
                     className="form-control"
-                    step="0.01"
+                    step={0.01}
+                    min={0.00}
+                    max={1.00}
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('opacity',1.0) }
                     onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
@@ -462,7 +479,8 @@ namespace('sp.outfitter.Outfitter', {
                     id="pattern"
                     type="number"
                     className="form-control"
-                    min="-1"
+                    min={-1}
+                    max={ this.state.metadata["pattern-count"] }
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('pattern',-1) }
                     onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
@@ -474,7 +492,8 @@ namespace('sp.outfitter.Outfitter', {
                     id="shading"
                     type="number"
                     className="form-control"
-                    min="-1"
+                    min={-1}
+                    max={ this.state.metadata["shading-count"] }
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('shading',-1) }
                     onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
