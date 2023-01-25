@@ -10,8 +10,10 @@ namespace('sp.outfitter.ImageDownload',{
             props.setOnOpen(({ defaultFilename, svgData }) => {
                 console.log(svgData);
                 const { width, height } = svgData;
-                const imageURL = oUtil.convertSVGtoBase64(svgData);
-                this.setState({ defaultFilename, imageURL, width, height });
+                oUtil.convertSVGtoBase64(svgData,(imageURL) => {
+                    this.setState({ imageURL });
+                });
+                this.setState({ defaultFilename, placeholder: defaultFilename, width, height });
             });
         }
         render() {
@@ -30,20 +32,15 @@ namespace('sp.outfitter.ImageDownload',{
                     onChange={(e) => this.setState({ filename: e.target.value })}
                 />
                 </div>
-                <div style={{
-                    backgroundImage: `url("${this.state.imageURL}")`,
-                    width: this.state.width,
-                    height: this.state.height
-                }}></div>
                 <img src={this.state.imageURL}/>
                 <div className="justify-content-end">
-                <button
-                    className="btn btn-info"
-                    onClick={() => {
-                        Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
-                        this.onClose();
-                    }}>Download & Close</button>
-                <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
+                    <button
+                        className="btn btn-info"
+                        onClick={() => {
+                            Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
+                            this.onClose();
+                        }}>Download & Close</button>
+                    <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
                 </div>
             </>;
         }
