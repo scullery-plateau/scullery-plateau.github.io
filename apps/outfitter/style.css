@@ -7,3 +7,8 @@
     margin-top: 2%;
     margin-bottom: 2%;
 }
+
+.svgCommonSpinner {
+    width: 4em;
+    height: 4em;
+}

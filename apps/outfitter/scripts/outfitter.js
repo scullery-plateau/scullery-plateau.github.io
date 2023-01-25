@@ -8,9 +8,10 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
+  'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.OutfitterUtil':'oUtil'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, OutfitterSVG, oUtil }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, ImageDownload, OutfitterSVG, oUtil }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -42,6 +43,11 @@ namespace('sp.outfitter.Outfitter', {
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {}
         },
+        imageDownload: {
+          templateClass: ImageDownload,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {}
+        },
         colorPicker: {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -63,15 +69,10 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          alert("'Download Image' is not yet available")
-          /*
-          this.modals.fileDownload.open({isImage:true,defaultFilename:"outfitter",imageURL});
-          const svgObj = OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs);
-          console.log(svgObj);
-          oUtil.convertSVGtoBase64(svgObj,(imageURL) => {
-            console.log(imageURL);
+          this.modals.imageDownload.open({
+            defaultFilename: "outfitter",
+            svgData: OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs)
           });
-          */
         }
       },{
         id: 'about',
