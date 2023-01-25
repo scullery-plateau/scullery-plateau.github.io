@@ -9,8 +9,9 @@ namespace('sp.outfitter.ImageDownload',{
             this.onClose = props.onClose;
             props.setOnOpen(({ defaultFilename, svgData }) => {
                 console.log(svgData);
+                const { width, height } = svgData;
                 const imageURL = oUtil.convertSVGtoBase64(svgData);
-                this.setState({ defaultFilename, imageURL });
+                this.setState({ defaultFilename, imageURL, width, height });
             });
         }
         render() {
@@ -29,6 +30,11 @@ namespace('sp.outfitter.ImageDownload',{
                     onChange={(e) => this.setState({ filename: e.target.value })}
                 />
                 </div>
+                <div style={{
+                    backgroundImage: `url("${this.state.imageURL}")`,
+                    width: this.state.width,
+                    height: this.state.height
+                }}></div>
                 <img src={this.state.imageURL}/>
                 <div className="justify-content-end">
                 <button

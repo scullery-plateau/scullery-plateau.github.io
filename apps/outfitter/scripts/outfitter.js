@@ -69,13 +69,11 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          alert("'Download Image' is not available at this time");
-          /*
+          //alert("'Download Image' is not available at this time");
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
             svgData: OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs)
           });
-          */
         }
       },{
         id: 'about',
