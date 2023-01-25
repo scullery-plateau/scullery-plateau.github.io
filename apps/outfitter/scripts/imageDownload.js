@@ -10,36 +10,40 @@ namespace('sp.outfitter.ImageDownload',{
             props.setOnOpen(({ defaultFilename, svgData }) => {
                 console.log(svgData);
                 const { width, height } = svgData;
-                oUtil.convertSVGtoBase64(svgData,(imageURL) => {
-                    this.setState({ imageURL });
+                const imageURL = oUtil.convertSVGtoBase64(svgData,(canvasURL) => {
+                    console.log({ canvasURL });
+                    this.setState({ canvasURL });
                 });
-                this.setState({ defaultFilename, placeholder: defaultFilename, width, height });
+                this.setState({ defaultFilename, imageURL, placeholder: defaultFilename, width, height });
             });
         }
         render() {
             return <>
                 <p>Feel free to enter a filename</p>
+                {  this.state.canvasURL &&  
                 <div className="form-group">
-                <label className="text-light" htmlFor="imageDownloadFilename">
-                    Filename
-                </label>
-                <input
-                    type="text"
-                    className="form-control rpg-textbox"
-                    id="imageDownloadFilename"
-                    placeholder={this.state.placeholder}
-                    value={this.state.filename}
-                    onChange={(e) => this.setState({ filename: e.target.value })}
-                />
-                </div>
-                <img src={this.state.imageURL}/>
+                    <label className="text-light" htmlFor="imageDownloadFilename">
+                        Filename
+                    </label>
+                    <input
+                        type="text"
+                        className="form-control rpg-textbox"
+                        id="imageDownloadFilename"
+                        placeholder={this.state.placeholder}
+                        value={this.state.filename}
+                        onChange={(e) => this.setState({ filename: e.target.value })}
+                    />
+                </div> }
+                { this.state.imageURL && <img src={this.state.imageURL}/> }
+                { this.state.canvasURL && <img src={this.state.canvasURL}/> }
                 <div className="justify-content-end">
-                    <button
-                        className="btn btn-info"
-                        onClick={() => {
-                            Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
-                            this.onClose();
-                        }}>Download & Close</button>
+                    { this.state.canvasURL && 
+                        <button
+                            className="btn btn-info"
+                            onClick={() => {
+                                Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
+                                this.onClose();
+                            }}>Download & Close</button> }
                     <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
                 </div>
             </>;
