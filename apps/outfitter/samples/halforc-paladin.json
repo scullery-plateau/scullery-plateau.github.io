@@ -1,0 +1,198 @@
+{
+    "bodyType": "superman",
+    "bgColor": "#6699ff",
+    "layers": [
+      {
+        "part": "torso",
+        "index": 0,
+        "shading": 0,
+        "base": "#66cc66"
+      },
+      {
+        "part": "legs",
+        "index": 0,
+        "shading": 0,
+        "base": "#66cc66"
+      },
+      {
+        "part": "arm",
+        "index": 0,
+        "shading": 0,
+        "base": "#66cc66"
+      },
+      {
+        "part": "arm",
+        "index": 0,
+        "shading": 0,
+        "flip": true,
+        "base": "#66cc66"
+      },
+      {
+        "part": "head",
+        "index": 0,
+        "shading": 0,
+        "base": "#66cc66"
+      },
+      {
+        "part": "head",
+        "index": 25,
+        "shading": 0
+      },
+      {
+        "part": "eyes",
+        "index": 0,
+        "shading": 0,
+        "base": "#990000"
+      },
+      {
+        "part": "mouth",
+        "index": 35,
+        "shading": 0
+      },
+      {
+        "part": "nose",
+        "index": 4,
+        "shading": 0
+      },
+      {
+        "part": "ears",
+        "index": 0,
+        "shading": 0,
+        "base": "#66cc66"
+      },
+      {
+        "part": "hair",
+        "index": 5,
+        "shading": 0,
+        "base": "#ff9900"
+      },
+      {
+        "part": "beard",
+        "index": 38,
+        "shading": 0,
+        "base": "#ff9900"
+      },
+      {
+        "part": "eyebrows",
+        "index": 18,
+        "shading": 0,
+        "base": "#ff9900"
+      },
+      {
+        "part": "stockings",
+        "index": 21,
+        "shading": 0,
+        "base": "#666666",
+        "pattern": 7
+      },
+      {
+        "part": "boots",
+        "index": 46,
+        "shading": 0,
+        "base": "#666666"
+      },
+      {
+        "part": "boots",
+        "index": 21,
+        "shading": 13,
+        "base": "#999999"
+      },
+      {
+        "part": "boots",
+        "index": 25,
+        "shading": 13,
+        "base": "#999999"
+      },
+      {
+        "part": "shirt",
+        "index": 54,
+        "shading": 0,
+        "base": "#666666",
+        "pattern": 7
+      },
+      {
+        "part": "belt",
+        "index": 5,
+        "shading": 6,
+        "base": "#663366"
+      },
+      {
+        "part": "belt",
+        "index": 48,
+        "shading": 6,
+        "base": "#990033",
+        "detail": "#996666"
+      },
+      {
+        "part": "chest",
+        "index": 53,
+        "shading": 13,
+        "base": "#999999",
+        "detail": "#cccc66"
+      },
+      {
+        "part": "gloves",
+        "index": 24,
+        "shading": 0,
+        "pattern": 7,
+        "base": "#666666"
+      },
+      {
+        "part": "sholders",
+        "index": 25,
+        "shading": 13,
+        "base": "#999999",
+        "detail": "#999933",
+        "flip": true
+      },
+      {
+        "part": "accessories_and_shields",
+        "index": 30,
+        "shading": 0,
+        "flip": true,
+        "base": "#999999",
+        "detail": "#e1b600"
+      },
+      {
+        "part": "gloves",
+        "index": 50,
+        "shading": 0,
+        "base": "#666666",
+        "pattern": 7
+      },
+      {
+        "part": "swords",
+        "index": 22,
+        "shading": 0,
+        "base": "#cccccc",
+        "detail": "#cccc33"
+      },
+      {
+        "part": "gloves",
+        "index": 36,
+        "shading": 0,
+        "base": "#666666",
+        "pattern": 7
+      },
+      {
+        "part": "gloves",
+        "index": 41,
+        "shading": 13,
+        "base": "#999999"
+      },
+      {
+        "part": "gauntlets",
+        "index": 40,
+        "shading": 13,
+        "detail": "#cccc66",
+        "base": "#999999"
+      },
+      {
+        "part": "sholders",
+        "index": 25,
+        "shading": 13,
+        "base": "#999999"
+      }
+    ],
+    "bodyScale": "teen"
+  }
