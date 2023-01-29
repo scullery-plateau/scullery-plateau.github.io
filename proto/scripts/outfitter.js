@@ -1,3 +1,0 @@
-(function () {
-  window.initOutfitter = function () {};
-})();

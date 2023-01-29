@@ -1,7 +1,3 @@
-## Outfitter
-
-1. _impl_ (with REACT)
-
 ## Overall
 
 - load data validation
@@ -24,6 +20,11 @@
 
 1. improved / condensed paging(how??)
 2. reload image from tile edit screen
+
+## Outfitter
+
+1. "Flip?" button styling
+1. split layer into multiple layers (both into right and left)
 
 ## SVG Canvas - **Mondrian**
 
