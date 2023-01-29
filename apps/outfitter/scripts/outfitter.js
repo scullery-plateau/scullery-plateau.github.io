@@ -45,7 +45,7 @@ namespace('sp.outfitter.Outfitter', {
         },
         imageDownload: {
           templateClass: ImageDownload,
-          attrs: { class: 'rpg-box text-light w-75' },
+          attrs: { class: 'rpg-box text-light w-50' },
           onClose: () => {}
         },
         colorPicker: {
@@ -69,13 +69,11 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          alert("'Download Image' is not available at this time");
-          /*
+          // alert("'Download Image' is not available at this time");
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
             svgData: OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata,this.state.defs)
           });
-          */
         }
       },{
         id: 'about',
@@ -87,27 +85,13 @@ namespace('sp.outfitter.Outfitter', {
     }
     loadMeta(bodyType,schematic) {
       this.setState({schematic, progress: 1, selectedLayer: 0});
-      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.svg`,
+      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}2.json`,
         {
-          success: (fullDefs) => {
-            let [h, defs, t] = fullDefs.split('defs');
-            defs = defs.substring(1, defs.length - 2);
-            this.setState({ fullDefs, defs });
-            Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.json`,
-              {
-                success: (responseText) => {
-                  const metadata = JSON.parse(responseText);
-                  this.setState({ metadata, progress: undefined, selectedLayer: 0});
-                },
-                failure: (resp) => {
-                  console.log(resp);
-                  throw resp;
-                },
-                stateChange: (state) => {
-                  const progress = (100 * (state.state + 1)) / (state.max + 1);
-                  this.setState({progress})
-                }
-              });
+          success: (responseText) => {
+            const metadata = JSON.parse(responseText);
+            metadata.patternCount = Object.keys(metadata.patterns).length;
+            metadata.shadingCount = Object.keys(metadata.shadings).length;
+            this.setState({ metadata, progress: undefined, selectedLayer: 0});
           },
           failure: (resp) => {
             console.log(resp);
@@ -404,7 +388,7 @@ namespace('sp.outfitter.Outfitter', {
                       type="number"
                       className="form-control"
                       min={-1}
-                      max={ this.state.metadata["pattern-count"] }
+                      max={ this.state.metadata.patternCount }
                       style={{width: "3em"}}
                       value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
                       onChange={(e) => this.updateSchematic('bgPattern',parseInt(e.target.value))}
@@ -415,7 +399,7 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-4 d-flex justify-content-center">
               <div className="rpg-box m-1">
-                <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata } defs={ this.state.defs }/>
+                <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata }/>
               </div>
             </div>
             <div className="col-4 d-flex flex-column">
@@ -488,7 +472,7 @@ namespace('sp.outfitter.Outfitter', {
                     type="number"
                     className="form-control"
                     min={-1}
-                    max={ this.state.metadata["pattern-count"] }
+                    max={ this.state.metadata.patternCount }
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('pattern',-1) }
                     onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
@@ -501,7 +485,7 @@ namespace('sp.outfitter.Outfitter', {
                     type="number"
                     className="form-control"
                     min={-1}
-                    max={ this.state.metadata["shading-count"] }
+                    max={ this.state.metadata.shadingCount }
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('shading',-1) }
                     onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}

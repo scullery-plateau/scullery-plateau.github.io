@@ -20,9 +20,9 @@ namespace('sp.outfitter.ImageDownload',{
         render() {
             return <>
                 <p>Feel free to enter a filename</p>
-                {  this.state.canvasURL &&  
+                {  this.state.canvasURL &&
                 <div className="form-group">
-                    <label className="text-light" htmlFor="imageDownloadFilename">
+                    <label className="text-light form-label" htmlFor="imageDownloadFilename">
                         Filename
                     </label>
                     <input
@@ -31,10 +31,10 @@ namespace('sp.outfitter.ImageDownload',{
                         id="imageDownloadFilename"
                         placeholder={this.state.placeholder}
                         value={this.state.filename}
+                        style={{ width: "15em" }}
                         onChange={(e) => this.setState({ filename: e.target.value })}
                     />
                 </div> }
-                { this.state.imageURL && <img src={this.state.imageURL}/> }
                 { this.state.canvasURL && <img src={this.state.canvasURL}/> }
                 <div className="justify-content-end">
                     { this.state.canvasURL && 
