@@ -192,7 +192,6 @@ namespace('sp.outfitter.OutfitterSVG',{
     if (isNumber(schematic.bgPattern)) {
       content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#patterns-${schematic.bgPattern >= 10 ? '' : '0'}${schematic.bgPattern})" stroke="none"/>`);
     }
-    content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="none" stroke="black" stroke-width="2"/>`)
     content.push(`<g>${contents.join('')}</g>`)
     return { width: frameWidth, height: frameHeight, viewBox, content: content.join('') };
   }
@@ -250,7 +249,6 @@ namespace('sp.outfitter.OutfitterSVG',{
           `url(#patterns-${ schematic.bgPattern >= 10 ? '' : '0' }${ schematic.bgPattern })`
         } stroke="none"/>
       }
-      <rect x={ minX } y={ minY } width={ width } height={ height } fill="none" stroke="black" strokeWidth="2"/>
       <g>
         { contents }
       </g>
