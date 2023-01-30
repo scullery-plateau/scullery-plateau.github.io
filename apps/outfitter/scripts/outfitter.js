@@ -325,7 +325,7 @@ namespace('sp.outfitter.Outfitter', {
                   </button>
                   <button
                     id="flip-button"
-                    className="btn btn-secondary"
+                    className={`btn ${this.fromSelectedLayer("flip",false)?'flipped':"not-flipped"}`}
                     onClick={() => this.flipLayer()}
                   >
                     Flip?

@@ -23,8 +23,8 @@
 
 ## Outfitter
 
-1. "Flip?" button styling
-1. split layer into multiple layers (both into right and left)
+1. title/alt attrs for useability/accessability 
+2. split layer into multiple layers (both into right and left)
 
 ## SVG Canvas - **Mondrian**
 

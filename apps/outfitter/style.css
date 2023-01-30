@@ -12,3 +12,19 @@
     width: 4em;
     height: 4em;
 }
+
+button.flipped, button.flipped:hover {
+    color: purple;
+    background-color: yellow;
+    transform: scale(-1, 1);
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
+
+button.not-flipped, button.not-flipped:hover  {
+    background-color: purple;
+    color: yellow;
+}
