@@ -1,16 +1,43 @@
-## Overall
+## SVG Canvas - **Mondrian**
 
-- load data validation
-
-## Spritely
-
-- hot keys
-- "load as overlay"
+1. _impl_ (with REACT)
 
 ## Tokenizer
 
 - allow users to determine rotation of frame
 - allow users to flip image
+
+## Outfitter
+
+1. make layers clickable for selection
+
+## Spritely
+
+- "load as overlay"
+
+## Outfitter
+
+3. split layer into multiple layers (both into right and left)
+
+## Cobblestone
+
+2. reload image from tile edit screen
+
+## Hex Map builder - **Overlander**
+
+1. _impl_ (with REACT)
+
+## Overall
+
+- load data validation
+
+## Outfitter
+
+2. title/alt attrs for useability/accessability 
+
+## Spritely
+
+- hot keys
 
 ## Minifier
 
@@ -19,20 +46,6 @@
 ## Cobblestone
 
 1. improved / condensed paging(how??)
-2. reload image from tile edit screen
-
-## Outfitter
-
-1. title/alt attrs for useability/accessability 
-2. split layer into multiple layers (both into right and left)
-
-## SVG Canvas - **Mondrian**
-
-1. _impl_ (with REACT)
-
-## Hex Map builder - **Overlander**
-
-1. _impl_ (with REACT)
 
 ## Card Builder - **Svengali**
 
