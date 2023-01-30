@@ -15,7 +15,7 @@ namespace('sp.mondrian.Mondrian',{
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = MondrianSVG.newSchematic();
       this.modals = Dialog.factory({
         about: {
           templateClass: buildAbout("Mondrian",about),
@@ -73,9 +73,8 @@ namespace('sp.mondrian.Mondrian',{
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          this.modals.imageDownload.open({
-            defaultFilename: "mondrian",
-            svgData: MondrianSVG.buildSVG(this.state.schematic)
+          MondrianSVG.drawCanvasBase64(this.state.schematic,(canvasURL) => {
+            this.modals.imageDownload.open({ defaultFilename: "mondrian", canvasURL });
           });
         }
       },{
@@ -87,7 +86,7 @@ namespace('sp.mondrian.Mondrian',{
       }];
     }
     setColorFromPicker(index, color) {
-
+      // todo
     }
     getLayerLabel(layer) {
       return layer.type;
