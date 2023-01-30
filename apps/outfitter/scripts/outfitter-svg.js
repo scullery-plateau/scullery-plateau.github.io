@@ -136,6 +136,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       patterns:{},
       shading:{}
     };
+    defs.patterns[getPatternId(schematic.bgPattern)] = true;
     const { bodyScale, headShift } = getBodyScaleAndHeadShift(schematic);
     const contents = schematic.layers.map((layer,index) => {
       let part = meta.parts[layer.part][layer.index];
@@ -190,7 +191,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="${schematic.bgColor}" stroke="none"/>`)
     }
     if (isNumber(schematic.bgPattern)) {
-      content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#patterns-${schematic.bgPattern >= 10 ? '' : '0'}${schematic.bgPattern})" stroke="none"/>`);
+      content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#${ getPatternId(schematic.bgPattern) })" stroke="none"/>`);
     }
     content.push(`<g>${contents.join('')}</g>`)
     return { width: frameWidth, height: frameHeight, viewBox, content: content.join('') };
@@ -205,6 +206,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       patterns:{},
       shading:{}
     }
+    defs.patterns[getPatternId(schematic.bgPattern)] = true;
     const { bodyScale, headShift } = getBodyScaleAndHeadShift(schematic);
     const contents = schematic.layers.map((layer,index) => {
       let part = meta.parts[layer.part][layer.index];
@@ -246,7 +248,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       }
       { isNumber(schematic.bgPattern) &&
         <rect x={ minX } y={ minY } width={ width } height={ height } fill={
-          `url(#patterns-${ schematic.bgPattern >= 10 ? '' : '0' }${ schematic.bgPattern })`
+          `url(#${ getPatternId(schematic.bgPattern) })`
         } stroke="none"/>
       }
       <g>
