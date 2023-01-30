@@ -18,6 +18,7 @@
 ## Outfitter
 
 3. split layer into multiple layers (both into right and left)
+4. fix part/pattern/shading positioning issues in data
 
 ## Cobblestone
 
