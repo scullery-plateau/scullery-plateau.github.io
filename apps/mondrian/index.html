@@ -55,12 +55,14 @@
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
+    <script type="text/babel" src="./scripts/imageDownload.js"></script>
     <script type="text/babel" src="./scripts/mondrian.js"></script>
+    <script type="text/babel" src="./scripts/mondrian-svg.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { Outfitter, Footer } = imports({
+        const { Mondrian, Footer } = imports({
           'sp.mondrian.Mondrian': 'Mondrian',
           'sp.common.Footer': 'Footer',
         });

@@ -5,17 +5,18 @@ namespace('sp.mondrian.Mondrian',{
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
+  'sp.common.Utilities':'util',
   'sp.mondrian.ImageDownload':'ImageDownload',
   'sp.mondrian.MondrianSVG':'MondrianSVG'
-},({ buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, ImageDownload, MondrianSVG }) => {
+},({ buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, MondrianSVG }) => {
   const about = [];
-  const validateLoadFileJson = function() {
-
-  };
+  const validateLoadFileJson = function() {};
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = MondrianSVG.newSchematic();
+      this.state = { 
+        schematic: MondrianSVG.newSchematic()
+      };
       this.modals = Dialog.factory({
         about: {
           templateClass: buildAbout("Mondrian",about),
