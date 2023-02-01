@@ -240,7 +240,7 @@
                                     (this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
                                         ? ' selected-tile'
                                         : '')}
-                                    title="click to select, double click or right click to edit"
+                                    title={`Tile: ${filename}, ${tf}; click to select, double click or right click to edit`}
                                     onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
                                     onDoubleClick={ () => {
                                         this.editTile(filename)

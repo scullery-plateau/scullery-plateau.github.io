@@ -264,7 +264,7 @@ namespace(
                           ? ' selected-color'
                           : ''
                       }`}
-                      title="click to select, double click or right click to change this color"
+                      title={`Color: ${ color }; click to select, double click or right click to change this color`}
                       style={{ color, backgroundColor: color }}
                       onClick={() => {
                         this.setState({ selectedPaletteIndex: index });

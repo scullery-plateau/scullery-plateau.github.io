@@ -218,8 +218,8 @@ namespace('sp.outfitter.Outfitter', {
     buildColorPickerButton(label, field, getter, style) {
       const value = getter();
       return <button
-        className="btn btn-secondary"
-        title={`${label}: ${value}`}
+        className={`btn ${value?'btn-secondary':'btn-outline-light'}`}
+        title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
         style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
         onClick={() => this.launchColorPicker(field)}
         onDoubleClick={() => this.setColorFromPicker(field,undefined)}
@@ -241,13 +241,13 @@ namespace('sp.outfitter.Outfitter', {
                 <img alt="fit" src="assets/fit.png" width={413 * buttonScale} height={833 * buttonScale}/>
               </button>
               <button className="btn btn-primary" onClick={ () => this.loadNew('hulk') }>
-                <img alt="fit" src="assets/bulk.png" width={824 * buttonScale} height={960 * buttonScale}/>
+                <img alt="bulk" src="assets/bulk.png" width={824 * buttonScale} height={960 * buttonScale}/>
               </button>
               <button className="btn btn-primary" onClick={ () => this.loadNew('superman') }>
-                <img alt="fit" src="assets/muscled.png" width={509 * buttonScale} height={887 * buttonScale}/>
+                <img alt="muscled" src="assets/muscled.png" width={509 * buttonScale} height={887 * buttonScale}/>
               </button>
               <button className="btn btn-primary" onClick={ () => this.loadNew('woman') }>
-                <img alt="fit" src="assets/woman.png" width={320 * buttonScale} height={802 * buttonScale}/>
+                <img alt="woman" src="assets/woman.png" width={320 * buttonScale} height={802 * buttonScale}/>
               </button>
             </div>
           </div>
@@ -380,7 +380,7 @@ namespace('sp.outfitter.Outfitter', {
                   </select>
                 </div>
                 <div className="d-flex">
-                  <ColorPickerButton label="BG Color" field="background" getter={() => this.state.schematic.bgColor || "#999999"} style={{minWidth:"6em"}}/>
+                  <ColorPickerButton label="BG Color" field="background" getter={() => this.state.schematic.bgColor } style={{minWidth:"6em"}}/>
                   <div className="input-group">
                     <label htmlFor="bg-pattern" className="input-group-text">BG Pattern:</label>
                     <input
@@ -404,9 +404,9 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-4 d-flex flex-column">
               <div className=" rpg-box text-light m-1 d-flex justify-content-evenly">
-                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base',"#999999") } style={{}}/>
-                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail',"#999999") } style={{}}/>
-                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline',"#999999") } style={{}}/>
+                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') } style={{}}/>
+                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') } style={{}}/>
+                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') } style={{}}/>
               </div>
               <div className=" rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">

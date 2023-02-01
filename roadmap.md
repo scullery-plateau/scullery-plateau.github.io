@@ -32,10 +32,6 @@
 
 - load data validation
 
-## Outfitter
-
-2. title/alt attrs for useability/accessability 
-
 ## Spritely
 
 - hot keys
