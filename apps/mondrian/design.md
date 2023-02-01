@@ -1,5 +1,4 @@
-layers: _________v
-  |<<  <  >  >>|
+layers: _________v + - |<<  <  >  >>|
 
 layer type: circle | ellipse | rect | poly
 [layer args]
