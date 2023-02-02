@@ -65,7 +65,17 @@ namespace('sp.mondrian.MondrianSVG',{},() => {
     }
   }
   const newSchematic = function() {
-    return { minX: 0, minY: 0, maxX: 100, maxY:100, layers:[] };
+    return {
+      size: {
+        minX: 0, minY: 0, maxX: 100, maxY:100,
+      },
+      layers:[],
+      grid:{
+        size:10,
+        lineWidth:1,
+        style:"solid"
+      }
+    };
   }
   const newLayer = function(type) {
     const shape = shapes[type];
@@ -79,8 +89,8 @@ namespace('sp.mondrian.MondrianSVG',{},() => {
   }
   const getDim = function(schematic) {
     return {
-      width: schematic.maxX - schematic.minX,
-      height: schematic.maxY - schematic.minY
+      width: schematic.size.maxX - schematic.size.minX,
+      height: schematic.size.maxY - schematic.size.minY
     }
   }
   const MondrianSVG = class extends React.Component {
@@ -90,7 +100,7 @@ namespace('sp.mondrian.MondrianSVG',{},() => {
     }
     render() {
       const { width, height } = getDim(this.state);
-      return <svg width={width} height={height} viewBox={`${this.state.minX} ${this.state.minY} ${width} ${height}`}>
+      return <svg width={width} height={height} viewBox={`${this.state.size.minX} ${this.state.size.minY} ${width} ${height}`}>
         { this.state.layers.map((layer) => {
           return render(layer);
         })}
