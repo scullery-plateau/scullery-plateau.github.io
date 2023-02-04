@@ -12,6 +12,40 @@ namespace('sp.common.Utilities', () => {
       }, acc);
     }, {});
   };
+  const getIn = function(obj,keys,defaultValue) {
+    if (keys.length <= 0) {
+      return obj || defaultValue;
+    }
+    return getIn(obj[keys[0]],keys.slice(1),defaultValue);
+  }
+  const updateIn = function(obj,keys,value) {
+    if (keys.length > 1) {
+      obj[keys[0]] = updateIn(obj[keys[0]],keys.slice(1),value);
+    } else if (keys.length === 1) {
+      obj[keys[0]] = value;
+    }
+    if (Array.isArray(obj)) {
+      return Array.from(obj);
+    } else {
+      return merge(obj);
+    }
+  }
+  const toggleIn = function(obj,keys) {
+    if (keys.length > 1) {
+      obj[keys[0]] = toggleIn(obj[keys[0]],keys.slice(1));
+    } else if (keys.length === 1) {
+      if (obj[keys[0]]) {
+        delete obj[keys[0]];
+      } else {
+        obj[keys[0]] = true;
+      }
+    }
+    if (Array.isArray(obj)) {
+      return Array.from(obj);
+    } else {
+      return merge(obj);
+    }
+  }
   const partition = function (myArray, partitionSize) {
     const incoming = Array.from(myArray);
     const partitions = [];
@@ -121,6 +155,11 @@ namespace('sp.common.Utilities', () => {
     }
     return { offsetX, offsetY, width, height };
   };
+  const getCanvasAndContext = function(domId) {
+    const canvas = document.getElementById(domId);
+    const ctx = canvas.getContext('2d');
+    return { canvas, ctx };
+  }
   return {
     range,
     merge,
@@ -132,6 +171,10 @@ namespace('sp.common.Utilities', () => {
     triggerPNGDownload,
     buildImmutable,
     partition,
-    calcTrimBounds
+    calcTrimBounds,
+    getCanvasAndContext,
+    getIn,
+    updateIn,
+    toggleIn
   };
 });

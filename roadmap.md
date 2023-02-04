@@ -52,6 +52,12 @@
     - size (business card to full page)
   - apply data
 
+## Dice Roller app - **Runyon**
+
+1. _impl_ (with REACT)
+   - simple implementation
+2. (future feature) canvas 3d animation?
+
 ## How To D&D?
 
 - Build Page as blog post
