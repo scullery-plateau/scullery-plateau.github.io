@@ -185,17 +185,6 @@ namespace('sp.mondrian.Mondrian',{
       return <button className={`btn ${this.fromSelectedLayer(field)?'btn-success':'btn-outline-secondary'}`} onClick={() => this.toggleInLayer(field)}>{label}</button>;
 
     }
-    updateInState(keys,value) {
-      const first = keys.shift();
-      const last = keys.pop();
-      const newState = util.merge(this.state[first]);
-      const tempState = keys.reduce((temp, key) => {
-        temp[key] = util.merge(temp[key]);
-        return temp[key];
-      },newState);
-      tempState[last] = value;
-      this.setState(newState);
-    }
     render() {
       const ColorPickerButton = (({label, field, getter, style}) => {
         return this.buildColorPickerButton(label, field, getter, style);
@@ -203,75 +192,56 @@ namespace('sp.mondrian.Mondrian',{
       const ToggleButton = (({label, field}) => {
         return this.buildToggleButton(label,field);
       })
+      const StateInputGroup = function({ inputId, inputLabel, keys, opts}) {
+        opts = opts || {};
+        return <div className="input-group">
+          <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
+          <input
+            id={inputId}
+            type="number"
+            min={opts.min}
+            max={opts.max}
+            step={opts.step || 1}
+            className="form-control"
+            value={ util.getIn(this.state,keys)}
+            onChange={(e) => util.updateIn(this.state,keys,parseFloat(e.target.value))}
+          />
+        </div>;
+      }
+      const me = this;
+      const LayerInputGroup = function({ inputId, inputLabel, layerField, defaultValue, opts, parser }) {
+        opts = opts || {};
+        parser = parser || ((v) => parseFloat(v));
+        return <div className="input-group">
+          <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
+          <input
+            id={inputId}
+            type="number"
+            className="form-control"
+            min={opts.min}
+            max={opts.max}
+            step={opts.step || 1}
+            style={{width: "4em"}}
+            value={ me.fromSelectedLayer(layerField,defaultValue)}
+            onChange={(e) => me.updateSelectedLayer(layerField, parser(e.target.value))}
+          />
+        </div>;
+      }
       return <>
         <Header menuItems={this.menuItems} appTitle={'Mondrian'} />
         <div className="d-flex justify-content-center">
           <div className="d-flex flex-column">
             <div className="rpg-box text-light m-1 d-flex flex-column">
               <div className="d-flex justify-content-center">
-                <div className="input-group">
-                  <label htmlFor="min-x" className="input-group-text">Min X</label>
-                  <input
-                    id="min-x"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.minX }
-                    onChange={(e) => this.updateInState(['schematic','size','minX'],parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label htmlFor="min-y" className="input-group-text">Min Y</label>
-                  <input
-                    id="min-y"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.minY }
-                    onChange={(e) => this.updateInState(['schematic','size','minY'],parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label htmlFor="max-x" className="input-group-text">Max X</label>
-                  <input
-                    id="max-x"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.maxX }
-                    onChange={(e) => this.updateInState(['schematic','size','maxX'],parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label htmlFor="max-y" className="input-group-text">Max Y</label>
-                  <input
-                    id="max-y"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.maxY }
-                    onChange={(e) => this.updateInState(['schematic','size','maxY'],parseFloat(e.target.value))}
-                  />
-                </div>
+                <StateInputGroup inputId="min-x" inputLabel="Min X" keys={['schematic','size','minX']}/>
+                <StateInputGroup inputId="min-y" inputLabel="Min Y" keys={['schematic','size','minY']}/>
+                <StateInputGroup inputId="max-x" inputLabel="Max X" keys={['schematic','size','maxX']}/>
+                <StateInputGroup inputId="max-y" inputLabel="Max Y" keys={['schematic','size','maxY']}/>
               </div>
               <div className="d-flex justify-content-center">
                 <label className="input-group-text">Grid</label>
-                <div className="input-group">
-                  <label htmlFor="grid-size" className="input-group-text">Size</label>
-                  <input
-                    id="grid-size"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.grid.size }
-                    onChange={(e) => this.updateInState(['schematic','grid','size'],parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label htmlFor="grid-line-width" className="input-group-text">Line Width</label>
-                  <input
-                    id="grid-line-width"
-                    type="number"
-                    className="form-control"
-                    value={ this.state.schematic.grid.lineWidth }
-                    onChange={(e) => this.updateInState(['schematic','grid','lineWidth'],parseFloat(e.target.value))}
-                  />
-                </div>
+                <StateInputGroup inputId="grid-size" inputLabel="Size" keys={['schematic','grid','size']}/>
+                <StateInputGroup inputId="grid-line-width" inputLabel="Line Width" keys={['schematic','grid','lineWidth']}/>
                 <div className="input-group">
                   <label htmlFor="grid-style" className="input-group-text">Style</label>
                   <select id="grid-style" className="form-control" value={ this.state.schematic.grid.style } onChange={(e) => {
@@ -382,104 +352,12 @@ namespace('sp.mondrian.Mondrian',{
                 </div>
                 <div className="rpg-box text-light m-1 d-flex flex-column">
                   <div className="d-flex justify-content-center">
-                    <ToggleButton label="Translate" field="translate"/>
-                    { this.fromSelectedLayer('translate') &&
-                      <>
-                        <div className="input-group">
-                          <label htmlFor="translate-x" className="input-group-text">X:</label>
-                          <input
-                            id="translate-x"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            value={ this.fromSelectedLayer('translate-x',0) }
-                            onChange={(e) => this.updateSelectedLayer('translate-x',parseInt(e.target.value))}
-                          />
-                        </div>
-                        <div className="input-group">
-                          <label htmlFor="translate-y" className="input-group-text">Y:</label>
-                          <input
-                            id="translate-y"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            value={ this.fromSelectedLayer('translate-y',0) }
-                            onChange={(e) => this.updateSelectedLayer('translate-y',parseInt(e.target.value))}
-                          />
-                        </div>
-                      </>
-                    }
-                  </div>
-                  <div className="d-flex justify-content-center">
                     <ToggleButton label="Rotate" field="rotate"/>
                     {this.fromSelectedLayer('rotate') &&
                       <>
-                        <div className="input-group">
-                          <label htmlFor="rotate-cx" className="input-group-text">CX:</label>
-                          <input
-                            id="rotate-cx"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            value={this.fromSelectedLayer('rotate-cx',0)}
-                            onChange={(e) => this.updateSelectedLayer('rotate-cx', parseInt(e.target.value))}
-                          />
-                        </div>
-                        <div className="input-group">
-                          <label htmlFor="rotate-cy" className="input-group-text">CY:</label>
-                          <input
-                            id="rotate-cy"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            value={this.fromSelectedLayer('rotate-cy',0)}
-                            onChange={(e) => this.updateSelectedLayer('rotate-cy', parseInt(e.target.value))}
-                          />
-                        </div>
-                        <div className="input-group">
-                          <label htmlFor="rotate-angle" className="input-group-text">Angle:</label>
-                          <input
-                            id="rotate-angle"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            min={0}
-                            max={360}
-                            value={this.fromSelectedLayer('rotate-angle',0)}
-                            onChange={(e) => this.updateSelectedLayer('rotate-angle', parseInt(e.target.value)%360)}
-                          />
-                        </div>
-                      </>
-                    }
-                  </div>
-                  <div className="d-flex justify-content-center">
-                    <ToggleButton label="Scale" field="scale"/>
-                    { this.fromSelectedLayer('scale') &&
-                      <>
-                        <div className="input-group">
-                          <label htmlFor="scale-x" className="input-group-text">X:</label>
-                          <input
-                            id="scale-x"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            step={0.01}
-                            value={ this.fromSelectedLayer('scale-x',1.00) }
-                            onChange={(e) => this.updateSelectedLayer('scale-x',parseInt(e.target.value))}
-                          />
-                        </div>
-                        <div className="input-group">
-                          <label htmlFor="scale-y" className="input-group-text">Y:</label>
-                          <input
-                            id="scale-y"
-                            type="number"
-                            className="form-control"
-                            style={{width: "4em"}}
-                            step={0.01}
-                            value={ this.fromSelectedLayer('scale-y',1.00) }
-                            onChange={(e) => this.updateSelectedLayer('scale-y',parseInt(e.target.value))}
-                          />
-                        </div>
+                        <LayerInputGroup inputId="rotate-cx" inputLabel="CX" layerField="rotateCX" defaultValue={0}/>
+                        <LayerInputGroup inputId="rotate-cy" inputLabel="CY" layerField="rotateCY" defaultValue={0}/>
+                        <LayerInputGroup inputId="rotate-angle" inputLabel="Angle" layerField="rotateAngle" defaultValue={0} opts={{ min: 0, max: 360 }} parser={(v) => parseInt(v)%360}/>
                       </>
                     }
                   </div>

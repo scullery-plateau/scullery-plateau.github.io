@@ -160,6 +160,19 @@ namespace('sp.common.Utilities', () => {
     const ctx = canvas.getContext('2d');
     return { canvas, ctx };
   }
+  const buildNumberInputGroup = function(inputId, inputLabel, getter, setter) {
+    return <div className="input-group">
+      <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
+      <input
+        id={inputId}
+        type="number"
+        className="form-control"
+        style={{width: "4em"}}
+        value={ getter() }
+        onChange={(e) => setter(e.target.value)}
+      />
+    </div>;
+  }
   return {
     range,
     merge,
@@ -175,6 +188,7 @@ namespace('sp.common.Utilities', () => {
     getCanvasAndContext,
     getIn,
     updateIn,
-    toggleIn
+    toggleIn,
+    buildNumberInputGroup
   };
 });
