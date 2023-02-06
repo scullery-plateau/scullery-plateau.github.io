@@ -119,6 +119,7 @@ namespace('sp.runyon.Runyon',{
                           type="number"
                           className="form-control text-center"
                           style={{width:'4em'}}
+                          min={0}
                           value={ dice.count }
                           onChange={(e) => {
                             const allDice = this.state.dice.map(({ size, count, results, holds }) => {
