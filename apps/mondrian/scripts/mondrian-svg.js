@@ -10,12 +10,11 @@ namespace('sp.mondrian.MondrianSVG',{
     })
     ctx.lineTo(firstX,firstY);
   }
-  const layerDefaults = {};
+  const layerDefaults = {strokeWidth:0};
   const shapes = {
     rect:{
-      args:{},
       init:function(defaults) {
-        return util.merge(defaults,{});
+        return util.merge(defaults,{type:"rect"});
       },
       render:function(layer) {
         return <rect x={layer.rectX} y={layer.rectY} width={layer.rectWidth} height={layer.rectHeight} fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></rect>;
@@ -35,9 +34,8 @@ namespace('sp.mondrian.MondrianSVG',{
       }
     },
     circle:{
-      args:{},
       init:function(defaults) {
-        return util.merge(defaults,{});
+        return util.merge(defaults,{type:"circle",circleCX:0,circleCY:0,circleR:20});
       },
       render:function(layer) {
         return <circle cx={layer.circleCX} cy={layer.circleCY} r={layer.circleR}  fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></circle>;
@@ -59,9 +57,8 @@ namespace('sp.mondrian.MondrianSVG',{
       }
     },
     ellipse:{
-      args:{},
       init:function(defaults) {
-        return util.merge(defaults,{});
+        return util.merge(defaults,{type:"ellipse"});
       },
       render:function(layer) {
         return <ellipse cx={layer.ellipseCX} cy={layer.ellipseCY} rx={layer.ellipseRX} ry={layer.ellipseRY} fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></ellipse>;
@@ -80,13 +77,14 @@ namespace('sp.mondrian.MondrianSVG',{
         }
       }
     },
-    polygon:{
-      args:{},
+    poly:{
       init:function(defaults) {
-        return util.merge(defaults,{});
+        return util.merge(defaults,{ type:"poly", polyPoints: [] });
       },
       render:function(layer) {
-        return <polygon points={layer.polyPoints.map((p) => p.join(',')).join(' ')}  fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></polygon>;
+        if(Array.isArray(layer.polyPoints) && layer.polyPoints.length >= 3) {
+          return <polygon points={layer.polyPoints.map((p) => p.join(',')).join(' ')}  fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></polygon>;
+        }
       },
       draw:function(ctx,layer) {
         if (layer.fill) {
@@ -146,10 +144,14 @@ namespace('sp.mondrian.MondrianSVG',{
   };
   const MondrianSVG = function({ schematic }) {
     const { width, height } = getDim(schematic);
-    return <svg width={width} height={height} viewBox={`${schematic.size.minX} ${schematic.size.minY} ${width} ${height}`}>
+
+    return <svg width="100%" height="80%" viewBox={`${schematic.size.minX} ${schematic.size.minY} ${width} ${height}`}>
+      <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="#999999" stroke="none"/>
       { schematic.layers.map((layer) => {
         return render(layer);
       })}
+      <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="none" stroke="black" strokeWidth={2}/>
+
     </svg>;
   }
   MondrianSVG.drawCanvasBase64 = function(schematic,callback) {

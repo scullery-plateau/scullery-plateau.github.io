@@ -12,6 +12,16 @@ namespace('sp.common.Utilities', () => {
       }, acc);
     }, {});
   };
+  const assoc = function (map, key, value) {
+    const out = merge(map);
+    out[key] = value;
+    return out;
+  }
+  const dissoc = function(map, key) {
+    const out = merge(map);
+    delete out[key];
+    return out;
+  }
   const getIn = function(obj,keys,defaultValue) {
     if (keys.length <= 0) {
       return obj || defaultValue;
@@ -160,14 +170,17 @@ namespace('sp.common.Utilities', () => {
     const ctx = canvas.getContext('2d');
     return { canvas, ctx };
   }
-  const buildNumberInputGroup = function(inputId, inputLabel, getter, setter) {
+  const buildNumberInputGroup = function(inputId, inputLabel, opts, getter, setter) {
     return <div className="input-group">
       <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
       <input
         id={inputId}
         type="number"
         className="form-control"
-        style={{width: "4em"}}
+        min={opts.min}
+        max={opts.max}
+        step={opts.step || 1}
+        style={opts.style || {}}
         value={ getter() }
         onChange={(e) => setter(e.target.value)}
       />
@@ -176,6 +189,8 @@ namespace('sp.common.Utilities', () => {
   return {
     range,
     merge,
+    assoc,
+    dissoc,
     getForegroundColor,
     hexFromRGB,
     rgbFromHex,

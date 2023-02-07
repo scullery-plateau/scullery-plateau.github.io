@@ -1,102 +1,112 @@
 namespace('sp.mondrian.LayerArgs',{
   'sp.common.Utilities':'util'
 },({ util }) => {
-  const buildSimpleInputGroup = function(inputId, inputLabel, layerField, props) {
-    return <div className="input-group">
-      <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
-      <input
-        id={inputId}
-        type="number"
-        className="form-control"
-        style={{width: "4em"}}
-        value={ props.fromLayer(layerField) }
-        onChange={(e) => props.updateLayer(layerField,parseFloat(e.target.value))}
-      />
-    </div>;
-  }
-  return function(props) {
-    const SimpleInputGroup = function({inputId, inputLabel, layerField}) {
-      return util.buildNumberInputGroup(inputId, inputLabel, () => {
-        return props.fromLayer(layerField);
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
+      const { fromLayer, updateLayer } = props;
+      this.fromLayer = fromLayer;
+      this.updateLayer = updateLayer;
+      this.state = {x:0,y:0};
+    }
+    buildSimpleInputGroup (inputId, inputLabel, layerField) {
+      return util.buildNumberInputGroup(inputId, inputLabel, {style:{width: "4em"}},() => {
+        return this.fromLayer(layerField);
       },(value) => {
-        props.updateLayer(layerField,parseFloat(value))
+        this.updateLayer(layerField,parseFloat(value))
       });
     }
-    const [polyPoint, setPolyPoint] = React.useState({x:0,y:0});
-    switch (props.fromLayer('type')) {
-      case 'rect':
-        return <div className="d-flex justify-content-center flex-wrap">
-          <SimpleInputGroup inputId="rect-x" inputLabel="X" layerField="rectX"/>
-          <SimpleInputGroup inputId="rect-y" inputLabel="Y" layerField="rectY"/>
-          <SimpleInputGroup inputId="rect-width" inputLabel="Width" layerField="rectWidth"/>
-          <SimpleInputGroup inputId="rect-height" inputLabel="Height" layerField="rectHeight"/>
-        </div>;
-      case 'circle':
-        return <div className="d-flex justify-content-center flex-wrap">
-          <SimpleInputGroup inputId="circle-cx" inputLabel="CX" layerField="circleCX"/>
-          <SimpleInputGroup inputId="circle-cy" inputLabel="CY" layerField="circleCY"/>
-          <SimpleInputGroup inputId="circle-r" inputLabel="R" layerField="circleR"/>
-        </div>;
-      case 'ellipse':
-        return <div className="d-flex justify-content-center flex-wrap">
-          <SimpleInputGroup inputId="ellipse-cx" inputLabel="CX" layerField="ellipseCX"/>
-          <SimpleInputGroup inputId="ellipse-cy" inputLabel="CY" layerField="ellipseCY"/>
-          <SimpleInputGroup inputId="ellipse-rx" inputLabel="RX" layerField="ellipseRX"/>
-          <SimpleInputGroup inputId="ellipse-ry" inputLabel="RY" layerField="ellipseRY"/>
-        </div>;
-      case 'poly':
-        return <>
-          <div className="d-flex justify-content-center flex-wrap">
-            {
-              props.fromLayer('args').points.map(([x,y],i) => {
-                return <span className="btn btn-secondary">({x},{y})
-                  <a
-                    className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const points = Array.from(props.fromLayer('args').points || []);
-                      points.splice(i,1);
-                      props.updateLayer('args',{ points });
-                    }}>X</a>
-                </span>;
-              })
-            }
-          </div>
-          <div className="d-flex justify-content-center">
-            <div className="input-group">
-              <label htmlFor="poly-x" className="input-group-text">X:</label>
-              <input
-                id="poly-x"
-                type="number"
-                className="form-control"
-                style={{width: "4em"}}
-                value={ polyPoint.x }
-                onChange={(e) => setPolyPoint({ x: parseFloat(e.target.value) })}
-              />
+    buildPolyPointInputGroup (inputId, inputLabel, coordName) {
+      return util.buildNumberInputGroup(inputId, inputLabel, {style:{width: "4em"}},() => {
+        return this.state[coordName]
+      },(value) => {
+        const parsed = parseFloat(value);
+        if (!isNaN(this.state.i)) {
+          const polyPoints = Array.from(this.fromLayer('polyPoints') || []);
+          const [x,y] = polyPoints[i];
+          const point = {x,y};
+          point[coordName] = parsed;
+          polyPoints[i] = [point.x,point.y];
+          this.updateLayer('polyPoints',polyPoints);
+        }
+        this.setState(util.assoc({},coordName,parsed));
+      });
+    }
+    clearState() {
+      this.setState({x:0,y:0,i:undefined});
+    }
+    render() {
+      switch (this.fromLayer('type')) {
+        case 'rect':
+          return <>
+            <div className="d-flex justify-content-center">
+              { this.buildSimpleInputGroup('rect-x','X','rectX') }
+              { this.buildSimpleInputGroup('rect-y','Y','rectY') }
             </div>
-            <div className="input-group">
-              <label htmlFor="poly-y" className="input-group-text">Y:</label>
-              <input
-                id="poly-y"
-                type="number"
-                className="form-control"
-                style={{width: "4em"}}
-                value={ polyPoint.y }
-                onChange={(e) => setPolyPoint({ y: parseFloat(e.target.value) })}
-              />
+            <div className="d-flex justify-content-center">
+              { this.buildSimpleInputGroup('rect-width','Width','rectWidth') }
+              { this.buildSimpleInputGroup('rect-height','Height','rectHeight') }
             </div>
-            <button
-              title="Add Layer"
-              className="btn btn-success"
-              onClick={() => {
-                const points = Array.from(props.fromLayer('polyPoints') || []);
-                points.push([polyPoint.x,polyPoint.y]);
-                props.updateLayer('polyPoints',points);
-              }}>+</button>
-          </div>
-        </>;
-      default:
-        return <></>
+          </> ;
+        case 'circle':
+          return <div className="d-flex justify-content-center">
+            { this.buildSimpleInputGroup('circle-cx','CX','circleCX') }
+            { this.buildSimpleInputGroup('circle-cy','CY','circleCY') }
+            { this.buildSimpleInputGroup('circle-r','R','circleR') }
+          </div>;
+        case 'ellipse':
+          return <>
+            <div className="d-flex justify-content-center">
+              { this.buildSimpleInputGroup('ellipse-cx','CX','ellipseCX') }
+              { this.buildSimpleInputGroup('ellipse-cy','CY','ellipseCY') }
+            </div>
+            <div className="d-flex justify-content-center">
+              { this.buildSimpleInputGroup('ellipse-rx','RX','ellipseRX') }
+              { this.buildSimpleInputGroup('ellipse-ry','RY','ellipseRY') }
+            </div>
+          </>;
+        case 'poly':
+          return <>
+            <div className="d-flex justify-content-center flex-wrap">
+              {
+                (this.fromLayer('polyPoints') || []).map(([x,y],i) => {
+                  return <button
+                    className={`btn ${this.state.i === i?"btn-info":"btn-secondary"}`}
+                    onClick={() => {
+                      if (this.state.i === i) {
+                        this.clearState();
+                      } else {
+                        this.setState({x,y,i});
+                      }
+                    }}
+                    onDoubleClick={() => {
+                      const polyPoints = Array.from(this.fromLayer('polyPoints') || []);
+                      polyPoints.splice(i,1);
+                      this.updateLayer('polyPoints',polyPoints);
+                      this.clearState();
+                    }}
+                  >({x},{y})</button>;
+                })
+              }
+            </div>
+            <div className="d-flex justify-content-center">
+              { this.buildPolyPointInputGroup('poly-x','X','x') }
+              { this.buildPolyPointInputGroup('poly-y','Y','y') }
+              { isNaN(this.state.i) &&
+                <button
+                  title="Add Layer"
+                  className="btn btn-success"
+                  onClick={() => {
+                    const points = Array.from(this.fromLayer('polyPoints') || []);
+                    points.push([this.state.x,this.state.y]);
+                    this.updateLayer('polyPoints',points);
+                  }}>+</button>
+              }
+            </div>
+          </>;
+        default:
+          return <></>
+      }
     }
   }
 });

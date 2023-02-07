@@ -98,7 +98,7 @@ namespace('sp.mondrian.Mondrian',{
     }
     addLayer(){
       const { schematic } = util.merge(this.state);
-      schematic.layers = schematic.layers.concat([{ part: 'arm', index: 0, shading: 0 }]);
+      schematic.layers = schematic.layers.concat(MondrianSVG.newLayer(layerTypes[0][0]));
       const selectedLayer = schematic.layers.length - 1;
       this.setState({ schematic, selectedLayer });
     }
@@ -192,180 +192,168 @@ namespace('sp.mondrian.Mondrian',{
       const ToggleButton = (({label, field}) => {
         return this.buildToggleButton(label,field);
       })
-      const StateInputGroup = function({ inputId, inputLabel, keys, opts}) {
-        opts = opts || {};
-        return <div className="input-group">
-          <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
-          <input
-            id={inputId}
-            type="number"
-            min={opts.min}
-            max={opts.max}
-            step={opts.step || 1}
-            className="form-control"
-            value={ util.getIn(this.state,keys)}
-            onChange={(e) => util.updateIn(this.state,keys,parseFloat(e.target.value))}
-          />
-        </div>;
-      }
       const me = this;
-      const LayerInputGroup = function({ inputId, inputLabel, layerField, defaultValue, opts, parser }) {
+      const buildStateInputGroup = ( inputId, inputLabel, keys, opts ) => {
+        opts = opts || {};
+        return util.buildNumberInputGroup(inputId, inputLabel, opts, () => util.getIn(me.state,keys), (value) => {
+          me.setState(util.updateIn(me.state,keys,parseFloat(value)));
+        });
+      }
+      const buildLayerInputGroup = ( inputId, inputLabel, layerField, defaultValue, opts, parser ) => {
         opts = opts || {};
         parser = parser || ((v) => parseFloat(v));
-        return <div className="input-group">
-          <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
-          <input
-            id={inputId}
-            type="number"
-            className="form-control"
-            min={opts.min}
-            max={opts.max}
-            step={opts.step || 1}
-            style={{width: "4em"}}
-            value={ me.fromSelectedLayer(layerField,defaultValue)}
-            onChange={(e) => me.updateSelectedLayer(layerField, parser(e.target.value))}
-          />
-        </div>;
+        return util.buildNumberInputGroup(inputId, inputLabel, opts, () => me.fromSelectedLayer(layerField,defaultValue), (value) => {
+          me.updateSelectedLayer(layerField, parser(value));
+        });
       }
       return <>
         <Header menuItems={this.menuItems} appTitle={'Mondrian'} />
-        <div className="d-flex justify-content-center">
-          <div className="d-flex flex-column">
-            <div className="rpg-box text-light m-1 d-flex flex-column">
-              <div className="d-flex justify-content-center">
-                <StateInputGroup inputId="min-x" inputLabel="Min X" keys={['schematic','size','minX']}/>
-                <StateInputGroup inputId="min-y" inputLabel="Min Y" keys={['schematic','size','minY']}/>
-                <StateInputGroup inputId="max-x" inputLabel="Max X" keys={['schematic','size','maxX']}/>
-                <StateInputGroup inputId="max-y" inputLabel="Max Y" keys={['schematic','size','maxY']}/>
-              </div>
-              <div className="d-flex justify-content-center">
-                <label className="input-group-text">Grid</label>
-                <StateInputGroup inputId="grid-size" inputLabel="Size" keys={['schematic','grid','size']}/>
-                <StateInputGroup inputId="grid-line-width" inputLabel="Line Width" keys={['schematic','grid','lineWidth']}/>
-                <div className="input-group">
-                  <label htmlFor="grid-style" className="input-group-text">Style</label>
-                  <select id="grid-style" className="form-control" value={ this.state.schematic.grid.style } onChange={(e) => {
-                    this.updateInState(['schematic','grid','style'],e.target.value);
-                  }}>
-                    {
-                      ['Solid','Dashed','Dotted','Single-Dot','None'].map((option, index) => {
-                        return <option key={`grid-style-${index}`} value={option.toLowerCase()}>{option}</option>;
-                      })
-                    }
-                  </select>
+        <div className="row">
+          <div className="col-7">
+            <div className="d-flex flex-column">
+              <div className="rpg-box text-light m-1 d-flex flex-column justify-content-center">
+                <div className="d-flex justify-content-center">
+                  { buildStateInputGroup('min-x','Min X', ['schematic','size','minX']) }
+                  { buildStateInputGroup('min-y','Min Y', ['schematic','size','minY']) }
+                </div>
+                <div className="d-flex justify-content-center">
+                  { buildStateInputGroup('max-x','Max X', ['schematic','size','maxX']) }
+                  { buildStateInputGroup('max-y','Max Y', ['schematic','size','maxY']) }
+                </div>
+                <div className="d-flex justify-content-center">
+                  { buildStateInputGroup('grid-size','Grid Size', ['schematic','grid','size']) }
+                  <div className="input-group">
+                    <label htmlFor="grid-style" className="input-group-text">Grid Style</label>
+                    <select id="grid-style" className="form-control" value={ this.state.schematic.grid.style } onChange={(e) => {
+                      this.updateInState(['schematic','grid','style'],e.target.value);
+                    }}>
+                      {
+                        ['Solid','Dashed','Dotted','Single-Dot','None'].map((option, index) => {
+                          return <option key={`grid-style-${index}`} value={option.toLowerCase()}>{option}</option>;
+                        })
+                      }
+                    </select>
+                  </div>
+                </div>
+                <div className="d-flex justify-content-center">
+                  { buildStateInputGroup('grid-line-width','Grid Line Width', ['schematic','grid','lineWidth']) }
                 </div>
               </div>
-            </div>
-            <div className="rpg-box text-light m-1 d-flex flex-column">
-              <div className="d-flex justify-content-center">
-                <div className="input-group">
-                  <label htmlFor="layer-select" className="input-group-text">Layers:</label>
-                  <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
-                    this.setState({ selectedLayer: parseInt(e.target.value.toString()) })
-                  }}>
-                    {
-                      this.state.schematic.layers.map((layer, index) => {
-                        return <option key={`layer-option-${index}`} value={index}>{index}: { this.getLayerLabel(layer)}</option>;
-                      })
-                    }
-                  </select>
+              <div className="rpg-box text-light m-1 d-flex flex-column">
+                <div className="d-flex justify-content-center">
+                  <div className="input-group">
+                    <label htmlFor="layer-select" className="input-group-text">Layers:</label>
+                    <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
+                      this.setState({ selectedLayer: parseInt(e.target.value.toString()) })
+                    }}>
+                      {
+                        this.state.schematic.layers.map((layer, index) => {
+                          return <option key={`layer-option-${index}`} value={index}>{index}: { this.getLayerLabel(layer)}</option>;
+                        })
+                      }
+                    </select>
+                  </div>
                 </div>
-                <button
-                  title="Add Layer"
-                  className="btn btn-success"
-                  onClick={() => this.addLayer()}>+</button>
-                <button
-                  title="Remove Layer"
-                  className="btn btn-danger"
-                  onClick={() => this.removeLayer()}>-</button>
+                <div className="d-flex justify-content-around">
+                  <button
+                    title="Add Layer"
+                    className="btn btn-success"
+                    onClick={() => this.addLayer()}>+</button>
+                  <button
+                    title="Remove Layer"
+                    className="btn btn-danger"
+                    onClick={() => this.removeLayer()}>-</button>
+                  <button
+                    title="Move To Back"
+                    className="btn btn-secondary"
+                    onClick={() => this.moveLayerToBack()}
+                  >
+                    <i className="fas fa-fast-backward"></i>
+                  </button>
+                  <button
+                    title="Move Back"
+                    className="btn btn-secondary"
+                    onClick={() => this.moveLayerBack()}
+                  >
+                    <i className="fas fa-step-backward"></i>
+                  </button>
+                  <button
+                    title="Move Forward"
+                    className="btn btn-secondary"
+                    onClick={() => this.moveLayerForward()}
+                  >
+                    <i className="fas fa-step-forward"></i>
+                  </button>
+                  <button
+                    title="Move To Front"
+                    className="btn btn-secondary"
+                    onClick={() => this.moveLayerToFront()}
+                  >
+                    <i className="fas fa-fast-forward"></i>
+                  </button>
+                </div>
               </div>
-              <div className="d-flex justify-content-around">
-                <button
-                  title="Move To Back"
-                  className="btn btn-secondary"
-                  onClick={() => this.moveLayerToBack()}
-                >
-                  <i className="fas fa-fast-backward"></i>
-                </button>
-                <button
-                  title="Move Back"
-                  className="btn btn-secondary"
-                  onClick={() => this.moveLayerBack()}
-                >
-                  <i className="fas fa-step-backward"></i>
-                </button>
-                <button
-                  title="Move Forward"
-                  className="btn btn-secondary"
-                  onClick={() => this.moveLayerForward()}
-                >
-                  <i className="fas fa-step-forward"></i>
-                </button>
-                <button
-                  title="Move To Front"
-                  className="btn btn-secondary"
-                  onClick={() => this.moveLayerToFront()}
-                >
-                  <i className="fas fa-fast-forward"></i>
-                </button>
-              </div>
-            </div>
-            {
-              this.state.selectedLayer >= 0 &&
-              <>
-                <div className="rpg-box text-light m-1 d-flex flex-column">
-                  <div className="d-flex justify-content-center">
-                    <div className="input-group">
-                      <label htmlFor="layer-type-select" className="input-group-text">Layer Type:</label>
-                      <select id="layer-type-select" className="form-control" value={ this.fromSelectedLayer('type') } onChange={(e) => {
-                        this.updateSelectedLayer('type',e.target.value);
-                      }}>
-                        {
-                          layerTypes.map(([type,label], index) => {
-                            return <option key={`layer-type-option-${index}`} value={type}>{label}</option>;
-                          })
-                        }
-                      </select>
+              {
+                this.state.selectedLayer >= 0 &&
+                <>
+                  <div className="rpg-box text-light m-1 d-flex flex-column">
+                    <div className="d-flex justify-content-center">
+                      <div className="input-group">
+                        <label htmlFor="layer-type-select" className="input-group-text">Layer Type:</label>
+                        <select id="layer-type-select" className="form-control" value={ this.fromSelectedLayer('type') } onChange={(e) => {
+                          this.updateSelectedLayer('type',e.target.value);
+                        }}>
+                          {
+                            layerTypes.map(([type,label], index) => {
+                              return <option key={`layer-type-option-${index}`} value={type}>{label}</option>;
+                            })
+                          }
+                        </select>
+                      </div>
+                    </div>
+                    <LayerArgs
+                      fromLayer={(field,defaultValue) => this.fromSelectedLayer(field,defaultValue)}
+                      updateLayer={(field,value) => this.updateSelectedLayer(field,value)}/>
+                  </div>
+                  <div className="rpg-box text-light m-1 d-flex flex-column">
+                    <div className="d-flex justify-content-center">
+                      <ColorPickerButton label="Fill" field="fill" getter={() => this.fromSelectedLayer('fill') } style={{}}/>
+                      <ColorPickerButton label="Line" field="stroke" getter={() => this.fromSelectedLayer('stroke') } style={{}}/>
+                      <div className="input-group">
+                        <label htmlFor="stroke-width" className="input-group-text">Line Width:</label>
+                        <input
+                          id="stroke-width"
+                          type="number"
+                          className="form-control"
+                          min={ 0 }
+                          style={{width: "4em"}}
+                          value={ this.fromSelectedLayer('strokeWidth') }
+                          onChange={(e) => this.updateSelectedLayer('strokeWidth',parseInt(e.target.value))}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <LayerArgs
-                    fromLayer={(field,defaultValue) => this.fromSelectedLayer(field,defaultValue)}
-                    updateLayer={(field,value) => this.updateSelectedLayer(field,value)}/>
-                </div>
-                <div className="rpg-box text-light m-1 d-flex flex-column">
-                  <div className="d-flex justify-content-center">
-                    <ColorPickerButton label="Fill" field="fill" getter={() => this.fromSelectedLayer('fill') } style={{}}/>
-                    <ColorPickerButton label="Line" field="stroke" getter={() => this.fromSelectedLayer('stroke') } style={{}}/>
-                    <div className="input-group">
-                      <label htmlFor="stroke-width" className="input-group-text">Line Width:</label>
-                      <input
-                        id="stroke-width"
-                        type="number"
-                        className="form-control"
-                        min={ 0 }
-                        style={{width: "4em"}}
-                        value={ this.fromSelectedLayer('strokeWidth') }
-                        onChange={(e) => this.updateSelectedLayer('strokeWidth',parseInt(e.target.value))}
-                      />
+                  <div className="rpg-box text-light m-1 d-flex flex-column">
+                    <div className="d-flex justify-content-center">
+                      <ToggleButton label="Rotate" field="rotate"/>
+                      { this.fromSelectedLayer('rotate') &&
+                        <>
+                          { buildLayerInputGroup('rotate-cx', 'CX', 'rotateCX', 0) }
+                          { buildLayerInputGroup('rotate-cy', 'CY', 'rotateCY', 0) }
+                          { buildLayerInputGroup('rotate-angle', 'Angle', 'rotateAngle', 0) }
+                        </>
+                      }
                     </div>
                   </div>
-                </div>
-                <div className="rpg-box text-light m-1 d-flex flex-column">
-                  <div className="d-flex justify-content-center">
-                    <ToggleButton label="Rotate" field="rotate"/>
-                    {this.fromSelectedLayer('rotate') &&
-                      <>
-                        <LayerInputGroup inputId="rotate-cx" inputLabel="CX" layerField="rotateCX" defaultValue={0}/>
-                        <LayerInputGroup inputId="rotate-cy" inputLabel="CY" layerField="rotateCY" defaultValue={0}/>
-                        <LayerInputGroup inputId="rotate-angle" inputLabel="Angle" layerField="rotateAngle" defaultValue={0} opts={{ min: 0, max: 360 }} parser={(v) => parseInt(v)%360}/>
-                      </>
-                    }
-                  </div>
-                </div>
-              </>
-            }
+                </>
+              }
+            </div>
           </div>
-          <MondrianSVG schematic={this.state.schematic}/>
+          <div className="col-5">
+            <div className="w-100 rpg-box text-light m-1 d-flex justify-content-center">
+              <MondrianSVG schematic={this.state.schematic}/>
+            </div>
+          </div>
         </div>
       </>;
     }
