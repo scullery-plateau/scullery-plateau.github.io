@@ -10,8 +10,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
-  'sp.outfitter.OutfitterUtil':'oUtil'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, ImageDownload, OutfitterSVG, oUtil }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, ImageDownload, OutfitterSVG }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -279,7 +278,7 @@ namespace('sp.outfitter.Outfitter', {
                     }}>
                       {
                         this.state.schematic.layers.map((layer, index) => {
-                          return <option key={`layer-option-${index}`} value={index}>{index}: {layer.part} {layer.index}</option>;
+                          return <option key={`layer-option-${index}`} value={index}>{ c.getLayerLabel(index,layer) }</option>;
                         })
                       }
                     </select>
@@ -399,7 +398,9 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-4 d-flex justify-content-center">
               <div className="rpg-box m-1">
-                <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata }/>
+                <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata } selectLayer={(layerIndex) => {
+                  this.setState({ selectedLayer: layerIndex });
+                }}/>
               </div>
             </div>
             <div className="col-4 d-flex flex-column">

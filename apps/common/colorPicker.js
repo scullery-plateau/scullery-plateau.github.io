@@ -74,6 +74,7 @@ namespace(
                                 >
                                   <button
                                     key={hex}
+                                    title={`Color: #${hex}`}
                                     style={{ color: hex, backgroundColor: hex }}
                                     onClick={() => {
                                       this.setState(setRGB(hex));

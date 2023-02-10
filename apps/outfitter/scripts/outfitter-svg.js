@@ -1,6 +1,7 @@
 namespace('sp.outfitter.OutfitterSVG',{
-  'sp.common.Point':'XY'
-},({ XY }) => {
+  'sp.common.Point':'XY',
+  'sp.outfitter.Constants':'c'
+},({ XY, c }) => {
   const SCALES = {
     lanky: [0.8, 1.1],
     thin: [0.8, 1.0],
@@ -196,7 +197,7 @@ namespace('sp.outfitter.OutfitterSVG',{
     content.push(`<g>${contents.join('')}</g>`)
     return { width: frameWidth, height: frameHeight, viewBox, content: content.join('') };
   }
-  const OutfitterSVG = function({ schematic, meta }) {
+  const OutfitterSVG = function({ schematic, meta, selectLayer }) {
     const minmax = {
       min:new XY([0, 0]),
       max:new XY([0, 0])
@@ -223,22 +224,33 @@ namespace('sp.outfitter.OutfitterSVG',{
       if (shadingId) {
         defs.shading[shadingId] = true;
       }
-      return <g key={`group-${index}`} opacity={layer.opacity || 1.0} transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
-        { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
-        { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}
-        { isNumber(layer.pattern) && layer.pattern >= 0 && (part.layers.base || part.layers.detail) &&
-          <>
-            { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ patternId })`} stroke="none"/>}
-            { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ patternId })`} stroke="none"/>}
-          </>}
-        { isNumber(layer.shading) && layer.shading >= 0 && (part.layers.base || part.layers.detail) &&
-          <>
-            { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ shadingId })`} stroke="none"/>}
-            { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ shadingId })`} stroke="none"/>}
-          </>}
-        { part.layers.outline && <use href={ '#' + part.layers.outline } fill="none" stroke={ layer.outline || 'black'} strokeWidth="1"/>}
-        { part.layers.shadow && <use href={ '#' + part.layers.shadow } stroke="none"/> }
-      </g>
+      return <a 
+        href="#" 
+        onClick={(e) => {
+          e.preventDefault();
+          selectLayer(index);
+        }}>
+        <g 
+          key={`group-${index}`} 
+          opacity={layer.opacity || 1.0} 
+          transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
+          <title>{ c.getLayerLabel(index,layer) }</title>
+          { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
+          { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}
+          { isNumber(layer.pattern) && layer.pattern >= 0 && (part.layers.base || part.layers.detail) &&
+            <>
+              { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ patternId })`} stroke="none"/>}
+              { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ patternId })`} stroke="none"/>}
+            </>}
+          { isNumber(layer.shading) && layer.shading >= 0 && (part.layers.base || part.layers.detail) &&
+            <>
+              { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ shadingId })`} stroke="none"/>}
+              { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ shadingId })`} stroke="none"/>}
+            </>}
+          { part.layers.outline && <use href={ '#' + part.layers.outline } fill="none" stroke={ layer.outline || 'black'} strokeWidth="1"/>}
+          { part.layers.shadow && <use href={ '#' + part.layers.shadow } stroke="none"/> }
+        </g>
+      </a>
     });
     const { minX, minY, width, height, frameWidth, frameHeight} = getImgDim(minmax);
     return <svg width={ frameWidth } height={ frameHeight } viewBox={`${ minX } ${ minY } ${ width } ${ height }`}>
