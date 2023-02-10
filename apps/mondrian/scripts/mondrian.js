@@ -82,7 +82,7 @@ namespace('sp.mondrian.Mondrian',{
         label: 'Download Image',
         callback: () => {
           MondrianSVG.drawCanvasBase64(this.state.schematic,(canvasURL) => {
-            this.modals.imageDownload.open({ defaultFilename: "mondrian", canvasURL });
+            this.modals.imageDownload.open({ defaultFilename: "mondrian", imageURL: canvasURL });
           });
         }
       },{

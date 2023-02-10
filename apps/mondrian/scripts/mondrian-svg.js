@@ -1,16 +1,7 @@
 namespace('sp.mondrian.MondrianSVG',{
   'sp.common.Utilities':'util'
 },({ util }) => {
-  const drawPoly = function(ctx,points) {
-    const [firstX,firstY] = points[0];
-    const rest = points.slice(1);
-    ctx.moveTo(firstX,firstY);
-    rest.forEach(([x,y]) => {
-      ctx.lineTo(x,y);
-    })
-    ctx.lineTo(firstX,firstY);
-  }
-  const layerDefaults = {strokeWidth:0};
+  const layerDefaults = { strokeWidth: 0 };
   const shapes = {
     rect:{
       init:function(defaults) {
@@ -19,18 +10,10 @@ namespace('sp.mondrian.MondrianSVG',{
       render:function(layer) {
         return <rect x={layer.rectX} y={layer.rectY} width={layer.rectWidth} height={layer.rectHeight} fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></rect>;
       },
-      draw:function(ctx,layer) {
-        if (layer.fill) {
-          ctx.fillStyle = layer.fill;
-          ctx.rect(layer.rectX,layer.rectY,layer.rectWidth,layer.rectHeight);
-          ctx.fill();
-        }
-        if (layer.stroke && layer.strokeWidth > 0) {
-          ctx.strokeStyle = layer.stroke;
-          ctx.lineWidth = layer.strokeWidth
-          ctx.rect(layer.rectX,layer.rectY,layer.rectWidth,layer.rectHeight);
-          ctx.stroke();
-        }
+      draw:function(layer) {
+        const path = new Path2D();
+        path.rect(layer.rectX || 0,layer.rectY || 0,layer.rectWidth || 0,layer.rectHeight || 0);
+        return path;
       }
     },
     circle:{
@@ -40,20 +23,11 @@ namespace('sp.mondrian.MondrianSVG',{
       render:function(layer) {
         return <circle cx={layer.circleCX} cy={layer.circleCY} r={layer.circleR}  fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></circle>;
       },
-      draw:function(ctx,layer) {
-        if (layer.fill) {
-          ctx.fillStyle = layer.fill;
-          ctx.beginPath();
-          ctx.arc(layer.circleCX,layer.circleCY,layer.circleR, 0, 2 * Math.PI);
-          ctx.fill();
-        }
-        if (layer.stroke && layer.strokeWidth > 0) {
-          ctx.strokeStyle = layer.stroke;
-          ctx.lineWidth = layer.strokeWidth
-          ctx.beginPath();
-          ctx.arc(layer.circleCX,layer.circleCY,layer.circleR, 0, 2 * Math.PI);
-          ctx.stroke();
-        }
+      draw:function(layer) {
+        const path = new Path2D();
+        path.arc(layer.circleCX || 0,layer.circleCY || 0,layer.circleR || 0, 0, 2 * Math.PI);
+        path.closePath();
+        return path;
       }
     },
     ellipse:{
@@ -63,18 +37,10 @@ namespace('sp.mondrian.MondrianSVG',{
       render:function(layer) {
         return <ellipse cx={layer.ellipseCX} cy={layer.ellipseCY} rx={layer.ellipseRX} ry={layer.ellipseRY} fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></ellipse>;
       },
-      draw:function(ctx,layer) {
-        if (layer.fill) {
-          ctx.fillStyle = layer.fill;
-          ctx.ellipse(layer.ellipseCX,layer.ellipseCY,layer.ellipseRX,layer.ellipseRY,0,0,2 * Math.PI);
-          ctx.fill();
-        }
-        if (layer.stroke && layer.strokeWidth > 0) {
-          ctx.strokeStyle = layer.stroke;
-          ctx.lineWidth = layer.strokeWidth
-          ctx.ellipse(layer.ellipseCX,layer.ellipseCY,layer.ellipseRX,layer.ellipseRY,0,0,2 * Math.PI);
-          ctx.stroke();
-        }
+      draw:function(layer) {
+        const path = new Path2D();
+        path.ellipse(layer.ellipseCX || 0, layer.ellipseCY || 0, layer.ellipseRX || 0, layer.ellipseRY || 0, 0, 0, 2 * Math.PI);
+        return path;
       }
     },
     poly:{
@@ -86,20 +52,16 @@ namespace('sp.mondrian.MondrianSVG',{
           return <polygon points={layer.polyPoints.map((p) => p.join(',')).join(' ')}  fill={layer.fill || 'none'} stroke={layer.stroke || 'none'} strokeWidth={layer.strokeWidth || 0}></polygon>;
         }
       },
-      draw:function(ctx,layer) {
-        if (layer.fill) {
-          ctx.fillStyle = layer.fill;
-          ctx.beginPath();
-          drawPoly(ctx,layer.polyPoints);
-          ctx.fill();
-        }
-        if (layer.stroke && layer.strokeWidth > 0) {
-          ctx.strokeStyle = layer.stroke;
-          ctx.lineWidth = layer.strokeWidth
-          ctx.beginPath();
-          drawPoly(ctx,layer.polyPoints);
-          ctx.stroke();
-        }
+      draw:function(layer) {
+        const path = new Path2D();
+        const [firstX,firstY] = layer.polyPoints[0];
+        const rest = layer.polyPoints.slice(1);
+        path.moveTo(firstX || 0, firstY || 0);
+        rest.forEach(([x,y]) => {
+          path.lineTo(x || 0, y || 0);
+        })
+        path.closePath();
+        return path;
       }
     }
   }
@@ -112,7 +74,17 @@ namespace('sp.mondrian.MondrianSVG',{
   const draw = function(ctx,layer) {
     const shape = shapes[layer.type];
     if (shape) {
-      shape.draw(ctx,layer);
+      console.log({ msg: `draw ${layer.type}`, layer});
+      ctx.fillStyle = layer.fill;
+      ctx.strokeStyle = layer.stroke;
+      ctx.lineWidth = layer.strokeWidth || 0;
+      const path = shape.draw(layer);
+      if (layer.fill) {
+        ctx.fill(path);
+      }
+      if (layer.stroke && layer.strokeWidth > 0) {
+        ctx.stroke(path);
+      }
     }
   }
   const newSchematic = function() {
@@ -144,14 +116,12 @@ namespace('sp.mondrian.MondrianSVG',{
   };
   const MondrianSVG = function({ schematic }) {
     const { width, height } = getDim(schematic);
-
     return <svg width="100%" height="80%" viewBox={`${schematic.size.minX} ${schematic.size.minY} ${width} ${height}`}>
       <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="#999999" stroke="none"/>
       { schematic.layers.map((layer) => {
         return render(layer);
       })}
       <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="none" stroke="black" strokeWidth={2}/>
-
     </svg>;
   }
   MondrianSVG.drawCanvasBase64 = function(schematic,callback) {
