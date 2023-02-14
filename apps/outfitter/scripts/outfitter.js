@@ -136,9 +136,11 @@ namespace('sp.outfitter.Outfitter', {
     }
     removeLayer(){
       const { schematic } = util.merge(this.state);
-      schematic.layers.splice(this.state.selectedLayer,1);
-      const selectedLayer = schematic.layers.length - 1;
-      this.setState({ schematic, selectedLayer });
+      if (schematic.layers.length > 1) {
+        schematic.layers.splice(this.state.selectedLayer,1);
+        const selectedLayer = schematic.layers.length - 1;
+        this.setState({ schematic, selectedLayer });
+      }
     }
     moveLayerToBack(){
       const { schematic } = util.merge(this.state);
@@ -180,14 +182,24 @@ namespace('sp.outfitter.Outfitter', {
       this.updateLayer("flip",(v) => !v);
     }
     updateLayer(field,newValue) {
+      const updates = {};
+      if (typeof field === 'string') {
+        updates[field] = newValue;
+      } else if (typeof field === 'object') {
+        Object.entries(field).forEach(([k,v]) => {
+          updates[k] = v;
+        });
+      }
       const { schematic } = util.merge(this.state);
       schematic.layers = schematic.layers.map((l) => util.merge(l));
-      const temp = schematic.layers[this.state.selectedLayer];
-      const oldValue = temp[field];
-      if ((typeof newValue) === 'function') {
-        newValue = newValue(oldValue);
-      }
-      temp[field] = newValue;
+      Object.entries(updates).reduce((out,[k, v]) => {
+        const oldValue = out[k];
+        if ((typeof v) === 'function') {
+          v = v(oldValue);
+        }
+        out[k] = v;
+        return out;
+      }, schematic.layers[this.state.selectedLayer]);
       this.setState({ schematic });
     }
     fromSelectedLayer(field,defaultValue) {
@@ -335,7 +347,10 @@ namespace('sp.outfitter.Outfitter', {
                 <div className="input-group">
                   <label htmlFor="part-type" className="input-group-text">Part Type:</label>
                   <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
-                    this.updateLayer('part',e.target.value)
+                    const part = e.target.value;
+                    const maxIndex = this.state.metadata.parts[newPart].length - 1;
+                    const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
+                    this.updateLayer({ part, index });
                   }}>
                     <option disabled hidden value>Select Part Type</option>
                     {
@@ -361,8 +376,9 @@ namespace('sp.outfitter.Outfitter', {
                     max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
                     style={{ width: "4em" }}
                     value={ this.fromSelectedLayer('index') }
-                    onChange={(e) => this.updateLayer('index', parseInt(e.target.value))}
-                  />
+                    onChange={(e) => {
+                      this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value))))
+                    }}/>
                 </div>
               </div>
               <div className="rpg-box text-light m-1 d-flex flex-column">
