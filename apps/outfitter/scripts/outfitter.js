@@ -348,7 +348,7 @@ namespace('sp.outfitter.Outfitter', {
                   <label htmlFor="part-type" className="input-group-text">Part Type:</label>
                   <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
                     const part = e.target.value;
-                    const maxIndex = this.state.metadata.parts[newPart].length - 1;
+                    const maxIndex = this.state.metadata.parts[part].length - 1;
                     const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
                     this.updateLayer({ part, index });
                   }}>
