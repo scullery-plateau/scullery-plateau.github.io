@@ -41,7 +41,7 @@ namespace('sp.outfitter.ImageDownload',{
                         <button
                             className="btn btn-info"
                             onClick={() => {
-                                Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.imageURL);
+                                Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.canvasURL);
                                 this.onClose();
                             }}>Download & Close</button> }
                     <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
