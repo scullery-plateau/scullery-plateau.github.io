@@ -10,11 +10,11 @@ namespace('sp.outfitter.ImageDownload',{
             props.setOnOpen(({ defaultFilename, svgData }) => {
                 console.log(svgData);
                 const { width, height } = svgData;
-                const imageURL = oUtil.convertSVGtoBase64(svgData,(canvasURL) => {
+                oUtil.convertSVGtoBase64(svgData,(canvasURL) => {
                     console.log({ canvasURL });
                     this.setState({ canvasURL });
                 });
-                this.setState({ defaultFilename, imageURL, placeholder: defaultFilename, width, height });
+                this.setState({ defaultFilename, placeholder: defaultFilename, width, height });
             });
         }
         render() {
