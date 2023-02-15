@@ -181,6 +181,15 @@ namespace('sp.outfitter.Outfitter', {
     flipLayer(){
       this.updateLayer("flip",(v) => !v);
     }
+    copyLayer() {
+      const { schematic } = util.merge(this.state);
+      const layers = Array.from(schematic.layers);
+      const temp = schematic.layers[this.state.selectedLayer];
+      layers.splice(this.state.selectedLayer + 1, 0, util.merge(temp));
+      schematic.layers = layers;
+      const selectedLayer = this.state.selectedLayer + 1;
+      this.setState({ schematic, selectedLayer });
+    }
     updateLayer(field,newValue) {
       const updates = {};
       if (typeof field === 'string') {
@@ -333,6 +342,13 @@ namespace('sp.outfitter.Outfitter', {
                     onClick={() => this.moveLayerToFront()}
                   >
                     <i className="fas fa-fast-forward"></i>
+                  </button>
+                  <button
+                    title="Copy Layer"
+                    className="btn btn-secondary"
+                    onClick={() => this.copyLayer()}
+                  >
+                    <i className="fas fa-copy"></i>
                   </button>
                   <button
                     id="flip-button"
