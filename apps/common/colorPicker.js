@@ -185,9 +185,9 @@ namespace(
               </div>
               <hr />
               <div className="d-flex">
-                { buildColorInput('redColor', 'Red', 'red') }
-                { buildColorInput('greenColor', 'Green', 'green') }
-                { buildColorInput('blueColor', 'Blue', 'blue') }
+                { this.buildColorInput('redColor', 'Red', 'red') }
+                { this.buildColorInput('greenColor', 'Green', 'green') }
+                { this.buildColorInput('blueColor', 'Blue', 'blue') }
               </div>
               <hr />
               <div>
