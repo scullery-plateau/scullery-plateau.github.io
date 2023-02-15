@@ -1,4 +1,4 @@
-namespace('sp.mondrian.MondrianSVG',{
+namespace('sp.glyph.GlyphSVG',{
   'sp.common.Utilities':'util'
 },({ util }) => {
   const layerDefaults = { strokeWidth: 0 };
@@ -165,7 +165,7 @@ namespace('sp.mondrian.MondrianSVG',{
       height: schematic.size.maxY - schematic.size.minY
     };
   };
-  const MondrianSVG = function({ schematic, selectLayer }) {
+  const GlyphSVG = function({ schematic, selectLayer }) {
     const { width, height } = getDim(schematic);
     return <svg width="100%" height="80%" viewBox={`${schematic.size.minX} ${schematic.size.minY} ${width} ${height}`}>
       <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="#999999" stroke="none"/>
@@ -178,7 +178,7 @@ namespace('sp.mondrian.MondrianSVG',{
       <rect x={schematic.size.minX} y={schematic.size.minY} width={width} height={height} fill="none" stroke="black" strokeWidth={2}/>
     </svg>;
   }
-  MondrianSVG.drawCanvasBase64 = function(schematic,callback) {
+  GlyphSVG.drawCanvasBase64 = function(schematic,callback) {
     const { width, height } = getDim(schematic);
     const { ctx, canvas } = util.getCanvasAndContext("canvas");
     canvas.width = width;
@@ -188,7 +188,7 @@ namespace('sp.mondrian.MondrianSVG',{
     });
     callback(canvas.toDataURL());
   }
-  MondrianSVG.newSchematic = newSchematic;
-  MondrianSVG.newLayer = newLayer;
-  return MondrianSVG;
+  GlyphSVG.newSchematic = newSchematic;
+  GlyphSVG.newLayer = newLayer;
+  return GlyphSVG;
 });

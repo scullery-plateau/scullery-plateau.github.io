@@ -1,4 +1,4 @@
-namespace('sp.mondrian.Mondrian',{
+namespace('sp.glyph.Glyph',{
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Dialog':'Dialog',
@@ -6,10 +6,10 @@ namespace('sp.mondrian.Mondrian',{
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Utilities':'util',
-  'sp.mondrian.ImageDownload':'ImageDownload',
-  'sp.mondrian.LayerArgs':'LayerArgs',
-  'sp.mondrian.MondrianSVG':'MondrianSVG'
-},({ buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, MondrianSVG }) => {
+  'sp.glyph.ImageDownload':'ImageDownload',
+  'sp.glyph.LayerArgs':'LayerArgs',
+  'sp.glyph.GlyphSVG':'GlyphSVG'
+},({ buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, GlyphSVG }) => {
   const about = [];
   const validateLoadFileJson = function() {};
   const layerTypes = [
@@ -26,11 +26,11 @@ namespace('sp.mondrian.Mondrian',{
     constructor(props) {
       super(props);
       this.state = { 
-        schematic: MondrianSVG.newSchematic(),
+        schematic: GlyphSVG.newSchematic(),
       };
       this.modals = Dialog.factory({
         about: {
-          templateClass: buildAbout("Mondrian",about),
+          templateClass: buildAbout("Glyph",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {}
         },
@@ -65,7 +65,8 @@ namespace('sp.mondrian.Mondrian',{
               if (error) {
                 throw error;
               }
-              this.setState({ schematic })
+              const selectedLayer = 0;
+              this.setState({ schematic, selectedLayer })
             },
             (fileName, error) => {
               console.log({ fileName, error });
@@ -77,7 +78,7 @@ namespace('sp.mondrian.Mondrian',{
         label: 'Download File',
         callback: () => {
           this.modals.fileDownload.open({
-            defaultFilename:"mondrian",
+            defaultFilename:"glyph",
             jsonData:this.state.schematic
           });
         }
@@ -85,8 +86,8 @@ namespace('sp.mondrian.Mondrian',{
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          MondrianSVG.drawCanvasBase64(this.state.schematic,(canvasURL) => {
-            this.modals.imageDownload.open({ defaultFilename: "mondrian", imageURL: canvasURL });
+          GlyphSVG.drawCanvasBase64(this.state.schematic,(canvasURL) => {
+            this.modals.imageDownload.open({ defaultFilename: "glyph", canvasURL });
           });
         }
       },{
@@ -99,7 +100,7 @@ namespace('sp.mondrian.Mondrian',{
     }
     addLayer(){
       const { schematic } = util.merge(this.state);
-      schematic.layers = schematic.layers.concat(MondrianSVG.newLayer(layerTypes[0][0]));
+      schematic.layers = schematic.layers.concat(GlyphSVG.newLayer(layerTypes[0][0]));
       const selectedLayer = schematic.layers.length - 1;
       this.setState({ schematic, selectedLayer });
     }
@@ -143,6 +144,15 @@ namespace('sp.mondrian.Mondrian',{
       schematic.layers.splice(this.state.selectedLayer,1);
       schematic.layers = schematic.layers.concat([temp]);
       const selectedLayer = schematic.layers.length - 1;
+      this.setState({ schematic, selectedLayer });
+    }
+    copyLayer() {
+      const { schematic } = util.merge(this.state);
+      const layers = Array.from(schematic.layers);
+      const temp = schematic.layers[this.state.selectedLayer];
+      layers.splice(this.state.selectedLayer + 1, 0, util.merge(temp));
+      schematic.layers = layers;
+      const selectedLayer = this.state.selectedLayer + 1;
       this.setState({ schematic, selectedLayer });
     }
     updateSelectedLayer(field,newValue) {
@@ -207,7 +217,7 @@ namespace('sp.mondrian.Mondrian',{
         });
       }
       return <>
-        <Header menuItems={this.menuItems} appTitle={'Mondrian'} />
+        <Header menuItems={this.menuItems} appTitle={'Glyph'} />
         <div className="row">
           <div className="col-7">
             <div className="d-flex flex-column">
@@ -249,7 +259,7 @@ namespace('sp.mondrian.Mondrian',{
               </div>
               <div className="rpg-box text-light m-1 d-flex flex-column">
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-5">
                     <div className="input-group">
                       <label htmlFor="layer-select" className="input-group-text">Layers:</label>
                       <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
@@ -269,7 +279,7 @@ namespace('sp.mondrian.Mondrian',{
                     <button title="Add Layer" className="btn btn-success" onClick={() => this.addLayer()}>+</button>
                     <button title="Remove Layer" className="btn btn-danger" onClick={() => this.removeLayer()}>-</button>
                   </div>
-                  <div className="col-4">
+                  <div className="col-5">
                     <button title="Move To Back" className="btn btn-secondary" onClick={() => this.moveLayerToBack()}>
                       <i className="fas fa-fast-backward"></i>
                     </button>
@@ -281,6 +291,9 @@ namespace('sp.mondrian.Mondrian',{
                     </button>
                     <button title="Move To Front" className="btn btn-secondary" onClick={() => this.moveLayerToFront()}>
                       <i className="fas fa-fast-forward"></i>
+                    </button>
+                    <button title="Duplicate Layer" className="btn btn-secondary" onClick={() => this.copyLayer()}>
+                      <i className="fas fa-copy"></i>
                     </button>
                   </div>
                 </div>
@@ -311,13 +324,13 @@ namespace('sp.mondrian.Mondrian',{
                   </div>
                   <div className="rpg-box text-light m-1 d-flex flex-column">
                     <div className="row">
-                      <div className="col">
+                      <div className="col-1">
                         <ColorPickerButton label="Fill" field="fill" getter={() => this.fromSelectedLayer('fill') } style={{}}/>
-                      </div>
-                      <div className="col">
                         <ColorPickerButton label="Line" field="stroke" getter={() => this.fromSelectedLayer('stroke') } style={{}}/>
                       </div>
-                      <div className="col-4">
+                      <div className="col-1">
+                      </div>
+                      <div className="col-5">
                         <div className="input-group">
                           <label htmlFor="stroke-width" className="input-group-text">Line Width:</label>
                           <input
@@ -331,14 +344,12 @@ namespace('sp.mondrian.Mondrian',{
                           />
                         </div>
                       </div>
-                      <div className="col">
+                      <div className="col-2">
                         <ToggleButton label="Rotate" field="rotate"/>
                       </div>
-                      { this.fromSelectedLayer('rotate') &&
-                        <div className="col-4">
-                          { buildLayerInputGroup('rotate-angle', 'Angle', 'rotateAngle', 0) }
-                        </div>
-                      }
+                      <div className="col-3">
+                        { this.fromSelectedLayer('rotate') && buildLayerInputGroup('rotate-angle', 'Angle', 'rotateAngle', 0) }
+                      </div>
                     </div>
                   </div>
                 </>
@@ -347,7 +358,7 @@ namespace('sp.mondrian.Mondrian',{
           </div>
           <div className="col-5">
             <div className="w-100 rpg-box text-light m-1 d-flex justify-content-center">
-              <MondrianSVG schematic={this.state.schematic} selectLayer={(selectedLayer) => {
+              <GlyphSVG schematic={this.state.schematic} selectLayer={(selectedLayer) => {
                 this.setState({ selectedLayer });
               }}/>
             </div>

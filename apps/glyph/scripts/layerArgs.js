@@ -1,4 +1,4 @@
-namespace('sp.mondrian.LayerArgs',{
+namespace('sp.glyph.LayerArgs',{
   'sp.common.Utilities':'util'
 },({ util }) => {
   return class extends React.Component {
