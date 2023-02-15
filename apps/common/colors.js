@@ -1,5 +1,5 @@
 namespace('sp.common.Colors', () => {
-  return {
+  const colorMap = {
     aquamarine: '#7FFFD4',
     lime: '#00FF00',
     deepskyblue: '#00BFFF',
@@ -149,4 +149,18 @@ namespace('sp.common.Colors', () => {
     beige: '#F5F5DC',
     black: '#000000',
   };
+  const nameLookup = Object.entries(colorMap).reduce((out,[name, color]) => {
+    out[color] = name;
+    return out;
+  }, {});
+  const getColorNames = function() {
+    return Object.keys(colorMap).sort();
+  }
+  const getColorByName = function(name) {
+    return colorMap[name];
+  }
+  const getNameForColor = function(color) {
+    return nameLookup[color];
+  }
+  return { getColorNames, getColorByName, getNameForColor };
 });

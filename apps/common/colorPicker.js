@@ -5,6 +5,7 @@ namespace(
     'sp.common.Colors': 'Colors',
   },
   ({ Utilities, Colors }) => {
+    const localStorageKey = "ColorPickerStoredColors";
     const hexFromXY = function (x, y) {
       const r = 3 * Math.floor(x / 6) + Math.floor(y / 6);
       const g = x % 6;
@@ -34,23 +35,71 @@ namespace(
       );
       return newState;
     };
+    const loadStoredColors = function(savedColorArray) {
+      const storedColors = localStorage.getItem(localStorageKey);
+      if (storedColors) {
+        JSON.parse(storedColors).forEach((color) => {
+          savedColorArray.push(color);
+        })
+      }
+    }
     const buildInitState = function () {
+      const savedColors = [];
+      loadStoredColors(savedColors)
       return {
         hex: '',
         red: 0,
         green: 0,
         blue: 0,
+        savedColors
       };
     };
+    const buildColorInput = function(id, label, colorPart) {
+      return <div className="form-group">
+        <label htmlFor={id}>{label}:</label>
+        <input
+          id={id}
+          type="number"
+          min="0"
+          max="255"
+          className="form-control"
+          value={this.state[colorPart]}
+          onChange={ (e) => {
+            this.setState(
+              setColorPart(this.state, colorPart, e.target.value)
+            );
+          }}
+        />
+      </div>;
+    }
     return class extends React.Component {
       constructor(props) {
         super(props);
         this.state = buildInitState();
         props.setOnOpen(({ color, index }) => {
-          this.setState(setRGB(color));
+          const savedColors = Array.from(this.state.savedColors);
+          loadStoredColors(savedColors);
+          this.setState(Utilities.merge(setRGB(color),{ savedColors }));
           this.index = index;
         });
         this.onClose = props.onClose;
+      }
+      saveColor() {
+        const savedColors = Array.from(this.state.savedColors);
+        if (savedColors.indexOf(this.state.hex) === -1) {
+          savedColors.push(this.state.hex);
+          this.setState({ savedColors });
+          localStorage.setItem(localStorageKey,JSON.stringify(savedColors));
+        }
+      }
+      buildColorOption(label, value) {
+        return <option
+          key={label}
+          value={value}
+          style={{
+            color: Utilities.getForegroundColor(value),
+            backgroundColor: value,
+          }}>{label}</option>
       }
       render() {
         return (
@@ -114,7 +163,7 @@ namespace(
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="colorByName">Color by Name:</label>
+                <label htmlFor="colorByName">Color by Name (including Saved Colors):</label>
                 <select
                   id="colorByName"
                   className="form-control"
@@ -124,92 +173,35 @@ namespace(
                   }}
                 >
                   <option value={undefined}>Select</option>
-                  {Object.keys(Colors)
-                    .sort()
-                    .map((colorName) => {
-                      const hex = Colors[colorName];
-                      return (
-                        <option
-                          key={colorName}
-                          value={hex}
-                          style={{
-                            color: Utilities.getForegroundColor(hex),
-                            backgroundColor: hex,
-                          }}
-                        >
-                          {colorName}
-                        </option>
-                      );
-                    })}
+                  {this.state.savedColors.map((color,index) => {
+                    const label = `Saved Color #${index+1}: ${color}`;
+                    return this.buildColorOption(label, color);
+                  })}
+                  {Colors.getColorNames().map((colorName) => {
+                    const hex = Colors.getColorByName(colorName);
+                    return this.buildColorOption(colorName, hex);
+                  })}
                 </select>
               </div>
               <hr />
               <div className="d-flex">
-                <div className="form-group">
-                  <label htmlFor="redColor">Red:</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="255"
-                    className="form-control"
-                    id="redColor"
-                    value={this.state.red}
-                    onChange={(e) => {
-                      this.setState(
-                        setColorPart(this.state, 'red', e.target.value)
-                      );
-                    }}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="greenColor">Green:</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="255"
-                    className="form-control"
-                    id="greenColor"
-                    value={this.state.green}
-                    onChange={(e) => {
-                      this.setState(
-                        setColorPart(this.state, 'green', e.target.value)
-                      );
-                    }}
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="blueColor">Blue:</label>
-                  <input
-                    type="number"
-                    min="0"
-                    max="255"
-                    className="form-control"
-                    id="blueColor"
-                    value={this.state.blue}
-                    onChange={(e) => {
-                      this.setState(
-                        setColorPart(this.state, 'blue', e.target.value)
-                      );
-                    }}
-                  />
-                </div>
+                { buildColorInput('redColor', 'Red', 'red') }
+                { buildColorInput('greenColor', 'Green', 'green') }
+                { buildColorInput('blueColor', 'Blue', 'blue') }
               </div>
               <hr />
               <div>
                 <button
-                  className="btn btn-info"
-                  onClick={() =>
-                    this.onClose({ color: this.state.hex, index: this.index })
-                  }
-                >
-                  Use Color
-                </button>
-                <button
-                  className="btn btn-secondary"
-                  onClick={() => this.onClose()}
-                >
-                  Cancel
-                </button>
+                  onClick={ () => {
+                    localStorage.setItem(localStorageKey,JSON.stringify(this.state.savedColors));
+                    this.onClose({color: this.state.hex, index: this.index});
+                  }}
+                  className="btn btn-success">Use Color</button>
+                <button onClick={ () => { this.saveColor() } } className="btn btn-info">Save Color</button>
+                <button onClick={ () => {
+                  localStorage.setItem(localStorageKey,JSON.stringify(this.state.savedColors));
+                  this.onClose();
+                }} className="btn btn-secondary">Cancel</button>
               </div>
             </div>
           </div>
