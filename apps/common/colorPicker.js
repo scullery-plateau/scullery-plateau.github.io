@@ -54,24 +54,6 @@ namespace(
         savedColors
       };
     };
-    const buildColorInput = function(id, label, colorPart) {
-      return <div className="form-group">
-        <label htmlFor={id}>{label}:</label>
-        <input
-          id={id}
-          type="number"
-          min="0"
-          max="255"
-          className="form-control"
-          value={this.state[colorPart]}
-          onChange={ (e) => {
-            this.setState(
-              setColorPart(this.state, colorPart, e.target.value)
-            );
-          }}
-        />
-      </div>;
-    }
     return class extends React.Component {
       constructor(props) {
         super(props);
@@ -91,6 +73,24 @@ namespace(
           this.setState({ savedColors });
           localStorage.setItem(localStorageKey,JSON.stringify(savedColors));
         }
+      }
+      buildColorInput(id, label, colorPart) {
+        return <div className="form-group">
+          <label htmlFor={id}>{label}:</label>
+          <input
+            id={id}
+            type="number"
+            min="0"
+            max="255"
+            className="form-control"
+            value={this.state[colorPart]}
+            onChange={ (e) => {
+              this.setState(
+                setColorPart(this.state, colorPart, e.target.value)
+              );
+            }}
+          />
+        </div>;
       }
       buildColorOption(label, value) {
         return <option
