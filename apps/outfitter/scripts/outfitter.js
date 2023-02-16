@@ -393,7 +393,7 @@ namespace('sp.outfitter.Outfitter', {
                     style={{ width: "4em" }}
                     value={ this.fromSelectedLayer('index') }
                     onChange={(e) => {
-                      this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value))))
+                      this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value || 0))))
                     }}/>
                 </div>
               </div>
