@@ -39,13 +39,15 @@ namespace(
       const storedColors = localStorage.getItem(localStorageKey);
       if (storedColors) {
         JSON.parse(storedColors).forEach((color) => {
-          savedColorArray.push(color);
+          if (savedColorArray.indexOf(color) <= -1) {
+            savedColorArray.push(color);
+          }
         })
       }
     }
     const buildInitState = function () {
       const savedColors = [];
-      loadStoredColors(savedColors)
+      loadStoredColors(savedColors);
       return {
         hex: '',
         red: 0,
@@ -59,10 +61,14 @@ namespace(
         super(props);
         this.state = buildInitState();
         props.setOnOpen(({ color, index }) => {
+          console.log('called set on open');
           const savedColors = Array.from(this.state.savedColors);
+          console.log('loading stored colors');
           loadStoredColors(savedColors);
+          console.log('stored colors loaded');
           this.setState(Utilities.merge(setRGB(color),{ savedColors }));
           this.index = index;
+          console.log('set on open');
         });
         this.onClose = props.onClose;
       }
