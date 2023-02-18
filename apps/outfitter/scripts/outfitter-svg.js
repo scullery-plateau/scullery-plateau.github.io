@@ -82,8 +82,8 @@ namespace('sp.outfitter.OutfitterSVG',{
   const updateMinMax = function(part, flip, move, minmax) {
     let partMin = new XY(part.min).times(flip.toJSON()).plus(move.toJSON());
     let partMax = new XY(part.max).times(flip.toJSON()).plus(move.toJSON());
-    const [partMinX, partMinY] = partMin.toJSON();
-    const [partMaxX, partMaxY] = partMax.toJSON();
+    const [partMinX, partMinY] = partMin.min(partMax.toJSON()).toJSON();
+    const [partMaxX, partMaxY] = partMin.max(partMax.toJSON()).toJSON();
     const minX = Math.min(partMinX, partMaxX);
     const maxX = Math.max(partMinX, partMaxX);
     partMin = new XY([minX, partMinY]);

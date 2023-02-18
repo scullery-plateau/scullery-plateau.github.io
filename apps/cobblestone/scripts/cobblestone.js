@@ -2,6 +2,7 @@
     'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
+    'sp.common.GridUtilities': 'gUtil',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'util',
@@ -11,9 +12,9 @@
     'sp.cobblestone.Publish': 'Publish',
     'sp.cobblestone.TileDefs': 'TileDefs',
     'sp.cobblestone.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, util, cUtil, Publish, Download, DimensionSetter }) => {
+},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, gUtil, util, cUtil, Publish, Download, DimensionSetter }) => {
     const tileDim = cUtil.getTileDim();
-    const emptyCellId = cUtil.getEmptyCellId();
+    const emptyCellId = gUtil.getEmptyCellId();
     const about = [
         'Cobblestone is a canvas for game boards and battle maps.',
         'Build your map a page at a time. Publish them as printable or download them as images.',
@@ -95,14 +96,14 @@
                             'text',
                             (fileContent) => {
                                 const jsonData = JSON.parse(fileContent);
-                                const { images, tiles, placements, size, orientation, pages } = jsonData;
-                                const stateData = { images, tiles, placements, size, orientation, pages };
+                                const { images, tiles, placements, size, orientation, pages, printOrientation } = jsonData;
+                                const stateData = { images, tiles, placements, size, orientation, pages, printOrientation };
                                 const error = validateLoadFileJson(stateData);
                                 if (error) {
                                     throw error;
                                 }
                                 const [filename, tfs] = Object.entries(tiles)[0];
-                                const firstTF = Object.keys(tfs);
+                                const firstTF = Object.keys(tfs)[0];
                                 stateData.selectedTile = [filename, firstTF];
                                 this.setState(stateData);
                             },
@@ -116,10 +117,10 @@
                     id: 'downloadFile',
                     label: 'Download File',
                     callback: () => {
-                        const { images, tiles, placements, size, orientation, pages } = this.state;
+                        const { images, tiles, placements, size, orientation, pages, printOrientation } = this.state;
                         this.modals.fileDownload.open({
                             defaultFilename:"cobblestone",
-                            jsonData:{ images, tiles, placements, size, orientation, pages }
+                            jsonData:{ images, tiles, placements, size, orientation, pages, printOrientation }
                         });
                     }
                 },{
@@ -168,15 +169,15 @@
             }];
         }
         transform(transformType) {
-            const width = cUtil.getWidth(this.state.size,this.state.orientation);
-            const height = cUtil.getHeight(this.state.size,this.state.orientation);
+            const width = gUtil.getWidth(this.state.size,this.state.orientation);
+            const height = gUtil.getHeight(this.state.size,this.state.orientation);
             const transformFn = getTransforms[transformType]();
             const placements = Object.entries(this.state.placements).reduce(
               (out, [pixelId, tile]) => {
-                const { x, y } = cUtil.parseCoordinateId(pixelId);
+                const { x, y } = gUtil.parseCoordinateId(pixelId);
                 const [x1, y1] = transformFn(x, y);
                 if (x1 >= 0 && x1 < width && y1 >= 0 && y1 < height) {
-                  const newPixelId = cUtil.getCoordinateId(x1, y1);
+                  const newPixelId = gUtil.getCoordinateId(x1, y1);
                   out[newPixelId] = tile;
                 }
                 return out;
@@ -208,7 +209,7 @@
         toggleTile(x,y) {
             if (this.state.selectedTile) {
                 const placements = util.merge(this.state.placements);
-                const coordId = cUtil.getCoordinateId(x, y);
+                const coordId = gUtil.getCoordinateId(x, y);
                 const tile = placements[coordId];
                 if (tile) {
                     delete placements[coordId];
@@ -219,8 +220,8 @@
             }
         }
         render() {
-            const width = cUtil.getWidth(this.state.size, this.state.orientation);
-            const height = cUtil.getHeight(this.state.size, this.state.orientation);
+            const width = gUtil.getWidth(this.state.size, this.state.orientation);
+            const height = gUtil.getHeight(this.state.size, this.state.orientation);
             const fullWidth = width * tileDim;
             const fullHeight = height * tileDim;
             return <>
@@ -262,7 +263,7 @@
                     {
                         util.range(width).map((x) => {
                             return util.range(height).map((y) => {
-                                const tile = this.state.placements[cUtil.getCoordinateId(x, y)];
+                                const tile = this.state.placements[gUtil.getCoordinateId(x, y)];
                                 const tileId = tile ? cUtil.getTileId(tile[0], tile[1]) : emptyCellId;
                                 return <a href="#" onClick={(e) => {
                                     e.preventDefault();

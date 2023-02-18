@@ -49,13 +49,20 @@
     <script type="text/babel" src="../common/fileDownload.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
     <script type="text/babel" src="../common/footer.js"></script>
+    <script type="text/babel" src="../common/gridUtil.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
     <script type="text/babel" src="../common/point.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
+    <script type="text/babel" src="./scripts/dimSetter.js"></script>
+    <script type="text/babel" src="./scripts/imageDownload.js"></script>
     <script type="text/babel" src="./scripts/overlander.js"></script>
+    <script type="text/babel" src="./scripts/overlanderUtil.js"></script>
+    <script type="text/babel" src="./scripts/publish.js"></script>
+    <script type="text/babel" src="./scripts/tileDefs.js"></script>
+    <script type="text/babel" src="./scripts/tileEditor.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
@@ -74,6 +81,25 @@
     </script>
   </head>
   <body class="bg-dark text-light">
+    <svg width="0%" height="0%">
+      <defs>
+        <linearGradient
+          id="clearedGradient"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop offset="5%" style="stop-color: #ff0000; stop-opacity: 0.2" />
+          <stop offset="23%" style="stop-color: #ffff00; stop-opacity: 0.2" />
+          <stop offset="41%" style="stop-color: #00ff00; stop-opacity: 0.2" />
+          <stop offset="59%" style="stop-color: #00ffff; stop-opacity: 0.2" />
+          <stop offset="77%" style="stop-color: #0000ff; stop-opacity: 0.2" />
+          <stop offset="95%" style="stop-color: #ff00ff; stop-opacity: 0.2" />
+        </linearGradient>
+        <polygon points="26,2 74,2 98,43.3 74,84.6 26,84.6 2,43.3" id="emptyCell" fill="url(#clearedGradient)" stroke="black" stroke-width="4"/>
+      </defs>
+    </svg>
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
     <canvas style="display: none;" id="canvas"></canvas>

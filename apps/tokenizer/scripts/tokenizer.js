@@ -121,7 +121,7 @@ namespace(
             const { size, tokens } = jsonData;
             const allTokens = tokens.map((token) => {
               const t = { token };
-              TokenCanvas.initImageObj(token.url,(baseImg) => {
+              util.initImageObj(token.url,(baseImg) => {
                 token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
                 t.baseImg = baseImg;
               });
@@ -153,7 +153,7 @@ namespace(
           'dataURL',
           (dataURL, filename) => {
             const token = TokenCanvas.initState(dataURL,filename,1);
-            TokenCanvas.initImageObj(dataURL,(baseImg) => {
+            util.initImageObj(dataURL,(baseImg) => {
               token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
               this.setState({ tokens: [].concat(this.state.tokens, [{token,baseImg}]) });
             });

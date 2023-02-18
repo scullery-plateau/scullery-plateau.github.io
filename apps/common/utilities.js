@@ -186,6 +186,14 @@ namespace('sp.common.Utilities', () => {
       />
     </div>;
   }
+  const toRadians = (degrees) => (degrees * Math.PI) / 180;
+  const initImageObj = function(url,callback) {
+    const baseImg = new Image();
+    baseImg.onload = (() => {
+      callback(baseImg);
+    });
+    baseImg.src = url;
+  }
   return {
     range,
     merge,
@@ -204,6 +212,8 @@ namespace('sp.common.Utilities', () => {
     getIn,
     updateIn,
     toggleIn,
-    buildNumberInputGroup
+    buildNumberInputGroup,
+    toRadians,
+    initImageObj
   };
 });

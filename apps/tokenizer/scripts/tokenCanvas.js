@@ -1,4 +1,6 @@
-namespace("sp.tokenizer.TokenCanvas",{},() => {
+namespace("sp.tokenizer.TokenCanvas",{
+  'sp.common.Utilities':'util'
+},({ util }) => {
     const initState = function(url,filename,copyCount) {
         return {
           url,
@@ -13,13 +15,6 @@ namespace("sp.tokenizer.TokenCanvas",{},() => {
           xOffset: 0,
           yOffset: 0
         }
-    }
-    const initImageObj = function(url,callback) {
-      const baseImg = new Image();
-      baseImg.onload = (() => {
-        callback(baseImg);
-      });
-      baseImg.src = url;
     }
     const getConstants = function(dim) {
         const [width, height, cx, cy, r, lineWidthMult] = [dim, dim, dim / 2, dim / 2, dim / 2, 5];
@@ -75,6 +70,7 @@ namespace("sp.tokenizer.TokenCanvas",{},() => {
           ctx.fillStyle = token.backgroundColor;
           ctx.beginPath();
           drawShape(ctx,dimObj,token);
+          ctx.closePath();
           ctx.fill();
         }
 
@@ -84,6 +80,7 @@ namespace("sp.tokenizer.TokenCanvas",{},() => {
         ctx.fillStyle = token.backgroundColor;
         ctx.beginPath();
         drawShape(ctx,dimObj,token);
+        ctx.closePath();
         ctx.fill();
         // reset to default
         ctx.globalCompositeOperation='source-over';
@@ -92,11 +89,12 @@ namespace("sp.tokenizer.TokenCanvas",{},() => {
         ctx.strokeStyle = token.frameColor;
         ctx.beginPath();
         drawShape(ctx,dimObj,token);
+        ctx.closePath();
         ctx.stroke();
 
         // closePath is useless here
         //ctx.closePath();
         return c.toDataURL();
     }
-    return { initState, initImageObj, drawCanvasURL };
+    return { initState, drawCanvasURL };
 });

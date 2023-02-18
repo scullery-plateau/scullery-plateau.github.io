@@ -1,16 +1,9 @@
 namespace("sp.cobblestone.CobblestoneUtil",{
   'sp.common.Utilities': 'util',
-},({ util }) => {
-  const radix = 32;
-  const getCoordinateId = ((x, y) => [x, y].map((i) => i.toString(radix).toUpperCase()).join('x'));
-  const parseCoordinateId = function (id) {
-    const [x, y] = id.split('x').map((n) => parseInt(n, radix));
-    return { x, y };
-  };
+  'sp.common.GridUtilities': 'gUtil'
+},({ util, gUtil }) => {
   const tileDim = 30
   const getTileDim = (() => tileDim);
-  const getBlankCellId = (() => 'blankCell');
-  const getEmptyCellId = (() => 'emptyCell');
   const getTileId = ((filename, tf) => [filename].concat(tf.split(',')).join('.'));
   const tileTransforms = {
     flipDown: `matrix(1 0 0 -1 0 ${tileDim})`,
@@ -28,7 +21,6 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     'flipOver,turnLeft',
     'flipOver,turnRight',
   ];
-  const toRadians = (degrees) => (degrees * Math.PI) / 180;
   const canvasTransforms = {
     '': (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
@@ -47,32 +39,32 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     },
     turnLeft: (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
-      ctx.rotate(toRadians(-90));
+      ctx.rotate(util.toRadians(-90));
       ctx.translate(-tileDim, 0);
       ctx.drawImage(img, 0, 0, tileDim, tileDim);
     },
     turnRight: (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
-      ctx.rotate(toRadians(90));
+      ctx.rotate(util.toRadians(90));
       ctx.translate(0, -tileDim);
       ctx.drawImage(img, 0, 0, tileDim, tileDim);
     },
     'flipDown,flipOver': (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
-      ctx.rotate(toRadians(180));
+      ctx.rotate(util.toRadians(180));
       ctx.translate(-tileDim, -tileDim);
       ctx.drawImage(img, 0, 0, tileDim, tileDim);
     },
     'flipOver,turnLeft': (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
-      ctx.rotate(toRadians(-90));
+      ctx.rotate(util.toRadians(-90));
       ctx.scale(1, -1);
       ctx.translate(-tileDim, 0);
       ctx.drawImage(img, 0, 0, tileDim, -1 * tileDim);
     },
     'flipOver,turnRight': (ctx, img, tileDim, x, y) => {
       ctx.translate(x * tileDim, y * tileDim);
-      ctx.rotate(toRadians(90));
+      ctx.rotate(util.toRadians(90));
       ctx.scale(1, -1);
       ctx.translate(0, tileDim);
       ctx.drawImage(img, 0, 0, tileDim, -1 * tileDim);
@@ -82,15 +74,13 @@ namespace("sp.cobblestone.CobblestoneUtil",{
   const buildImageTransform = ((tf) => tf.split(',').map((t) => getTileTransform(t)).join(' '));
   const mapTransformOptions = ((cb) => transformOptions.map(cb));
   const transformCanvas = ((tf, ctx, img, tileDim, x, y) => canvasTransforms[tf](ctx, img, tileDim, x, y))
-  const getWidth = ((size, orientation) => (orientation === 'portrait')?size.min:size.max);
-  const getHeight = ((size, orientation) => (orientation === 'portrait')?size.max:size.min);
   const drawImage = function (ctx, dataURL, tileDim, x, y, tf, state, callback) {
     const img = document.createElement('img');
     img.onload = () => {
       ctx.save();
       transformCanvas(tf,ctx, img, tileDim, x, y);
       ctx.restore();
-      delete state[getCoordinateId(x, y)];
+      delete state[gUtil.getCoordinateId(x, y)];
       if (Object.keys(state).length === 0) {
         callback();
       }
@@ -103,7 +93,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
       w,
       h,
       Object.keys(placements),
-      parseCoordinateId
+      gUtil.parseCoordinateId
     );
     const canvas = document.createElement('canvas');
     canvas.setAttribute('width', width * tileDim);
@@ -113,7 +103,7 @@ namespace("sp.cobblestone.CobblestoneUtil",{
     const state = {};
     for (let x = 0; x < width; x++) {
       for (let y = 0; y < height; y++) {
-        const coordId = getCoordinateId(x, y);
+        const coordId = gUtil.getCoordinateId(x, y);
         const placement = placements[coordId];
         if (placement) {
           state[coordId] = true;
@@ -136,7 +126,5 @@ namespace("sp.cobblestone.CobblestoneUtil",{
       }
     }
   };
-  return { getCoordinateId, parseCoordinateId, getTileDim, getEmptyCellId, getBlankCellId, getTileTransform, getWidth, getHeight,
-    buildImageTransform, mapTransformOptions, transformCanvas, drawImage, drawCanvas, getTileId
-  };
+  return { getTileDim, getTileTransform, buildImageTransform, mapTransformOptions, transformCanvas, drawImage, drawCanvas, getTileId };
 });
