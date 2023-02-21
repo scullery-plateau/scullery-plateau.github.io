@@ -7,10 +7,13 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
     const items = [
         ['Critical Role: Mighty Nein', 'bluud'],
         ['Critical Role: Vox Machina', 'grog'],
+        ['Miscellaneous','he-man'],
         ['Miscellaneous','link'],
         ['Critical Role: Vox Machina', 'percy'],
         ['Critical Role: Vox Machina', 'pike'],
         ['Critical Role: Mighty Nein', 'ruby', 'Marion Lavore'],
+        ['Miscellaneous','skeleton'],
+        ['Miscellaneous','skeletor'],
         ['Critical Role: Vox Machina', 'tiberius'],
         ['Critical Role: Vox Machina', 'vex']
     ].map(([group,filename,label]) => {
@@ -28,7 +31,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         downloadExtension: ".json",
         imageExtension: ".png",
         style:{ 
-            height: '64px' 
+            height: '150px'
         },
         groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein' ],
         items
