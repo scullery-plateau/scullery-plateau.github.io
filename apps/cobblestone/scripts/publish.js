@@ -2,12 +2,13 @@ namespace('sp.cobblestone.Publish',{
   "sp.common.ColorPicker":'ColorPicker',
   "sp.common.Colors":'colors',
   "sp.common.Dialog":'Dialog',
+  "sp.common.GridUtilities":"gUtil",
   "sp.common.Utilities":"util",
   "sp.cobblestone.CobblestoneUtil":'cUtil',
   "sp.cobblestone.PrintPages":"Print",
   "sp.cobblestone.TileDefs":"TileDefs"
-},({ ColorPicker, Dialog, util, cUtil, TileDefs, Print }) => {
-  const emptyCellId = cUtil.getEmptyCellId();
+},({ ColorPicker, Dialog, util, cUtil, gUtil, TileDefs, Print }) => {
+  const emptyCellId = gUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
     '#FF0000', '#00FF00', '#0000FF', '#FFFF00',
@@ -31,8 +32,8 @@ namespace('sp.cobblestone.Publish',{
       props.setOnOpen(({images,tiles,placements,size,orientation,printOrientation,pages}) => {
         pages = pages || [];
         const selectedIndex = ((pages.length > 0) ? 0 : -1);
-        const fullWidth = cUtil.getWidth(size, orientation);
-        const fullHeight = cUtil.getHeight(size, orientation);
+        const fullWidth = gUtil.getWidth(size, orientation);
+        const fullHeight = gUtil.getHeight(size, orientation);
         this.setState({images,tiles,placements,size,orientation,pages,fullWidth,fullHeight,printOrientation,selectedIndex});
       });
       this.modals = Dialog.factory({
@@ -62,8 +63,8 @@ namespace('sp.cobblestone.Publish',{
     addPage() {
       const pages = Array.from(this.state.pages);
       const selectedIndex = pages.length;
-      const width = cUtil.getWidth(pageSize,this.state.printOrientation);
-      const height = cUtil.getHeight(pageSize,this.state.printOrientation);
+      const width = gUtil.getWidth(pageSize,this.state.printOrientation);
+      const height = gUtil.getHeight(pageSize,this.state.printOrientation);
       pages.push({
         pageOutlineColor: defaultColors[pages.length % defaultColors.length],
         x:0, y:0, width, height
@@ -95,7 +96,7 @@ namespace('sp.cobblestone.Publish',{
     render() {
       const tileDim = cUtil.getTileDim();
       const current = ((this.state.selectedIndex >= 0)?this.state.pages[this.state.selectedIndex]:undefined);
-      const [pageWidth, pageHeight] = [cUtil.getWidth, cUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
+      const [pageWidth, pageHeight] = [gUtil.getWidth, gUtil.getHeight].map((f) => f(pageSize,this.state.printOrientation));
       const pageDim = {
         x: -tileDim/2,
         y: -tileDim/2,
@@ -162,7 +163,7 @@ namespace('sp.cobblestone.Publish',{
               <input
                 type="number"
                 min="0"
-                max={ Math.min(cUtil.getWidth( pageSize, this.state.printOrientation ), this.state.fullWidth - current.x) }
+                max={ Math.min(gUtil.getWidth( pageSize, this.state.printOrientation ), this.state.fullWidth - current.x) }
                 className="form-control"
                 id="current-width"
                 value={ current.width }
@@ -175,7 +176,7 @@ namespace('sp.cobblestone.Publish',{
               <input
                 type="number"
                 min="0"
-                max={ Math.min(cUtil.getHeight( pageSize, this.state.printOrientation ), this.state.fullHeight - current.y) }
+                max={ Math.min(gUtil.getHeight( pageSize, this.state.printOrientation ), this.state.fullHeight - current.y) }
                 className="form-control"
                 id="current-height"
                 value={ current.height }
@@ -191,14 +192,14 @@ namespace('sp.cobblestone.Publish',{
             <rect x={pageDim.x} y={pageDim.y} width={pageDim.w} height={pageDim.h} fill="white" stroke="black" strokeWidth="3"/>
             { current &&
               util.range(current.width).map((x) => util.range(current.height).map((y) => {
-                return this.getTileImage(x, y, cUtil.getCoordinateId(current.x + x, current.y + y), tileDim);
+                return this.getTileImage(x, y, gUtil.getCoordinateId(current.x + x, current.y + y), tileDim);
               }))
             }
             </svg>
           <svg key="svg.mapcanvas" width="100%" height="100%" viewBox={`0 0 ${this.state.fullWidth * tileDim} ${this.state.fullHeight * tileDim}`}>
             {
               util.range(this.state.fullWidth).map((x) => util.range(this.state.fullHeight).map((y) => {
-                return this.getTileImage(x,y,cUtil.getCoordinateId(x, y),tileDim);
+                return this.getTileImage(x, y, gUtil.getCoordinateId(x, y), tileDim);
               }))
             }
             {

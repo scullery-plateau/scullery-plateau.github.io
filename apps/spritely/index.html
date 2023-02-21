@@ -63,6 +63,10 @@
           'sp.spritely.Spritely': 'Spritely',
           'sp.common.Footer': 'Footer',
         });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
         ReactDOM.createRoot(document.getElementById('spritely')).render(
           <Spritely />
         );

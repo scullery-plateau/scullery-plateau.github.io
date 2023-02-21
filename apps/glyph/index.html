@@ -51,7 +51,6 @@
     <script type="text/babel" src="../common/footer.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
-    <script type="text/babel" src="../common/point.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
@@ -67,6 +66,10 @@
           'sp.glyph.Glyph': 'Glyph',
           'sp.common.Footer': 'Footer',
         });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
           <Glyph />
         );

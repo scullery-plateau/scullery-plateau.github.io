@@ -1,9 +1,10 @@
 namespace("sp.cobblestone.DimensionSetter",{
     "sp.common.Utilities": "util",
+    "sp.common.GridUtilities": "gUtil",
     "sp.cobblestone.CobblestoneUtil": 'cUtil'
-},({ cUtil, util }) => {
+},({ cUtil, gUtil, util }) => {
     const tileDim = cUtil.getTileDim();
-    const emptyCellId = cUtil.getEmptyCellId();
+    const emptyCellId = gUtil.getEmptyCellId();
     return class extends React.Component {
         constructor(props) {
             super(props);
@@ -14,8 +15,8 @@ namespace("sp.cobblestone.DimensionSetter",{
             }
             this.onClose = props.onClose;
             props.setOnOpen(({size,orientation}) => {
-                const width = cUtil.getWidth(size,orientation);
-                const height = cUtil.getHeight(size,orientation);
+                const width = gUtil.getWidth(size,orientation);
+                const height = gUtil.getHeight(size,orientation);
                 this.setState({width,height,orientation})
             });
         }

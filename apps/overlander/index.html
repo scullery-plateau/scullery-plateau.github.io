@@ -71,6 +71,10 @@
           'sp.overlander.Overlander': 'Overlander',
           'sp.common.Footer': 'Footer',
         });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
           <Overlander />
         );

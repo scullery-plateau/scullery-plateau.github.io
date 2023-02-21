@@ -45,6 +45,7 @@
     <script type="text/babel" src="../common/fileDownload.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
     <script type="text/babel" src="../common/footer.js"></script>
+    <script type="text/babel" src="../common/gridUtil.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
     <script type="text/babel" src="../common/print.js"></script>
@@ -67,6 +68,10 @@
           'sp.cobblestone.Cobblestone': 'Cobblestone',
           'sp.common.Footer': 'Footer',
         });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
           <Cobblestone />
         );

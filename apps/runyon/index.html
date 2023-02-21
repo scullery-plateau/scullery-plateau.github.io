@@ -55,6 +55,10 @@
         'sp.runyon.Runyon': 'Runyon',
         'sp.common.Footer': 'Footer',
       });
+      const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
       ReactDOM.createRoot(document.getElementById('runyon')).render(
         <Runyon />
       );

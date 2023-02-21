@@ -41,7 +41,6 @@
     <script type="text/babel" src="../common/buildAbout.js"></script>
     <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
-    <script type="text/babel" src="../common/constants.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
     <script type="text/babel" src="../common/fileDownload.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
@@ -63,6 +62,10 @@
           'sp.tokenizer.Tokenizer': 'Tokenizer',
           'sp.common.Footer': 'Footer',
         });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
         ReactDOM.createRoot(document.getElementById('app-root')).render(<Tokenizer/>);
         ReactDOM.createRoot(document.getElementById('footer')).render(<Footer/>);
       })();
