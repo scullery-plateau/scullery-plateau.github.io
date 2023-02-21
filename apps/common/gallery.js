@@ -1,6 +1,6 @@
 namespace('sp.common.Gallery',{
     'sp.common.Header':'Header'
-},() => {
+},({ Header }) => {
     return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, groups, items } }) {
         const menuItems = [];
         const buildThumbnail = function(fileName,label) {

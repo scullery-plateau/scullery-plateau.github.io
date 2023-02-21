@@ -252,6 +252,7 @@ namespace('sp.outfitter.Outfitter', {
       if (!this.state.schematic) {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
+          <h4 className="text-center">Click <a href="./gallery.html">here</a> view a gallery of Outfitter images with datafiles!</h4>
           <div className="d-flex flex-column">
             <div className="m-2 d-flex justify-content-center">
               <button className="btn btn-success" onClick={ () => this.loadSchematic() }>Load File</button>

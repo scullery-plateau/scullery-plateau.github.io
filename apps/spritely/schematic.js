@@ -58,7 +58,7 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         style:{ 
             height: '64px' 
         },
-        groups:[ 'Tiles', 'Tokens', 'Characters' ],
+        groups:[ 'Tokens', 'Characters', 'Tiles' ],
         items
     };
 });

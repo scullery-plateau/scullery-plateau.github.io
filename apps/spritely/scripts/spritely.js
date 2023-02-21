@@ -210,7 +210,7 @@ namespace(
         return (
           <>
             <Header menuItems={this.menuItems} appTitle={'Spritely'} />
-            <h4 className="text-center">Click <a href="../../archive/tile-gallery.html">here</a> view a gallery of Spritely images with datafiles!</h4>
+            <h4 className="text-center">Click <a href="./gallery.html">here</a> view a gallery of Spritely images with datafiles!</h4>
             <div className="d-flex justify-content-center rpg-box m-3">
               <button
                 className="rounded w-25"

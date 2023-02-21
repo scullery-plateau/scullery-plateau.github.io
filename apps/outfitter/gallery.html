@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Scullery Plateau: Spritely Gallery</title>
+    <title>Scullery Plateau: Outfitter Gallery</title>
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
     <!-- external styles -->
@@ -39,13 +39,13 @@
         const { Gallery, Footer, schematic } = imports({
           'sp.common.Gallery': 'Gallery',
           'sp.common.Footer': 'Footer',
-          'sp.spritely.GallerySchematic':'schematic'
+          'sp.outfitter.GallerySchematic':'schematic'
         });
         const unusedNamespaces = listUnusedNamespaces();
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
-        ReactDOM.createRoot(document.getElementById('spritelyGallery')).render(
+        ReactDOM.createRoot(document.getElementById('outfitterGallery')).render(
           <Gallery schematic={ schematic }/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
@@ -55,7 +55,7 @@
     </script>
   </head>
   <body class="bg-dark text-light">
-    <div id="spritelyGallery" class="container"></div>
+    <div id="outfitterGallery" class="container"></div>
     <footer id="footer" class="text-center"></footer>
   </body>
 </html>
