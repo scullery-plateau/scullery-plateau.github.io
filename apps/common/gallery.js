@@ -9,7 +9,7 @@ namespace('sp.common.Gallery',{
             </a>);
         };
         return <>
-            <Header menuItems={menuItems} appTitle={sourceApp + ' Gallery'} />
+            <Header menuItems={menuItems} appTitle={<a href="./index.html">sourceApp</a> + ' Gallery'} />
             <div class="rpg-box m-3 d-flex flex-column justify-content-center">
                 {groups.map(group => {
                     return <>

@@ -5,10 +5,13 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         }).join(" ");
     };
     const items = [
+        ['Critical Role: Vox Machina', 'arkhan'],
         ['Critical Role: Mighty Nein', 'bluud'],
         ['Critical Role: Mighty Nein', 'calianna'],
+        ['Critical Role: Mighty Nein', 'essek'],
         ['Critical Role: Vox Machina', 'grog'],
-        ['Miscellaneous','he-man'],
+        ['Miscellaneous','half-orc-paladin','Half-Orc Paladin'],
+        ['Miscellaneous','he-man','He-Man'],
         ['Miscellaneous','link'],
         ['Critical Role: Vox Machina', 'percy'],
         ['Critical Role: Vox Machina', 'pike'],
