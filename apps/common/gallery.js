@@ -1,8 +1,22 @@
 namespace('sp.common.Gallery',{
+    'sp.common.BuildAbout':'buildAbout',
     'sp.common.Header':'Header'
-},({ Header }) => {
+},({ buildAbout, Header }) => {
     return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, groups, items } }) {
-        const menuItems = [];
+        const modals = Dialog.factory({
+            about: {
+              templateClass: buildAbout(`${sourceApp} Gallery`,[`Click on any of the images in the gallery to download the datafile used to reproduce that image in ${sourceApp}.`]),
+              attrs: { class: 'rpg-box text-light w-75' },
+              onClose: () => {},
+            }
+        });
+        const menuItems = [{
+            id: 'about',
+            label: 'About',
+            callback: () => {
+                modals.about.open();
+            }
+        }];
         const buildThumbnail = function(fileName,label) {
             return (<a className="m-2" href={`./gallery/${fileName}${downloadExtension}`} download={true} title={label}>
                 <img src={`./gallery/${fileName}${imageExtension}`} style={style} alt={label}/>
