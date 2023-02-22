@@ -6,6 +6,7 @@ namespace('sp.spritely.GallerySchematic',{},() => {
     };
     const items = [
         ['Tiles','alternating-brick-floor'],
+        ['Characters','animated-sword'],
         ['Tiles','brazier-half-door'],
         ['Tiles','brick-corner'],
         ['Tiles','brick-edge'],
@@ -44,6 +45,7 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Tiles','statue'],
         ['Tiles','suit-of-armor'],
         ['Tiles','tile-floor'],
+        ['Characters','unicorn'],
         ['Tiles','wave-wall'],
         ['Tiles','wave-wall-edge'],
         ['Tiles','wave-wall-corner'],
