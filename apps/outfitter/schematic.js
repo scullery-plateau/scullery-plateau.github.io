@@ -6,6 +6,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
     };
     const items = [
         ['Critical Role: Mighty Nein', 'bluud'],
+        ['Critical Role: Mighty Nein', 'calianna'],
         ['Critical Role: Vox Machina', 'grog'],
         ['Miscellaneous','he-man'],
         ['Miscellaneous','link'],
@@ -31,7 +32,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         downloadExtension: ".json",
         imageExtension: ".png",
         style:{ 
-            height: '150px'
+            height: '250px'
         },
         groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein' ],
         items
