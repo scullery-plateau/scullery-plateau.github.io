@@ -24,6 +24,8 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Tiles','door'],
         ['Tiles','doorway'],
         ['Tiles','double-brazier'],
+        ['Tiles','fire-tile'],
+        ['Tiles','fire-weave-tile'],
         ['Characters','gelatinous-cube'],
         ['Tokens','green-potion'],
         ['Tiles','lawn-bottom-corner'],
@@ -41,16 +43,20 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Tiles','stairs-down'],
         ['Tiles','statue'],
         ['Tiles','suit-of-armor'],
-        ['Tiles','tile-floor']].map(([group,filename]) => {
-            const label = makeLabel(filename);
-            return { group, filename, label};
-        }).reduce((out,obj) => {
-            if(!out[obj.group]) {
-                out[obj.group] = [];
-            }
-            out[obj.group].push(obj);
-            return out;
-        }, {});
+        ['Tiles','tile-floor'],
+        ['Tiles','wave-wall'],
+        ['Tiles','wave-wall-edge'],
+        ['Tiles','wave-wall-corner'],
+    ].map(([group,filename]) => {
+        const label = makeLabel(filename);
+        return { group, filename, label};
+    }).reduce((out,obj) => {
+        if(!out[obj.group]) {
+            out[obj.group] = [];
+        }
+        out[obj.group].push(obj);
+        return out;
+    }, {});
     return {
         sourceApp: "Spritely",
         downloadExtension: ".json",
