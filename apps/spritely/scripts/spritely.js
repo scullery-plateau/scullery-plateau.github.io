@@ -294,15 +294,18 @@ namespace(
                 title="Remove Color"
                 onClick={() => {
                   const palette = Array.from(this.state.palette);
-                  palette.splice(this.state.selectedPaletteIndex);
+                  palette.splice(this.state.selectedPaletteIndex, 1);
+                  const pixels = Object.entries(this.state.pixels).reduce((out,[k,v]) => {
+                    out[k] = v - ((v >= this.state.selectedPaletteIndex)?1:0);
+                  }, {});
                   const selectedPaletteIndex = Math.min(
                     this.state.selectedPaletteIndex,
                     palette.length - 1
                   );
-                  this.setState({ palette, selectedPaletteIndex });
+                  this.setState({ palette, selectedPaletteIndex, pixels });
                 }}
               >
-                X
+                -
               </button>
             </div>
             <div className="rpg-title-box m-3" title="click to paint a pixel">
