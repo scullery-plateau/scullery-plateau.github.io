@@ -35,6 +35,7 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Tiles','locked-door'],
         ['Characters','mimic'],
         ['Tiles','one-way-door'],
+        ['Characters','owlbear'],
         ['Tokens','red-potion'],
         ['Tiles','shallow-water'],
         ['Tiles','sigil-floor-tile'],
