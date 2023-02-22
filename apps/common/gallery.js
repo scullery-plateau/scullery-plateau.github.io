@@ -1,7 +1,8 @@
 namespace('sp.common.Gallery',{
     'sp.common.BuildAbout':'buildAbout',
-    'sp.common.Header':'Header'
-},({ buildAbout, Header }) => {
+    'sp.common.Dialog':'Dialog',
+    'sp.common.Header':'Header',
+},({ buildAbout, Dialog, Header }) => {
     return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, groups, items } }) {
         const modals = Dialog.factory({
             about: {
