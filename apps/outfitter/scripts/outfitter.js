@@ -23,8 +23,8 @@ namespace('sp.outfitter.Outfitter', {
         { part: 'legs', index: 0, shading: 0 },
         { part: 'arm', index: 0, shading: 0 },
         { part: 'arm', index: 0, shading: 0, flip: true },
-        { part: 'head', index: 0, shading: 0 },
-      ],
+        { part: 'head', index: 0, shading: 0 }
+      ]
     };
   }
   return class extends React.Component {
@@ -206,7 +206,11 @@ namespace('sp.outfitter.Outfitter', {
         if ((typeof v) === 'function') {
           v = v(oldValue);
         }
-        out[k] = v;
+        if (!v && ((typeof v) !== 'number')) {
+          delete out[k];
+        } else {
+          out[k] = v;
+        }
         return out;
       }, schematic.layers[this.state.selectedLayer]);
       this.setState({ schematic });
