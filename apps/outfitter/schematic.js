@@ -19,7 +19,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Miscellaneous','skeleton'],
         ['Miscellaneous','skeletor'],
         ['Critical Role: Vox Machina', 'tiberius'],
-        ['Critical Role: Vox Machina', 'vex']
+        ['Critical Role: Vox Machina', 'vex'],
         ['D&D Animated','acrobat'],
         ['D&D Animated','cavalier'],
         ['D&D Animated','thief'],
