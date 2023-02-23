@@ -23,8 +23,8 @@ namespace('sp.outfitter.Outfitter', {
         { part: 'legs', index: 0, shading: 0 },
         { part: 'arm', index: 0, shading: 0 },
         { part: 'arm', index: 0, shading: 0, flip: true },
-        { part: 'head', index: 0, shading: 0 },
-      ],
+        { part: 'head', index: 0, shading: 0 }
+      ]
     };
   }
   return class extends React.Component {
