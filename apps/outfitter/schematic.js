@@ -20,6 +20,9 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Miscellaneous','skeletor'],
         ['Critical Role: Vox Machina', 'tiberius'],
         ['Critical Role: Vox Machina', 'vex']
+        ['D&D Animated','acrobat'],
+        ['D&D Animated','cavalier'],
+        ['D&D Animated','thief'],
     ].map(([group,filename,label]) => {
             label = label || makeLabel(filename);
             return { group, filename, label};
@@ -37,7 +40,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         style:{ 
             height: '250px'
         },
-        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein' ],
+        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'D&D Animated' ],
         items
     };
 });
