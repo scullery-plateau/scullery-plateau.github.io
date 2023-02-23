@@ -206,7 +206,11 @@ namespace('sp.outfitter.Outfitter', {
         if ((typeof v) === 'function') {
           v = v(oldValue);
         }
-        out[k] = v;
+        if (!v && ((typeof v) !== 'number')) {
+          delete out[k];
+        } else {
+          out[k] = v;
+        }
         return out;
       }, schematic.layers[this.state.selectedLayer]);
       this.setState({ schematic });
