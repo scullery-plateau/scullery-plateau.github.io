@@ -5,9 +5,11 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         }).join(" ");
     };
     const items = [
+        ['D&D Animated','acrobat'],
         ['Critical Role: Vox Machina', 'arkhan'],
         ['Critical Role: Mighty Nein', 'bluud'],
         ['Critical Role: Mighty Nein', 'calianna'],
+        ['D&D Animated','cavalier'],
         ['Critical Role: Mighty Nein', 'essek'],
         ['Critical Role: Vox Machina', 'grog'],
         ['Miscellaneous','half-orc-paladin','Half-Orc Paladin'],
@@ -15,14 +17,15 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Miscellaneous','link'],
         ['Critical Role: Vox Machina', 'percy'],
         ['Critical Role: Vox Machina', 'pike'],
+        ['D&D Animated','presto'],
+        ['D&D Animated','ranger'],
         ['Critical Role: Mighty Nein', 'ruby', 'Marion Lavore'],
         ['Miscellaneous','skeleton'],
         ['Miscellaneous','skeletor'],
-        ['Critical Role: Vox Machina', 'tiberius'],
-        ['Critical Role: Vox Machina', 'vex'],
-        ['D&D Animated','acrobat'],
-        ['D&D Animated','cavalier'],
         ['D&D Animated','thief'],
+        ['Critical Role: Vox Machina', 'tiberius'],
+        ['D&D Animated','venger'],
+        ['Critical Role: Vox Machina', 'vex'],
     ].map(([group,filename,label]) => {
             label = label || makeLabel(filename);
             return { group, filename, label};
