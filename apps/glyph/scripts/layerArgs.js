@@ -143,8 +143,8 @@ namespace('sp.glyph.LayerArgs',{
                 <button title="Move Right" className="btn btn-secondary" onClick={() => {this.movePoly(1,0)}}><i className="fas fa-arrow-right"/></button>
                 <button title="Shrink" className="btn btn-secondary" onClick={() => {this.scalePoly(-1,-1)}}><i className="fas fa-compress-arrows-alt"/></button>
                 <button title="Stretch" className="btn btn-secondary" onClick={() => {this.scalePoly(1,1)}}><i className="fas fa-expand-arrows-alt"/></button>
-                <button title="Stretch" className="btn btn-secondary" onClick={() => {this.scalePoly(0,1)}}><i className="fas fa-arrows-alt-v"/></button>
-                <button title="Stretch" className="btn btn-secondary" onClick={() => {this.scalePoly(1,0)}}><i className="fas fa-arrows-alt-h"/></button>
+                <button title="Stretch Vertical" className="btn btn-secondary" onClick={() => {this.scalePoly(0,1)}}><i className="fas fa-arrows-alt-v"/></button>
+                <button title="Stretch Horizontal" className="btn btn-secondary" onClick={() => {this.scalePoly(1,0)}}><i className="fas fa-arrows-alt-h"/></button>
               </> }
             </div>
           </>;
