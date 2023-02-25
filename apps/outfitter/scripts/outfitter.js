@@ -526,8 +526,7 @@ namespace('sp.outfitter.Outfitter', {
                     max={ this.state.metadata.shadingCount }
                     style={{width: "4em"}}
                     value={ this.fromSelectedLayer('shading',-1) }
-                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}
-                  />
+                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}/>
                 </div>
               </div>
             </div>
