@@ -97,14 +97,21 @@ namespace("sp.game-icons.Gallery",{
       </div>;
     }
   }
+  const favesKey = "Scullery-Plateau.Game-Icons.Favorites"
   return class extends React.Component {
     constructor(props) {
       super(props);
+      let faves = {};
+      if (localStorage[favesKey]) {
+        faves = JSON.parse(localStorage[favesKey]);
+      }
       this.state = {
         gallery: {},
         bgColor: props.bgColor,
         color: props.color,
-        search:""
+        search:"",
+        favorites:faves,
+        filterByFavorites:false
       };
       this.modals = Dialog.factory({
         downloader:{
@@ -153,6 +160,16 @@ namespace("sp.game-icons.Gallery",{
         this.setColorFromPicker(field,undefined);
       });
     }
+    toggleFavorite(id) {
+      const favorites = util.merge(this.state.favorites);
+      if (favorites[id]) {
+        delete favorites[id];
+      } else {
+        favorites[id] = true;
+      }
+      localStorage.setItem(favesKey, JSON.stringify(favorites));
+      this.setState({ favorites });
+    }
     render() {
       let entries = Object.entries(this.state.gallery);
       if (this.state.progress) {
@@ -171,15 +188,26 @@ namespace("sp.game-icons.Gallery",{
         return <div className="d-flex justify-content-center">
           <div className="d-flex flex-column">
             <h2 className="text-center">Game Icons Gallery</h2>
-            <div className="input-group">
-              <label htmlFor="search" className="input-group-text">Search:</label>
-              <input
-                id="search"
-                type="text"
-                className="form-control"
-                style={{width: "4em"}}
-                value={ this.state.search }
-                onChange={(e) => this.setState({ search: e.target.value })}/>
+            <div className="row">
+              <div className="col-6">
+                <div className="input-group">
+                  <label htmlFor="search" className="input-group-text">Search:</label>
+                  <input
+                    id="search"
+                    type="text"
+                    className="form-control"
+                    style={{width: "4em"}}
+                    value={ this.state.search }
+                    onChange={(e) => this.setState({ search: e.target.value })}/>
+                </div>
+              </div>
+              <div className="col-6">
+                <button
+                  className={this.state.filterByFavorites?"btn btn-primary":"btn btn-outline-dark"}
+                  onClick={() => {
+                    this.setState({ filterByFavorites: !this.state.filterByFavorites });
+                  }}>Filter By Favorites{this.state.filterByFavorites?"!":"?"}</button>
+              </div>
             </div>
             <div className="d-flex justify-content-center">
               { this.buildColorPickerButton("Color","color",{})}
@@ -189,16 +217,23 @@ namespace("sp.game-icons.Gallery",{
               { entries.filter(([id, svgPath]) => {
                 const term = this.state.search || "";
                 if (term.length === 0) {
-                  return true;
+                  return !this.state.filterByFavorites || this.state.favorites[id];
                 }
-                return id.includes(term);
+                return id.includes(term) && (!this.state.filterByFavorites || this.state.favorites[id]);
               }).map(([id,svgPath]) => {
                 const { color, bgColor } = this.state;
                 return <div className="col-sm-5 col-md-4 col-lg-3 col-xl-3" key={id}>
                   <div className="d-flex flex-column border border-dark text-center">
                     <p style={{width: "6em!important"}}>{id}</p>
                     <div className="text-center">
-                      <button className="btn" onClick={() => this.modals.downloader.open({ id, svgPath, color, bgColor })}>
+                      <button
+                        className={`btn p-0 ${this.state.favorites[id]?"btn-outline-success border-5":""}`}
+                        onClick={() => this.modals.downloader.open({ id, svgPath, color, bgColor })}
+                        onDoubleClick={() => this.toggleFavorite(id)}
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          this.toggleFavorite(id);
+                        }}>
                         <svg width="6em" height="6em" viewBox="0 0 512 512">
                           <rect x="2" y="2" width="510" height="510" fill={bgColor}/>
                           <path fill={color} d={svgPath}/>
