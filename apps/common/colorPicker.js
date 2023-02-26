@@ -23,6 +23,8 @@ namespace(
       if (rgb) {
         rgb.hex = hexColor;
         return rgb;
+      } else {
+        return {};
       }
     };
     const setColorPart = function (state, colorPart, colorValue) {
@@ -62,6 +64,7 @@ namespace(
         this.state = buildInitState();
         props.setOnOpen(({ color, index }) => {
           console.log('called set on open');
+          console.log({ color, index });
           const savedColors = Array.from(this.state.savedColors);
           console.log('loading stored colors');
           loadStoredColors(savedColors);

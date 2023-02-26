@@ -1,4 +1,7 @@
-namespace('sp.common.Utilities', () => {
+namespace('sp.common.Utilities', {
+  'sp.common.Colors':'Colors'
+}, ({ Colors }) => {
+  const hexPattern = /#[0-9A-Fa-f]{6}/;
   const range = function (size) {
     return Array(size)
       .fill('')
@@ -64,16 +67,25 @@ namespace('sp.common.Utilities', () => {
     }
     return partitions;
   };
+
   const rgbFromHex = function (hex) {
-    if (typeof hex === 'string') {
-      const [red, green, blue] = [1, 3, 5].map((i) =>
-        parseInt(hex.substr(i, 2), 16)
-      );
-      return { red, green, blue };
+    if (typeof hex === 'string' && hex.length > 0) {
+      if (!hexPattern.test(hex)) {
+        hex = Colors.getColorByName(hex);
+      }
+      if (typeof hex === 'string' && hex.length > 0) {
+        const [red, green, blue] = [1, 3, 5].map((i) =>
+          parseInt(hex.substr(i, 2), 16)
+        );
+        return { red, green, blue };
+      }
     }
   };
-  const getForegroundColor = function (hex) {
+  const getForegroundColor = function (hex,defaultColor) {
     const rgb = rgbFromHex(hex);
+    if (!rgb) {
+      return defaultColor;
+    }
     const luminosity = Math.sqrt(
       Math.pow(rgb['red'], 2) * 0.299 +
         Math.pow(rgb['green'], 2) * 0.587 +

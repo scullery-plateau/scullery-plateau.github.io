@@ -26,7 +26,8 @@
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
-        ReactDOM.createRoot(document.getElementById('gallery')).render(<Gallery bgColor="cyan" color="black"/>);
+        ReactDOM.createRoot(document.getElementById('gallery'))
+          .render(<Gallery bgColor="#00ffff" color="#000000"/>);
       })();
     </script>
   </head>

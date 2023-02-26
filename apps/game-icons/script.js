@@ -4,12 +4,25 @@ namespace("sp.game-icons.Gallery",{
   'sp.common.Dialog':'Dialog',
   'sp.common.Utilities':'util'
 },({ Ajax, ColorPicker, Dialog, util }) => {
+  const buildColorPickerButton = function(label, style, getter, primary, secondary) {
+    const value = getter();
+    return <button
+      className={`btn ${value?'btn-secondary':'btn-outline-dark'}`}
+      title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
+      style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
+      onClick={() => primary(value)}
+      onDoubleClick={() => secondary(value)}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        secondary(value);
+      }}>{label}</button>;
+  }
   const Downloader = class extends React.Component {
     constructor(props) {
       super(props);
-      props.setOnOpen(({ id, svgPath }) => {
-        console.log({ event: "open", id, svgPath});
-        this.setState({ id, svgPath });
+      props.setOnOpen(({ id, svgPath, color, bgColor }) => {
+        console.log({ event: "open", id, svgPath, color, bgColor});
+        this.setState({ id, svgPath, color, bgColor, canvasURL: undefined });
       });
       this.state = {
         color: "#555555",
@@ -18,13 +31,13 @@ namespace("sp.game-icons.Gallery",{
       };
       this.onClose = props.onClose;
       this.modals = Dialog.factory({
-        colorPicker: {
+        dlColorPicker: {
           templateClass: ColorPicker,
-          attrs: { class: 'rpg-box text-light w-75' },
+          attrs: { class: 'w-75' },
           onClose: ({ color, index }) => {
             this.setColorFromPicker(index, color);
           },
-        },
+        }
       });
     }
     setColorFromPicker(index,color) {
@@ -33,20 +46,19 @@ namespace("sp.game-icons.Gallery",{
       this.setState(update);
     }
     buildColorPickerButton(label, field, getter, style) {
-      const value = getter();
-      return <button
-        className={`btn ${value?'btn-secondary':'btn-outline-light'}`}
-        title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
-        style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
-        onClick={() => this.modals.colorPicker.open({index:field,color:value})}
-        onDoubleClick={() => this.setColorFromPicker(field,undefined)}
-        onContextMenu={(e) => {
-          e.preventDefault();
-          this.setColorFromPicker(field,undefined)
-        }}>{label}</button>;
+      return buildColorPickerButton(label,style,getter,(value) => {
+        this.modals.dlColorPicker.open({index:field,color:(value || '#999999')})
+      },(value) => {
+        this.setColorFromPicker(field,undefined);
+      });
     }
     updateCanvasURL() {
       if (!this.state.canvasURL && this.state.svgPath) {
+        let download = this.state.id.replace(".","-") + "-" + this.state.color;
+        if (this.state.bgColor) {
+          download += "-" + this.state.bgColor;
+        }
+        download += ".png";
         const [width, height] = [512, 512];
         const viewBox = [0, 0, width, height].join(' ');
         const content = [];
@@ -64,13 +76,12 @@ namespace("sp.game-icons.Gallery",{
           c.width = width;
           c.height = height;
           ctx.drawImage(baseImg, 0, 0, width, height);
-          this.setState({ canvasURL: c.toDataURL() });
+          this.setState({ download, canvasURL: c.toDataURL() });
         });
         baseImg.src = imageURL;
       }
     }
     render() {
-      // todo - render canvas image from svg
       this.updateCanvasURL();
       return <div className="d-flex flex-column">
         <div className="d-flex justify-content-center">
@@ -78,7 +89,7 @@ namespace("sp.game-icons.Gallery",{
           { this.buildColorPickerButton("Background Color","bgColor",() => this.state.bgColor, {})}
         </div>
         <div className="d-flex justify-content-center">
-          { this.state.canvasURL && <img src={this.state.canvasURL}/> }
+          { this.state.canvasURL && <a href={this.state.canvasURL} download={this.state.download}><img src={this.state.canvasURL}/></a> }
         </div>
         <div className="d-flex justify-content-end">
           <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
@@ -93,7 +104,6 @@ namespace("sp.game-icons.Gallery",{
         gallery: {},
         bgColor: props.bgColor,
         color: props.color,
-        frameColor: util.getForegroundColor(props.bgColor),
         search:""
       };
       this.modals = Dialog.factory({
@@ -101,6 +111,13 @@ namespace("sp.game-icons.Gallery",{
           templateClass: Downloader,
           attrs: { class: '' },
           onClose: () => {}
+        },
+        colorPicker: {
+          templateClass: ColorPicker,
+          attrs: { class: 'w-75' },
+          onClose: ({ color, index }) => {
+            this.setColorFromPicker(index, color);
+          },
         }
       });
     }
@@ -118,6 +135,22 @@ namespace("sp.game-icons.Gallery",{
           const progress = (100 * (state.state + 1)) / (state.max + 1);
           this.setState({progress})
         }
+      });
+    }
+    setColorFromPicker(index,color) {
+      const update = { };
+      update[index] = color;
+      this.setState(update);
+    }
+    buildColorPickerButton(label, field, style) {
+      return buildColorPickerButton(label,style,() => {
+        return this.state[field];
+      },(value) => {
+        const args = {index:field,color:(value || '#999999')};
+        console.log(args);
+        this.modals.colorPicker.open(args);
+      },() => {
+        this.setColorFromPicker(field,undefined);
       });
     }
     render() {
@@ -148,6 +181,10 @@ namespace("sp.game-icons.Gallery",{
                 value={ this.state.search }
                 onChange={(e) => this.setState({ search: e.target.value })}/>
             </div>
+            <div className="d-flex justify-content-center">
+              { this.buildColorPickerButton("Color","color",{})}
+              { this.buildColorPickerButton("Background Color","bgColor", {})}
+            </div>
             <div className="row justify-content-center">
               { entries.filter(([id, svgPath]) => {
                 const term = this.state.search || "";
@@ -156,14 +193,15 @@ namespace("sp.game-icons.Gallery",{
                 }
                 return id.includes(term);
               }).map(([id,svgPath]) => {
+                const { color, bgColor } = this.state;
                 return <div className="col-sm-5 col-md-4 col-lg-3 col-xl-3" key={id}>
                   <div className="d-flex flex-column border border-dark text-center">
                     <p style={{width: "6em!important"}}>{id}</p>
                     <div className="text-center">
-                      <button className="btn" onClick={() => this.modals.downloader.open({ id, svgPath })}>
+                      <button className="btn" onClick={() => this.modals.downloader.open({ id, svgPath, color, bgColor })}>
                         <svg width="6em" height="6em" viewBox="0 0 512 512">
-                          <rect x="2" y="2" width="510" height="510" strokeWidth={4} stroke={this.state.frameColor} fill={this.state.bgColor}/>
-                          <path fill={this.state.color} d={svgPath}/>
+                          <rect x="2" y="2" width="510" height="510" fill={bgColor}/>
+                          <path fill={color} d={svgPath}/>
                         </svg>
                       </button>
                     </div>
