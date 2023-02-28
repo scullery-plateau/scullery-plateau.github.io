@@ -235,7 +235,7 @@ namespace("sp.game-icons.Gallery",{
                           this.toggleFavorite(id);
                         }}>
                         <svg width="6em" height="6em" viewBox="0 0 512 512">
-                          <rect x="2" y="2" width="510" height="510" fill={bgColor}/>
+                          { this.state.bgColor && <rect x="2" y="2" width="510" height="510" fill={bgColor}/> }
                           <path fill={color} d={svgPath}/>
                         </svg>
                       </button>
