@@ -69,16 +69,14 @@ namespace("sp.game-icons.Gallery",{
         const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="${viewBox}">${content.join('')}</svg>`;
         console.log({ svg });
         const imageURL = `data:image/svg+xml, ${encodeURIComponent(svg)}`;
-        const baseImg = new Image();
-        baseImg.onload = (() => {
+        util.initImageObj(imageURL,(baseImg) => {
           const c = document.getElementById("canvas");
           const ctx = c.getContext('2d');
           c.width = width;
           c.height = height;
           ctx.drawImage(baseImg, 0, 0, width, height);
           this.setState({ download, canvasURL: c.toDataURL() });
-        });
-        baseImg.src = imageURL;
+        })
       }
     }
     render() {

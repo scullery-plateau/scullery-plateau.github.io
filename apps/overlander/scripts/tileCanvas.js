@@ -28,7 +28,7 @@ namespace('sp.overlander.TileCanvas',{
   const drawCanvasURL = function(img,tile) {
     const c = document.getElementById("canvas");
     const ctx = c.getContext('2d');
-
+    // todo - draw canvas url
   }
   return { initState, drawCanvasURL };
 });

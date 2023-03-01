@@ -10,13 +10,11 @@ namespace('sp.overlander.Overlander',{
     'sp.overlander.DimensionSetter': 'DimensionSetter',
     'sp.overlander.Download': 'Download',
     'sp.overlander.Publish': 'Publish',
+    'sp.overlander.Tile': 'Tile',
     'sp.overlander.TileDefs': 'TileDefs',
     'sp.overlander.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, FileDownload, Header, LoadFile, gUtil, util, oUtil, Publish, Download, DimensionSetter, TileDefs, TileEditor }) => {
-    const columnWidth = 75;
-    const tileHeight = 86.6;
-    const extraWidth = 25;
-    const columnOffset = 43.3
+},({ buildAbout, Dialog, FileDownload, Header, LoadFile, gUtil, util, oUtil, Publish, Download, DimensionSetter, Tile, TileDefs, TileEditor }) => {
+    const { columnWidth, tileHeight, extraWidth, tileWidth, columnOffset } = Tile.getConstants();
     const about = [];
     const validateLoadFileJson = function() {};
     const emptyCellId = gUtil.getEmptyCellId();
@@ -145,13 +143,11 @@ namespace('sp.overlander.Overlander',{
             true,
             'dataURL',
             (imageURL, filename) => {
-              const tiles = this.state.tiles.map(tile => util.merge(tile));
-              tiles.push({
-                filename,
-                imageURL,
-                index: tiles.length
+              Tile.loadTile(filename, imageURL, (tile) => {
+                const tiles = this.state.tiles.map(tile => util.merge(tile));
+                tiles.push(tile);
+                this.setState({ tiles });
               });
-              this.setState({ tiles });
             },
             (filename, error) => {
               console.log({ filename, error });
@@ -192,7 +188,7 @@ namespace('sp.overlander.Overlander',{
                       return <button
                         key={`btn.tile${index}.key`}
                         id={`btn.tile${index}`}
-                        className={'tile m-2 p-0'+ (this.state.selectedTile === index ? ' selected-tile' : '')}
+                        className={'tile.js m-2 p-0'+ (this.state.selectedTile === index ? ' selected-tile.js' : '')}
                         title={`Tile: ${tile.filename}; click to select, double click or right click to edit`}
                         onClick={ () => this.setState({ selectedTile: index }) }
                         onDoubleClick={ () => {

@@ -1,7 +1,7 @@
 namespace("sp.cobblestone.TileEditor",{
   "sp.cobblestone.CobblestoneUtil": 'cUtil'
 },({ cUtil }) => {
-  const tileEditorHelp = 'Click on the variation of the given tile shown below to include (green) or exclude (red) them in the main app.';
+  const tileEditorHelp = 'Click on the variation of the given tile.js shown below to include (green) or exclude (red) them in the main app.';
   const tileDim = cUtil.getTileDim();
   return class extends React.Component {
     constructor(props) {
