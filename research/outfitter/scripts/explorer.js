@@ -152,7 +152,7 @@ namespace('sp.outfitter.Explorer', {
             }) }
           </div>
           <div className="d-flex justify-content-center flex-wrap">
-            {  }
+            { /* todo - grouped */ }
           </div>
         </div>;
       }
