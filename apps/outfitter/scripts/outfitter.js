@@ -6,11 +6,12 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
+  'sp.common.ProgressBar':'ProgressBar',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, c, ImageDownload, OutfitterSVG }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, ProgressBar, util, c, ImageDownload, OutfitterSVG }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -280,12 +281,7 @@ namespace('sp.outfitter.Outfitter', {
       } else if (this.state.progress) {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
-          <div className="d-flex flex-column">
-            <p>Loading display configuration data, please wait....</p>
-            <div className="progress">
-              <div className="progress-bar" style={{width: `${this.state.progress}%`}}>{this.state.progress}%</div>
-            </div>
-          </div>
+          <ProgressBar subject="display configuration" progress={this.state.progress}/>
         </>;
       } else {
         const ColorPickerButton = (({label, field, getter, style}) => {

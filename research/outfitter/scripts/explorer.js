@@ -1,10 +1,12 @@
 namespace('sp.outfitter.Explorer',{
+    'sp.common.Ajax': 'Ajax',
     'sp.common.Dialog': 'Dialog',
     'sp.common.FileDownload': 'FileDownload',
     'sp.common.LoadFile': 'LoadFile',
+    'sp.common.ProgressBar': 'ProgressBar',
     'sp.common.Utilities': 'util',
     'sp.outfitter.LayerGrouper':'LayerGrouper'
-},({ Dialog, FileDownload, LoadFile, util, LayerGrouper }) => {
+},({ Ajax, Dialog, FileDownload, LoadFile, ProgressBar, util, LayerGrouper }) => {
     const assetNames = [
         'animated-1',
         'animated-2',
@@ -39,7 +41,7 @@ namespace('sp.outfitter.Explorer',{
         }
         loadMeta(assetName,schematic) {
             this.setState({schematic, progress: 1, selected: {}});
-            Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}2.json`,
+            Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/research/outfitter/assets/${assetName}.json`,
             {
                 success: (responseText) => {
                     const metadata = JSON.parse(responseText);
@@ -78,39 +80,38 @@ namespace('sp.outfitter.Explorer',{
         render() {
             if (!this.state.schematic) {
                 return <div className="d-flex flex-column justify-content-center">
-                    <button className="btn btn-primary" onClick={() => this.loadSchematic()}>Load Schematic</button>
-                    { assetNames.map((assetName) => {
-                        return <button className="btn btn-primary" onClick={() => this.loadNew(assetName)}>Load Metadata '{assetName}'</button>
-                    })}
+                    <div className="d-flex flex-wrap justify-content-center">
+                        <button className="btn btn-primary p-2 m-2" onClick={() => this.loadSchematic()}>Load Schematic</button>
+                    </div>
+                    <div className="d-flex flex-wrap justify-content-center">
+                        { assetNames.map((assetName) => {
+                            return <button className="btn btn-primary p-2 m-2" onClick={() => this.loadNew(assetName)}>Load Metadata '{assetName}'</button>
+                        })}
+                    </div>
                 </div>;
             } else if (this.state.progress) {
-                <div className="d-flex flex-column">
-                    <p>Loading display configuration data, please wait....</p>
-                    <div className="progress">
-                        <div className="progress-bar" style={{width: `${this.state.progress}%`}}>{this.state.progress}%</div>
-                    </div>
-                </div>
+                return <ProgressBar subject="metadata" progress={this.state.progress}/>
             } else {
                 return <div className="d-flex flex-column justify-content-center">
                     <div className="d-flex justify-content-center">
-                        <button className="btn btn-primary" onClick={() => this.ignoreSelected()}>Ignore Selected</button>
-                        <button className="btn btn-primary" onClick={() => this.groupSelected()}>Group Selected</button>
+                        <button className="btn btn-primary m-2" onClick={() => this.ignoreSelected()}>Ignore Selected</button>
+                        <button className="btn btn-primary m-2" onClick={() => this.groupSelected()}>Group Selected</button>
                     </div>
-                    <div className="d-flex justify-content-center">
+                    <div className="d-flex justify-content-center flex-wrap">
                         { Object.keys(this.state.metadata).filter((imageIndex) => {
                             return !(imageIndex in this.state.schematic.ignored) && !(imageIndex in this.state.schematic.grouped);
                         }).map((imageIndex) => {
                             const layer = this.state.metadata[imageIndex];
                             const isSelected = this.state.selected[imageIndex];
-                            return <div className="rpg-box m-2 p-2 d-flex flex-column">
+                            return (<div className="rpg-box m-2 p-2 d-flex flex-column">
                                 <p>{imageIndex}</p>
                                 <button className={`btn layer ${isSelected?"btn-outline-success border-5":""}`}  onClick={() => this.selectLayer(imageIndex)}>
                                     <svg viewBox={`0 0 ${layer.width} ${layer.height}`}>
-                                        <g transform={`matrix(1,0,0,1,${layer.xOff},${layer.yOff})`} dangerouslySetInnerHTML={layer.paths}></g>
-                                        <defs dangerouslySetInnerHTML={layer.defs}></defs>
+                                        <g transform={`matrix(1,0,0,1,${layer.xOff},${layer.yOff})`} dangerouslySetInnerHTML={{ __html:layer.paths}}></g>
+                                        <defs dangerouslySetInnerHTML={{ __html:layer.defs}}></defs>
                                     </svg>
                                 </button>
-                            </div>;
+                            </div>);
                         }) }
                     </div>
                 </div>;
