@@ -4,8 +4,9 @@ namespace('sp.outfitter.LayerSVG',{},() => {
       <p>{imageIndex}</p>
       <button className={`btn layer ${isSelected()?"btn-outline-success border-5" : ""}`} onClick={onClick}>
         <svg viewBox={`0 0 ${layer.width} ${layer.height}`}>
-          <rect width={layer.width} height={layer.height} fill="#ffffff" stroke="#000000" strokeWidth={2}/>
-          <g transform={`matrix(1,0,0,1,${layer.xOff},${layer.yOff})`}
+          <rect width={layer.width} height={layer.height} fill="#ffff00"/>
+          <g id={layer.id}
+             transform={`matrix(1,0,0,1,${layer.xOff},${layer.yOff})`}
              dangerouslySetInnerHTML={{__html: layer.paths}}></g>
           <defs dangerouslySetInnerHTML={{__html: layer.defs}}></defs>
         </svg>

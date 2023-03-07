@@ -46,12 +46,23 @@ namespace('sp.outfitter.Explorer', {
     }
 
     loadMeta(assetName, schematic) {
-      this.setState({schematic, progress: 1, selected: {}});
+      const init = {schematic, progress: 1, selected: {}};
+      if (schematic.used) {
+        init.used = schematic.used;
+        delete schematic.used;
+      }
+      this.setState(init);
       Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/research/outfitter/assets/${assetName}.json`,
         {
           success: (responseText) => {
             const metadata = JSON.parse(responseText);
-            this.setState({ metadata, progress: undefined, selected: {} });
+            const update = { metadata, progress: undefined, selected: {} }
+            if (this.state.used){
+              update.unused = Object.keys(metadata).map((k) => parseInt(k)).sort().filter((k) => {
+                return this.state.used.indexOf(k.toString()) < 0;
+              });
+            }
+            this.setState(update);
           },
           failure: (resp) => {
             console.log(resp);
@@ -69,10 +80,23 @@ namespace('sp.outfitter.Explorer', {
         false,
         'text',
         (fileContent) => {
-          const schematic = JSON.parse(fileContent);
-          const error = validateLoadFileJson(schematic);
+          const schematicData = JSON.parse(fileContent);
+          const error = validateLoadFileJson(schematicData);
           if (error) {
             throw error;
+          }
+          const schematic = util.merge(getDefaultSchematic(schematicData.assetName),schematicData);
+          if (schematic.records || schematic.patterns) {
+            const used = [];
+            (schematic.patterns || []).forEach((i) => {
+              used.push(i);
+            });
+            (schematic.records || []).forEach(({base,detail,outline}) => {
+              if(base) used.push(base);
+              if(detail) used.push(detail);
+              if(outline) used.push(outline);
+            });
+            schematic.used = used;
           }
           this.loadMeta(schematic.assetName, schematic);
         },
@@ -163,15 +187,18 @@ namespace('sp.outfitter.Explorer', {
         </div>;
       } else if (this.state.progress) {
         return <ProgressBar subject="metadata" progress={this.state.progress}/>
-      } else if (!this.state.schematic.dataTable) {
+      } else if (!this.state.schematic.dataTable && !this.state.schematic.records && !this.state.schematic.patterns) {
         return <div className="d-flex flex-column justify-content-center">
           <div className="d-flex justify-content-center">
             <button className="btn btn-primary m-2" onClick={() => this.groupSelected()}>Group Selected</button>
             <button className="btn btn-warning m-2" onClick={() => this.ignoreSelected()}>Ignore Selected</button>
             <button className="btn btn-info m-2" onClick={() => this.downloadSchematic()}>Download Schematic</button>
           </div>
-          <div className="d-flex justify-content-center flex-wrap overflow-scroll" style={{height: screen.availHeight * 0.75}}>
+          <div className="d-flex justify-content-center flex-wrap overflow-scroll" style={{
+            height: screen.availHeight * 0.75
+          }}>
             { Object.keys(this.state.metadata).filter((imageIndex) => {
+              console.log({ schematic: this.state.schematic });
               return !(imageIndex in this.state.schematic.ignored) && !(imageIndex in this.state.schematic.grouped);
             }).map((imageIndex) => {
               return <LayerSVG
@@ -185,15 +212,17 @@ namespace('sp.outfitter.Explorer', {
             { /* todo - grouped */ }
           </div>
         </div>;
-      } else {
+      } else if (this.state.schematic.dataTable && (!this.state.schematic.records && !this.state.schematic.patterns)) {
         return <div className="d-flex flex-column justify-content-center">
           <div>
             <button
               className="btn btn-success"
               onClick={() => {
-                util.triggerJSONDownload(this.state.schematic.assetName,this.state.schematic.assetName,this.state.schematic.dataTable);
-              }}
-            >Download Data Table JSON</button>
+                util.triggerJSONDownload(this.state.schematic.assetName,this.state.schematic.assetName, {
+                  assetName: this.state.schematic.assetName,
+                  records: this.state.schematic.dataTable
+                });
+              }}>Download Data Table JSON</button>
           </div>
           <table>
             <tbody>
@@ -226,6 +255,50 @@ namespace('sp.outfitter.Explorer', {
               }) }
             </tbody>
           </table>
+        </div>;
+      } else if (this.state.schematic.records || this.state.schematic.patterns) {
+        return <div className="d-flex flex-column justify-content-center">
+          { this.state.schematic.records && <>
+            <h2>Composites</h2>
+            <div className="d-flex flex-wrap justify-content-center">
+              { this.state.schematic.records.map((record) => {
+                return <Composite
+                  metadata={this.state.metadata}
+                  record={record}
+                  colors={{
+                    base:'#0000ff',
+                    detail:'#00ff00',
+                    outline:'#ff0000'
+                  }}/>;
+              }) }
+            </div>
+          </> }
+          { this.state.schematic.patterns && <>
+            <h2>Patterns</h2>
+            <div className="d-flex flex-wrap justify-content-center">
+              { this.state.schematic.patterns.map((imageIndex) => {
+                const layer = this.state.metadata[imageIndex];
+                return<LayerSVG
+                  layer={layer}
+                  imageIndex={imageIndex}
+                  isSelected={() => {}}
+                  onClick={() => {}}/>;
+              }) }
+            </div>
+          </> }
+          { this.state.unused && <>
+            <h2>Unused</h2>
+            <div className="d-flex flex-wrap justify-content-center">
+              { this.state.unused.map((imageIndex) => {
+                const layer = this.state.metadata[imageIndex];
+                return<LayerSVG
+                  layer={layer}
+                  imageIndex={imageIndex}
+                  isSelected={() => {}}
+                  onClick={() => {}}/>;
+              }) }
+            </div>
+          </> }
         </div>;
       }
     }

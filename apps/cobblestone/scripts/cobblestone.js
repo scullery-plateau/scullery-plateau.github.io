@@ -237,9 +237,9 @@
                                 return <button
                                     key={`btn.${tileRef}.key`}
                                     id={`btn.${tileRef}`}
-                                    className={'tile.js m-2 p-0'+
-                                    (this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
-                                        ? ' selected-tile.js'
+                                    className={'tile m-2 p-0'+
+                                    (Array.isArray(this.state.selectedTile) && this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
+                                        ? ' selected-tile'
                                         : '')}
                                     title={`Tile: ${filename}, ${tf}; click to select, double click or right click to edit`}
                                     onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }

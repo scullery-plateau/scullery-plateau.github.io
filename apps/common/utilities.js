@@ -81,6 +81,7 @@ namespace('sp.common.Utilities', {
       }
     }
   };
+
   const getForegroundColor = function (hex,defaultColor) {
     const rgb = rgbFromHex(hex);
     if (!rgb) {
@@ -93,6 +94,7 @@ namespace('sp.common.Utilities', {
     );
     return luminosity > 186 ? 'black' : 'white';
   };
+
   const hexFromRGB = function (r, g, b) {
     return (
       '#' +

@@ -29,9 +29,10 @@ namespace('sp.outfitter.Composite',{},() => {
       <p>{record.part}</p>
       <button className="btn layer" onClick={() => {}}>
         <svg viewBox={`0 0 ${width} ${height}`}>
-          <rect width={width} height={height} fill="#ffffff" stroke="#000000" strokeWidth={2}/>
-          { layers.map(([layerName, { paths }]) => {
-            return <g transform={`matrix(1,0,0,1,${xOff},${yOff})`}
+          <rect width={width} height={height} fill="#ffff00"/>
+          { layers.map(([layerName, { id, paths }]) => {
+            return <g id={ id }
+                      transform={`matrix(1,0,0,1,${xOff},${yOff})`}
                       dangerouslySetInnerHTML={{__html: paths.replaceAll("#000000",colors[layerName])}}></g>
           }) }
           <defs dangerouslySetInnerHTML={{__html: defs}}></defs>
