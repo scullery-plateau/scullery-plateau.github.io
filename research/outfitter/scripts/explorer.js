@@ -112,9 +112,16 @@ namespace('sp.outfitter.Explorer', {
         'text',
         (fileContent, filename) => {
           const csvData = CSV.parse(fileContent);
-          const assetName = filename.replace(".csv","");
+          const names = assetNames.filter((name) => {
+            return filename.indexOf(name) >= 0;
+          })
+          if (names.length != 1) {
+            throw `asset name not in filename: ${filename}`;
+          }
+          const assetName = names[0];
           const schematic = getDefaultSchematic(assetName);
           const header = csvData[0];
+          console.log({ header });
           schematic.dataTable = csvData.slice(1).map((record) => {
             return header.reduce((out,h,i) => {
               const value = record[i];
@@ -124,6 +131,13 @@ namespace('sp.outfitter.Explorer', {
               return out;
             }, {});
           });
+          const flagged = schematic.dataTable.filter((record) => {
+            return record.flagged && record.flagged.length > 0;
+          });
+          console.log({ flagged });
+          if (flagged.length > 0) {
+            schematic.flagged = flagged;
+          }
           this.loadMeta(schematic.assetName, schematic);
         },
         (fileName, error) => {
@@ -169,6 +183,41 @@ namespace('sp.outfitter.Explorer', {
 
     downloadSchematic() {
       util.triggerJSONDownload(this.state.schematic.assetName, this.state.schematic.assetName, this.state.schematic);
+    }
+
+    buildDataTable(records) {
+      return <table>
+        <tbody>
+          { records.map((record) => {
+            return <tr>
+              { ['base','detail','outline'].map((layerName) => {
+                const imageIndex = record[layerName];
+                const layer = this.state.metadata[imageIndex];
+                return <td>
+                  { imageIndex && layer &&
+                    <LayerSVG
+                      layer={layer}
+                      imageIndex={imageIndex}
+                      isSelected={() => {}}
+                      onClick={() => {}}/>
+                  }
+                </td>;
+              }) }
+              <td>
+                <Composite
+                  metadata={this.state.metadata}
+                  record={record}
+                  colors={{
+                    base:'#0000ff',
+                    detail:'#00ff00',
+                    outline:'#ff0000'
+                  }}/>
+              </td>
+            </tr>
+          }) }
+        </tbody>
+      </table>;
+
     }
 
     render() {
@@ -224,37 +273,11 @@ namespace('sp.outfitter.Explorer', {
                 });
               }}>Download Data Table JSON</button>
           </div>
-          <table>
-            <tbody>
-              { this.state.schematic.dataTable.map((record) => {
-                return <tr>
-                  { ['base','detail','outline'].map((layerName) => {
-                    const imageIndex = record[layerName];
-                    const layer = this.state.metadata[imageIndex];
-                    return <td>
-                      { imageIndex && layer &&
-                        <LayerSVG
-                          layer={layer}
-                          imageIndex={imageIndex}
-                          isSelected={() => {}}
-                          onClick={() => {}}/>
-                      }
-                    </td>;
-                  }) }
-                  <td>
-                    <Composite
-                      metadata={this.state.metadata}
-                      record={record}
-                      colors={{
-                        base:'#0000ff',
-                        detail:'#00ff00',
-                        outline:'#ff0000'
-                      }}/>
-                  </td>
-                </tr>
-              }) }
-            </tbody>
-          </table>
+          { this.state.schematic.flagged && <>
+            { this.buildDataTable(this.state.schematic.flagged) }
+            <hr/>
+          </>}
+          { this.buildDataTable(this.state.schematic.dataTable) }
         </div>;
       } else if (this.state.schematic.records || this.state.schematic.patterns) {
         return <div className="d-flex flex-column justify-content-center">
