@@ -312,7 +312,9 @@ namespace('sp.outfitter.Explorer', {
           { this.state.unused && <>
             <h2>Unused</h2>
             <div className="d-flex flex-wrap justify-content-center">
-              { this.state.unused.map((imageIndex) => {
+              { this.state.unused.sort((a,b) => {
+                return parseInt(a) - parseInt(b);
+              }).map((imageIndex) => {
                 const layer = this.state.metadata[imageIndex];
                 return<LayerSVG
                   layer={layer}
