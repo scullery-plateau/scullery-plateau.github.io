@@ -1,24 +1,14 @@
 namespace('sp.outfitter.Composite',{
   'sp.outfitter.LayerSVG':'LayerSVG'
 },({ LayerSVG }) => {
-  const colorPattern = new RegExp("#[0-9a-fA-F]{6}")
-  return function({ metadata, record, colors }) {
-    const layers = ['base','detail','outline'].map((layerName) => {
-      return [layerName,record[layerName]];
-    }).filter(([layerName, index]) => {
-      return index && index.length > 0;
-    }).map(([layerName, index]) => {
-      return [layerName, metadata[index]];
-    }).filter(([layerName, layer]) => {
-      return layer;
-    });
-    const accFields = {
-      minX:(arr) => Math.min.apply(null,arr),
-      minY:(arr) => Math.min.apply(null,arr),
-      maxX:(arr) => Math.max.apply(null,arr),
-      maxY:(arr) => Math.max.apply(null,arr),
-      defs:(arr) => arr.join('')
-    }
+  const accFields = {
+    minX:(arr) => Math.min.apply(null,arr),
+    minY:(arr) => Math.min.apply(null,arr),
+    maxX:(arr) => Math.max.apply(null,arr),
+    maxY:(arr) => Math.max.apply(null,arr),
+    defs:(arr) => arr.join('')
+  }
+  const accumulate = function(layers) {
     const acc = layers.reduce((out, [layerName, layer]) => {
       const {min:[minX,minY],max:[maxX,maxY]} = LayerSVG.getLayerMinMax(layer);
       const args = {minX,minY,maxX,maxY,defs:layer.defs};
@@ -33,7 +23,22 @@ namespace('sp.outfitter.Composite',{
     Object.entries(accFields).forEach(([field,accFn]) => {
       acc[field] = accFn(acc[field]);
     })
-    const { minX, maxX, minY, maxY, defs } = acc;
+    return acc;
+  }
+  const filterLayers = function(metadata, record) {
+    return ['base','detail','outline'].map((layerName) => {
+      return [layerName,record[layerName]];
+    }).filter(([layerName, index]) => {
+      return index && index.length > 0;
+    }).map(([layerName, index]) => {
+      return [layerName, metadata[index]];
+    }).filter(([layerName, layer]) => {
+      return layer;
+    });
+  }
+  const Composite = function({ metadata, record, colors }) {
+    const layers = filterLayers(metadata, record);
+    const { minX, maxX, minY, maxY, defs } = accumulate(layers);
     const [width, height] = [maxX-minX,maxY-minY]
     return <div className="rpg-box m-2 p-2 d-flex flex-column">
       <p>{record.part}</p>
@@ -51,4 +56,7 @@ namespace('sp.outfitter.Composite',{
       </button>
     </div>;
   }
+  Composite.accumulate = accumulate;
+  Composite.filterLayers = filterLayers;
+  return Composite;
 });

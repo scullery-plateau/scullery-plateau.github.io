@@ -1,5 +1,4 @@
 namespace('sp.outfitter.Constants', () => {
-    const partLayers = [ 'base', 'detail', 'outline', 'shadow' ];
     const partGroups = [
         "Body",
         "Face",
@@ -59,14 +58,19 @@ namespace('sp.outfitter.Constants', () => {
         return out;
       },out);
     }, {});
-    const getPartLayers = function() {
-      return Array.from(partLayers);
-    }
     const getPartGroups = function() {
         return Array.from(partGroups);
     }
     const getPartTypesByGroup = function(group) {
         return Array.from(partTypes[group]);
+    }
+    const getPartTypeIndicies = function(partType) {
+      const targetGroups = Object.entries(partTypes).map(([group,types]) => [group,types.map(t => t.part).indexOf(partType)]).filter(([group,typeIndex]) => typeIndex >= 0);
+      if (targetGroups.length !== 1) {
+        throw "Invalid part Type"
+      }
+      const [group,typeIndex] = targetGroups[0];
+      return [partGroups.indexOf(group),typeIndex];
     }
     const getPartLabel = function(labelTypeId) {
       return partLabels[labelTypeId];
@@ -74,5 +78,5 @@ namespace('sp.outfitter.Constants', () => {
     const getLayerLabel = function(index,layer) {
       return <>{index}: { getPartLabel(layer.part) } {layer.index}{layer.flip?" flipped":""}{layer.base?`, Base: ${layer.base}`:""}{layer.detail?`, Detail: ${layer.detail}`:""}{layer.outline?`, Outline: ${layer.outline}`:""}</>;
     }
-    return { getPartLayers, getPartGroups, getPartTypesByGroup, getPartLabel, getLayerLabel };
+    return { getPartGroups, getPartTypesByGroup, getPartTypeIndicies, getPartLabel, getLayerLabel };
 });

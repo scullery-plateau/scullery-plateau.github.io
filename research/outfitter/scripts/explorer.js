@@ -13,13 +13,13 @@ namespace('sp.outfitter.Explorer', {
     'animated-1',
     'animated-2',
     'animated-3',
-    'animated-4',
-    'animated-1-old',
-    'animated-2-old',
-    'animated-3-old',
-    'animated-4-old',
-    'heromatic'
+    'animated-4'
   ];
+  const compositeColors = {
+    base:'#00ff00',
+    detail:'#ff0000',
+    outline:'#0000ff'
+  };
   const validateLoadFileJson = function (data) {
   };
   const getDefaultSchematic = function (assetName) {
@@ -30,6 +30,48 @@ namespace('sp.outfitter.Explorer', {
       grouped: {}
     }
   };
+  const reduceRecord = function(out, metadata, record) {
+    const partType = record.part;
+    const layerList = Composite.filterLayers(metadata,record);
+    console.log({ layerList });
+    const { minX, maxX, minY, maxY, defs } = Composite.accumulate(layerList);
+    const { groups, layers } = layerList.reduce(({ groups, layers },[ layerName, { id, paths } ]) => {
+      layers[layerName] = id;
+      groups += `<g id="${id}">${paths}</g>`;
+      return { groups, layers };
+    }, { groups:defs, layers:{} })
+    let partList = [];
+    if (partType in out) {
+      partList = out[partType]
+    } else {
+      out[partType] = partList;
+    }
+    partList.push({
+      layers,
+      defs: groups,
+      min:[minX,minY],
+      max:[maxX,maxY]
+    });
+    return out;
+  }
+  const reducePatterns = function(out,label,layer,index) {
+    console.log({ label, index })
+    const { paths, defs } = layer;
+    const {min:[minX,minY],max:[maxX,maxY]} = LayerSVG.getLayerMinMax(layer);
+    const id = label + "-" + ((index < 10) ? "0" : "") + index;
+    out[id] = `<pattern x="${minX}" y="${minY}" width="${maxX - minX}" height="${maxY - minY}" patternUnits='userSpaceOnUse' id="${id}"><g>${paths}</g></pattern>${defs}`;
+    return out;
+  }
+  const buildDataset = function(metadata, { records, patterns, shading }, bodyType) {
+    return {
+      bodyType,
+      patterns: patterns.reduce((out,p,i) => reducePatterns(out,"patterns", metadata[p], i),{}),
+      shadings: shading.reduce((out,s,i) => reducePatterns(out,"shading",metadata[s],i),{}),
+      parts: records.reduce((out, record) => {
+        return reduceRecord(out, metadata, record);
+      },{})
+    }
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -91,6 +133,9 @@ namespace('sp.outfitter.Explorer', {
             (schematic.patterns || []).forEach((i) => {
               used.push(i);
             });
+            (schematic.shading || []).forEach((i) => {
+              used.push(i);
+            });
             (schematic.records || []).forEach(({base,detail,outline}) => {
               if(base) used.push(base);
               if(detail) used.push(detail);
@@ -115,7 +160,7 @@ namespace('sp.outfitter.Explorer', {
           const names = assetNames.filter((name) => {
             return filename.indexOf(name) >= 0;
           })
-          if (names.length != 1) {
+          if (names.length !== 1) {
             throw `asset name not in filename: ${filename}`;
           }
           const assetName = names[0];
@@ -204,22 +249,28 @@ namespace('sp.outfitter.Explorer', {
                 </td>;
               }) }
               <td>
-                <Composite
-                  metadata={this.state.metadata}
-                  record={record}
-                  colors={{
-                    base:'#0000ff',
-                    detail:'#00ff00',
-                    outline:'#ff0000'
-                  }}/>
+                <Composite metadata={this.state.metadata} record={record} colors={compositeColors}/>
               </td>
             </tr>
           }) }
         </tbody>
       </table>;
-
     }
-
+    displayPatternsShading(prop) {
+      return <>{ this.state.schematic[prop] && <>
+        <h2>{ prop }</h2>
+        <div className="d-flex flex-wrap justify-content-center">
+          { this.state.schematic[prop].map((imageIndex) => {
+            const layer = this.state.metadata[imageIndex];
+            return<LayerSVG
+              layer={layer}
+              imageIndex={imageIndex}
+              isSelected={() => {}}
+              onClick={() => {}}/>;
+          }) }
+        </div>
+      </> }</>;
+    }
     render() {
       if (!this.state.schematic) {
         return <div className="d-flex flex-column justify-content-center">
@@ -261,54 +312,65 @@ namespace('sp.outfitter.Explorer', {
             { /* todo - grouped */ }
           </div>
         </div>;
-      } else if (this.state.schematic.dataTable && (!this.state.schematic.records && !this.state.schematic.patterns)) {
+      } else if (this.state.schematic.dataTable && (!this.state.schematic.records)) {
         return <div className="d-flex flex-column justify-content-center">
-          <div>
+          <div className="d-flex justify-content-center">
             <button
               className="btn btn-success"
               onClick={() => {
                 util.triggerJSONDownload(this.state.schematic.assetName,this.state.schematic.assetName, {
                   assetName: this.state.schematic.assetName,
-                  records: this.state.schematic.dataTable
+                  records: this.state.schematic.dataTable,
+                  patterns: this.state.schematic.patterns || [],
+                  shading: this.state.schematic.shading || []
                 });
               }}>Download Data Table JSON</button>
+            { (!this.state.schematic.patterns || !this.state.schematic.shading) &&
+              <button
+                className="btn btn-primary"
+                onClick={() => {
+                  LoadFile(
+                    false,
+                    'text',
+                    (fileContent) => {
+                      const csvData = CSV.parse(fileContent);
+                      const schematic = util.merge(this.state.schematic);
+                      csvData.map((row) => row.filter((c) => (c.length > 0))).filter((r) => (r.length > 0)).forEach(([key, ...rest]) => {
+                        schematic[key] = rest;
+                      });
+                      this.setState({ schematic });
+                    },
+                    (fileName, error) => {
+                      console.log({fileName, error});
+                      alert(fileName + ' failed to load. See console for error.');
+                    });
+                }}>Append Patterns & Shading</button> }
           </div>
+          { this.displayPatternsShading('patterns') }
+          { this.displayPatternsShading('shading') }
           { this.state.schematic.flagged && <>
             { this.buildDataTable(this.state.schematic.flagged) }
             <hr/>
           </>}
           { this.buildDataTable(this.state.schematic.dataTable) }
         </div>;
-      } else if (this.state.schematic.records || this.state.schematic.patterns) {
+      } else if (this.state.schematic.records) {
         return <div className="d-flex flex-column justify-content-center">
+          <button className="btn btn-success" onClick={() => {
+            const { assetName, records, patterns, shading } = this.state.schematic;
+            const filename = assetName + "-dataset"
+            util.triggerJSONDownload(filename,filename,buildDataset(this.state.metadata,{ records, patterns, shading }, assetName));
+          }}>Build Dataset</button>
           { this.state.schematic.records && <>
             <h2>Composites</h2>
             <div className="d-flex flex-wrap justify-content-center">
               { this.state.schematic.records.map((record) => {
-                return <Composite
-                  metadata={this.state.metadata}
-                  record={record}
-                  colors={{
-                    base:'#0000ff',
-                    detail:'#00ff00',
-                    outline:'#ff0000'
-                  }}/>;
+                return <Composite metadata={this.state.metadata} record={record} colors={compositeColors}/>;
               }) }
             </div>
           </> }
-          { this.state.schematic.patterns && <>
-            <h2>Patterns</h2>
-            <div className="d-flex flex-wrap justify-content-center">
-              { this.state.schematic.patterns.map((imageIndex) => {
-                const layer = this.state.metadata[imageIndex];
-                return<LayerSVG
-                  layer={layer}
-                  imageIndex={imageIndex}
-                  isSelected={() => {}}
-                  onClick={() => {}}/>;
-              }) }
-            </div>
-          </> }
+          { this.displayPatternsShading('patterns') }
+          { this.displayPatternsShading('shading') }
           { this.state.unused && <>
             <h2>Unused</h2>
             <div className="d-flex flex-wrap justify-content-center">

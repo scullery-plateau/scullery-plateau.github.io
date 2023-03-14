@@ -7,11 +7,13 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
+  'sp.common.QueryParams':'QueryParams',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, ProgressBar, util, c, ImageDownload, OutfitterSVG }) => {
+  'sp.outfitter.Shareable':'Shareable'
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -64,6 +66,8 @@ namespace('sp.outfitter.Outfitter', {
             defaultFilename:"outfitter",
             jsonData:this.state.schematic
           });
+          const url = Shareable.publish(this.state.schematic);
+          console.log({ url });
         }
       },{
         id: 'downloadImage',
@@ -82,9 +86,20 @@ namespace('sp.outfitter.Outfitter', {
           this.modals.about.open();
         }
       }];
+      if (location.search) {
+        const { share } = QueryParams.read();
+        if (share) {
+          const schematic = Shareable.parse(share);
+          this.loadMeta(schematic.bodyType,schematic,true);
+        }
+      }
     }
-    loadMeta(bodyType,schematic) {
-      this.setState({schematic, progress: 1, selectedLayer: 0});
+    loadMeta(bodyType,schematic,onInit) {
+      if (onInit) {
+        this.state = {schematic, progress: 1, selectedLayer: 0};
+      } else {
+        this.setState({schematic, progress: 1, selectedLayer: 0});
+      }
       Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}2.json`,
         {
           success: (responseText) => {
@@ -115,6 +130,12 @@ namespace('sp.outfitter.Outfitter', {
           const error = validateLoadFileJson(schematic);
           if (error) {
             throw error;
+          }
+          try {
+            const url = Shareable.publish(schematic);
+            console.log({ url });
+          } catch (e) {
+            console.log(e)
           }
           this.loadMeta(schematic.bodyType,schematic);
         },
@@ -437,10 +458,26 @@ namespace('sp.outfitter.Outfitter', {
               </div>
             </div>
             <div className="col-4 d-flex flex-column">
-              <div className=" rpg-box text-light m-1 d-flex justify-content-evenly">
-                <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') } style={{}}/>
-                <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') } style={{}}/>
-                <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') } style={{}}/>
+              <div className=" rpg-box text-light m-1 d-flex flex-column">
+                <div className="d-flex justify-content-evenly">
+                  <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') } style={{}}/>
+                  <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') } style={{}}/>
+                  <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') } style={{}}/>
+                </div>
+                <div className="input-group">
+                  <label htmlFor="opacity" className="input-group-text">Opacity:</label>
+                  <input
+                    id="opacity"
+                    type="number"
+                    className="form-control"
+                    step={0.01}
+                    min={0.00}
+                    max={1.00}
+                    style={{width: "2em"}}
+                    value={ this.fromSelectedLayer('opacity',1.0) }
+                    onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
+                  />
+                </div>
               </div>
               <div className=" rpg-box text-light m-1 d-flex flex-column">
                 <div className="input-group">
@@ -485,20 +522,6 @@ namespace('sp.outfitter.Outfitter', {
                 </div>
               </div>
               <div className=" rpg-box text-light m-1 d-flex flex-column">
-                <div className="input-group">
-                  <label htmlFor="opacity" className="input-group-text">Opacity:</label>
-                  <input
-                    id="opacity"
-                    type="number"
-                    className="form-control"
-                    step={0.01}
-                    min={0.00}
-                    max={1.00}
-                    style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('opacity',1.0) }
-                    onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
-                  />
-                </div>
                 <div className="input-group">
                   <label htmlFor="pattern" className="input-group-text">Pattern:</label>
                   <input
