@@ -1,6 +1,7 @@
 namespace('sp.outfitter.Shareable',{
+  'sp.common.QueryParams':'QueryParams',
   'sp.outfitter.Constants':'c'
-},({ c }) => {
+},({ QueryParams, c }) => {
   const delim = ",";
   const rowDelim = "\n";
   const bodyTypes = ['fit','hulk','superman','woman'];
@@ -37,7 +38,8 @@ namespace('sp.outfitter.Shareable',{
     data.layers.forEach((layer) => {
       rows.push(rowFields.reduce(getRowOutReducer(layer),[]).join(delim));
     });
-    return btoa(rows.join(rowDelim));
+    const joint = (location.search ? "&" : "?");
+    return location.href + joint + "share=" + btoa(rows.join(rowDelim));
   }
   const colorParseMapper = (([color]) => "#" + color);
   const intMapper = (([str]) => parseInt(str));
@@ -60,33 +62,36 @@ namespace('sp.outfitter.Shareable',{
     index:intMapper
   }
   const identity = (([c]) => c);
-  const parse = function(dataText) {
-    const [header, ...rows] = atob(dataText).split(rowDelim);
-    const out = {};
-    header.split(delim).forEach((value,index) => {
-      const field = headerFields[index];
-      const mapper = parseMapper[field] || identity;
-      out[field] = mapper([value]);
-    });
-    out.layers = rows.map((row) => {
-      const temp = row.split(delim).reduce((acc,value, index) => {
-        if (value.length > 0) {
-          acc[parseFields[index]] = value;
-        }
-        return acc;
-      },{});
-      const obj = {};
-      rowFields.forEach((rowField) => {
-        const mapper = parseMapper[rowField] || identity;
-        const fieldList = fieldMap[rowField] || [rowField];
-        const values = fieldList.map((field) => temp[field]);
-        if (values.filter(v => v).length === fieldList.length) {
-          obj[rowField] = mapper(values);
-        }
+  const parse = function() {
+    const { share } = QueryParams.read();
+    if (share) {
+      const [header, ...rows] = atob(share).split(rowDelim);
+      const out = {};
+      header.split(delim).forEach((value,index) => {
+        const field = headerFields[index];
+        const mapper = parseMapper[field] || identity;
+        out[field] = mapper([value]);
       });
-      return obj;
-    });
-    return out;
+      out.layers = rows.map((row) => {
+        const temp = row.split(delim).reduce((acc,value, index) => {
+          if (value.length > 0) {
+            acc[parseFields[index]] = value;
+          }
+          return acc;
+        },{});
+        const obj = {};
+        rowFields.forEach((rowField) => {
+          const mapper = parseMapper[rowField] || identity;
+          const fieldList = fieldMap[rowField] || [rowField];
+          const values = fieldList.map((field) => temp[field]);
+          if (values.filter(v => v).length === fieldList.length) {
+            obj[rowField] = mapper(values);
+          }
+        });
+        return obj;
+      });
+      return out;
+    }
   }
   return { publish, parse };
 });

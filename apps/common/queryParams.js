@@ -1,7 +1,7 @@
 namespace('sp.common.QueryParams',{},() => {
   const read = function(str) {
     str = str || location.search;
-    return str.slice(1).split("&").reduce((out,pairStr) => {
+    return str.slice(1).split("&").filter(s => s.length > 0).reduce((out,pairStr) => {
       const [ k, v ] = pairStr.split("=");
       if (k in out) {
         if (Array.isArray(out[k])) {

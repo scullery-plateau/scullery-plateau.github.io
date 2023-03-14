@@ -5,6 +5,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
+  'sp.common.LinkShare':'LinkShare',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
   'sp.common.QueryParams':'QueryParams',
@@ -13,7 +14,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -50,6 +51,11 @@ namespace('sp.outfitter.Outfitter', {
           attrs: { class: 'rpg-box text-light w-50' },
           onClose: () => {}
         },
+        linkShare: {
+          templateClass: LinkShare,
+          attrs: { class: 'rpg-box text-light w-50' },
+          onClose: () => {}
+        },
         colorPicker: {
           templateClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -66,8 +72,12 @@ namespace('sp.outfitter.Outfitter', {
             defaultFilename:"outfitter",
             jsonData:this.state.schematic
           });
-          const url = Shareable.publish(this.state.schematic);
-          console.log({ url });
+        }
+      },{
+        id: 'shareAsLink',
+        label: 'Share As Link',
+        callback: () => {
+          this.modals.linkShare.open(Shareable.publish(this.state.schematic));
         }
       },{
         id: 'downloadImage',
@@ -86,12 +96,9 @@ namespace('sp.outfitter.Outfitter', {
           this.modals.about.open();
         }
       }];
-      if (location.search) {
-        const { share } = QueryParams.read();
-        if (share) {
-          const schematic = Shareable.parse(share);
-          this.loadMeta(schematic.bodyType,schematic,true);
-        }
+      const schematic = Shareable.parse();
+      if (schematic) {
+        this.loadMeta(schematic.bodyType,schematic,true);
       }
     }
     loadMeta(bodyType,schematic,onInit) {
