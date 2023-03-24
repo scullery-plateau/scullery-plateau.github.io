@@ -297,6 +297,7 @@ namespace(
                   palette.splice(this.state.selectedPaletteIndex, 1);
                   const pixels = Object.entries(this.state.pixels).reduce((out,[k,v]) => {
                     out[k] = v - ((v >= this.state.selectedPaletteIndex)?1:0);
+                    return out;
                   }, {});
                   const selectedPaletteIndex = Math.min(
                     this.state.selectedPaletteIndex,
