@@ -184,6 +184,23 @@ namespace('sp.common.Utilities', {
     const ctx = canvas.getContext('2d');
     return { canvas, ctx };
   }
+  const drawCanvasURL = function(domIdOrCallback,callback) {
+    if (typeof domIdOrCallback === 'function') {
+      callback = domIdOrCallback;
+      domIdOrCallback = undefined;
+    }
+    const canvas = domIdOrCallback?document.getElementById(domIdOrCallback):document.createElement("canvas");
+    const ctx = canvas.getContext('2d');
+    callback(canvas,ctx);
+    return canvas.toDataURL();
+  }
+  const drawImageInCanvas = function(baseImg,xOffset,yOffset,frameWidth,frameHeight,domId) {
+    return drawCanvasURL(domId,(canvas,ctx) => {
+      canvas.width = frameWidth;
+      canvas.height = frameHeight;
+      ctx.drawImage(baseImg,-xOffset,-yOffset,baseImg.width,baseImg.height);
+    })
+  }
   const buildNumberInputGroup = function(inputId, inputLabel, opts, getter, setter) {
     return <div className="input-group">
       <label htmlFor={inputId} className="input-group-text">{inputLabel}</label>
@@ -228,6 +245,7 @@ namespace('sp.common.Utilities', {
     toggleIn,
     buildNumberInputGroup,
     toRadians,
-    initImageObj
+    initImageObj,
+    drawImageInCanvas
   };
 });

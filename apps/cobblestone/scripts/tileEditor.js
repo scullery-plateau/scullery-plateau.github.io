@@ -21,7 +21,11 @@ namespace("sp.cobblestone.TileEditor",{
     }
     toggleTransform(transform) {
       const tiles = this.copyTiles(this.state.tiles);
-      tiles[transform] = !tiles[transform];
+      if (tiles[transform]) {
+        delete tiles[transform];
+      } else {
+        tiles[transform] = true;
+      }
       this.setState({ tiles });
     }
     render() {
