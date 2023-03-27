@@ -15,7 +15,8 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
           mBottom:0,
           mFrame:0,
           sampleRow:0,
-          sampleCol:0
+          sampleCol:0,
+          pixelCount:1
         }
       };
     }
@@ -28,7 +29,7 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
             const spec = util.merge(this.state.spec);
             spec.tileWidth = baseImg.width;
             spec.tileHeight = baseImg.height;
-            this.setState({ baseImg, spec });
+            this.setState({ baseImg, spec, filename:filename.split(".")[0] });
           });
         },
         (filename, error) => {
@@ -38,11 +39,11 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
       );
     }
     calcX(update, fieldName){
-      const span = (this.state.baseImg.width - (update.mTop + update.mBottom))
+      const span = (this.state.baseImg.width - (update.mLeft + update.mRight))
       update.tileWidth = span/update.columns;
     }
     calcY(update, fieldName){
-      const span = (this.state.baseImg.height - (update.mLeft + update.mRight))
+      const span = (this.state.baseImg.height - (update.mTop + update.mBottom))
       update.tileHeight = span/update.rows;
     }
     updateSpec(fieldName,value) {
@@ -59,7 +60,6 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
         case "mRight":
           this.calcX(update, fieldName);
       }
-      console.log({ update });
       this.setState({ spec: update });
     }
     buildSpecField(label,fieldName,opts){
@@ -72,10 +72,10 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
     getImageFrame(row,col) {
       return {
         baseImg: this.state.baseImg,
-        xOffset: (this.state.spec.mLeft + (col * this.state.spec.tileWidth) + this.state.spec.mFrame),
-        yOffset: (this.state.spec.mTop + (row * this.state.spec.tileHeight) + this.state.spec.mFrame),
-        frameWidth: (this.state.spec.tileWidth - (2 * this.state.spec.mFrame)),
-        frameHeight: (this.state.spec.tileHeight - (2 * this.state.spec.mFrame))
+        xOffset: Math.ceil(this.state.spec.mLeft + (col * this.state.spec.tileWidth) + this.state.spec.mFrame),
+        yOffset: Math.ceil(this.state.spec.mTop + (row * this.state.spec.tileHeight) + this.state.spec.mFrame),
+        frameWidth: Math.floor(this.state.spec.tileWidth - (2 * this.state.spec.mFrame)),
+        frameHeight: Math.floor(this.state.spec.tileHeight - (2 * this.state.spec.mFrame))
       }
     }
     drawSampleImage() {
@@ -86,16 +86,56 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
         </svg>
       </div>
     }
+    applyImageContext(data,width){
+      const pixels = [];
+      let rest = Array.from(data);
+      while(rest.length > 0) {
+        const [red, green, blue, alpha] = rest.slice(0,4);
+        pixels.push({ red, green, blue, alpha });
+        rest = rest.slice(4);
+      }
+      const rows = [];
+      rest = Array.from(pixels);
+      while(rest.length > 0) {
+        rows.push(rest.slice(0,width));
+        rest = rest.slice(width);
+      }
+      return rows;
+    }
     generateTileImages() {
       this.setState({ gallery: util.range(this.state.spec.rows).reduce((out,rowIndex) => {
           return util.range(this.state.spec.columns).reduce((acc,colIndex) => {
             const { baseImg, xOffset, yOffset, frameWidth, frameHeight } = this.getImageFrame(rowIndex, colIndex);
+            const dataShell = {};
+            const url = util.drawCanvasURL('canvas',(canvas,ctx) => {
+              canvas.width = frameWidth;
+              canvas.height = frameHeight;
+              ctx.drawImage(baseImg,-xOffset,-yOffset,baseImg.width,baseImg.height);
+              dataShell.data = ctx.getImageData(0,0,frameWidth,frameHeight);
+            });
             return acc.concat([{
-              url:util.drawImageInCanvas(baseImg, xOffset, yOffset, frameWidth, frameHeight, 'canvas'),
+              url,
+              data:this.applyImageContext(dataShell.data.data,frameWidth),
               index: `${colIndex}x${rowIndex}`
             }])
           },out);
         },[]) });
+    }
+    downloadImage({url,index}){
+      const filename = this.state.filename + "_" + index;
+      util.triggerPNGDownload(filename,filename,url);
+    }
+    downloadData({data,index}){
+      const filename = this.state.filename + "_" + index;
+      const { pixelCount } = this.state.spec;
+      const { frameWidth, frameHeight } = this.getImageFrame(this.state.spec.sampleRow, this.state.spec.sampleCol);
+      console.log({
+        filename,
+        frameWidth,
+        frameHeight,
+        pixelCount,
+        data
+      });
     }
     render() {
       return <div className="d-flex flex-column justify-content-center">
@@ -119,6 +159,12 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
                   { this.buildSpecField("Right", "mRight",{min:0,style:{width:"3em"}}) }
                 </div>
                 { this.buildSpecField("Frame Margin", "mFrame",{min:0,style:{width:"3em"}}) }
+                { this.buildSpecField("Pixel Count", "pixelCount",{min:1,style:{width:"3em"}}) }
+                <h3 className="text-center">Pseudopixel size: { (() => {
+                  const { frameWidth, frameHeight } = this.getImageFrame(this.state.spec.sampleRow,this.state.spec.sampleCol);
+                  const dim = Math.min(frameWidth, frameHeight);
+                  return dim / this.state.spec.pixelCount;
+                })() }</h3>
               </div>
               <div className="rpg-box m-2 p-2 w-50 d-flex flex-column justify-content-center">
                 <div className="d-flex justify-content-center">
@@ -132,7 +178,23 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
             { this.state.gallery && this.state.gallery.length > 0 &&
               <div className="d-flex flex-wrap justify-content-center">
                 { this.state.gallery.map((img) => {
-                  return <a href={img.url} download={true}><img className="p-2" style={{width:"7em",height:"7em"}} alt={img.index} src={img.url}/></a>;
+                  return <div className="rpg-box m-2 p-2">
+                    <a href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        this.downloadImage(img);
+                      }}
+                      onDoubleClick={(e) => {
+                        e.preventDefault();
+                        this.downloadData(img);
+                      }}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        this.downloadData(img);
+                      }}>
+                        <img className="p-2" style={{width:"7em",height:"7em"}} alt={img.index} src={img.url}/>
+                      </a>
+                  </div>;
                 })}
               </div> }
           </>

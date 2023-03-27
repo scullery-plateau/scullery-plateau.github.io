@@ -246,6 +246,7 @@ namespace('sp.common.Utilities', {
     buildNumberInputGroup,
     toRadians,
     initImageObj,
+    drawCanvasURL,
     drawImageInCanvas
   };
 });
