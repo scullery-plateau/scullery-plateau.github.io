@@ -1,8 +1,9 @@
 namespace("sp.spritelyHarvester.SpritelyHarvester",{
   'sp.common.Colors':'Colors',
   'sp.common.LoadFile':'LoadFile',
+  'sp.common.ProgressBar':'ProgressBar',
   'sp.common.Utilities':'util',
-},({ Colors, LoadFile, util }) => {
+},({ Colors, LoadFile, ProgressBar, util }) => {
   const spColors = util.range(6).reduce((out,red) => {
     return util.range(6).reduce((acc,green) => {
       return util.range(6).reduce((results,blue) => {
@@ -33,6 +34,9 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       const pixels = [];
       const palette = {};
       let rest = Array.from(data);
+      this.setState({ progressSubject: "bytes to colors", progressDenominator: data.length / 4, progressNumerator: 0 })
+      console.log({ state: this.state });
+      let count = 0;
       while(rest.length > 0) {
         const [red, green, blue, alpha] = rest.slice(0,4);
         const hex = util.hexFromRGB(red, green, blue);
@@ -40,14 +44,21 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         pixels.push(hex);
         palette[hex] = color;
         rest = rest.slice(4);
+        this.setState({ progressNumerator: ++count });
       }
+      this.setState({ progressSubject: "measuring distances between sp colors and image colors",  progressDenominator: Object.keys(spColors).length * Object.keys(palette).length, progressNumerator: 0 })
+      count = 0
       const measurements = Object.entries(spColors).reduce((out,[spHex,spc]) => {
         return Object.entries(palette).reduce((acc,[imgHex,imgC]) => {
           const dist = this.colorDist(spc,imgC);
           const diff = this.colorDiff(spc,imgC);
-          return acc.concat([{spHex,imgHex,dist,diff}]);
+          acc.push({spHex,imgHex,dist,diff});
+          this.setState({ progressNumerator: ++count });
+          return acc;
         },out)
       },[]);
+      this.setState({ progressSubject: "finding nearest sp colors",  progressDenominator: Object.keys(palette).length, progressNumerator: 0 })
+      count = 0;
       const imgToSP = Object.keys(palette).reduce((out,hex) => {
         const myMeasurements = measurements.filter(m => m.imgHex === hex);
         const spHex = myMeasurements.sort((a,b) => {
@@ -58,13 +69,17 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           return a.diff - b.diff;
         })[0].spHex;
         out[hex] = spHex;
+        this.setState({ progressNumerator: ++count });
         return out;
       }, {});
       const rows = [];
       rest = Array.from(pixels);
+      this.setState({ progressSubject: "mapping pixel colors to new color",  progressDenominator: Math.ceil(rest.length / width), progressNumerator: 0 })
+      count = 0;
       while(rest.length > 0) {
         rows.push(rest.slice(0,width).map(h => imgToSP[h]));
         rest = rest.slice(width);
+        this.setState({ progressNumerator: ++count });
       }
       return rows;
     }
@@ -173,17 +188,23 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         canvas.width = baseImg.width;
         canvas.height = baseImg.height;
         ctx.drawImage(baseImg,0,0,baseImg.width,baseImg.height);
+        console.log("drawing image");
         dataShell.data = ctx.getImageData(0,0,baseImg.width,baseImg.height);
+        console.log("image data received");
       });
+      console.log("applying image context");
       const data = this.applyImageContext(dataShell.data.data,baseImg.width);
-      return {url,data}
+      console.log("image context applyed");
+      return {url,data};
     }
     loadImage() {
       LoadFile(
         true,
         'dataURL',
         (dataURL, filename) => {
+          console.log("loading image")
           util.initImageObj(dataURL,(baseImg) => {
+            console.log("initializing image")
             const {width,height} = baseImg;
             const {url,data} = this.drawImageInCanvas(baseImg);
             this.setState({ url, data, width, height, filename:filename.split(".")[0] });
@@ -208,8 +229,10 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     }
     render() {
       return <div className="d-flex flex-column justify-content-center">
-        { !this.state.baseImg && <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>}
-        { this.state.baseImg && 
+        { !this.state.url && !this.state.progressDenominator && <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>}
+        { !this.state.url && this.state.progressDenominator && 
+          <ProgressBar subject={this.state.progressSubject} progress={Math.floor(100 * this.state.progressNumerator / this.state.progressDenominator)}></ProgressBar>}
+        { this.state.url && 
           <div className="rpg-box m-2 p-2 w-50 d-flex justify-content-center">
             <div className="d-flex flex-column justify-content-center">
               <h3 className="text-center">Image Size: {this.state.width} x {this.state.height}</h3>
