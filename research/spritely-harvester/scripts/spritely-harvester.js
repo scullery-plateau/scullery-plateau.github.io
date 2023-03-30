@@ -1,25 +1,69 @@
 namespace("sp.spritelyHarvester.SpritelyHarvester",{
+  'sp.common.Colors':'Colors',
+  'sp.common.LoadFile':'LoadFile',
   'sp.common.Utilities':'util',
-  'sp.common.LoadFile':'LoadFile'
-},({ util, LoadFile }) => {
-  const colors = ["red","green","blue"]
+},({ Colors, LoadFile, util }) => {
+  const spColors = util.range(6).reduce((out,red) => {
+    return util.range(6).reduce((acc,green) => {
+      return util.range(6).reduce((results,blue) => {
+        const [r,g,b] = [red,green,blue].map((c) => (c*3).toString(16));
+        const color = ['#',r,r,g,g,b,b].join('');
+        results[color] = util.rgbFromHex(color);
+        return results;
+      }, acc);
+    }, out);
+  }, Colors.getAllNamedColors().reduce((out,color) => {
+    out[color] = util.rgbFromHex(color);
+    return out;
+  }, {}));
+  console.log({ spColors });
+  const colors = ["red","green","blue"];
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {spec:{}};
+    }
+    colorDist(a,b) {
+      return Math.sqrt(colors.map(c => Math.pow((a[c] - b[c]),2)).reduce((sum,sqr) => sum + sqr, 0));
+    }
+    colorDiff(a,b) {
+      return colors.map(c => (a[c] - b[c])).reduce((sum,sqr) => sum + sqr, 0);
     }
     applyImageContext(data,width){
       const pixels = [];
+      const palette = {};
       let rest = Array.from(data);
       while(rest.length > 0) {
         const [red, green, blue, alpha] = rest.slice(0,4);
-        pixels.push({ red, green, blue, alpha });
+        const hex = util.hexFromRGB(red, green, blue);
+        const color = { red, green, blue };
+        pixels.push(hex);
+        palette[hex] = color;
         rest = rest.slice(4);
       }
+      const measurements = Object.entries(spColors).reduce((out,[spHex,spc]) => {
+        return Object.entries(palette).reduce((acc,[imgHex,imgC]) => {
+          const dist = this.colorDist(spc,imgC);
+          const diff = this.colorDiff(spc,imgC);
+          return acc.concat([{spHex,imgHex,dist,diff}]);
+        },out)
+      },[]);
+      const imgToSP = Object.keys(palette).reduce((out,hex) => {
+        const myMeasurements = measurements.filter(m => m.imgHex === hex);
+        const spHex = myMeasurements.sort((a,b) => {
+          const compare = b.dist - a.dist;
+          if (compare != 0) {
+            return compare;
+          }
+          return a.diff - b.diff;
+        })[0].spHex;
+        out[hex] = spHex;
+        return out;
+      }, {});
       const rows = [];
       rest = Array.from(pixels);
       while(rest.length > 0) {
-        rows.push(rest.slice(0,width));
+        rows.push(rest.slice(0,width).map(h => imgToSP[h]));
         rest = rest.slice(width);
       }
       return rows;
@@ -140,22 +184,42 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         'dataURL',
         (dataURL, filename) => {
           util.initImageObj(dataURL,(baseImg) => {
-            const spec = util.merge(this.state.spec);
-            spec.tileWidth = baseImg.width;
-            spec.tileHeight = baseImg.height;
-            this.setState({ baseImg, spec, filename:filename.split(".")[0] });
+            const {width,height} = baseImg;
+            const {url,data} = this.drawImageInCanvas(baseImg);
+            this.setState({ url, data, width, height, filename:filename.split(".")[0] });
           });
         },
         (filename, error) => {
           console.log({filename, error});
           alert(filename + ' failed to load. See console for error.');
-        }
-      );
+        });
+    }
+    updateSpec(fieldName,value) {
+      const update = util.merge(this.state.spec);
+      update[fieldName] = value;
+      this.setState({ spec: update });
+    }
+    buildSpecField(label,fieldName,opts){
+      return util.buildNumberInputGroup(fieldName,label,opts,() => {
+        return this.state.spec[fieldName];
+      },(value) => {
+        this.updateSpec(fieldName,parseFloat(value));
+      })
     }
     render() {
       return <div className="d-flex flex-column justify-content-center">
         { !this.state.baseImg && <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>}
-        { this.state.baseImg && <></> }
+        { this.state.baseImg && 
+          <div className="rpg-box m-2 p-2 w-50 d-flex justify-content-center">
+            <div className="d-flex flex-column justify-content-center">
+              <h3 className="text-center">Image Size: {this.state.width} x {this.state.height}</h3>
+              <h3 className="text-center"></h3>
+              <div className="d-flex justify-content-center">
+                { this.buildSpecField("Rows","rows",{min:1,style:{width:"3em"}}) }
+                { this.buildSpecField("Columns","columns",{min:1,style:{width:"3em"}}) }
+              </div>
+            </div>
+          </div> }
       </div>;
     }
   }

@@ -162,5 +162,8 @@ namespace('sp.common.Colors', () => {
   const getNameForColor = function(color) {
     return nameLookup[color];
   }
-  return { getColorNames, getColorByName, getNameForColor };
+  const getAllNamedColors = function() {
+    return Object.values(colorMap);
+  }
+  return { getColorNames, getColorByName, getNameForColor, getAllNamedColors };
 });
