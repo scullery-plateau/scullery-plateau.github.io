@@ -86,36 +86,17 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
         </svg>
       </div>
     }
-    applyImageContext(data,width){
-      const pixels = [];
-      let rest = Array.from(data);
-      while(rest.length > 0) {
-        const [red, green, blue, alpha] = rest.slice(0,4);
-        pixels.push({ red, green, blue, alpha });
-        rest = rest.slice(4);
-      }
-      const rows = [];
-      rest = Array.from(pixels);
-      while(rest.length > 0) {
-        rows.push(rest.slice(0,width));
-        rest = rest.slice(width);
-      }
-      return rows;
-    }
     generateTileImages() {
       this.setState({ gallery: util.range(this.state.spec.rows).reduce((out,rowIndex) => {
           return util.range(this.state.spec.columns).reduce((acc,colIndex) => {
             const { baseImg, xOffset, yOffset, frameWidth, frameHeight } = this.getImageFrame(rowIndex, colIndex);
-            const dataShell = {};
             const url = util.drawCanvasURL('canvas',(canvas,ctx) => {
               canvas.width = frameWidth;
               canvas.height = frameHeight;
               ctx.drawImage(baseImg,-xOffset,-yOffset,baseImg.width,baseImg.height);
-              dataShell.data = ctx.getImageData(0,0,frameWidth,frameHeight);
             });
             return acc.concat([{
               url,
-              data:this.applyImageContext(dataShell.data.data,frameWidth),
               index: `${colIndex}x${rowIndex}`
             }])
           },out);
@@ -124,18 +105,6 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
     downloadImage({url,index}){
       const filename = this.state.filename + "_" + index;
       util.triggerPNGDownload(filename,filename,url);
-    }
-    downloadData({data,index}){
-      const filename = this.state.filename + "_" + index;
-      const { pixelCount } = this.state.spec;
-      const { frameWidth, frameHeight } = this.getImageFrame(this.state.spec.sampleRow, this.state.spec.sampleCol);
-      console.log({
-        filename,
-        frameWidth,
-        frameHeight,
-        pixelCount,
-        data
-      });
     }
     render() {
       return <div className="d-flex flex-column justify-content-center">
@@ -180,20 +149,12 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
                 { this.state.gallery.map((img) => {
                   return <div className="rpg-box m-2 p-2">
                     <a href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.downloadImage(img);
-                      }}
-                      onDoubleClick={(e) => {
-                        e.preventDefault();
-                        this.downloadData(img);
-                      }}
-                      onContextMenu={(e) => {
-                        e.preventDefault();
-                        this.downloadData(img);
-                      }}>
-                        <img className="p-2" style={{width:"7em",height:"7em"}} alt={img.index} src={img.url}/>
-                      </a>
+                       onClick={(e) => {
+                         e.preventDefault();
+                         this.downloadImage(img);
+                       }}>
+                      <img className="p-2" style={{width:"7em",height:"7em"}} alt={img.index} src={img.url}/>
+                    </a>
                   </div>;
                 })}
               </div> }

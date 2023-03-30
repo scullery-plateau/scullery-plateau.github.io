@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Texture Pack Harvester</title>
+  <title>Spritely Harvester</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
   <link rel="stylesheet" href="../../style/rpg.css" />
   <link rel="stylesheet" href="../../style/font.css" />
@@ -27,19 +27,19 @@
   <script type="text/babel" src="../../apps/common/utilities.js"></script>
 
   <!-- local namespaces -->
-  <script type="text/babel" src="./scripts/texture-pack-harvester.js"></script>
+  <script type="text/babel" src="./scripts/spritely-harvester.js"></script>
 
   <!-- bind app root -->
   <script type="text/babel">
     (function () {
-      const { TexturePackHarvester } = imports({
-        'sp.texturePackHarvester.TexturePackHarvester': 'TexturePackHarvester',
+      const { SpritelyHarvester } = imports({
+        'sp.spritelyHarvester.SpritelyHarvester': 'SpritelyHarvester',
       });
       const unusedNamespaces = listUnusedNamespaces();
       if (unusedNamespaces.length > 0) {
         console.warn({ unusedNamespaces });
       }
-      ReactDOM.createRoot(document.getElementById('app-root')).render( <TexturePackHarvester/> );
+      ReactDOM.createRoot(document.getElementById('app-root')).render( <SpritelyHarvester/> );
     })();
   </script>
 </head>
