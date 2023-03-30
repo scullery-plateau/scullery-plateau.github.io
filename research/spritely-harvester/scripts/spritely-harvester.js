@@ -1,21 +1,12 @@
 namespace("sp.spritelyHarvester.SpritelyHarvester",{
-  'sp.common.Utilities':'util'
-},({ util }) => {
+  'sp.common.Utilities':'util',
+  'sp.common.LoadFile':'LoadFile'
+},({ util, LoadFile }) => {
   const colors = ["red","green","blue"]
   return class extends React.Component {
     constructor(props) {
       super(props);
-    }
-    drawImageInCanvas(baseImg) {
-      const dataShell = {};
-      const url = util.drawCanvasURL('canvas',(canvas,ctx) => {
-        canvas.width = baseImg.width;
-        canvas.height = baseImg.height;
-        ctx.drawImage(baseImg,0,0,baseImg.width,baseImg.height);
-        dataShell.data = ctx.getImageData(0,0,baseImg.width,baseImg.height);
-      });
-      const data = this.applyImageContext(dataShell.data.data,baseImg.width);
-      return {url,data}
+      this.state = {};
     }
     applyImageContext(data,width){
       const pixels = [];
@@ -132,9 +123,40 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       console.log({ palette })
       return data;
     }
-
+    drawImageInCanvas(baseImg) {
+      const dataShell = {};
+      const url = util.drawCanvasURL('canvas',(canvas,ctx) => {
+        canvas.width = baseImg.width;
+        canvas.height = baseImg.height;
+        ctx.drawImage(baseImg,0,0,baseImg.width,baseImg.height);
+        dataShell.data = ctx.getImageData(0,0,baseImg.width,baseImg.height);
+      });
+      const data = this.applyImageContext(dataShell.data.data,baseImg.width);
+      return {url,data}
+    }
+    loadImage() {
+      LoadFile(
+        true,
+        'dataURL',
+        (dataURL, filename) => {
+          util.initImageObj(dataURL,(baseImg) => {
+            const spec = util.merge(this.state.spec);
+            spec.tileWidth = baseImg.width;
+            spec.tileHeight = baseImg.height;
+            this.setState({ baseImg, spec, filename:filename.split(".")[0] });
+          });
+        },
+        (filename, error) => {
+          console.log({filename, error});
+          alert(filename + ' failed to load. See console for error.');
+        }
+      );
+    }
     render() {
-      return <></>;
+      return <div className="d-flex flex-column justify-content-center">
+        { !this.state.baseImg && <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>}
+        { this.state.baseImg && <></> }
+      </div>;
     }
   }
 });
