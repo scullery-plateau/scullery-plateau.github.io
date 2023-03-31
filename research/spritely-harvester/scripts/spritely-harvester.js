@@ -1,9 +1,11 @@
 namespace("sp.spritelyHarvester.SpritelyHarvester",{
   'sp.common.Colors':'Colors',
   'sp.common.LoadFile':'LoadFile',
-  'sp.common.ProgressBar':'ProgressBar',
+  'sp.common.RollingProgressBar':'RollingProgressBar',
+  'sp.common.Trigger':'Trigger',
   'sp.common.Utilities':'util',
-},({ Colors, LoadFile, ProgressBar, util }) => {
+},({ Colors, LoadFile, RollingProgressBar, Trigger, util }) => {
+  const trigger = new Trigger("SpritelyHarvesterProgressTrigger" + Date.now());
   const spColors = util.range(6).reduce((out,red) => {
     return util.range(6).reduce((acc,green) => {
       return util.range(6).reduce((results,blue) => {
@@ -34,8 +36,11 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       const pixels = [];
       const palette = {};
       let rest = Array.from(data);
-      this.setState({ progressSubject: "bytes to colors", progressDenominator: data.length / 4, progressNumerator: 0 })
-      console.log({ state: this.state });
+      trigger.publish({
+        subject: "bytes to colors",
+        outOf: data.length / 4,
+        count: 0
+      });
       let count = 0;
       while(rest.length > 0) {
         const [red, green, blue, alpha] = rest.slice(0,4);
@@ -44,20 +49,36 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         pixels.push(hex);
         palette[hex] = color;
         rest = rest.slice(4);
-        this.setState({ progressNumerator: ++count });
-      }
-      this.setState({ progressSubject: "measuring distances between sp colors and image colors",  progressDenominator: Object.keys(spColors).length * Object.keys(palette).length, progressNumerator: 0 })
+        trigger.publish({
+          subject: "bytes to colors",
+          outOf: data.length / 4,
+          count: ++count
+        });
+        }
+      trigger.publish({
+        subject: "measuring distances between sp colors and image colors",
+        outOf:  Object.keys(spColors).length * Object.keys(palette).length,
+        count: 0
+      });
       count = 0
       const measurements = Object.entries(spColors).reduce((out,[spHex,spc]) => {
         return Object.entries(palette).reduce((acc,[imgHex,imgC]) => {
           const dist = this.colorDist(spc,imgC);
           const diff = this.colorDiff(spc,imgC);
           acc.push({spHex,imgHex,dist,diff});
-          this.setState({ progressNumerator: ++count });
-          return acc;
+          trigger.publish({
+            subject: "measuring distances between sp colors and image colors",
+            outOf:  Object.keys(spColors).length * Object.keys(palette).length,
+            count: ++count
+          });
+              return acc;
         },out)
       },[]);
-      this.setState({ progressSubject: "finding nearest sp colors",  progressDenominator: Object.keys(palette).length, progressNumerator: 0 })
+      trigger.publish({
+        subject: "finding nearest sp colors",
+        outOf: Object.keys(palette).length,
+        count: 0
+      });
       count = 0;
       const imgToSP = Object.keys(palette).reduce((out,hex) => {
         const myMeasurements = measurements.filter(m => m.imgHex === hex);
@@ -69,17 +90,29 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           return a.diff - b.diff;
         })[0].spHex;
         out[hex] = spHex;
-        this.setState({ progressNumerator: ++count });
+        trigger.publish({
+          subject: "finding nearest sp colors",
+          outOf: Object.keys(palette).length,
+          count: ++count
+        });
         return out;
       }, {});
       const rows = [];
       rest = Array.from(pixels);
-      this.setState({ progressSubject: "mapping pixel colors to new color",  progressDenominator: Math.ceil(rest.length / width), progressNumerator: 0 })
+      trigger.publish({
+        subject: "mapping pixel colors to new color",
+        outOf: Math.ceil(rest.length / width),
+        count: 0
+      });
       count = 0;
       while(rest.length > 0) {
         rows.push(rest.slice(0,width).map(h => imgToSP[h]));
         rest = rest.slice(width);
-        this.setState({ progressNumerator: ++count });
+        trigger.publish({
+          subject: "mapping pixel colors to new color",
+          outOf: Math.ceil(rest.length / width),
+          count: ++count
+        });
       }
       return rows;
     }
@@ -229,9 +262,10 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     }
     render() {
       return <div className="d-flex flex-column justify-content-center">
-        { !this.state.url && !this.state.progressDenominator && <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>}
-        { !this.state.url && this.state.progressDenominator && 
-          <ProgressBar subject={this.state.progressSubject} progress={Math.floor(100 * this.state.progressNumerator / this.state.progressDenominator)}></ProgressBar>}
+        { !this.state.url && <>
+        <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>
+        <RollingProgressBar trigger={trigger}/>
+        </>}
         { this.state.url && 
           <div className="rpg-box m-2 p-2 w-50 d-flex justify-content-center">
             <div className="d-flex flex-column justify-content-center">
