@@ -4,12 +4,15 @@ namespace('sp.common.RollingProgressBar',{
     return class extends React.Component {
         constructor(props) {
             super(props);
-            this.state = {};
+            this.state = {
+                subject:"",
+                count:0,
+                outOf:1
+            };
             props.trigger.subscribe((state) => this.setState(state));
         }
         render() {
-            return <>{this.state.outOf && this.state.subject && typeof this.state.count === 'number' &&
-            <ProgressBar subject={subject} progress={100 * this.state.count / this.state.outOf}></ProgressBar>}</>
+            return <ProgressBar subject={subject} progress={100 * this.state.count / this.state.outOf}/>;
         }
     }
 });

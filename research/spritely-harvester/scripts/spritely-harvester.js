@@ -32,11 +32,15 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     colorDiff(a,b) {
       return colors.map(c => (a[c] - b[c])).reduce((sum,sqr) => sum + sqr, 0);
     }
+    publishTrigger(p) {
+      console.log(`subject: ${p.subject}, count: ${p.count}, outOf: ${p.outOf}`);
+      trigger.publish(p);
+    }
     applyImageContext(data,width){
       const pixels = [];
       const palette = {};
       let rest = Array.from(data);
-      trigger.publish({
+      this.publishTrigger({
         subject: "bytes to colors",
         outOf: data.length / 4,
         count: 0
@@ -49,13 +53,13 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         pixels.push(hex);
         palette[hex] = color;
         rest = rest.slice(4);
-        trigger.publish({
+        this.publishTrigger({
           subject: "bytes to colors",
           outOf: data.length / 4,
           count: ++count
         });
         }
-      trigger.publish({
+      this.publishTrigger({
         subject: "measuring distances between sp colors and image colors",
         outOf:  Object.keys(spColors).length * Object.keys(palette).length,
         count: 0
@@ -66,7 +70,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           const dist = this.colorDist(spc,imgC);
           const diff = this.colorDiff(spc,imgC);
           acc.push({spHex,imgHex,dist,diff});
-          trigger.publish({
+          this.publishTrigger({
             subject: "measuring distances between sp colors and image colors",
             outOf:  Object.keys(spColors).length * Object.keys(palette).length,
             count: ++count
@@ -74,7 +78,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
               return acc;
         },out)
       },[]);
-      trigger.publish({
+      this.publishTrigger({
         subject: "finding nearest sp colors",
         outOf: Object.keys(palette).length,
         count: 0
@@ -90,7 +94,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           return a.diff - b.diff;
         })[0].spHex;
         out[hex] = spHex;
-        trigger.publish({
+        this.publishTrigger({
           subject: "finding nearest sp colors",
           outOf: Object.keys(palette).length,
           count: ++count
@@ -99,7 +103,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       }, {});
       const rows = [];
       rest = Array.from(pixels);
-      trigger.publish({
+      this.publishTrigger({
         subject: "mapping pixel colors to new color",
         outOf: Math.ceil(rest.length / width),
         count: 0
@@ -108,7 +112,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       while(rest.length > 0) {
         rows.push(rest.slice(0,width).map(h => imgToSP[h]));
         rest = rest.slice(width);
-        trigger.publish({
+        this.publishTrigger({
           subject: "mapping pixel colors to new color",
           outOf: Math.ceil(rest.length / width),
           count: ++count
