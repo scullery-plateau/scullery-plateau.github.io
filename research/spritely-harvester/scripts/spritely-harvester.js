@@ -1,11 +1,8 @@
 namespace("sp.spritelyHarvester.SpritelyHarvester",{
   'sp.common.Colors':'Colors',
   'sp.common.LoadFile':'LoadFile',
-  'sp.common.RollingProgressBar':'RollingProgressBar',
-  'sp.common.Trigger':'Trigger',
   'sp.common.Utilities':'util',
-},({ Colors, LoadFile, RollingProgressBar, Trigger, util }) => {
-  const trigger = new Trigger("SpritelyHarvesterProgressTrigger" + Date.now());
+},({ Colors, LoadFile, util }) => {
   const spColors = util.range(6).reduce((out,red) => {
     return util.range(6).reduce((acc,green) => {
       return util.range(6).reduce((results,blue) => {
@@ -19,33 +16,65 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     out[color] = util.rgbFromHex(color);
     return out;
   }, {}));
-  console.log({ spColors });
+  console.log({ spColors, count: Object.keys(spColors).length })
   const colors = ["red","green","blue"];
+  const measurementSorter = (a,b) => {
+    const compare = a.dist - b.dist;
+    if (compare !== 0) {
+      return compare;
+    }
+    return a.diff - b.diff;
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {spec:{}};
+      this.state = {
+        spec:{
+          rows:32,
+          columns:32,
+          imgTop:0,
+          imgBottom:0,
+          imgLeft:0,
+          imgRight:0,
+          pixTop:0,
+          pixBottom:0,
+          pixLeft:0,
+          pixRight:0
+        }
+      };
     }
     colorDist(a,b) {
       return Math.sqrt(colors.map(c => Math.pow((a[c] - b[c]),2)).reduce((sum,sqr) => sum + sqr, 0));
     }
     colorDiff(a,b) {
-      return colors.map(c => (a[c] - b[c])).reduce((sum,sqr) => sum + sqr, 0);
+      return Math.abs(colors.map(c => (a[c] - b[c])).reduce((sum,sqr) => sum * sqr, 0));
     }
-    publishTrigger(p) {
-      console.log(`subject: ${p.subject}, count: ${p.count}, outOf: ${p.outOf}`);
-      trigger.publish(p);
+    gatherMeasurements(paletteA,paletteB) {
+      return Object.entries(paletteA).reduce((out,[hexA,colorA]) => {
+        return Object.entries(paletteB).reduce((acc,[hexB,colorB]) => {
+          const dist = this.colorDist(colorA,colorB);
+          const diff = this.colorDiff(colorA,colorB);
+          acc.push({hexA,hexB,dist,diff});
+          return acc;
+        },out)
+      },[]);
+    }
+    findShortestMappingFrom(palette,measurements) {
+      return Object.keys(palette).reduce((out,hex) => {
+        const myMeasurements = measurements.filter(m => m.hexB === hex);
+        const ordered = myMeasurements.sort(measurementSorter);
+        const shortestFrom = ordered[0];
+        console.log(shortestFrom)
+        if (shortestFrom.dist < 32) {
+          out[hex] = shortestFrom.hexA;
+        }
+        return out;
+      }, {});
     }
     applyImageContext(data,width){
       const pixels = [];
       const palette = {};
       let rest = Array.from(data);
-      this.publishTrigger({
-        subject: "bytes to colors",
-        outOf: data.length / 4,
-        count: 0
-      });
-      let count = 0;
       while(rest.length > 0) {
         const [red, green, blue, alpha] = rest.slice(0,4);
         const hex = util.hexFromRGB(red, green, blue);
@@ -53,82 +82,23 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         pixels.push(hex);
         palette[hex] = color;
         rest = rest.slice(4);
-        this.publishTrigger({
-          subject: "bytes to colors",
-          outOf: data.length / 4,
-          count: ++count
-        });
-        }
-      this.publishTrigger({
-        subject: "measuring distances between sp colors and image colors",
-        outOf:  Object.keys(spColors).length * Object.keys(palette).length,
-        count: 0
-      });
-      count = 0
-      const measurements = Object.entries(spColors).reduce((out,[spHex,spc]) => {
-        return Object.entries(palette).reduce((acc,[imgHex,imgC]) => {
-          const dist = this.colorDist(spc,imgC);
-          const diff = this.colorDiff(spc,imgC);
-          acc.push({spHex,imgHex,dist,diff});
-          this.publishTrigger({
-            subject: "measuring distances between sp colors and image colors",
-            outOf:  Object.keys(spColors).length * Object.keys(palette).length,
-            count: ++count
-          });
-              return acc;
-        },out)
-      },[]);
-      this.publishTrigger({
-        subject: "finding nearest sp colors",
-        outOf: Object.keys(palette).length,
-        count: 0
-      });
-      count = 0;
-      const imgToSP = Object.keys(palette).reduce((out,hex) => {
-        const myMeasurements = measurements.filter(m => m.imgHex === hex);
-        const spHex = myMeasurements.sort((a,b) => {
-          const compare = b.dist - a.dist;
-          if (compare != 0) {
-            return compare;
-          }
-          return a.diff - b.diff;
-        })[0].spHex;
-        out[hex] = spHex;
-        this.publishTrigger({
-          subject: "finding nearest sp colors",
-          outOf: Object.keys(palette).length,
-          count: ++count
-        });
-        return out;
-      }, {});
+      }
       const rows = [];
       rest = Array.from(pixels);
-      this.publishTrigger({
-        subject: "mapping pixel colors to new color",
-        outOf: Math.ceil(rest.length / width),
-        count: 0
-      });
-      count = 0;
       while(rest.length > 0) {
-        rows.push(rest.slice(0,width).map(h => imgToSP[h]));
+        rows.push(rest.slice(0,width));
         rest = rest.slice(width);
-        this.publishTrigger({
-          subject: "mapping pixel colors to new color",
-          outOf: Math.ceil(rest.length / width),
-          count: ++count
-        });
       }
-      return rows;
+      return { palette, data: rows };
     }
     drawPixelsAsSVG(data,dim){
-      console.log({rows:data});
       const pixelSize = 5
       const height = data.length;
       const width = data.reduce((out,row) => Math.max(out,row.length),0);
       return <svg width={dim} height={dim} viewBox={`0 0 ${width * pixelSize} ${height * pixelSize}`}>
         { data.map((row,y) => {
           return row.map((color,x) => {
-            return <rect x={x * pixelSize} y={y * pixelSize} width={pixelSize} height={pixelSize} fill={util.hexFromRGB(color.red,color.green,color.blue)}/>
+            return <rect x={x * pixelSize} y={y * pixelSize} width={pixelSize} height={pixelSize} fill={color}/>
           })
         }) }
       </svg>;
@@ -153,6 +123,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         } else {
           out[hex] = 1;
         }
+        return out;
       },{});
       const palette = Object.keys(colorCounts);
       const diffs = [];
@@ -178,46 +149,90 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           out[score] = {}
           out[score][count] = [hex];
         }
+        return out;
       },{});
       const lowScore = Object.keys(scoreboard).sort()[0];
       const highCount = Object.keys(scoreboard[lowScore]).sort().reverse()[0];
       return this.pixelAverage(scoreboard[lowScore][highCount].map((hex) => util.rgbFromHex(hex)));
     }
-    averagePixels(data,pixelCount){
-      const height = data.length;
-      const width = data.reduce((out,row) => Math.max(out,row.length),0);
-      const xRatio = width / pixelCount;
-      const yRatio = height / pixelCount;
-      return util.range(pixelCount).map((y) => {
-        const y1 = Math.ceil(y * yRatio);
-        const y2 = Math.min(Math.floor((y + 1) * yRatio), height);
-        return util.range(pixelCount).map((x) => {
-          const x1 = Math.ceil(x * xRatio);
-          const x2 = Math.min(Math.floor((x + 1) * xRatio), width);
-          const pixels = [];
-          for (let _y = y1; _y < y2; _y++) {
-            for (let _x = x1; _x < x2; _x++) {
-              pixels.push(data[_y][_x]);
-            }
+    condensePixels() {
+      const { data, palette, spec } = this.state;
+      const { rows, columns, xRatio, yRatio } = spec;
+      console.log({ xRatio, yRatio })
+      const newPalette = {};
+      const condensed = util.range(rows).map((rowNum) => {
+        const yOff = rowNum * yRatio;
+        return util.range(columns).map((colNum) => {
+          const xOff = colNum * xRatio;
+          const pixels = util.range(yRatio).reduce((out,y) => {
+            return util.range(xRatio).reduce((acc,x) => {
+              const color = data[yOff + y][xOff + x]
+              acc[color] = palette[color];
+              return acc;
+            }, out);
+          }, {});
+          const rgb = this.bestPixel(Object.values(pixels))
+          const hex = util.hexFromRGB(rgb.red,rgb.green,rgb.blue);
+          if (newPalette[hex]) {
+            newPalette[hex]++;
+          } else {
+            newPalette[hex] = 1;
           }
-          return this.pixelAverage(pixels);
+          return hex;
         });
       });
+      console.log({ newPalette, count: Object.keys(newPalette).length})
+      this.setState({ condensed, newPalette });
     }
-    condensePalette(data){
-      const palette = data.reduce((out,row) => {
-        return row.reduce((acc,color) => {
-          const hex = util.hexFromRGB(color.red,color.green,color.blue);
-          if (acc[hex]) {
-            acc[hex]++;
+    reducePalette() {
+      console.log("reduce palette");
+      let { condensed, reduced, reducedPalette, newPalette } = this.state;
+      reduced = reduced || condensed;
+      reducedPalette = reducedPalette || newPalette;
+      const usablePalette = Object.keys(reducedPalette).reduce((out,hex) => {
+        out[hex] = util.rgbFromHex(hex);
+        return out;
+      }, {});
+      const measurements = this.gatherMeasurements(usablePalette,usablePalette).filter((m) => m.hexA !== m.hexB).sort(measurementSorter);
+      console.log({ measurements });
+      const shortestMappings = this.findShortestMappingFrom(usablePalette,measurements);
+      console.log({ shortestMappings, count: Object.keys(shortestMappings).length });
+      const flips = Object.entries(shortestMappings).reduce((out,[k,v]) => {
+        if (!out[v] && !out[k] && shortestMappings[v] === k) {
+          const kCount = Object.values(shortestMappings).filter((m) => m === k).length;
+          const vCount = Object.values(shortestMappings).filter((m) => m === v).length;
+          if ( kCount > vCount ) {
+            out[k] = true;
           } else {
-            acc[hex] = 1;
+            out[v] = true;
           }
-          return acc;
-        },out)
-      },{});
-      console.log({ palette })
-      return data;
+        }
+        return out;
+      }, {});
+      Object.keys(flips).forEach((f) => {
+        delete shortestMappings[f];
+      });
+      const roots = Object.values(shortestMappings).filter((hex) => !shortestMappings[hex]).sort();
+      console.log({ flips, flipCount: Object.keys(flips).length, roots })
+      reducedPalette = {};
+      const traverse = function(c) {
+        if (shortestMappings[c]) {
+          return traverse(shortestMappings[c]);
+        } else {
+          return c;
+        }
+      }
+      reduced = reduced.map((row) => row.map((c) => {
+        const newHex = traverse(c);
+        if (reducedPalette[newHex]) {
+          reducedPalette[newHex]++;
+        } else {
+          reducedPalette[newHex] = 1;
+        }
+        return newHex;
+      }));
+      console.log({ reducedPalette, count: Object.keys(reducedPalette).length })
+      this.setState({ reduced, reducedPalette });
     }
     drawImageInCanvas(baseImg) {
       const dataShell = {};
@@ -225,26 +240,27 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         canvas.width = baseImg.width;
         canvas.height = baseImg.height;
         ctx.drawImage(baseImg,0,0,baseImg.width,baseImg.height);
-        console.log("drawing image");
         dataShell.data = ctx.getImageData(0,0,baseImg.width,baseImg.height);
-        console.log("image data received");
       });
-      console.log("applying image context");
-      const data = this.applyImageContext(dataShell.data.data,baseImg.width);
-      console.log("image context applyed");
-      return {url,data};
+      const {data,palette} = this.applyImageContext(dataShell.data.data,baseImg.width);
+      return {url,data,palette};
     }
     loadImage() {
       LoadFile(
         true,
         'dataURL',
         (dataURL, filename) => {
-          console.log("loading image")
           util.initImageObj(dataURL,(baseImg) => {
-            console.log("initializing image")
             const {width,height} = baseImg;
-            const {url,data} = this.drawImageInCanvas(baseImg);
-            this.setState({ url, data, width, height, filename:filename.split(".")[0] });
+            const {url,data,palette} = this.drawImageInCanvas(baseImg);
+            console.log({ palette, count: Object.keys(palette).length });
+            const spec = this.state.spec;
+            spec.xRatio = width / spec.columns;
+            spec.yRatio = height / spec.rows;
+            this.setState({
+              url, data, palette, width, height, spec,
+              filename:filename.split(".")[0]
+            });
           });
         },
         (filename, error) => {
@@ -255,6 +271,18 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     updateSpec(fieldName,value) {
       const update = util.merge(this.state.spec);
       update[fieldName] = value;
+      switch (fieldName) {
+        case 'rows':
+        case 'imgTop':
+        case 'imgBottom':
+          update.yRatio = (this.state.height - (update.imgTop + update.imgBottom)) / update.rows;
+          break;
+        case 'columns':
+        case 'imgLeft':
+        case 'imgRight':
+          update.xRatio = (this.state.width - (update.imgLeft + update.imgRight)) / update.columns;
+          break;
+      }
       this.setState({ spec: update });
     }
     buildSpecField(label,fieldName,opts){
@@ -268,19 +296,60 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       return <div className="d-flex flex-column justify-content-center">
         { !this.state.url && <>
         <button className="btn btn-success" onClick={() => this.loadImage()}>Load Image To Harvest</button>
-        <RollingProgressBar trigger={trigger}/>
         </>}
         { this.state.url && 
-          <div className="rpg-box m-2 p-2 w-50 d-flex justify-content-center">
-            <div className="d-flex flex-column justify-content-center">
-              <h3 className="text-center">Image Size: {this.state.width} x {this.state.height}</h3>
-              <h3 className="text-center"></h3>
-              <div className="d-flex justify-content-center">
-                { this.buildSpecField("Rows","rows",{min:1,style:{width:"3em"}}) }
-                { this.buildSpecField("Columns","columns",{min:1,style:{width:"3em"}}) }
+          <>
+            <div className="rpg-box m-2 p-2 d-flex justify-content-center">
+              <div className="d-flex flex-column justify-content-center">
+                <h3 className="text-center">Image Size: {this.state.width} x {this.state.height}</h3>
+                <hr/>
+                <h3 className="text-center">Pixels:</h3>
+                { this.buildSpecField("Rows","rows",{min:1}) }
+                { this.buildSpecField("Columns","columns",{min:1}) }
+                <h3 className="text-center">Pixel Size: {this.state.spec.xRatio} x {this.state.spec.yRatio}</h3>
+              </div>
+              <div className="d-flex flex-column justify-content-center">
+                <h3 className="text-center">Image Margin</h3>
+                { this.buildSpecField("Top","imgTop",{}) }
+                { this.buildSpecField("Bottom","imgBottom",{}) }
+                { this.buildSpecField("Left","imgLeft",{}) }
+                { this.buildSpecField("Right","imgRight",{}) }
+              </div>
+              <div className="d-flex flex-column justify-content-center">
+                <h3 className="text-center">Pixel Margin</h3>
+                { this.buildSpecField("Top","pixTop",{max:this.state.spec.yRatio - this.state.spec.pixBottom}) }
+                { this.buildSpecField("Bottom","pixBottom",{max:this.state.spec.yRatio - this.state.spec.pixTop}) }
+                { this.buildSpecField("Left","pixLeft",{max:this.state.spec.xRatio - this.state.spec.pixRight}) }
+                { this.buildSpecField("Right","pixRight",{max:this.state.spec.xRatio - this.state.spec.pixLeft}) }
               </div>
             </div>
-          </div> }
+            <div className="d-flex flex-wrap justify-content-center">
+              <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
+                <img src={this.state.url} style={{width:"15em",height:"15em"}}/>
+              </div>
+              <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
+                { this.drawPixelsAsSVG(this.state.data,"15em") }
+              </div>
+              <button className="btn btn-success" onClick={() => {
+                this.condensePixels();
+              }}>&gt; Condense &gt;</button>
+              { this.state.condensed &&
+                <>
+                  <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
+                    { this.drawPixelsAsSVG(this.state.condensed,"15em") }
+                  </div>
+                  <button className="btn btn-success" onClick={() => {
+                    this.reducePalette();
+                  }}>&gt; Reduce &gt;</button>
+                  { this.state.reduced &&
+                    <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
+                      { this.drawPixelsAsSVG(this.state.reduced,"15em") }
+                    </div>
+                  }
+                </>
+              }
+            </div>
+          </> }
       </div>;
     }
   }

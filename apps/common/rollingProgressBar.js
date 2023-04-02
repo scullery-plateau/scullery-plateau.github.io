@@ -12,7 +12,7 @@ namespace('sp.common.RollingProgressBar',{
             props.trigger.subscribe((state) => this.setState(state));
         }
         render() {
-            return <ProgressBar subject={subject} progress={100 * this.state.count / this.state.outOf}/>;
+            return <ProgressBar subject={this.state.subject} progress={100 * this.state.count / this.state.outOf}/>;
         }
     }
 });
