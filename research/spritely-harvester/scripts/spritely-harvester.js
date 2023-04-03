@@ -39,7 +39,9 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
           pixTop:0,
           pixBottom:0,
           pixLeft:0,
-          pixRight:0
+          pixRight:0,
+          maxDist:16,
+          paletteMax:20
         }
       };
     }
@@ -59,17 +61,49 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         },out)
       },[]);
     }
-    findShortestMappingFrom(palette,measurements) {
-      return Object.keys(palette).reduce((out,hex) => {
+    findShortestMappingFrom(palette,measurements,maxDistDiff) {
+      const distMap = {};
+      const paletteKeys = Object.keys(palette);
+      const shortestDists = paletteKeys.reduce((out,hex) => {
         const myMeasurements = measurements.filter(m => m.hexB === hex);
         const ordered = myMeasurements.sort(measurementSorter);
         const shortestFrom = ordered[0];
-        console.log(shortestFrom)
-        if (shortestFrom.dist < 32) {
-          out[hex] = shortestFrom.hexA;
-        }
-        return out;
-      }, {});
+        distMap[shortestFrom.dist] = true;
+        return out.concat([shortestFrom]);
+      }, []);
+      console.log({ shortestDists });
+      const dists = Object.keys(distMap).map((m) => {
+        return parseFloat(m);
+      }).sort((a,b) => {
+        return a - b;
+      });
+      console.log({ dists });
+      const distDiffs = util.range(dists.length - 1).map((i) => {
+        const a = dists[i];
+        const b = dists[i + 1];
+        const diff = b - a;
+        return { a, b, diff };
+      }).sort((a,b) => {
+        return b.diff - a.diff;
+      });
+      console.log({ distDiffs });
+      if (distDiffs.length <= 0) {
+        return {maxDistDiff,shortestMappings:{}};
+      }
+      if (distDiffs[0].diff < maxDistDiff && paletteKeys.length < this.state.spec.paletteMax) {
+        return {maxDistDiff,shortestMappings:{}};
+      }
+      const maxDist = distDiffs[0].a;
+      console.log({ maxDist, maxDistDiff, newMaxDistDiff: distDiffs[0].diff });
+      return {
+        maxDistDiff: distDiffs[0].diff,
+        shortestMappings: shortestDists.reduce((out, sd) => {
+          if (sd.dist <= maxDist) {
+            out[sd.hexA] = sd.hexB;
+          }
+          return out;
+        }, {})
+      };
     }
     applyImageContext(data,width){
       const pixels = [];
@@ -184,19 +218,19 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       console.log({ newPalette, count: Object.keys(newPalette).length})
       this.setState({ condensed, newPalette });
     }
-    reducePalette() {
+    reducePalette(reduced, reducedPalette, distDiffMax) {
       console.log("reduce palette");
-      let { condensed, reduced, reducedPalette, newPalette } = this.state;
-      reduced = reduced || condensed;
-      reducedPalette = reducedPalette || newPalette;
+      const oldCount = Object.keys(reducedPalette).length;
       const usablePalette = Object.keys(reducedPalette).reduce((out,hex) => {
         out[hex] = util.rgbFromHex(hex);
         return out;
       }, {});
       const measurements = this.gatherMeasurements(usablePalette,usablePalette).filter((m) => m.hexA !== m.hexB).sort(measurementSorter);
       console.log({ measurements });
-      const shortestMappings = this.findShortestMappingFrom(usablePalette,measurements);
-      console.log({ shortestMappings, count: Object.keys(shortestMappings).length });
+      const {shortestMappings, maxDistDiff} = this.findShortestMappingFrom(usablePalette,measurements,distDiffMax);
+      distDiffMax = maxDistDiff;
+      console.log({ shortestMappings });
+      console.log({  count: (Object.keys(shortestMappings) || []).length });
       const flips = Object.entries(shortestMappings).reduce((out,[k,v]) => {
         if (!out[v] && !out[k] && shortestMappings[v] === k) {
           const kCount = Object.values(shortestMappings).filter((m) => m === k).length;
@@ -231,8 +265,13 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
         }
         return newHex;
       }));
-      console.log({ reducedPalette, count: Object.keys(reducedPalette).length })
-      this.setState({ reduced, reducedPalette });
+      const count = Object.keys(reducedPalette).length;
+      console.log({ reducedPalette, count })
+      if (count < oldCount) {
+        this.reducePalette(reduced, reducedPalette, distDiffMax);
+      } else {
+        this.setState({ reduced, reducedPalette });
+      }
     }
     drawImageInCanvas(baseImg) {
       const dataShell = {};
@@ -244,6 +283,9 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       });
       const {data,palette} = this.applyImageContext(dataShell.data.data,baseImg.width);
       return {url,data,palette};
+    }
+    spritelyify() {
+
     }
     loadImage() {
       LoadFile(
@@ -306,6 +348,8 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
                 <h3 className="text-center">Pixels:</h3>
                 { this.buildSpecField("Rows","rows",{min:1}) }
                 { this.buildSpecField("Columns","columns",{min:1}) }
+                { this.buildSpecField("Max Dist","maxDist",{min:1}) }
+                { this.buildSpecField("Palette Max","paletteMax",{min:1}) }
                 <h3 className="text-center">Pixel Size: {this.state.spec.xRatio} x {this.state.spec.yRatio}</h3>
               </div>
               <div className="d-flex flex-column justify-content-center">
@@ -339,12 +383,18 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
                     { this.drawPixelsAsSVG(this.state.condensed,"15em") }
                   </div>
                   <button className="btn btn-success" onClick={() => {
-                    this.reducePalette();
+                    let { condensed, newPalette } = this.state;
+                    this.reducePalette(condensed, newPalette, 0);
                   }}>&gt; Reduce &gt;</button>
                   { this.state.reduced &&
-                    <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
-                      { this.drawPixelsAsSVG(this.state.reduced,"15em") }
-                    </div>
+                    <>
+                      <div className="rpg-box m-2 p-2 d-flex flex-column justify-content-center">
+                        { this.drawPixelsAsSVG(this.state.reduced,"15em") }
+                      </div>
+                      <button className="btn btn-success" onClick={() => {
+                        this.spritelyify();
+                      }}>&gt; Spritely-ify &gt;</button>
+                    </>
                   }
                 </>
               }
