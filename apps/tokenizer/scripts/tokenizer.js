@@ -68,17 +68,6 @@ namespace(
                   });
                 },
               },
-              {
-                id: 'publish',
-                label: 'Publish Printable',
-                callback: () => {
-                  PrintTokens.printTokenPages(
-                    'Print Tokenizer',
-                    this.state.size,
-                    this.state.tokens
-                  );
-                },
-              },
             ],
           },
           {
@@ -184,6 +173,17 @@ namespace(
                 Add Image To Tokenizer
               </button>
             </div>
+            { this.state.tokens.length > 0 &&
+              <div className="d-flex justify-content-center">
+                <button
+                  className="btn btn-success"
+                  onClick={() => {
+                    PrintTokens.printTokenPages('Print Tokenizer',this.state.size,this.state.tokens);
+                  }}>
+                  Publish Printable
+                </button>
+              </div>
+            }
             <div className="gallery m-3 d-flex flex-wrap justify-content-around">
               {this.state.tokens.map(({token,baseImg}, index) => {
                 return (

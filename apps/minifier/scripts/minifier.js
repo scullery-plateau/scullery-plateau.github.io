@@ -93,17 +93,6 @@ namespace(
                 modals.fileDownload.open();
               },
             },
-            {
-              id: 'publish',
-              label: 'Publish Printable',
-              callback: () => {
-                PrintMinis.printMiniPages(
-                  'Print Minifier',
-                  state.size,
-                  state.minis
-                );
-              },
-            },
           ],
         },
         {
@@ -142,11 +131,21 @@ namespace(
               className="btn btn-success"
               onClick={() => {
                 loadImage();
-              }}
-            >
+              }}>
               Add Image To Minify
             </button>
           </div>
+          { state.minis.length > 0 &&
+            <div className="d-flex justify-content-center">
+              <button
+                className="btn btn-success"
+                onClick={() => {
+                  PrintMinis.printMiniPages('Print Minifier',state.size,state.minis);
+                }}>
+                Publish Printable
+              </button>
+            </div>
+          }
           <div className="gallery m-3 d-flex flex-wrap justify-content-around">
             { state.minis.map((thumb, index) => {
               return (
