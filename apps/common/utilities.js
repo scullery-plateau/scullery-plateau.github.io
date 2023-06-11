@@ -68,47 +68,6 @@ namespace('sp.common.Utilities', {
     return partitions;
   };
 
-  const rgbFromHex = function (hex) {
-    if (typeof hex === 'string' && hex.length > 0) {
-      if (!hexPattern.test(hex)) {
-        hex = Colors.getColorByName(hex);
-      }
-      if (typeof hex === 'string' && hex.length > 0) {
-        const [red, green, blue] = [1, 3, 5].map((i) =>
-          parseInt(hex.substr(i, 2), 16)
-        );
-        return { red, green, blue };
-      }
-    }
-  };
-
-  const getForegroundColor = function (hex,defaultColor) {
-    const rgb = rgbFromHex(hex);
-    if (!rgb) {
-      return defaultColor;
-    }
-    const luminosity = Math.sqrt(
-      Math.pow(rgb['red'], 2) * 0.299 +
-        Math.pow(rgb['green'], 2) * 0.587 +
-        Math.pow(rgb['blue'], 2) * 0.114
-    );
-    return luminosity > 186 ? 'black' : 'white';
-  };
-
-  const hexFromRGB = function (r, g, b) {
-    return (
-      '#' +
-      [r, g, b]
-        .map((c) => {
-          let h = Number(c).toString(16);
-          if (h.length === 1) {
-            h = '0' + h;
-          }
-          return h;
-        })
-        .join('')
-    );
-  };
   const normalizeFilename = function (filename, ext, defaultFilename) {
     filename = filename || defaultFilename;
     if (filename.endsWith(ext)) {
@@ -230,9 +189,6 @@ namespace('sp.common.Utilities', {
     merge,
     assoc,
     dissoc,
-    getForegroundColor,
-    hexFromRGB,
-    rgbFromHex,
     normalizeFilename,
     triggerJSONDownload,
     triggerPNGDownload,
