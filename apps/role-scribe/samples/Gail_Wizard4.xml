@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>18</currentHealth>
+<maxHealth>18</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Wizard⊡School of Evocation⊡4⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Skilled⊟⊟⊟⊟Half-Elf⊟Half-Elf Variant⊟Cloistered Scholar⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>1⊠Quarterstaff⊠5 feet⊠1100⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6</weaponList>
+<abilityScores>9⊠14⊠11⊠15⊠13⊠14⊠false⊠false⊠false⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠false⊠true⊠true⊠true⊠false⊠true⊠true⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠4⊠false⊠⊟</spellList>
+<noteList>Half-Elf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+• Can cast the dancing lights cantrip. At 3rd level, faerie fire (1/day). At 5th level, darkness (1/day) (use Cha for DCs)
+Cloistered Scholar Feature:
+• You have information about your cloister and you can use its library. Other libraries are also more likely to admit you.
+Wizard Features:
+• Regain half your level (min 1) worth of spell slots during a short rest (once per day)
+• Wizard Archetype: Evocation
+• Half gold/time cost to copy school spells
+• Exclude 1 + spell level creatures from your evocations
+• Skilled: You gain three skill or tool proficiencies
+⊠⊠Daggers, Darts, Slings, Quarterstaffs, Light Crossbows
+⊠⊠Common
+Elvish
+Extra Language
+Two Extra Languages
+⊠quarterstaff
+arcane focus
+scholar's pack
+spellbook
+scholar's robes
+writing kit
+research book (borrowed)
+pouch
+⊠⊠Wizard 4⊠Variant⊠Cloistered Scholar⊠⊠⊠⊠⊠⊠Gail⊠Wizard 4⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠4⊠6⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

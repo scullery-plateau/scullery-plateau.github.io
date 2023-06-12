@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>45</currentHealth>
+<maxHealth>45</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>10</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-543</raceCode>
+<subraceCode>0</subraceCode>
+<backgroundCode>8</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode>35</featCode>
+<classData>Fighter⊡Eldritch Knight⊡3⊡2⊠Monk⊡Way of the Open Hand⊡4⊡-1⊟Unarmored Defense⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Action Surge⊡⊡1⊡1⊡0⊡2⊡0⊡0⊡303⊡0⊠Ki Points⊡⊡4⊡4⊡0⊡2⊡0⊡0⊡-1⊡0⊟Skilled⊟fighting style⊡Two-Weapon Fighting⊟monk⊟monk⊟Dragonborn⊟⊟Outlander⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟4⊟1⊟0</classData>
+<multiclassFeatures>3,1,2,1,0,5,4,7,0,0,0</multiclassFeatures>
+<weaponList>6⊠Greatsword⊠5 feet⊠2⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠2⊠6⊠Light Crossbow⊠80/320⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Rapier⊠5 feet⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Unarmed⊠Melee⊠0⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Crossbow, Hand⊠30/120⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>13⊠13⊠10⊠12⊠13⊠11⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠false⊠false⊠true⊠true⊠true⊠false⊠false⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠2⊠3⊠false⊠0⊟Dancing Lights⊟⊟⊟⊟⊟⊟true⊟0⊡0⊟Light⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Mage Armor⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Shield⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Burning Hands⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Dragonborn Features:
+• Silver Dragon
+• You can breathe a 15 ft cone of Cold(once between rests), dealing 3d6 Cold damage, Con save for half damage (DC 11). DC = 8 + Con mod + prof
+• You resist Cold damage
+Guild Artisan Feature:
+• While you are in good standing with your guild, your guild can gain you access to powerful politicians
+Class Features:
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Fighting Style - Two-Weapon Fighting: Add ability modifier to off-hand damage
+• Take an extra action once between rests
+• Fighter Archetype: Eldritch Knight
+• Form a magical bond with a weapon (see rules)
+• When unarmed or using monk weapons, can use dex for attack and damage rolls, unarmed strikes deal more damage (d4), and can make an unarmed attack as a bonus action after normal attack action
+• You gain a reservoir of energy (ki points = monk level) which is restored during a rest
+• You can use a bonus action and spend 1 ki point to make two unarmed strikes right after using the attack action
+• You can use a bonus action and spend 1 ki point to Dodge
+• You can use a bonus action and spend 1 ki point to Dash or Disengage and double the distance you can jump
+• When you are not in armor or using a shield your speed improves by 10 feet
+• When you are hit by a ranged weapon attack you can use a reaction to reduce the damage by 1d10 + Dex mod + Monk level, and you can catch and throw the weapon if you would take 0 damage (see rules)
+• Monk Archetype: Hand
+• When you hit a creature with a Flurry of Blows attack you can inflict an additional effect (see rules)
+• You can use a reaction to reduce fall damage by 5 x Monk level
+• Skilled: You gain three skill or tool proficiencies
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+⊠Simple Weapons, Martial Weapons
+⊠One type of artisan's tools
+⊠Common
+Draconic
+One Extra Language
+⊠two martial weapons
+light crossbow + 20 bolts OR two hand axes
+dungeoneer's pack OR explorer's pack
+set of artisan's tools of your choice
+letter of introduction
+set of bone dice OR deck of cards
+set of traveler's clothes
+belt pouch
+leather armor
+⊠⊠Fighter 3, Monk 4⊠Dragonborn⊠Guild Artisan⊠⊠⊠⊠⊠⊠Dr Zana Haranthi⊠Fighter 3, Monk 4⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>2⊠3⊠10⊠3⊠4⊠8⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠5⊠3⊠4⊠5</classResource>
+</character>

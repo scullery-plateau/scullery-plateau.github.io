@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>39</currentHealth>
+<maxHealth>39</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>16</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>1</miscArmorBonus>
+<maxDex>0</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>5</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Paladin⊡Oath of the Crown⊡5⊡1⊟⊠Extra Attack⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Lay on Hands⊡Lay Hands⊡25⊡25⊡0⊡2⊡0⊡0⊡303⊡0⊠Channel Divinity⊡Channel Div⊡1⊡1⊡0⊡1⊡0⊡0⊡-1⊡0⊟⊠Dual Wielder⊟fighting style⊡Dueling⊟⊟⊟Elf⊟High Elf⊟Cloistered Scholar⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠2⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟3</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>8⊠15⊠12⊠16⊠14⊠10⊠false⊠false⊠false⊠false⊠true⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠1⊠5⊠false⊠0⊟Message⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Command *⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Compelled Duel *⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Shield Of Faith⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Warding Bond *⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Zone of Truth *⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Aid⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Elf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+• Meditating 4 hours counts as 8 hours of rest
+• Perception proficiency
+• Longsword, shortsword, shortbow, longbow proficiency
+• Gain 1 wizard cantrip
+Cloistered Scholar Feature:
+• You have information about your cloister and you can use its library. Other libraries are also more likely to admit you.
+Paladin Features:
+• As an action, detect the location of any celestial, fiend or undead and any consecrated or desecrated place or object within 60 feet (1 + Cha mod per day)
+• Gain a reservoir of healing power (25hp), and as an action, you can heal a creature you touch by draining that power. You can also cure one poison or disease from the creature by sacrificing 5hp from the reservoir
+• Fighting Style - Dueling: +2 damage when using a single one-handed weapon
+• You can sacrifice a spell slot to deal (1 + spell level)d8 radiant damage plus 1d8 extra damage vs undead/fiends, when you hit with a melee weapon attack
+• Gain immunity to disease
+• Paladin Archetype: Crown
+• Champion Challenge (see rules)
+• Turn the Tide (see rules)
+• Dual Wielder: You can draw/stow two weapons per round, you can dual wield non-light weapons, and you gain +1 AC while dual wielding
+• You can make two attacks on your turn
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+⊠Longsword
+Shortsword
+Shortbow
+Longbow
+Simple Weapons, Martial Weapons
+⊠⊠Common
+Elvish
+Extra Language
+Two Extra Languages
+⊠chain mail
+rapier
+rapier
+dagger
+priest's pack
+holy symbol
+scholar's robes
+writing kit
+research book (borrowed)
+pouch
+⊠⊠Paladin 5⊠High Elf⊠Cloistered Scholar⊠⊠⊠⊠⊠⊠Devinshire Poe⊠Paladin 5⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠5⊠10⊠5</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

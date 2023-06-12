@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>13</currentHealth>
+<maxHealth>13</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Rogue⊡⊡2⊡-1⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡1⊡1⊡6⊡2⊡0⊡0⊡303⊡1⊟⊟expertise⊡Thieves' Tools⊡Perception⊟⊟⊟Harengon⊟⊟Faction Agent⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortbow⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>10⊠16⊠10⊠12⊠13⊠14⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠true⊠true⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠true⊠false⊠false⊠false⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Harefolk Features:
+• Gain perception and initiative proficiency
+• As a reaction you can add d4 to a dex save
+• Prof/day jump (5 x prof) feet and not provoke as a bonus action
+Faction Agent Feature:
+• Your faction has secret agents you can contact for information or support
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (1d6)
+• Understand a secret language
+• Double proficiency with chosen skills/tools (Perception,Thieves' Tools)
+• You can dash, disengage, or hide as a bonus action
+⊠Light Armor
+⊠Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠Thieves' Tools
+⊠Common
+Extra Language
+Two Extra Languages
+Thieves' Cant
+⊠leather armor
+rapier
+shortbow
+dagger (2)
+arrows (20)
+explorer's pack
+thieves' tools
+Emblem or badge
+faction book
+set of common clothes
+pouch
+⊠⊠Rogue 2⊠Harefolk⊠Faction Agent⊠⊠⊠⊠⊠⊠Petrucci Agincourt⊠Rogue 2⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠2⊠8⊠2</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

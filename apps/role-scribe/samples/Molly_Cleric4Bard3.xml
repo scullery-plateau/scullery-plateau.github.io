@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>52</currentHealth>
+<maxHealth>52</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>14</armorBonus>
+<shieldBonus>2</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>2</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>4</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>25</baseSpeed>
+<speedMiscMod>5</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Cleric⊡Forge Domain⊡4⊡0⊠Bard⊡College of Lore⊡3⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Inspiration⊡⊡2⊡2⊡6⊡2⊡0⊡0⊡-1⊡0⊠Channel Divinity⊡Channel Div⊡1⊡1⊡0⊡1⊡0⊡0⊡303⊡0⊟⊠Squat Nimbleness⊟expertise⊡Religion⊡Insight⊟⊟⊟Dwarf⊟Hill Dwarf⊟Acolyte⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟1⊟1⊟1⊟2</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Mace⊠5 feet⊠1100⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Crossbow, light⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>12⊠9⊠12⊠13⊠16⊠14⊠false⊠false⊠false⊠false⊠true⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠true⊠false⊠true⊠false⊠false⊠true⊠false⊠true⊠true⊠false⊠false⊠false⊠true⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡3⊡3⊡1⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠7⊠false⊠1⊟Identify⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Searing Smite⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Heat Metal⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Magic Weapon⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Dwarf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Advantage on saves vs poison, poison damage resistance
+• Double proficiency bonus to History checks concerning stonework (even if not proficient)
+• Battleaxe, handaxe, throwing hammer, warhammer proficiency
+• Gain 1 extra hit point per level
+Acolyte Feature:
+• Receive aid from those who share your faith
+Cleric Features:
+• Cleric Archetype: Forge
+• Proficiency Heavy Armor, Smith's Tools
+• You can make a nonmagical weapon or armor a +1 magic item until you die or take a long rest, once after a long rest
+• Inspire an ally within 60 feet, giving them a bonus 1d6 on one ability check, attack roll, or save (Cha mod per day)
+• Turn Undead (see rules)
+• Artisan's Blessing (see rules)
+• Squat Nimbleness: You have advantage on grapple escape attempts, +5 feet to speed, gain Athletics or Acrobatics proficiency, and +1 Str or Dex
+• Gain half your proficiency bonus on ability checks you aren't proficient in
+• You can perform during a short rest to cause any ally or yourself to gain an additional 1d6 hp (once) if healed during the rest
+• Double proficiency with chosen skills (Insight,Religion)
+• Bard Archetype: Lore
+• You are proficient in three additional skills
+• You can spend a use of Bardic Inspiration as a reaction to give a creature within 60 feet a penalty on an attack roll, damage roll, or ability check
+⊠Light Armor, Medium Armor, Shields
+Heavy Armor
+Light Armor
+⊠Battleaxe
+Handaxe
+Throwing Hammer
+Warhammer
+Simple Weapons
+⊠Smith's Tools OR Brewer's Supplies OR Mason's Tools
+Smith's Tools
+One musical instrument
+⊠Common
+Dwarvish
+Two Extra Languages
+⊠scale mail
+shield
+mace
+light crossbow
+bolts (20)
+priest's pouch
+holy symbol
+holy symbol
+prayer book
+stick of incense (5)
+vestments
+set of common clothes
+belt pouch
+⊠⊠Cleric 4, Bard 3⊠Hill Dwarf⊠Acolyte⊠⊠⊠⊠⊠⊠Molly⊠Cleric 4, Bard 3⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠7⊠8⊠7</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

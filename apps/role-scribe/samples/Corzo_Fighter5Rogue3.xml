@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>5</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>12</currentHealth>
+<maxHealth>65</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>15</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>2</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Fighter⊡Eldritch Knight⊡5⊡2⊠Rogue⊡Assassin⊡3⊡-1⊟⊠Extra Attack⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Action Surge⊡Act. Surge⊡1⊡1⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡2⊡2⊡6⊡2⊡0⊡0⊡303⊡0⊟⊠Alert⊟expertise⊡Intimidation⊡Deception⊠fighting style⊡Dueling⊟⊟⊟Tiefling⊟Tiefling⊟Criminal⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠2⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟2</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>4⊠Rapier of Wounding⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠2⊠1⊠8⊠1⊠4⊠Handaxe⊠20/60⊠1102⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Boom Stick⊠40/100⊠2101⊠1⊠0⊠0⊠0⊠0⊠true⊠false⊠3⊠1⊠8⊠1⊠8⊠2⊠6⊠Dagger of Venom (DC 15)⊠20/60⊠1101⊠1⊠1⊠0⊠0⊠0⊠true⊠true⊠2⊠1⊠4⊠2⊠15</weaponList>
+<abilityScores>8⊠17⊠14⊠11⊠12⊠15⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠true⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠2⊠5⊠false⊠0⊟Friends⊟⊟⊟⊟⊟⊟true⊟0⊡0⊟Blade Ward⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Shield⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Chromatic Orb⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Color Spray⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Thunderwave⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Tiefling Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Gain fire resistance
+• Can cast the thaumaturgy cantrip. At 3rd level, hellish rebuke (1/day). At 5th level, darkness (1/day) (use Cha for DCs)
+Criminal Feature:
+• You know someone who can connect you with other criminals
+Fighter Features:
+• Fighting Style - Dueling: +2 damage when using a single one-handed weapon
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Take an extra action once between rests
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (2d6)
+• Understand a secret language
+• Double proficiency with chosen skills (Deception,Intimidation)
+• Fighter Archetype: Eldritch Knight
+• Form a magical bond with a weapon (see rules)
+• You can dash, disengage, or hide as a bonus action
+• Alert: You don't grant advantage vs hidden creatures, you are never surprised, and you gain +5 to initiative
+• Rogue Archetype: Assassin
+• You are proficient with poisoner's kits and disguise kits
+• You always crit surprised creatures and you have advantage vs creatures who haven't acted
+• You can make two attacks on your turn
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+Light Armor
+⊠Simple Weapons, Martial Weapons
+⊠One type of gaming set
+Thieves' Tools
+Thieves' Tools
+Disguise kit
+Poisoner's kit
+⊠Common
+Infernal
+Thieves' Cant
+⊠chain mail
+rapier
+martial weapon
+handaxe (2)
+dungeoneer's pack
+crowbar
+set of dark common clothes
+hood
+belt pouch
+
+circlet of blasting - cast scorching ray w/ +5 to attack once per day
+ring of spell storing - holds 5 levels of spells: Dimension Door, Arms Of Hadar⊠⊠Fighter 5, Rogue 3⊠Tiefling⊠Criminal⊠⊠⊠⊠⊠⊠Corzo⊠Fighter 5, Rogue 3⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>2⊠5⊠10⊠5⊠3⊠8⊠3</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

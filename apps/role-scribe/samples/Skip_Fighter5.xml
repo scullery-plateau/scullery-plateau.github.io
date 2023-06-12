@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>49</currentHealth>
+<maxHealth>49</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>16</armorBonus>
+<shieldBonus>2</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>0</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>25</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Fighter⊡Champion⊡5⊡-1⊟⊠Extra Attack⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Action Surge⊡Act. Surge⊡1⊡1⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Grappler⊟fighting style⊡Great Weapon Fighting⊟⊟⊟Halfling⊟Stout Halfling⊟Folk Hero⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟3</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Greatsword⊠5 feet⊠1202⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠2⊠6⊠Crossbow, light⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>14⊠10⊠16⊠12⊠10⊠13⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Halfling Features:
+• Can reroll a natural 1
+• Advantage on saves vs frightened
+• Can move through larger creatures' spaces
+• Advantage on saves vs poison, poison damage resistance
+Folk Hero Feature:
+• Commoners are willing to shelter you from some troubles
+Fighter Features:
+• Fighting Style - Great Weapon Fighting: Reroll 1's and 2's on two-handed melee weapon damage dice
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Take an extra action once between rests
+• Fighter Archetype: Champion
+• Crit on 19
+• Grappler: You can restrain a grappled foe as an action, you gain advantage on attacks vs foe you grapple, and you can grapple creatures one size larger
+• You can make two attacks on your turn
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+⊠Simple Weapons, Martial Weapons
+⊠One type of artisan's tools
+Vehicles (land)
+⊠Common
+Halfling
+⊠chain mail
+shield
+greatsword
+light crossbow
+bolts (20)
+dungeoneer's pack
+set of artisan's tools
+shovel
+iron pot
+set of common clothes
+belt pouch
+⊠⊠Fighter 5⊠Stout Halfling⊠Folk Hero⊠⊠⊠⊠⊠⊠Skip⊠Fighter 5⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠5⊠10⊠5</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

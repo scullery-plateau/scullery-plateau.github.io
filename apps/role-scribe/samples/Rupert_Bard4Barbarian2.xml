@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>49</currentHealth>
+<maxHealth>49</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>5</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>3</unarmoredDefense>
+<featCode></featCode>
+<classData>Bard⊡College of Valor⊡4⊡0⊠Barbarian⊡⊡2⊡-1⊟⊠Unarmored Defense⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Inspiration⊡⊡3⊡3⊡6⊡2⊡0⊡0⊡-1⊡0⊠Rage⊡⊡2⊡2⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Actor⊟expertise⊡Performance⊡Acrobatics⊟⊟⊟Dragonborn⊟⊟Entertainer⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Longsword⊠5 feet⊠1102⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Dagger⊠20/60⊠1101⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>15⊠10⊠14⊠12⊠8⊠17⊠false⊠true⊠false⊠false⊠false⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠4⊠false⊠0⊟Friends ⊟⊟⊟⊟⊟⊟true⊟0⊡0⊟Mage Hand⊟⊟⊟⊟⊟⊟true⊟0⊡0⊟Thunderclap⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Earth Tremor⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Faerie Fire⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Longstrider⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Thunderwave⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Enthrall⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Hold Person⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Shatter⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Dragonborn Features:
+• Silver Dragon
+• You can breathe a 15 ft cone of cold (once between rests), dealing 2d6 cold damage, Dex save for half damage. DC = 8 + Con mod + prof
+• You resist cold damage
+Entertainer Feature:
+• Your performances tend to make people like you, and you can always find somewhere to perform
+• Inspire an ally within 60 feet, giving them a bonus 1d6 on one ability check, attack roll, or save (Cha mod per day)
+Barbarian Features:
+• 2/day you gain advantage on Str checks and saves, deal +2 damage on strength based melee attacks, and resistance vs bludgeoning, piercing, and slashing damage
+• Add Con mod to AC when not wearing armor
+• Gain half your proficiency bonus on ability checks you aren't proficient in
+• You can perform during a short rest to cause any ally or yourself to gain an additional 1d6 hp (once) if healed during the rest
+• Double proficiency with chosen skills (Acrobatics,Performance)
+• Bard Archetype: Valor
+• You are proficient with martial weapons. medium armor, and shields
+• Allies can use your Bardic Inspiration on weapon damage rolls and as a reaction to increase their AC against one attack
+• You can gain advantage on Str based melee attacks by granting advantage to attacks against you for the round
+• You gain advantage on Dex saves vs things you can see
+• Actor: You gain advantage on deception and performance checks to impersonate someone else, you can imitate the sounds or speech of another creature, and you gain +1 Cha
+⊠Light Armor
+Shields
+Medium Armor
+Shields
+⊠Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+Simple Weapons, Martial Weapons
+Martial Weapons
+⊠Disguise kit
+One type of musical instrument
+Any three musical instruments
+⊠Common
+Draconic
+⊠leather armor
+longsword
+dagger
+entertainer's pack
+any musical instrument
+one musical instrument of your choice
+a favor from an admirer
+costume
+belt pouch
+⊠⊠Bard 4, Barbarian 2⊠Dragonborn⊠Entertainer⊠⊠⊠⊠⊠⊠Rupert⊠Bard 4, Barbarian 2⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>2⊠4⊠8⊠4⊠2⊠12⊠2</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

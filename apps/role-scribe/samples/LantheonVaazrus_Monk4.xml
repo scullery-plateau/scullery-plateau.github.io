@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>37</currentHealth>
+<maxHealth>37</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>1</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>10</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-543</raceCode>
+<subraceCode>0</subraceCode>
+<backgroundCode>5</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>5</unarmoredDefense>
+<featCode></featCode>
+<classData>Monk⊡Way of the Open Hand⊡4⊡-1⊟Unarmored Defense⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Ki Points⊡⊡4⊡4⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Resilient⊟⊟monk⊟monk⊟Dragonborn⊟⊟Guild Artisan⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟4⊟1⊟0</classData>
+<multiclassFeatures>2,7,-1,0,0</multiclassFeatures>
+<weaponList>3⊠Monk Unarmed Strike⊠5 feet⊠0⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Shortsword⊠5 feet⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dart⊠20/60⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>12⊠12⊠14⊠10⊠6⊠11⊠true⊠true⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠true⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Dragonborn Features:
+• Brass Dragon
+• You can breathe a 30 ft line of Fire(once between rests), dealing 2d6 Fire damage, Dex save for half damage (DC 11). DC = 8 + Con mod + prof
+• You resist Fire damage
+Soldier Feature:
+• You have influence within your former army/organization
+Class Features:
+• Add Wis mod to AC when not wearing armor or using a shield
+• When unarmed or using monk weapons, can use dex for attack and damage rolls, unarmed strikes deal more damage (d4), and can make an unarmed attack as a bonus action after normal attack action
+• You gain a reservoir of energy (ki points = monk level) which is restored during a rest
+• You can use a bonus action and spend 1 ki point to make two unarmed strikes right after using the attack action
+• You can use a bonus action and spend 1 ki point to Dodge
+• You can use a bonus action and spend 1 ki point to Dash or Disengage and double the distance you can jump
+• When you are not in armor or using a shield your speed improves by 10 feet
+• When you are hit by a ranged weapon attack you can use a reaction to reduce the damage by 1d10 + Dex mod + Monk level, and you can catch and throw the weapon if you would take 0 damage (see rules)
+• Monk Archetype: Hand
+• When you hit a creature with a Flurry of Blows attack you can inflict an additional effect (see rules)
+• You can use a reaction to reduce fall damage by 5 x Monk level
+• Resilient: You gain proficiency with one save and +1 to that ability
+⊠⊠Simple Weapons, Shortswords
+⊠Cook's Utensils
+One type of gaming set
+Vehicles (land)
+⊠Common
+Draconic
+⊠quarterstaff
+ten darts
+explorer's pack
+rank insignia
+trophy
+set of bone dice
+set of common clothes
+belt pouch
+⊠⊠Monk 4⊠Dragonborn⊠Soldier⊠⊠⊠⊠⊠⊠Lantheon Vaazrus⊠Monk 4⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠4⊠8⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠8⊠3⊠4⊠5</classResource>
+</character>

@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>27</currentHealth>
+<maxHealth>27</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>13</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>5</castingStatCode>
+<offenseAbilityDisplay>1</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>4</raceCode>
+<subraceCode>1</subraceCode>
+<backgroundCode>1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode>40</featCode>
+<multiclassFeatures>5,10,0,0,1,2</multiclassFeatures>
+<weaponList>2⊠Dagger⊠20/60⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Light Crossbow⊠80/320⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>10⊠15⊠10⊠13⊠14⊠13⊠false⊠false⊠true⊠false⊠false⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>0⊠4⊠3⊠2⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠5⊠false</spellList>
+<noteList>Dragonborn Features:
+• Green Dragon
+• You can breathe a 15 ft cone of Poison(once between rests), dealing 2d6 Poison damage, Con save for half damage (DC 11). DC = 8 + Con mod + prof
+• You resist Poison damage
+Criminal Feature:
+• You know someone who can connect you with other criminals
+Class Features:
+• Sorcerer Archetype: Draconic
+• You know Draconic and gain double your proficiency bonus on Cha checks when speaking with dragons
+• Gain 1 extra hp per level, and grow scales which have an AC of 13 when you aren't wearing armor
+• You have a max of 5sorcery points used to alter spells and regain spell slots
+• Empowered Spell: You can reroll up to Cha mod damage dice for 1 sorcery point and can use this with other metamagic
+• War Caster: You gain advantage on concentration vs damage, can still cast while holding weapons, and can cast a single target 1 action spell as an opportunity attack
+⊠⊠Daggers, Darts, Slings, Quarterstaffs, Light Crossbows
+⊠One type of gaming set
+Thieves' Tools
+⊠Common
+Draconic
+Draconic
+⊠light crossbow + 20 bolts OR simple weapon
+two daggers
+leather armor
+component pouch OR arcane focus
+dungeoneer's pack OR explorer's pack
+crowbar
+set of dark common clothes
+hood
+belt pouch
+⊠⊠Sorcerer 5⊠Dragonborn⊠Criminal⊠⊠⊠⊠⊠⊠Roar⊠Sorcerer 5⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠5⊠6⊠5</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠12⊠3⊠4⊠5⊠12⊠5⊠⊠5⊠0</classResource>
+</character>

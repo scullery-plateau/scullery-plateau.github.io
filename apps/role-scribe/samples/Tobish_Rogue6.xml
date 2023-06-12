@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>39</currentHealth>
+<maxHealth>39</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>25</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Rogue⊡Thief⊡6⊡-1⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡3⊡3⊡6⊡2⊡0⊡0⊡303⊡0⊟⊠Skilled⊟expertise⊡Persuasion⊡Deception⊡Stealth⊡Insight⊟⊟⊟Dwarf⊟Hill Dwarf⊟Faction Agent⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟1⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Rapier⊠5 feet⊠1101⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortbow⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1101⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>15⊠12⊠10⊠13⊠11⊠14⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠true⊠true⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠true⊠false⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Dwarf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Advantage on saves vs poison, poison damage resistance
+• Double proficiency bonus to History checks concerning stonework (even if not proficient)
+• Battleaxe, handaxe, throwing hammer, warhammer proficiency
+• Gain 1 extra hit point per level
+Faction Agent Feature:
+• Your faction has secret agents you can contact for information or support
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (3d6)
+• Understand a secret language
+• Double proficiency with chosen skills (Deception,Persuasion)
+• You can dash, disengage, or hide as a bonus action
+• Rogue Archetype: Thief
+• You can use an object, use thieves' tools, or sleight of hand as a Cunning Action
+• You can climb at full speed and jump Dex mod feet further
+• Skilled: You gain three skill or tool proficiencies
+• You can use a reaction to take half damage when hit by a foe that you see
+• Double proficiency with chosen skills (Insight,Stealth)
+⊠Light Armor
+⊠Battleaxe
+Handaxe
+Throwing Hammer
+Warhammer
+Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠Smith's Tools OR Brewer's Supplies OR Mason's Tools
+Thieves' Tools
+⊠Common
+Dwarvish
+Two Extra Languages
+Thieves' Cant
+⊠rapier
+shortbow
+dagger (2)
+arrows (20)
+burglar's pack
+thieves' tools
+Emblem or badge
+faction book
+set of common clothes
+pouch
+⊠⊠Rogue 6⊠Hill Dwarf⊠Faction Agent⊠⊠⊠⊠⊠⊠Tobish⊠Rogue 6⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠6⊠8⊠6</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

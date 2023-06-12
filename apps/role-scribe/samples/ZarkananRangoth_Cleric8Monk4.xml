@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>87</currentHealth>
+<maxHealth>87</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>14</armorBonus>
+<shieldBonus>2</shieldBonus>
+<miscArmorBonus>1</miscArmorBonus>
+<maxDex>2</maxDex>
+<proficiencyBonus>4</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>4</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>10</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>4</raceCode>
+<subraceCode>0</subraceCode>
+<backgroundCode>5</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode>6,8</featCode>
+<multiclassFeatures>8,0,0,0,0,4,7,4,0,0</multiclassFeatures>
+<weaponList>3⊠Light Crossbow⊠80/320⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Scimitar⊠5 feet⊠2⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Rapier⊠5 feet⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>12⊠14⊠14⊠12⊠15⊠11⊠false⊠false⊠false⊠false⊠true⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠false⊠true⊠true⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>0⊠4⊠3⊠3⊠2⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠8⊠false⊠1⊠Command⊠⊠⊠⊠⊠⊠true⊠0⊠1⊠Identify⊠⊠⊠⊠⊠⊠true⊠0⊠2⊠Augury⊠⊠⊠⊠⊠⊠true⊠0⊠2⊠Suggestion⊠⊠⊠⊠⊠⊠true⊠0⊠3⊠Nondetection⊠⊠⊠⊠⊠⊠true⊠0⊠3⊠Speak with Dead⊠⊠⊠⊠⊠⊠true⊠0⊠4⊠Arcane Eye⊠⊠⊠⊠⊠⊠true⊠0⊠4⊠Confusion⊠⊠⊠⊠⊠⊠true⊠0</spellList>
+<noteList>Dragonborn Features:
+• Bronze Dragon
+• You can breathe a 30 ft line of Lightning(once between rests), dealing 4d6 Lightning damage, Dex save for half damage (DC 14). DC = 8 + Con mod + prof
+• You resist Lightning damage
+Soldier Feature:
+• You have influence within your former army/organization
+Class Features:
+• Cleric Archetype: Knowledge
+• Two extra languages, two knowledge skills with double proficiency bonus
+• Turn Undead (see rules)
+• Knowledge of the Ages (see rules)
+• Dual Wielder: You can draw/stow two weapons per round, you can dual wield non-light weapons, and you gain +1 AC while dual wielding
+• When unarmed or using monk weapons, can use dex for attack and damage rolls, unarmed strikes deal more damage (d4), and can make an unarmed attack as a bonus action after normal attack action
+• You gain a reservoir of energy (ki points = monk level) which is restored during a rest
+• You can use a bonus action and spend 1 ki point to make two unarmed strikes right after using the attack action
+• You can use a bonus action and spend 1 ki point to Dodge
+• You can use a bonus action and spend 1 ki point to Dash or Disengage and double the distance you can jump
+• When you are not in armor or using a shield your speed improves by 10 feet
+• When you are hit by a ranged weapon attack you can use a reaction to reduce the damage by 1d10 + Dex mod + Monk level, and you can catch and throw the weapon if you would take 0 damage (see rules)
+• Monk Archetype: Light
+• You can make a spell attack with 30ft range and radiant damage equal to your unarmed strike. When you use this attack you can expend a ki point and bonus action to repeat the attack twice
+• Kill CR ½ undead that fail save vs turning
+• Additional divinity per rest
+• Read Thoughts (see rules)
+• CR 1 undead can now be killed
+• Cleric cantrips deal Wis mod extra damage
+• Durable: You always regain at least 2x Con mod from a hit die and you gain +1 Con
+• You can use a reaction to reduce fall damage by 5 x Monk level
+⊠Light Armor, Medium Armor, Shields
+⊠Simple Weapons
+Shortswords
+⊠One type of gaming set
+Vehicles (land)
+⊠Common
+Draconic
+Two Extra Languages
+⊠mace
+shield
+holy symbol
+light crossbow + 20 bolts OR one simple weapon
+priest's pack OR explorer's pack
+rank insignia
+trophy
+set of bone dice OR deck of cards
+set of common clothes
+belt pouch
+scale mail
+⊠⊠Cleric 8, Monk 4⊠Dragonborn⊠Soldier⊠⊠⊠⊠⊠⊠Zarkanan Rangoth⊠Cleric 8, Monk 4⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠12⊠8⊠12</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠3⊠3⊠4⊠5⊠3⊠2⊠⊠1⊠0⊠8⊠4⊠⊠4⊠0</classResource>
+</character>

@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>58</currentHealth>
+<maxHealth>58</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>1</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>25</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-543</raceCode>
+<subraceCode>0</subraceCode>
+<backgroundCode>2</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode>27</featCode>
+<classData>Rogue⊡Mastermind⊡5⊡-1⊠Wizard⊡School of Illusion⊡3⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡⊡3⊡3⊡6⊡2⊡0⊡0⊡303⊡1⊟Observant⊟expertise⊡Deception⊡Persuasion⊟⊟⊟Dwarf⊟Hill Dwarf⊟Criminal⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟1⊟1⊟1⊟0</classData>
+<multiclassFeatures>5,2,3,2,0,14,17</multiclassFeatures>
+<weaponList>4⊠Rapier⊠5 feet⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortsword⊠5 feet⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Shortbow⊠80/320⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>10⊠15⊠10⊠13⊠11⊠12⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠true⊠false⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠3⊠false⊠⊟</spellList>
+<noteList>Dwarf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Advantage on saves vs poison, poison damage resistance
+• Double proficiency bonus to History checks concerning stonework (even if not proficient)
+• Battleaxe, handaxe, throwing hammer, warhammer proficiency
+Gain 1 extra hit point per level
+Folk Hero Feature:
+• Commoners are willing to shelter you from some trouble
+Class Features:
+• Double proficiency with chosen skills/tools (Deception, Persuasion)
+• Sneak Attack (3d6)
+• Understand a secret language
+• You can dash, disengage, or hide as a bonus action
+• Rogue Archetype: Mastermind
+• You gain fluency with two languages and proficiency with a gaming set, disguise kit, and forger's set
+• Can make yourself sound like a local
+• Use help action on targets within 30ft as a bonus action
+• Observant: You gain +5 to passive perception and investigation, can read lips, and gain +1 to either Int or Wis
+• You can use a reaction to take half damage when hit by a foe that you see
+Wizard Features:
+• Regain half your level (min 1) worth of spell slots during a short rest (once per day)
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Wizard Archetype: Illusion
+• Half gold/time cost to copy school spells
+• You can cast minor illusion, and can have both visual and auditory effects
+⊠Light Armor
+⊠Battleaxes, Handaxes, Throwing Hammers, Warhammers
+Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠Smith's Tools OR Brewer's Supplies OR Mason's Tools
+Thieves' Tools
+One type of artisan's tools
+Vehicles (land)
+Disguise kit
+Forgery kit
+One gaming set
+⊠Common, Dwarvish
+⊠leather armor
+daggers (2)
+thieves' tools
+rapier OR shortsword
+shortbow + 20 arrows OR shortsword
+burglar's pack OR dungeoneer's pack OR explorer's pack
+set of artisan's tools
+shovel
+iron pot
+set of common clothes
+belt pouch
+⊠⊠Rogue 5, Wizard 3⊠Hill Dwarf⊠Folk Hero⊠⊠⊠⊠⊠⊠Hanseld⊠Rogue 5, Wizard 3⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>2⊠5⊠8⊠5⊠3⊠6⊠3</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠11⊠3⊠4⊠5</classResource>
+</character>

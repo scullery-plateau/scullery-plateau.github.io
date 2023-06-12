@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>25</currentHealth>
+<maxHealth>25</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>12</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>1</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Artificer⊡Battle Smith⊡3⊡1⊡1⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡303⊡0⊟⊟⊟⊟⊟Warforged⊟⊟Soldier⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Mace⊠5 feet⊠1100⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Crossbow, light⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Crossbow, light⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>14⊠12⊠14⊠17⊠12⊠11⊠false⊠false⊠true⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠1⊠3⊠false⊠0⊟Mending⊟⊟⊟⊟⊟⊟true⊟0⊡0⊟Spare The Dying⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Cure Wounds⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Arcane Weapon⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Heroism⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Shield⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Warforged Features:
+• Disease doesn't affect you, you resist poison and gain adv vs poisoned, you don't - breathe, sleep, eat or drink
+• You can't move but are otherwise conscious during long rests and they take only six hours
+• Armor works differently for you and your AC increases by 1 (see rules)
+Soldier Feature:
+• You have influence within your former army/organization
+Artificer Features:
+• As an action, use tools to give a tiny object a visual, auditory, or olfactory effect (see rules).
+• You learn four infusions which you can use on two objects at once (see rules).
+• You can take an hour to make a set of artisan's tools (see rules)
+• Artificer Archetype: Battle Smith
+• Your magic weapon attacks can use Int for attack/damage
+• You can create a magical construct to protect you (see rules)
+⊠Light Armor, Medium Armor, Shields
+⊠Simple Weapons
+Martial Weapons
+⊠One tool proficiency
+One type of gaming set
+Vehicles (land)
+Thieves' Tools
+Tinker's Tools
+One Artisan's Tools
+Smith's Supplies
+⊠Common
+One Languages
+⊠studded leather armor
+mace
+crossbow, light
+light crossbow
+bolts (20)
+thieves' tools
+dungeoneer's pack
+rank insignia
+trophy
+set of bone dice OR deck of cards
+set of common clothes
+belt pouch
+⊠⊠Artificer 3⊠Warforged⊠Soldier⊠⊠⊠⊠⊠⊠Doc⊠Artificer 3⊠10⊠10⊠0⊠247⊠0⊠0</noteList>
+<hitDiceList>1⊠3⊠8⊠3</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

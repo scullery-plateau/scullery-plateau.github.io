@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>33</currentHealth>
+<maxHealth>33</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>16</armorBonus>
+<shieldBonus>2</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>0</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>4</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>1</raceCode>
+<subraceCode>3</subraceCode>
+<backgroundCode>2</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode>14</featCode>
+<multiclassFeatures>5,0,1,0,0</multiclassFeatures>
+<weaponList>2⊠Mace⊠5 feet⊠0⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Light Crossbow⊠80/320⊠1⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>15⊠15⊠12⊠11⊠15⊠8⊠false⊠false⊠false⊠false⊠true⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠false⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>0⊠4⊠3⊠2⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠5⊠false⊠1⊠Bless⊠⊠⊠⊠⊠⊠true⊠0⊠1⊠Cure Wounds⊠⊠⊠⊠⊠⊠true⊠0⊠2⊠Lesser Restoration⊠⊠⊠⊠⊠⊠true⊠0⊠2⊠Spiritual Weapon⊠⊠⊠⊠⊠⊠true⊠0⊠3⊠Beacon of Hope⊠⊠⊠⊠⊠⊠true⊠0⊠3⊠Revivify⊠⊠⊠⊠⊠⊠true⊠0</spellList>
+<noteList>Elf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+• Meditating 4 hours counts as 8 hours of rest
+• Perception proficiency
+• Longsword, shortsword, shortbow, longbow proficiency
+• Can cast misty step (1/rest)
+Folk Hero Feature:
+• Commoners are willing to shelter you from some trouble
+Class Features:
+• Cleric Archetype: Life
+• Healing spells of at least 1st level heal an additional 2 + spell level
+• Turn Undead (see rules)
+• Preserve Life (see rules)
+• Heavy Armor Master: You take 3 less bludgeoning, piercing, and slashing damage while in heavy armor and you gain +1 Str
+• Kill CR ½ undead that fail save vs turning
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+⊠Longswords, Shortswords, Shortbows, Longbows
+Simple Weapons
+⊠One type of artisan's tools
+Vehicles (land)
+⊠Common, Elvish
+⊠mace
+shield
+holy symbol
+light crossbow + 20 bolts OR one simple weapon
+priest's pack OR explorer's pack
+set of artisan's tools
+shovel
+iron pot
+set of common clothes
+belt pouch
+chain mail
+⊠⊠Cleric 5⊠Eladrin⊠Folk Hero⊠⊠⊠⊠⊠⊠Hello⊠Cleric 5⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠5⊠8⊠5</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠3⊠3⊠4⊠5⊠3⊠1⊠⊠1⊠0</classResource>
+</character>

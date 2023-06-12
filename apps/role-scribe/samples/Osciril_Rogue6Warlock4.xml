@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>73</currentHealth>
+<maxHealth>73</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>17</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>0</maxDex>
+<proficiencyBonus>4</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Rogue⊡Arcane Trickster⊡6⊡2⊠Warlock⊡The Hexblade⊡4⊡3⊟⊠Pact of the Blade⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡3⊡3⊡6⊡2⊡0⊡0⊡303⊡1⊟⊠Drow High Magic⊠Elven Accuracy⊟pact boon⊡Pact of the Blade⊠eldritch invocations⊡Mask of Many Faces⊡Agonizing Blast⊠expertise⊡Stealth⊡Deception⊡Intimidation⊡Athletics⊟⊟⊟Elf⊟Dark Elf⊟Criminal⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟4⊟2⊟0⊟1⊟1⊟3</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>4⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortbow⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Crossbow, hand⊠30/120⊠2101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6</weaponList>
+<abilityScores>8⊠15⊠14⊠15⊠10⊠14⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠true⊠true⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡3⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠-1⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠2⊠6⊠false⊠⊟</spellList>
+<noteList>Elf Features:
+• Within 120 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+• Meditating 4 hours counts as 8 hours of rest
+• Perception proficiency
+• While in direct sunlight, you have disadvantage on attack rolls and perception checks
+• Can cast the dancing lights cantrip. At 3rd level, faerie fire (1/day). At 5th level, darkness (1/day) (use Cha for DCs)
+• Rapier, shortsword, and hand crossbow proficiency
+Criminal Feature:
+• You know someone who can connect you with other criminals
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (1d6)
+• Understand a secret language
+• Double proficiency with chosen skills (Deception,Stealth)
+• You can dash, disengage, or hide as a bonus action
+• Rogue Archetype: Arcane Trickster
+• Special abilities with mage hand (see rules)
+• Dark Elf Magic: 1/day you can cast dispel magic and levitate, and can at will cast detect magic
+Warlock Features:
+• Warlock Archetype: Hexblade
+• The spells shield and wrathful smite are added to the warlock spell list for you
+• 1/rest as a bonus action you can curse a creature for 1 minute, healing level + Cha mod hp when it dies, critting it on a 19, and dealing it proficiency bonus extra damage
+• Gain martial weapon, shield, and medium armor proficiency
+• You can use Charisma for attack and damage rolls with your pact weapons and one one-handed weapon you choose at the start of each day
+• Disguise Self Expert: You don't use a spell slot when casting disguise self
+• Potent Cantrip: Your eldritch blast does Cha mod extra damage
+• Blade: You gain the ability to conjure a magical weapon (see rules)
+• The spells blur and branding smite are added to the warlock spell list for you
+• Elven Accuracy: You can reroll a Dex, Int, Wis, or Cha attack, and +1 Dex, Int, Wis, or Cha
+• You can use a reaction to take half damage when hit by a foe that you see
+• Double proficiency with chosen skills (Athletics,Intimidation)
+⊠Light Armor
+Light Armor
+Medium Armor
+Shields
+⊠Rapier
+Shortsword
+Hand Crossbow
+Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+Simple Weapons
+Martial Weapons
+⊠One type of gaming set
+Thieves' Tools
+Thieves' Tools
+⊠Common
+Elvish
+Extra Language
+Thieves' Cant
+⊠leather armor
+rapier
+shortbow
+dagger (2)
+arrows (20)
+burglar's pack
+thieves' tools
+crowbar
+set of dark common clothes
+hood
+belt pouch
+⊠⊠Rogue 6, Warlock 4⊠Dark Elf⊠Criminal⊠⊠⊠⊠⊠⊠Osciril⊠Rogue 6, Warlock 4⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠10⊠8⊠10</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

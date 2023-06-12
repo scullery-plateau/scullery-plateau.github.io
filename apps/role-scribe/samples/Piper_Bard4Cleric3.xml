@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>52</currentHealth>
+<maxHealth>52</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>5</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>25</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Bard⊡College of Glamour⊡4⊡0⊠Cleric⊡Trickery Domain⊡3⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Inspiration⊡⊡3⊡3⊡6⊡2⊡0⊡0⊡-1⊡0⊠Channel Divinity⊡Channel Div⊡1⊡1⊡0⊡1⊡0⊡0⊡303⊡0⊟⊠Tough⊟expertise⊡Stealth⊡Performance⊟⊟⊟Halfling⊟Lightfoot Halfling⊟Entertainer⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟2⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>8⊠16⊠10⊠12⊠13⊠16⊠false⊠true⊠false⊠false⊠false⊠true⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠true⊠true⊠true⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡3⊡3⊡1⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠7⊠false⊠1⊟Charm Person⊟⊟⊟⊟⊟⊟true⊟0⊡1⊟Disguise Self⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Mirror Image⊟⊟⊟⊟⊟⊟true⊟0⊡2⊟Pass Without Trace⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Halfling Features:
+• Can reroll a natural 1
+• Advantage on saves vs frightened
+• Can move through larger creatures' spaces
+• Can hide while obscured by larger creatures
+Entertainer Feature:
+• Your performances tend to make people like you, and you can always find somewhere to perform
+• Inspire an ally within 60 feet, giving them a bonus 1d6 on one ability check, attack roll, or save (Cha mod per day)
+Cleric Features:
+• Cleric Archetype: Trickery
+• You can touch an ally as an action to grant it advantage on stealth checks for one hour or until you use this ability again
+• Gain half your proficiency bonus on ability checks you aren't proficient in
+• You can perform during a short rest to cause any ally or yourself to gain an additional 1d6 hp (once) if healed during the rest
+• Turn Undead (see rules)
+• Invoke Duplicity (see rules)
+• Double proficiency with chosen skills (Performance,Stealth)
+• Bard Archetype: Glamour
+• You can spend a use of Bardic Inspiration as a bonus action to allow Cha mod creatures within 60 feet that can see you to move their speed without provoking as a reaction and grant them 5 temp hp (see rules)
+• Once per rest you can attempt to charm up to Cha mod creatures in your audience (see rules)
+• Tough: You gain 2 extra hp per level
+⊠Light Armor
+Light Armor, Medium Armor, Shields
+⊠Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠Disguise kit
+One type of musical instrument
+Any three musical instruments
+⊠Common
+Halfling
+⊠leather armor
+rapier
+dagger
+entertainer's pack
+any musical instrument
+one musical instrument of your choice
+a favor from an admirer
+costume
+belt pouch
+⊠⊠Bard 4, Cleric 3⊠Lightfoot Halfling⊠Entertainer⊠⊠⊠⊠⊠⊠Piper ⊠Bard 4, Cleric 3⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>1⊠7⊠8⊠7</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

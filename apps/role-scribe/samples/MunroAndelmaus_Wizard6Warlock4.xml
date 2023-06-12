@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>1</currentHealth>
+<maxHealth>56</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>4</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Wizard⊡School of Evocation⊡6⊡0⊠Warlock⊡The Undying⊡4⊡3⊟⊠Pact of the Tome⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Elemental Adept⊠War Caster⊠Resilient⊟pact boon⊡Pact of the Tome⊠eldritch invocations⊡Grasp of Hadar⊡Armor of Shadows⊟⊟⊟Human⊟Human Variant⊟Haunted One⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Claw⊠5 ft⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Rotting Gaze⊠30⊠2008⊠3⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠3⊠6⊠Dark Insight⊠30⊠2010⊠3⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>9⊠13⊠12⊠15⊠12⊠14⊠false⊠false⊠true⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠false⊠true⊠true⊠true⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡5⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠-1⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠6⊠false⊠0⊟Spare the Dying⊟⊟⊟⊟⊟⊟false⊟0⊡</spellList>
+<noteList>Human Features:
+• One extra skill proficiency of your choosing
+• One bonus feat of your choosing
+Haunted One Feature:
+• Commoners will do what they can to help you
+Wizard Features:
+• Regain half your level (min 1) worth of spell slots during a short rest (once per day)
+• Elemental Adept: Your spells that deal one of acid/cold/fire/lightning/thunder ignore resistance, and you can treat rolled 1s as 2s for those spells
+Warlock Features:
+• Warlock Archetype: Undead
+• The spells false life and ray of sickness are added to the warlock spell list for you
+• You know spare the dying
+• You repel attacks by undead (see rules)
+• Wizard Archetype: Evocation
+• Half gold/time cost to copy school spells
+• Exclude 1 + spell level creatures from your evocations
+• Grasping Eldritch Blast: Your eldritch blast can pull targets 10 feet
+• Mage Armor Expert: You don't use a spell slot when casting mage armor on yourself
+• War Caster: You gain advantage on concentration vs damage, can still cast while holding weapons, and can cast a single target 1 action spell as an opportunity attack
+• Tome: You can cast three cantrips from any class (see rules)
+• The spells blindness/deafness and silence are added to the warlock spell list for you
+• Resilient: You gain proficiency with one save and +1 to that ability
+• Your cantrips deal half damage on a save
+⊠Light Armor
+⊠Daggers, Darts, Slings, Quarterstaffs, Light Crossbows
+Simple Weapons
+⊠⊠Common
+Extra Language
+One Exotic Language
+⊠dagger
+arcane focus
+scholar's pack
+spellbook
+set of common clothes
+monster hunter's pack
+important trinket
+⊠⊠Wizard 6, Warlock 4⊠⊠⊠⊠⊠⊠⊠⊠Munro Andelmaus⊠Wizard 6, Warlock 4⊠0⊠0⊠0⊠0⊠0⊠0</noteList>
+<hitDiceList>2⊠6⊠6⊠6⊠4⊠8⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

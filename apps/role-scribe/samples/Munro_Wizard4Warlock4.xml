@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>46</currentHealth>
+<maxHealth>46</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Wizard⊡School of Transmutation⊡4⊡0⊠Warlock⊡The Great Old One⊡4⊡3⊟⊠Pact of the Tome⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Prodigy⊠War Caster⊠Resilient⊟pact boon⊡Pact of the Tome⊠eldritch invocations⊡Repelling Blast⊡Armor of Shadows⊠expertise⊡Arcana⊟⊟⊟Human⊟Human Variant⊟Haunted One⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>2⊠Dagger⊠20/60⊠1101⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Quarterstaff⊠5 feet⊠1100⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6</weaponList>
+<abilityScores>13⊠12⊠13⊠15⊠8⊠14⊠false⊠true⊠false⊠true⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠false⊠true⊠true⊠true⊠true⊠false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡4⊡5⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠-1⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡2⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠4⊠false⊠⊟</spellList>
+<noteList>Human Features:
+• One extra skill proficiency of your choosing
+• One bonus feat of your choosing
+Haunted One Feature:
+• Commoners will do what they can to help you
+Wizard Features:
+• Regain half your level (min 1) worth of spell slots during a short rest (once per day)
+• Prodigy: You gain one language, one skill proficiency, one skill double proficiency, and one tool proficiency
+• Double proficiency with chosen skills (Arcana)
+Warlock Features:
+• Warlock Archetype: Old One
+• The spells dissonant whispers and hideous laughter are added to the warlock spell list for you
+• You can telepathically communicate with any creature that knows any language within 30 feet
+• Wizard Archetype: Transmutation
+• Half gold/time cost to copy school spells
+• You can alter the composition of objects (see rules)
+• War Caster: You gain advantage on concentration vs damage, can still cast while holding weapons, and can cast a single target 1 action spell as an opportunity attack
+• Forceful Cantrip: You can push creatures you hit with eldritch blast ten feet
+• Mage Armor Expert: You don't use a spell slot when casting mage armor on yourself
+• Tome: You can cast three cantrips from any class (see rules)
+• The spells detect thoughts and phantasmal force are added to the warlock spell list for you
+• Resilient: You gain proficiency with one save and +1 to that ability
+⊠Light Armor
+⊠Daggers, Darts, Slings, Quarterstaffs, Light Crossbows
+Simple Weapons
+⊠One tool proficiency
+⊠Common
+Extra Language
+One Exotic Language
+One extra language
+⊠dagger
+arcane focus
+scholar's pack
+spellbook
+set of common clothes
+monster hunter's pack
+important trinket
+⊠⊠Wizard 4, Warlock 4⊠Human⊠Haunted One⊠⊠⊠⊠⊠⊠Munro⊠Wizard 4, Warlock 4⊠0⊠0⊠0⊠0⊠0⊠0</noteList>
+<hitDiceList>2⊠4⊠6⊠4⊠4⊠8⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

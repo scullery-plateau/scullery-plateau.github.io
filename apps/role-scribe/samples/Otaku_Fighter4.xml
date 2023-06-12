@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>38</currentHealth>
+<maxHealth>38</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Fighter⊡Battle Master⊡4⊡-1⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Action Surge⊡Act. Surge⊡1⊡1⊡0⊡2⊡0⊡0⊡-1⊡0⊠Superiority Dice⊡Superiority⊡5⊡5⊡8⊡1⊡0⊡0⊡303⊡0⊟⊠Martial Adept⊟combat superiority maneuvers⊡Riposte⊡Lunging Attack⊡Evasive Footwork⊡Sweeping Attack⊡Feinting Attack⊠fighting style⊡Archery⊟⊟⊟Tabaxi⊟⊟Uthgardt Tribe Member⊟0⊠0⊠2⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>4⊠Longbow⊠150/600⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Whip⊠10 feet⊠1102⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4⊠Crossbow, light⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8</weaponList>
+<abilityScores>8⊠17⊠14⊠12⊠13⊠11⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠true⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Tabaxi Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• You can double your speed for a turn when you move but must spend a turn not moving before using this again
+• You can claw as an unarmed attack for 1d4 slashing damage and can climb with a 20 speed
+Barbarian Tribe Member Feature:
+• You can forage for twice as much food and water while in the wilderness and have knowledge of barbarian lands
+Fighter Features:
+• Fighting Style - Archery: +2 to attack with ranged weapons
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Take an extra action once between rests
+• Fighter Archetype: Battle Master
+• Gain four superiority dice (d8) to spend on maneuvers
+• One artisan's tools proficiency
+• Riposte: You can use a reaction when missed by a melee attack to make a melee attack back and deal Superiority Die extra damage
+• Lunge: You can cause your next melee attack to have 5 extra feet of range and deal Superiority Die extra damage
+• Evade: You can gain Superiority Die to AC while moving
+• Martial Adept: You gain a superiority die and two battle master maneuvers
+• Cleave: You can cause one creature adjacent to one you hit with a melee weapon to take Superiority Die damage if the same attack roll would hit
+• Feint: You can spend a bonus action to grant your next attack against an adjacent foe advantage and Superiority Die extra damage
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+⊠Simple Weapons, Martial Weapons
+⊠One type of artisan's tools or musical instrument
+One artisan's tools proficiency
+⊠Common
+Extra Language
+One Extra Language
+⊠leather armor
+longbow
+rapier
+whip
+handaxe (2)
+arrows (20)
+dungeoneer's pack
+set of traveler's clothes
+hunting trap
+tattoos or totem
+pouch
+⊠⊠Fighter 4⊠Tabaxi⊠Barbarian Tribe Member⊠⊠⊠⊠⊠⊠Otaku⊠Fighter 4⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠4⊠10⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

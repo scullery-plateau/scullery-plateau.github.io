@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>59</currentHealth>
+<maxHealth>59</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>11</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Rogue⊡Assassin⊡8⊡-1⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡4⊡4⊡6⊡2⊡0⊡0⊡303⊡1⊟⊠Magic Initiate⊠Sharpshooter⊟expertise⊡Thieves' Tools⊡Stealth⊡Sleight of Hand⊡Investigation⊟⊟⊟Elf⊟Dark Elf⊟Folk Hero⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟1</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortbow⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>10⊠16⊠15⊠13⊠12⊠9⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠true⊠true⊠false⊠false⊠true⊠false⊠false⊠true⊠true⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠true⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠-1⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Elf Features:
+• Within 120 feet of you, treat dim light as bright, darkness as dim light
+• Immune to magical sleep, advantage on saves vs charmed
+• Meditating 4 hours counts as 8 hours of rest
+• Perception proficiency
+• While in direct sunlight, you have disadvantage on attack rolls and perception checks
+• Can cast the dancing lights cantrip. At 3rd level, faerie fire (1/day). At 5th level, darkness (1/day) (use Cha for DCs)
+• Rapier, shortsword, and hand crossbow proficiency
+Folk Hero Feature:
+• Commoners are willing to shelter you from some troubles
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (4d6)
+• Understand a secret language
+• Double proficiency with chosen skills/tools (Stealth,Thieves' Tools)
+• You can dash, disengage, or hide as a bonus action
+• Rogue Archetype: Assassin
+• You are proficient with poisoner's kits and disguise kits
+• You always crit surprised creatures and you have advantage vs creatures who haven't acted
+• Magic Initiate: You gain two cantrips and a first level spell which you can cast 1/day from a single spellcasting class
+• You can use a reaction to take half damage when hit by a foe that you see
+• Double proficiency with chosen skills (Investigation,Sleight of Hand)
+• When you would make a Dex save for half damage, you take no damage if you pass or half damage if you do not
+• Sharpshooter: Your ranged attacks ignore ½ and ¾ cover, don't have disadvantage from long range, and you can take -5 to a ranged attack for +10 damage
+⊠Light Armor
+⊠Rapier
+Shortsword
+Hand Crossbow
+Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠One type of artisan's tools
+Vehicles (land)
+Thieves' Tools
+Disguise kit
+Poisoner's kit
+⊠Common
+Elvish
+Extra Language
+Thieves' Cant
+⊠leather armor
+rapier
+shortbow
+dagger (2)
+arrows (20)
+dungeoneer's pack
+thieves' tools
+set of artisan's tools
+shovel
+iron pot
+set of common clothes
+belt pouch
+⊠⊠Rogue 8⊠Dark Elf⊠Folk Hero⊠⊠⊠⊠⊠⊠Drizzt⊠Rogue 8⊠0⊠0⊠0⊠10⊠0⊠0</noteList>
+<hitDiceList>1⊠8⊠8⊠8</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

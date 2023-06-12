@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>37</currentHealth>
+<maxHealth>37</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>0</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>0</unarmoredDefense>
+<featCode></featCode>
+<classData>Rogue⊡Mastermind⊡4⊡-1⊠Wizard⊡School of Illusion⊡2⊡0⊟⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Sneak Attack⊡Sneak Atk⊡2⊡2⊡6⊡2⊡0⊡0⊡303⊡1⊟⊠Magic Initiate⊟expertise⊡Persuasion⊡Deception⊟⊟⊟Dwarf⊟Hill Dwarf⊟Criminal⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟1⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Rapier⊠5 feet⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Shortbow⊠80/320⊠2201⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Dagger⊠20/60⊠1101⊠1⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠4</weaponList>
+<abilityScores>12⊠15⊠10⊠14⊠11⊠13⊠false⊠true⊠false⊠true⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>false⊠false⊠true⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠true⊠false⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡3⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠-1⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊠2⊠false⊠⊟</spellList>
+<noteList>Dwarf Features:
+• Within 60 feet of you, treat dim light as bright, darkness as dim light
+• Advantage on saves vs poison, poison damage resistance
+• Double proficiency bonus to History checks concerning stonework (even if not proficient)
+• Battleaxe, handaxe, throwing hammer, warhammer proficiency
+• Gain 1 extra hit point per level
+Criminal Feature:
+• You know someone who can connect you with other criminals
+Rogue Features:
+• Double proficiency with chosen skills
+• Sneak Attack (2d6)
+• Understand a secret language
+• Double proficiency with chosen skills (Deception,Persuasion)
+Wizard Features:
+• Regain half your level (min 1) worth of spell slots during a short rest (once per day)
+• You can dash, disengage, or hide as a bonus action
+• Rogue Archetype: Mastermind
+• You gain fluency with two languages and proficiency with a gaming set, disguise kit, and forger's set
+• Can make yourself sound like a local
+• Use help action on targets within 30ft as a bonus action
+• Magic Initiate: You gain two cantrips and a first level spell which you can cast 1/day from a single spellcasting class
+• Wizard Archetype: Illusion
+• Half gold/time cost to copy school spells
+• You can cast minor illusion, and can have both visual and auditory effects
+⊠Light Armor
+⊠Battleaxe
+Handaxe
+Throwing Hammer
+Warhammer
+Simple Weapons, Hand Crossbows, Longswords, Rapiers, Shortswords
+⊠Smith's Tools OR Brewer's Supplies OR Mason's Tools
+One type of gaming set
+Thieves' Tools
+Thieves' Tools
+Disguise kit
+Forgery kit
+One gaming set
+⊠Common
+Dwarvish
+Thieves' Cant
+Two Extra Languages
+⊠rapier
+shortbow
+dagger (2)
+arrows (20)
+burglar's pack
+thieves' tools
+crowbar
+set of dark common clothes
+hood
+belt pouch
+⊠⊠Rogue 4, Wizard 2⊠Hill Dwarf⊠Criminal⊠⊠⊠⊠⊠⊠Hanseld⊠Rogue 4, Wizard 2⊠0⊠0⊠0⊠15⊠0⊠0</noteList>
+<hitDiceList>2⊠4⊠8⊠4⊠2⊠6⊠2</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>

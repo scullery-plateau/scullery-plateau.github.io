@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>50</currentHealth>
+<maxHealth>50</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>16</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>0</maxDex>
+<proficiencyBonus>3</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>10</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>5</unarmoredDefense>
+<featCode></featCode>
+<classData>Fighter⊡Purple Dragon Knight⊡4⊡-1⊠Monk⊡Way of the Open Hand⊡3⊡-1⊟⊠Unarmored Defense⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Ki Points⊡⊡3⊡3⊡0⊡1⊡0⊡0⊡-1⊡0⊠Action Surge⊡Act. Surge⊡1⊡1⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Tavern Brawler⊠Mounted Combatant⊟fighting style⊡Great Weapon Fighting⊟⊠monk⊟⊠monk⊟Human⊟Human Variant⊟Noble⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟4⊟3</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Longsword⊠5 feet⊠1102⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠8⊠Greatsword⊠5 feet⊠1202⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠2⊠6⊠Handaxe⊠20/60⊠1102⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6</weaponList>
+<abilityScores>14⊠14⊠12⊠9⊠15⊠11⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠true⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠⊟</spellList>
+<noteList>Human Features:
+• One extra skill proficiency of your choosing
+• One bonus feat of your choosing
+Noble Feature:
+• You can secure an audience with a local noble
+Fighter Features:
+• Fighting Style - Great Weapon Fighting: Reroll 1's and 2's on two-handed melee weapon damage dice
+• Heal 1d10 + level hit points as a bonus action (once between rests)
+• Tavern Brawler: Your unarmed strikes deal d4 damage, you are proficient in unarmed strikes and improvised weapons, can make a grapple as a bonus action after hitting with one, and +1 to either Str or Con
+Monk Features:
+• Add Wis mod to AC when not wearing armor or using a shield
+• When unarmed or using monk weapons, can use dex for attack and damage rolls, unarmed strikes deal more damage (d4), and can make an unarmed attack as a bonus action after normal attack action
+• You gain a reservoir of energy (ki points = monk level) which is restored during a rest
+• You can use a bonus action and spend 1 ki point to make two unarmed strikes right after using the attack action
+• You can use a bonus action and spend 1 ki point to Dodge
+• You can use a bonus action and spend 1 ki point to Dash or Disengage and double the distance you can jump
+• When you are not in armor or using a shield your speed improves by 10 feet
+• When you are hit by a ranged weapon attack you can use a reaction to reduce the damage by 1d10 + Dex mod + Monk level, and you can catch and throw the weapon if you would take 0 damage (see rules)
+• Monk Archetype: Hand
+• When you hit a creature with a Flurry of Blows attack you can inflict an additional effect (see rules)
+• Take an extra action once between rests
+• Fighter Archetype: Knight
+• Three allies within 60ft heal your level in hp when you second wind
+• Mounted Combatant: You can redirect an attack against your mount to yourself, you gain advantage vs unmounted foes, and your mount gains Evasion
+⊠Light Armor, Medium Armor, Heavy Armor, Shields
+Light Armor, Shortswords
+⊠Simple Weapons, Martial Weapons
+Improvised Weapons
+Unarmed Strikes
+⊠One type of gaming set
+⊠Common
+Extra Language
+One Extra Language
+⊠chain mail
+longsword
+greatsword
+handaxe (2)
+explorer's pack
+set of fine clothes
+signet ring
+scroll of pedigree
+purse
+⊠⊠Fighter 4, Monk 3⊠Human⊠Noble⊠⊠⊠⊠⊠⊠Countless Carolinia⊠Fighter 4, Monk 3⊠0⊠0⊠0⊠25⊠0⊠0</noteList>
+<hitDiceList>2⊠4⊠10⊠4⊠3⊠8⊠3</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>
