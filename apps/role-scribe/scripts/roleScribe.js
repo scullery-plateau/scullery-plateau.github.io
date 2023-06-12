@@ -20,26 +20,34 @@ namespace('sp.roleScribe.RoleScribe',{
         ['Wisdom','WIS'],
         ['Charisma','CHA'],
     ];
+    const abilityMap = abilityLabels.reduce((out,[,ability],index) => {
+        out[ability] = index;
+        return out;
+    }, {});
     const skillLabels = [
-        ["Athletics",'STR'],
         ["Acrobatics",'DEX'],
-        ["Sleight Of Hand",'DEX'],
-        ["Stealth",'DEX'],
-        ["Arcana",'INT'],
-        ["History",'INT'],
-        ["Investigation",'INT'],
-        ["Nature",'INT'],
-        ["Religion",'INT'],
-        ["Religion",'INT'],
         ["Animal Handling",'WIS'],
-        ["Insight",'WIS'],
-        ["Medicine",'WIS'],
-        ["Perception",'WIS'],
-        ["Survival",'WIS'],
+        ["Arcana",'INT'],
+
+        ["Athletics",'STR'],
         ["Deception",'CHA'],
+        ["History",'INT'],
+
+        ["Investigation",'INT'],
+        ["Insight",'WIS'],
         ["Intimidation",'CHA'],
+
+        ["Medicine",'WIS'],
+        ["Nature",'INT'],
+        ["Perception",'WIS'],
+
         ["Performance",'CHA'],
         ["Persuasion",'CHA'],
+        ["Religion",'INT'],
+
+        ["Sleight Of Hand",'DEX'],
+        ["Stealth",'DEX'],
+        ["Survival",'WIS'],
     ];
     const dissoc = ((obj,fields) => {
         const retVal = Object.entries(obj).reduce((out,[key,value]) => {
@@ -86,41 +94,55 @@ namespace('sp.roleScribe.RoleScribe',{
     const splitter = function(delim) {
         return ((value) => value.split(delim));
     };
+    const parseableFields = [
+        "armorBonus","backgroundCode","baseSpeed","castingStatCode","currentHealth","currentTempHP","deathSaveFailures","deathSaveSuccesses","improvedInitiative","initMiscMod",
+        "maxDex","maxHealth","miscArmorBonus","miscSpellAttackBonus","miscSpellDCBonus","offenseAbilityDisplay","pagePosition0","pagePosition1","pagePosition2","pagePosition3",
+        "pagePosition4","proficiencyBonus","raceCode","shieldBonus","showDeathSaves","speedMiscMod","subraceCode","unarmoredDefense","version"
+    ];
     const fieldParsers = {
-        abilityScores:(value) => {
-            return pivot(partition(value.split(delims.xmark).map((v) => JSON.parse(v)),6).slice(0,3)).map((row,index) => {
-                const out = mapTo(row,['score','isSaveProficient','bonus']);
-                const [label,abrev] = abilityLabels[index];
-                out.label = label;
-                out.abrev = abrev;
-                return out;
-            });
-        },
         classData:splitter(delims.dash + delims.xmark),
         classResource:splitter(delims.xmark),
         hitDiceList:(value) => {
             const numbers = value.split(delims.xmark).map((n) => JSON.parse(n));
-            const count = numbers[0];
             const dice = partition(numbers.slice(1),3).map((row) => mapTo(row,["count","size","unused"]));
             return dice;
         },
         noteList:(value) => {
             return value.split(delims.xmark).map((v) => v.split("\n"));
         },
-        skillInfo:(value) => {
-            return pivot(partition(value.split(delims.xmark).map((v) => JSON.parse(v)),19).slice(0,5)).map((row,index) => {
-                const out = mapTo(row,['isProficient','bonus','hasExpertise','flag1','flag2']);
-                const [label,ability] = skillLabels[index];
-                out.label = label;
-                out.ability = ability;
-                return out;
-            });
-        },
         spellList:splitter(delims.xmark),
         weaponList:splitter(delims.xmark),
-        proficiencyBonus:parseInt,
-
     };
+    const fieldParserList = [
+        {
+            field:"abilityScores",
+            fn:(value,context) => {
+                return pivot(partition(value.split(delims.xmark).map((v) => JSON.parse(v)),6).slice(0,3)).map((row,index) => {
+                    const out = mapTo(row,['score','isSaveProficient','bonus']);
+                    const [label,abrev] = abilityLabels[index];
+                    out.label = label;
+                    out.abrev = abrev;
+                    out.modifier = Math.floor((out.score - 10)/2);
+                    out.save = out.modifier + (out.isSaveProficient?context.proficiencyBonus:0);
+                    return out;
+                });
+            },
+        },
+        {
+            field:"skillInfo",
+            fn:(value,context) => {
+                return pivot(partition(value.split(delims.xmark).map((v) => JSON.parse(v)),19).slice(0,5)).map((row,index) => {
+                    const out = mapTo(row,['isProficient','bonus','hasExpertise','flag1','flag2']);
+                    const [label,ability] = skillLabels[index];
+                    out.label = label;
+                    out.ability = ability;
+                    const abilityIndex = abilityMap[ability];
+                    out.modifier = context.abilityScores[abilityIndex].modifier + (out.isProficient?context.proficiencyBonus:0) + (out.hasExpertise?context.proficiencyBonus:0);
+                    return out;
+                });
+            }
+        }
+    ]
     const charSheetXmlToJson = function(text) {
         const parser = new DOMParser();
         const xml = parser.parseFromString(text,"text/xml");
@@ -130,10 +152,19 @@ namespace('sp.roleScribe.RoleScribe',{
             }
             return out;
         }, {});
+        parseableFields.forEach((field) => {
+            try {
+                json[field] = JSON.parse(json[field]);
+            } catch ({ message, stack }) {
+                console.log({ field, message, stack });
+            }
+        })
         Object.entries(fieldParsers).forEach(([field,parser]) => {
-            json[field] = parser(json[field]);
+            json[field] = parser(json[field],json);
         });
-        console.log(json);
+        fieldParserList.forEach(({ field, fn }) => {
+            json[field] = fn(json[field], json);
+        });
         return condenseFields(condenseFields(condenseFields(dissoc(json,[
             "pagePosition0","pagePosition1","pagePosition2","pagePosition3","pagePosition4","backgroundCode","raceCode","subraceCode","version"
         ]),"core",[
@@ -166,6 +197,41 @@ namespace('sp.roleScribe.RoleScribe',{
                 }
             ];
         }
+        publishAbilityScores() {
+            return <table className="ability-scores">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>
+                            <span className="vert-text">Score</span>
+                        </th>
+                        <th>
+                            <span className="vert-text">Modifier</span>
+                        </th>
+                        <th>
+                            <span className="vert-text">Save</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { this.state.characterSheet.abilityScores.map(({ abrev, score, modifier, save }) => {
+                        return <tr>
+                            <th className="text-right">{abrev}</th>
+                            <td className="text-center">{score}</td>
+                            <td className="text-center">{modifier}</td>
+                            <td className="text-center">{save}</td>
+                        </tr>
+                    }) }
+                </tbody>
+            </table>;
+        }
+        publishSkills() {
+            return <ul>
+                { this.state.characterSheet.skillInfo.map(({ ability, modifier, hasExpertise, isSaveProficient, label }) => {
+                    return <li>{label} ({ability}): {modifier}</li>;
+                }) }
+            </ul>;
+        }
         render() {
             return (<>
                 <Header menuItems={this.menuItems} appTitle={"Walter's Print Shop"}/>
@@ -191,28 +257,8 @@ namespace('sp.roleScribe.RoleScribe',{
                         }}
                     >Open Character Sheet XML</button> : <>
                         <div>
-                            <table className="ability-scores">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th className="vert-text">Score</th>
-                                        <th className="vert-text">Modifier</th>
-                                        <th className="vert-text">Save</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    { this.state.characterSheet.abilityScores.map((stat) => {
-                                        const modifier = Math.floor((stat.score - 10)/2);
-                                        const save = modifier + (stat.isSaveProficient?this.state.characterSheet.core.proficiencyBonus:0);
-                                        return <tr>
-                                            <th className="text-right">{stat.abrev}</th>
-                                            <td className="text-center">{stat.score}</td>
-                                            <td className="text-center">{modifier}</td>
-                                            <td className="text-center">{save}</td>
-                                        </tr>
-                                    }) }
-                                </tbody>
-                            </table>
+                            { this.publishAbilityScores() }
+                            { this.publishSkills() }
                         </div>
                     </>}
             </>);
