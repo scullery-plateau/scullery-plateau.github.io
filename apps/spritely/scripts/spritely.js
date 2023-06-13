@@ -3,6 +3,7 @@ namespace(
   {
     'sp.common.BuildAbout': 'buildAbout',
     'sp.common.ColorPicker': 'ColorPicker',
+    'sp.common.Colors': 'Colors',
     'sp.common.Dialog': 'Dialog',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
@@ -15,6 +16,7 @@ namespace(
   ({
     buildAbout,
     ColorPicker,
+    Colors,
     Dialog,
     Header,
     LoadFile,
@@ -216,7 +218,7 @@ namespace(
                 className="rounded w-25"
                 style={{
                   backgroundColor: this.state.bgColor,
-                  color: Utilities.getForegroundColor(this.state.bgColor),
+                  color: Colors.getForegroundColor(this.state.bgColor),
                 }}
                 onClick={() => {
                   this.modals.bgColorPicker.open({ color: this.state.bgColor });

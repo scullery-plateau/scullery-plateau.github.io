@@ -1,4 +1,5 @@
 namespace('sp.common.Colors', () => {
+  const hexPattern = /#[0-9A-Fa-f]{6}/;
   const colorMap = {
     aquamarine: '#7FFFD4',
     lime: '#00FF00',

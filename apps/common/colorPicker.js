@@ -10,7 +10,7 @@ namespace(
       const r = 3 * Math.floor(x / 6) + Math.floor(y / 6);
       const g = x % 6;
       const b = y % 6;
-      return Utilities.hexFromRGB.apply(
+      return Colors.hexFromRGB.apply(
         null,
         [r, g, b].map((c) => {
           c *= 3;
@@ -19,7 +19,7 @@ namespace(
       );
     };
     const setRGB = function (hexColor) {
-      const rgb = Utilities.rgbFromHex(hexColor);
+      const rgb = Colors.rgbFromHex(hexColor);
       if (rgb) {
         rgb.hex = hexColor;
         return rgb;
@@ -30,7 +30,7 @@ namespace(
     const setColorPart = function (state, colorPart, colorValue) {
       const newState = Utilities.merge(state);
       newState[colorPart] = colorValue;
-      newState.hex = Utilities.hexFromRGB(
+      newState.hex = Colors.hexFromRGB(
         newState.red,
         newState.green,
         newState.blue
@@ -106,7 +106,7 @@ namespace(
           key={label}
           value={value}
           style={{
-            color: Utilities.getForegroundColor(value),
+            color: Colors.getForegroundColor(value),
             backgroundColor: value,
           }}>{label}</option>
       }

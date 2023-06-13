@@ -1,15 +1,16 @@
 namespace("sp.game-icons.Gallery",{
   'sp.common.Ajax':'Ajax',
   'sp.common.ColorPicker':'ColorPicker',
+  'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.Utilities':'util'
-},({ Ajax, ColorPicker, Dialog, util }) => {
+},({ Ajax, ColorPicker, Colors, Dialog, util }) => {
   const buildColorPickerButton = function(label, style, getter, primary, secondary) {
     const value = getter();
     return <button
       className={`btn ${value?'btn-secondary':'btn-outline-dark'}`}
       title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
-      style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
+      style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
       onClick={() => primary(value)}
       onDoubleClick={() => secondary(value)}
       onContextMenu={(e) => {

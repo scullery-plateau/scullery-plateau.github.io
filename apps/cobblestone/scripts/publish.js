@@ -124,7 +124,7 @@ namespace('sp.cobblestone.Publish',{
               className="rounded w-25"
               style={{
                 backgroundColor: current.pageOutlineColor,
-                color: util.getForegroundColor(current.pageOutlineColor),
+                color: Colors.getForegroundColor(current.pageOutlineColor),
               }}
               onClick={() => {
                 this.modals.pageOutlinePicker.open({

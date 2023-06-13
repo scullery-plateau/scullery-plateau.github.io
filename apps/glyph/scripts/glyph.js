@@ -1,6 +1,7 @@
 namespace('sp.glyph.Glyph',{
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
+  'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
@@ -9,7 +10,7 @@ namespace('sp.glyph.Glyph',{
   'sp.glyph.ImageDownload':'ImageDownload',
   'sp.glyph.LayerArgs':'LayerArgs',
   'sp.glyph.GlyphSVG':'GlyphSVG'
-},({ buildAbout, ColorPicker, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, GlyphSVG }) => {
+},({ buildAbout, ColorPicker, Colors, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, GlyphSVG }) => {
   const about = [];
   const validateLoadFileJson = function() {};
   const layerTypes = [
@@ -181,7 +182,7 @@ namespace('sp.glyph.Glyph',{
       return <button
         className={`btn ${value?'btn-secondary':'btn-outline-light'}`}
         title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
-        style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
+        style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
         onClick={() => this.launchColorPicker(field)}
         onDoubleClick={() => this.updateSelectedLayer(field,undefined)}
         onContextMenu={(e) => {

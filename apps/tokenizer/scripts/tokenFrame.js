@@ -1,9 +1,10 @@
 namespace("sp.tokenizer.TokenFrame",{
   "sp.common.ColorPicker":"ColorPicker",
+  "sp.common.Colors":"Colors",
   "sp.common.Dialog":"Dialog",
   'sp.common.Utilities':'util',
   'sp.tokenizer.TokenCanvas':'TokenCanvas',
-},({ColorPicker,Dialog,util,TokenCanvas}) => {
+},({ ColorPicker, Colors, Dialog, util, TokenCanvas }) => {
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -106,7 +107,7 @@ namespace("sp.tokenizer.TokenFrame",{
               className="btn btn-light"
               style={{
                 backgroundColor: this.state.frameColor,
-                color: util.getForegroundColor(this.state.frameColor)
+                color: Colors.getForegroundColor(this.state.frameColor)
               }}
               onClick={ () => {
                 this.modals.frameColorPicker.open({
@@ -118,7 +119,7 @@ namespace("sp.tokenizer.TokenFrame",{
               className="btn btn-light"
               style={{
                 backgroundColor: this.state.backgroundColor,
-                color: util.getForegroundColor(this.state.backgroundColor)
+                color: Colors.getForegroundColor(this.state.backgroundColor)
               }}
               onClick={ () => {
                 this.modals.bgColorPicker.open({

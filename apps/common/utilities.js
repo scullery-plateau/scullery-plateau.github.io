@@ -1,7 +1,6 @@
 namespace('sp.common.Utilities', {
   'sp.common.Colors':'Colors'
 }, ({ Colors }) => {
-  const hexPattern = /#[0-9A-Fa-f]{6}/;
   const range = function (size) {
     return Array(size)
       .fill('')

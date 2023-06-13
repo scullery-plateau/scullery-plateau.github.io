@@ -2,6 +2,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.Ajax':'Ajax',
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
+  'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
@@ -14,7 +15,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, buildAbout, ColorPicker, Dialog, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Colors, Dialog, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -273,7 +274,7 @@ namespace('sp.outfitter.Outfitter', {
       return <button
         className={`btn ${value?'btn-secondary':'btn-outline-light'}`}
         title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
-        style={ value?util.merge({ backgroundColor: value, color: util.getForegroundColor(value) },style):style }
+        style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
         onClick={() => this.launchColorPicker(field)}
         onDoubleClick={() => this.setColorFromPicker(field,undefined)}
         onContextMenu={(e) => {
