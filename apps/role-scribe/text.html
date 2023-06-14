@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Scullery Plateau: Walter's Print Shop</title>
+    <title>Character Sheet Parser Test</title>
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
     <!-- external styles -->
@@ -38,39 +38,29 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- project namespaces -->
-    <script type="text/babel" src="../common/buildAbout.js"></script>
-    <script type="text/babel" src="../common/dialog.js"></script>
-    <script type="text/babel" src="../common/fileLoader.js"></script>
-    <script type="text/babel" src="../common/footer.js"></script>
-    <script type="text/babel" src="../common/header.js"></script>
-    <script type="text/babel" src="../common/menu.js"></script>
+    <script type="text/babel" src="../common/ajax.js"></script>
 
     <!-- local namespaces -->
     <script type="text/babel" src="./scripts/charSheetParser.js"></script>
-    <script type="text/babel" src="./scripts/roleScribe.js"></script>
+    <script type="text/babel" src="./scripts/roleScribeTest.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { RoleScribe, Footer } = imports({
-          'sp.roleScribe.RoleScribe': 'RoleScribe',
-          'sp.common.Footer': 'Footer',
+        const { RoleScribeTest } = imports({
+          'sp.roleScribe.RoleScribeTest': 'RoleScribeTest',
         });
         const unusedNamespaces = listUnusedNamespaces();
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
-        ReactDOM.createRoot(document.getElementById('roleScribe')).render(
-          <RoleScribe />
-        );
-        ReactDOM.createRoot(document.getElementById('footer')).render(
-          <Footer />
+        ReactDOM.createRoot(document.getElementById('roleScribeTest')).render(
+          <RoleScribeTest />
         );
       })();
     </script>
   </head>
   <body class="bg-dark text-light">
-    <div id="roleScribe" class="container"></div>
-    <footer id="footer" class="text-center"></footer>
+    <div id="roleScribeTest" class="container"></div>
   </body>
 </html>

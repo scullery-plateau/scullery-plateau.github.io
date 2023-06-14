@@ -14,7 +14,6 @@ namespace("sp.common.Ajax",{},() => {
     {}
   );
   const getLocalStaticFileAsText = function (filepath, callbacks) {
-    console.log(filepath);
     if (typeof callbacks == 'function') {
       callbacks = {
         success: callbacks,
@@ -28,7 +27,10 @@ namespace("sp.common.Ajax",{},() => {
     xhttp.onreadystatechange = function () {
       if (this.readyState === 4) {
         if (this.status === 200) {
-          callbacks.success(this.responseText);
+          callbacks.success({
+            requestedFile: filepath,
+            responseText:this.responseText
+          });
         } else {
           callbacks.failure({
             requestedFile: filepath,
