@@ -17,29 +17,28 @@ namespace('sp.roleScribe.CharacterSheetParser',{},() => {
         return out;
     }, {});
     const skillLabels = [
-        ["Acrobatics",'DEX'],
-        ["Animal Handling",'WIS'],
-        ["Arcana",'INT'],
-
         ["Athletics",'STR'],
-        ["Deception",'CHA'],
-        ["History",'INT'],
 
-        ["Investigation",'INT'],
-        ["Insight",'WIS'],
-        ["Intimidation",'CHA'],
-
-        ["Medicine",'WIS'],
-        ["Nature",'INT'],
-        ["Perception",'WIS'],
-
-        ["Performance",'CHA'],
-        ["Persuasion",'CHA'],
-        ["Religion",'INT'],
-
+        ["Acrobatics",'DEX'],
         ["Sleight Of Hand",'DEX'],
         ["Stealth",'DEX'],
+
+        ["Arcana",'INT'],
+        ["History",'INT'],
+        ["Investigation",'INT'],
+        ["Nature",'INT'],
+        ["Religion",'INT'],
+
+        ["Animal Handling",'WIS'],
+        ["Insight",'WIS'],
+        ["Medicine",'WIS'],
+        ["Perception",'WIS'],
         ["Survival",'WIS'],
+
+        ["Deception",'CHA'],
+        ["Intimidation",'CHA'],
+        ["Performance",'CHA'],
+        ["Persuasion",'CHA'],
 
         ["Initiative","DEX"]
     ];
@@ -96,6 +95,10 @@ namespace('sp.roleScribe.CharacterSheetParser',{},() => {
         "maxDex","maxHealth","miscArmorBonus","miscSpellAttackBonus","miscSpellDCBonus","offenseAbilityDisplay","pagePosition0","pagePosition1","pagePosition2","pagePosition3",
         "pagePosition4","proficiencyBonus","raceCode","shieldBonus","showDeathSaves","speedMiscMod","subraceCode","unarmoredDefense","version"
     ];
+    const noteListFields = [
+        "features","armorProficiencies","weaponProficiencies","toolProficiencies","languagesKnown","equiptment","alignment","class","race","background",
+        "personalityTraits","ideals","bonds","flaws","notes","name","class`","copper","silver","electrum","gold","platinum","experience"
+    ];
     const fieldParsers = {
         classData:splitter(delims.dash + delims.xmark),
         classResource:splitter(delims.xmark),
@@ -105,7 +108,7 @@ namespace('sp.roleScribe.CharacterSheetParser',{},() => {
             return dice;
         },
         noteList:(value) => {
-            return value.split(delims.xmark).map((v) => v.split("\n"));
+            return mapTo(value.split(delims.xmark).map((v) => v.split("\n")),noteList);
         },
         spellList:splitter(delims.xmark),
         weaponList:splitter(delims.xmark),
@@ -190,6 +193,8 @@ namespace('sp.roleScribe.CharacterSheetParser',{},() => {
         const retval = Object.entries(condensables).reduce((out,[k,v]) => {
             return condenseFields(out,k,v);
         }, json);
+        retval.core.initiative = retval.skillInfo[retval.skillInfo.length - 1].modifier;
+        retval.skillInfo = retval.skillInfo.slice(0,18);
         //console.log({ retval });
         return retval;
     };

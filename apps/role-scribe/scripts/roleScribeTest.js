@@ -42,6 +42,7 @@ namespace('sp.roleScribe.RoleScribeTest',{
         "Rupert_Bard4Barbarian2",
         "SimonDale_Bard1",
         "Skip_Fighter5",
+        "Steve_Barbarian4",
         "Thug_Rogue4",
         "Tobish_Rogue6",
         "Tom_Bard4",

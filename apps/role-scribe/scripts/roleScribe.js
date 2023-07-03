@@ -38,7 +38,7 @@ namespace('sp.roleScribe.RoleScribe',{
                             <span className="vert-text">Score</span>
                         </th>
                         <th>
-                            <span className="vert-text">Modifier</span>
+                            <span className="vert-text">Mod</span>
                         </th>
                         <th>
                             <span className="vert-text">Save</span>
@@ -50,8 +50,8 @@ namespace('sp.roleScribe.RoleScribe',{
                         return <tr>
                             <th className="text-right">{abrev}</th>
                             <td className="text-center">{score}</td>
-                            <td className="text-center">{modifier}</td>
-                            <td className="text-center">{save}</td>
+                            <td className="text-center">{(modifier>0)?"+":""}{modifier}</td>
+                            <td className="text-center">{(save>0)?"+":""}{save}</td>
                         </tr>
                     }) }
                 </tbody>
@@ -60,7 +60,7 @@ namespace('sp.roleScribe.RoleScribe',{
         publishSkills() {
             return <ul>
                 { this.state.characterSheet.skillInfo.map(({ ability, modifier, hasExpertise, isSaveProficient, label }) => {
-                    return <li>{label} ({ability}): {modifier}</li>;
+                    return <li>{label} ({ability}): {(modifier>0)?"+":""}{modifier}</li>;
                 }) }
             </ul>;
         }

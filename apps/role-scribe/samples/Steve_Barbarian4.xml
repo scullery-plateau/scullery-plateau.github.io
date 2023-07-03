@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<character>
+<version>1</version>
+<initMiscMod>0</initMiscMod>
+<improvedInitiative>0</improvedInitiative>
+<currentHealth>41</currentHealth>
+<maxHealth>41</maxHealth>
+<currentTempHP>0</currentTempHP>
+<armorBonus>10</armorBonus>
+<shieldBonus>0</shieldBonus>
+<miscArmorBonus>0</miscArmorBonus>
+<maxDex>10</maxDex>
+<proficiencyBonus>2</proficiencyBonus>
+<miscSpellAttackBonus>0</miscSpellAttackBonus>
+<miscSpellDCBonus>0</miscSpellDCBonus>
+<castingStatCode>3</castingStatCode>
+<offenseAbilityDisplay>0</offenseAbilityDisplay>
+<deathSaveSuccesses>0</deathSaveSuccesses>
+<deathSaveFailures>0</deathSaveFailures>
+<showDeathSaves>true</showDeathSaves>
+<baseSpeed>30</baseSpeed>
+<speedMiscMod>0</speedMiscMod>
+<movementMode>Speed</movementMode>
+<raceCode>-1</raceCode>
+<subraceCode>-1</subraceCode>
+<backgroundCode>-1</backgroundCode>
+<pagePosition0>1</pagePosition0>
+<pagePosition1>2</pagePosition1>
+<pagePosition2>3</pagePosition2>
+<pagePosition3>4</pagePosition3>
+<pagePosition4>5</pagePosition4>
+<unarmoredDefense>3</unarmoredDefense>
+<featCode></featCode>
+<classData>Barbarian⊡Path of the Storm Herald⊡4⊡-1⊡0⊟⊠Unarmored Defense⊠Primal Knowledge⊟Resource⊡Resource⊡0⊡0⊡0⊡2⊡0⊡0⊡-1⊡0⊠Rage⊡⊡3⊡3⊡0⊡2⊡0⊡0⊡303⊡0⊟⊠Aberrant Dragonmark⊟⊟⊟⊟Goliath⊟MotM Goliath⊟Folk Hero⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠⊟20⊠20⊠20⊠20⊠20⊠20⊠⊟0⊟2⊟0⊟1⊟1⊟0</classData>
+<multiclassFeatures></multiclassFeatures>
+<weaponList>3⊠Greataxe⊠5 feet⊠1202⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠12⊠Javelin⊠30/120⊠1101⊠0⊠0⊠0⊠0⊠0⊠true⊠true⊠1⊠1⊠6⊠Flaming Warhammer⊠5 feet⊠1105⊠0⊠0⊠0⊠2⊠1⊠true⊠true⊠2⊠1⊠8⊠1⊠6</weaponList>
+<abilityScores>16⊠10⊠15⊠9⊠12⊠14⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0</abilityScores>
+<skillInfo>true⊠false⊠false⊠false⊠false⊠false⊠false⊠true⊠false⊠true⊠false⊠false⊠true⊠true⊠false⊠true⊠false⊠false⊠false⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠0⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false⊠false</skillInfo>
+<spellList>v1.1⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠true⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡false⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡0⊡⊠-1⊠0⊠false⊠0⊟Create Bonfire⊟⊟⊟⊟⊟⊟true⊟0⊡</spellList>
+<noteList>Goliath Features:
+• Athletics proficiency
+• You can lift, drag, push, and carry weight as if one size larger
+• You are adapted to cold climates and high altitudes (see rules)
+• Prof/day you can reduce damage you would take by 1d12 + Con as a reaction
+Folk Hero Feature:
+• Commoners are willing to shelter you from some troubles
+Barbarian Features:
+• 2/day you gain advantage on Str checks and saves, deal +2 damage on strength based melee attacks, and resistance vs bludgeoning, piercing, and slashing damage
+• Add Con mod to AC when not wearing armor
+• You can gain advantage on Str based melee attacks by granting advantage to attacks against you for the round
+• You gain advantage on Dex saves vs things you can see
+• You can rage an additional time per day
+• Barbarian Archetype: Storm Herald
+• A 10 foot aura surrounds you while you rage based on an environment you choose every time you gain a level (see rules)
+• Desert - 2 fire damage to others. Increases by 1 at levels 5/10/15/20
+• Sea - 1d6 lightning damage to one creature you see in aura, Dex save for half. Increases by 1d6 at levels 5/10/15/20
+• Tundra - 2 temp hp to creatures you choose in aura. Increases by 1 at levels 5/10/15/20
+• Aberrant Mark: Can cast a sorcerer cantrip at will, sorcerer 1st lvl spell (1/day) with additional random effect (see rules), and +1 Con
+⊠Light Armor, Medium Armor, Shields
+⊠Simple Weapons, Martial Weapons
+⊠One type of artisan's tools
+Vehicles (land)
+⊠Common
+Extra Language
+⊠greataxe
+martial melee weapon
+javelin (4)
+explorer's pack
+set of artisan's tools
+shovel
+iron pot
+set of common clothes
+belt pouch
+⊠notes⊠Barbarian 4⊠Goliath⊠Folk Hero⊠neutral good⊠traits⊠ideals⊠bonds⊠flaws⊠Steve⊠Barbarian 4⊠1000⊠100⊠20⊠10⊠1⊠1000</noteList>
+<hitDiceList>1⊠4⊠12⊠4</hitDiceList>
+<classResource>-1⊠-1⊠-1⊠-1⊠-1⊠-1⊠1⊠2⊠1000⊠3⊠4⊠5</classResource>
+</character>
