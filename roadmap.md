@@ -13,6 +13,10 @@
     - size (business card to full page)
   - apply data
 
+## Hex Map builder - **Overlander**
+
+1. _impl_ (with REACT)
+
 ## SVG Canvas - **Mondrian**
 
 1. _impl_ (with REACT)
@@ -25,40 +29,26 @@
 ## Outfitter
 
 1. make layers clickable for selection
+3. split layer into multiple layers (both into right and left)
+4. fix part/pattern/shading positioning issues in data
+- hot keys
 
 ## Spritely
 
 - "load as overlay"
 
-## Outfitter
-
-3. split layer into multiple layers (both into right and left)
-4. fix part/pattern/shading positioning issues in data
-
 ## Cobblestone
 
-2. reload image from tile edit screen
-
-## Hex Map builder - **Overlander**
-
-1. _impl_ (with REACT)
+1. reload image from tile edit screen
+2. improved / condensed paging(how??)
 
 ## Overall
 
 - validate load data
-
-## Spritely
-
-- hot keys
-
-## Cobblestone
-
-1. improved / condensed paging(how??)
+- Google Drive integration
 
 ## Dice Roller app - **Runyon**
 
-1. _impl_ (with REACT)
-   - simple implementation
 2. (future feature) canvas 3d animation?
 
 ## How To D&D?
@@ -85,10 +75,6 @@
 6. spellbook by monster
 7. image google link
 8. Character Creator
-
-## Overall
-
-- Google Drive integration
 
 ## Custom Dice Builder
 
