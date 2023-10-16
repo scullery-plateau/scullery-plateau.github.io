@@ -1,3 +1,18 @@
+## Minifier
+
+- individual sizes & printing best fit
+- frame images to mini-frame size / ratio
+- match scale (pixels / inch)
+- individual offsets by thumbnail
+
+## Card Builder - **Svengali**
+
+1. _impl_ (with REACT)
+  - Define layout / template
+    - borders / lines / shapes / images / icons
+    - size (business card to full page)
+  - apply data
+
 ## SVG Canvas - **Mondrian**
 
 1. _impl_ (with REACT)
@@ -30,27 +45,15 @@
 
 ## Overall
 
-- load data validation
+- validate load data
 
 ## Spritely
 
 - hot keys
 
-## Minifier
-
-- individual sizes & printing best fit
-
 ## Cobblestone
 
 1. improved / condensed paging(how??)
-
-## Card Builder - **Svengali**
-
-1. _impl_ (with REACT)
-  - Define layout / template
-    - borders / lines / shapes / images / icons
-    - size (business card to full page)
-  - apply data
 
 ## Dice Roller app - **Runyon**
 
