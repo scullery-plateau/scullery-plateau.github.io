@@ -5,6 +5,10 @@
 - match scale (pixels / inch)
 - individual offsets by thumbnail
 
+## Spritely
+
+- "load as overlay"
+
 ## Card Builder - **Svengali**
 
 1. _impl_ (with REACT)
@@ -32,10 +36,6 @@
 3. split layer into multiple layers (both into right and left)
 4. fix part/pattern/shading positioning issues in data
 - hot keys
-
-## Spritely
-
-- "load as overlay"
 
 ## Cobblestone
 
