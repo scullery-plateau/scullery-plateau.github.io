@@ -110,11 +110,15 @@ namespace('sp.outfitter.Outfitter', {
       }
       Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}2.json`,
         {
-          success: (responseText) => {
-            const metadata = JSON.parse(responseText);
-            metadata.patternCount = Object.keys(metadata.patterns).length;
-            metadata.shadingCount = Object.keys(metadata.shadings).length;
-            this.setState({ metadata, progress: undefined, selectedLayer: 0});
+          success: ({ responseText }) => {
+            try{
+              const metadata = JSON.parse(responseText);
+              metadata.patternCount = Object.keys(metadata.patterns).length;
+              metadata.shadingCount = Object.keys(metadata.shadings).length;
+              this.setState({ metadata, progress: undefined, selectedLayer: 0});
+            } catch (e) {
+              console.log({ responseText, e });
+            }
           },
           failure: (resp) => {
             console.log(resp);
