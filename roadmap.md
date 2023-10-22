@@ -32,9 +32,8 @@
 
 ## Outfitter
 
-1. make layers clickable for selection
-3. split layer into multiple layers (both into right and left)
-4. fix part/pattern/shading positioning issues in data
+1. split layer into multiple layers (both into right and left)
+2. fix part/pattern/shading positioning issues in data
 - hot keys
 
 ## Cobblestone
