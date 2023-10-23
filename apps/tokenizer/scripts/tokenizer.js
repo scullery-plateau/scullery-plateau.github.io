@@ -3,6 +3,7 @@ namespace(
   {
     'sp.common.BuildAbout': 'buildAbout',
     'sp.common.Dialog': 'Dialog',
+    'sp.common.EditMode': 'EditMode',
     'sp.common.FileDownload': 'FileDownload',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
@@ -97,6 +98,7 @@ namespace(
             },
           },
         ];
+        EditMode.enable();
       }
       loadFile() {
         LoadFile(

@@ -5,6 +5,7 @@ namespace(
     'sp.common.ColorPicker': 'ColorPicker',
     'sp.common.Colors': 'Colors',
     'sp.common.Dialog': 'Dialog',
+    'sp.common.EditMode':'EditMode',
     'sp.common.Header': 'Header',
     'sp.common.LoadFile': 'LoadFile',
     'sp.common.Utilities': 'Utilities',
@@ -18,6 +19,7 @@ namespace(
     ColorPicker,
     Colors,
     Dialog,
+    EditMode,
     Header,
     LoadFile,
     Utilities,
@@ -158,6 +160,7 @@ namespace(
             },
           },
         ];
+        EditMode.enable();
       }
       loadFile() {
         LoadFile(

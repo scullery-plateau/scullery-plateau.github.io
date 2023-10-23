@@ -4,6 +4,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
+  'sp.common.EditMode':'EditMode',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
   'sp.common.LinkShare':'LinkShare',
@@ -15,7 +16,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, buildAbout, ColorPicker, Colors, Dialog, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Ajax, buildAbout, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -115,6 +116,7 @@ namespace('sp.outfitter.Outfitter', {
               const metadata = JSON.parse(responseText);
               metadata.patternCount = Object.keys(metadata.patterns).length;
               metadata.shadingCount = Object.keys(metadata.shadings).length;
+              EditMode.enable();
               this.setState({ metadata, progress: undefined, selectedLayer: 0});
             } catch (e) {
               console.log({ responseText, e });
