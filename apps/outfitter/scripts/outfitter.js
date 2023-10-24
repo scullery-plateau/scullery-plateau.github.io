@@ -33,10 +33,26 @@ namespace('sp.outfitter.Outfitter', {
       ]
     };
   }
+  const keyDownActions = {
+    "arrowrightctrldown": [ "resizeX", 0.01, 1.00 ],
+    "arrowleftctrldown": [ "resizeX", -0.01, 1.00 ],
+    "arrowupctrldown": [ "resizeY", 0.01, 1.00 ],
+    "arrowdownctrldown": [ "resizeY", -0.01, 1.00 ],
+    "arrowrightshiftdown": [ "moveX", 1, 0 ],
+    "arrowleftshiftdown": [ "moveX", -1, 0 ],
+    "arrowupshiftdown": [ "moveY", -1, 0 ],
+    "arrowdownshiftdown": [ "moveY", 1, 0 ],
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
       this.state = {};
+      this.keyHandlers = {};
+      Object.entries(keyDownActions).forEach(([event, [field, step, defaultValue]]) => {
+        const handler = (() => { this.stepLayer(field, step, defaultValue); });
+        this.keyHandlers[event] = handler;
+        document.addEventListener(event, handler);
+      });
       this.modals = Dialog.factory({
         about: {
           templateClass: buildAbout("Outfitter",about),
@@ -254,6 +270,9 @@ namespace('sp.outfitter.Outfitter', {
     fromSelectedLayer(field,defaultValue) {
       const retval = this.state.schematic.layers[this.state.selectedLayer][field];
       return (retval === undefined)?defaultValue:retval;
+    }
+    stepLayer(field,step,defaultValue) {
+      this.updateLayer(field, this.fromSelectedLayer(field, defaultValue) + step);
     }
     launchColorPicker(field) {
       if (field === 'background') {

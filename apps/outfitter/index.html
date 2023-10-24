@@ -71,6 +71,7 @@
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
+        initKeyEventWrapper();
         const { Outfitter, Footer } = imports({
           'sp.outfitter.Outfitter': 'Outfitter',
           'sp.common.Footer': 'Footer',
