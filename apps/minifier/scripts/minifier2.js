@@ -134,6 +134,9 @@ namespace(
         minis[index].count = newCount;
         this.setState({ size, minis });
       };
+      synchronizeScale(synchronizedScale) {
+        
+      }
       render() {
         return (
           <>
@@ -156,15 +159,54 @@ namespace(
                   }}>
                   Publish Printable
                 </button>
-                { /* TODO - additional header buttions */ }
+                <button className="btn btn-primary" onClick={() => {
+                      this.setState({ expandAll: !this.state.expandAll })
+                    }}>
+                  { this.expandAll?"Collapse All":"Expand All" }
+                </button>
+                <button
+                  className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
+                  onClick={() => {
+                      this.setState({ synchronize: !this.state.synchronize });
+                    }}>
+                  Synchronize Size
+                </button>
+                {
+                  this.state.synchronize && 
+                  <input
+                    className="form-control align-self-center"
+                    style={{ width: '5em' }}
+                    type="number"
+                    min="0"
+                    value={this.state.synchronizedScale}
+                    onChange={(e) => {
+                      this.synchronizeScale(parseFloat(e.target.value));
+                    }}
+                  />
+                }
               </div>
             }
             <div className="gallery m-3 d-flex flex-wrap justify-content-around">
               { this.state.minis.map((thumb, index) => {
                 <div className="thumbnail rpg-box d-flex flex-column">
                   <span className="align-self-center">{thumb.filename}</span>
-                  { /* TODO - new thumbnail design */ }
+                  <div className="frame align-self-center"
+                       style={{ backgroundImage: `url(${thumb.dataURL})` }}>
+                  </div>
+                  { 
+                    !this.state.expandAll && this.state.specIndex != index &&
+                    <button
+                    className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
+                    onClick={() => {
+                        this.setState({ specIndex: index });
+                      }}>
+                    specs
+                  </button>
+                  }
                 </div>
+                { 
+                  /* TODO - specs / form layout */ 
+                }
               })}
             </div>
           </>
