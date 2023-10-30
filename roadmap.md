@@ -34,7 +34,22 @@
 
 1. split layer into multiple layers (both into right and left)
 2. fix part/pattern/shading positioning issues in data
-- hot keys
+3. gallery
+  * D&D Character Sheets
+    * Dragonborn Sorcerer (silver)
+    * Drow Rogue
+    * Dwarf Cleric
+    * Half-Elf Bard
+    * High Elf Fighter
+    * High Elf Wizard
+    * Human Barbarian
+    * Human Cleric
+    * Human Druid
+    * Human Fighter
+    * Human Paladin
+    * Tiefling Warlock
+    * Wood Elf Ranger
+
 
 ## Cobblestone
 

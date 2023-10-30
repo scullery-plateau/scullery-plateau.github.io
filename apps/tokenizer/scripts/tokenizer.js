@@ -146,8 +146,8 @@ namespace(
           (dataURL, filename) => {
             const token = TokenCanvas.initState(dataURL,filename,1);
             util.initImageObj(dataURL,(baseImg) => {
-              token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
-              this.setState({ tokens: [].concat(this.state.tokens, [{token,baseImg}]) });
+              token.canvasURL = TokenCanvas.drawCanvasURL(baseImg, token);
+              this.setState({ tokens: [].concat(this.state.tokens, [{token, baseImg}]) });
             });
           },
           (filename, error) => {

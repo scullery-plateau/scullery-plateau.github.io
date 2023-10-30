@@ -14,6 +14,15 @@ namespace('sp.common.Utilities', {
       }, acc);
     }, {});
   };
+  const selectKeys = function (obj, keys) {
+    return Array.from(keys).reduce((acc, key) => {
+      acc[key] = obj[key];
+      return acc;
+    });
+  }
+  const copyObj = function (obj) {
+    return selectKeys(obj, Object.keys(obj));
+  }
   const assoc = function (map, key, value) {
     const out = merge(map);
     out[key] = value;

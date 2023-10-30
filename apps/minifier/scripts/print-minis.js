@@ -1,7 +1,7 @@
-namespace(
-  'sp.minifier.PrintMinis',
-  { 'sp.common.PrintJS': 'PrintJS' },
-  ({ PrintJS }) => {
+namespace('sp.minifier.PrintMinis', { 
+  'sp.common.PrintJS': 'PrintJS',
+  'sp.common.Utilities':'util'
+}, ({ PrintJS, util }) => {
     const partition = function (myArray, partitionSize) {
       const incoming = Array.from(myArray);
       const partitions = [];
@@ -19,6 +19,8 @@ namespace(
         cols: 2,
         width: 40,
         height: 10,
+        ratioW: 8,
+        ratioH: 12,
         svg: [
           ['ellipse', 5, 5, 4.75, 4.5],
           ['ellipse', 35, 5, 4.75, 4.5],
@@ -33,6 +35,8 @@ namespace(
         cols: 1,
         width: 80,
         height: 20,
+        ratioW: 18,
+        ratioH: 27,
         svg: [
           ['ellipse', 10, 10, 9.75, 9.5],
           ['ellipse', 70, 10, 9.75, 9.5],
@@ -47,6 +51,8 @@ namespace(
         cols: 1,
         width: 80,
         height: 30,
+        ratioW: 26,
+        ratioH: 26,
         svg: [
           ['ellipse', 10, 15, 9.75, 14],
           ['ellipse', 70, 15, 9.75, 14],
@@ -61,6 +67,8 @@ namespace(
         cols: 2,
         width: 40,
         height: 100,
+        ratioW: 36,
+        ratioH: 31.5,
         svg: [
           ['ellipse', 20, 15, 19, 14.75],
           ['ellipse', 20, 85, 19, 14.75],
@@ -153,6 +161,9 @@ namespace(
       const pages = buildPages(size, minis);
       PrintJS.printSvgPages(title, 'portrait', defs, pages);
     };
-    return { printMiniPages };
+    const getRatio = function(size) {
+      return util.selectKeys(miniFrames[size],["ratioW","ratioH"]);
+    }
+    return { printMiniPages, getRatio };
   }
 );

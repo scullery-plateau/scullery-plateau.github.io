@@ -39,7 +39,6 @@
 
     <!-- project namespaces -->
     <script type="text/babel" src="../common/buildAbout.js"></script>
-    <script type="text/babel" src="../common/canvasUtil.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
     <script type="text/babel" src="../common/editMode.js"></script>
@@ -52,14 +51,14 @@
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
-    <script type="text/babel" src="./scripts/minifier.js"></script>
+    <script type="text/babel" src="./scripts/minifier2.js"></script>
     <script type="text/babel" src="./scripts/print-minis.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
         const { Minifier, Footer } = imports({
-          'sp.minifier.Minifier': 'Minifier',
+          'sp.minifier.Minifier2': 'Minifier',
           'sp.common.Footer': 'Footer',
         });
         const unusedNamespaces = listUnusedNamespaces();

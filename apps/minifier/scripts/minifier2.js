@@ -1,217 +1,283 @@
-namespace(
-  'sp.minifier.Minifier2',
-  {
-    'sp.common.BuildAbout': 'buildAbout',
-    'sp.common.Dialog': 'Dialog',
-    'sp.common.EditMode': 'EditMode',
-    'sp.common.FileDownload': 'FileDownload',
-    'sp.common.Header': 'Header',
-    'sp.common.LoadFile': 'LoadFile',
-    'sp.minifier.PrintMinis': 'PrintMinis',
-  },
-  ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, PrintMinis }) => {
-    const about = [
-      'Minifier is a tool for turning digital images into printable standing miniatures.',
-      'Import your images and print them as miniatures of 1", 2", 3", or 4".',
-      'Publish sheets of armies, soldiers, or minions by increasing the count of a an image.',
-    ];
-    const validateLoadFileJson = function (data) {};
-    return class extends React.Component {
-      constructor(props) {
-        super(props);
-        this.state = { size: 1, minis: [] };
-        this.modals = Dialog.factory({
-          about: {
-            templateClass: buildAbout("Minifier",about),
-            attrs: { class: 'rpg-box text-light w-75' },
-            onClose: () => {},
-          },
-          fileDownload: {
-            templateClass: FileDownload,
-            attrs: { class: 'rpg-box text-light w-75' },
-            onClose: () => {},
-          },
-        });
-        this.menuItems = [
-          {
-            id: 'fileMenu',
-            label: 'File',
-            items: [
-              {
-                id: 'loadFile',
-                label: 'Load File',
-                callback: () => {
-                  this.loadFile();
-                },
+namespace('sp.minifier.Minifier2',{
+  'sp.common.BuildAbout': 'buildAbout',
+  'sp.common.Dialog': 'Dialog',
+  'sp.common.EditMode': 'EditMode',
+  'sp.common.FileDownload': 'FileDownload',
+  'sp.common.Header': 'Header',
+  'sp.common.LoadFile': 'LoadFile',
+  'sp.common.Utilities':'util',
+  'sp.minifier.MiniCanvas': 'MiniCanvas',
+  'sp.minifier.PrintMinis': 'PrintMinis',
+}, ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, util, MiniCanvas, PrintMinis }) => {
+  const about = [
+    'Minifier is a tool for turning digital images into printable standing miniatures.',
+    'Import your images and print them as miniatures of 1", 2", 3", or 4".',
+    'Publish sheets of armies, soldiers, or minions by increasing the count of a an image.',
+  ];
+  const validateLoadFileJson = function (data) {};
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { size: 1, minis: [], synchronize: false };
+      this.modals = Dialog.factory({
+        about: {
+          templateClass: buildAbout("Minifier2",about),
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {},
+        },
+        fileDownload: {
+          templateClass: FileDownload,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {},
+        },
+      });
+      this.menuItems = [
+        {
+          id: 'fileMenu',
+          label: 'File',
+          items: [
+            {
+              id: 'loadFile',
+              label: 'Load File',
+              callback: () => {
+                this.loadFile();
               },
-              {
-                id: 'download',
-                label: 'Download File',
-                callback: () => {
-                  const { size, minis } = this.state;
-                  this.modals.fileDownload.open({
-                    fieldId:"minifierDataFileName",
-                    placeholder:"minifier",
-                    defaultFilename:"minifier",
-                    jsonData:{ size, minis }
-                  });
-                },
+            },
+            {
+              id: 'download',
+              label: 'Download File',
+              callback: () => {
+                const { size, minis } = this.state;
+                this.modals.fileDownload.open({
+                  fieldId:"minifierDataFileName",
+                  placeholder:"minifier",
+                  defaultFilename:"minifier",
+                  jsonData:{ size, minis }
+                });
               },
-            ],
-          },
-          {
-            id: 'removeZeroCount',
-            label: 'Remove Zero Count',
-            callback: () => {
-              this.removeZeroCount();
             },
+          ],
+        },
+        {
+          id: 'removeZeroCount',
+          label: 'Remove Zero Count',
+          callback: () => {
+            this.removeZeroCount();
           },
-          {
-            id: 'sizePicker',
-            label: 'Size',
-            groupClassName: 'size-picker',
-            getter: () => this.state.size,
-            setter: (size) => {
-              const { minis } = state;
-              this.setState({ size, minis });
-            },
-            options: [1, 2, 3, 4].map((v) => {
-              return { label: `${v} inch`, value: v };
-            }),
+        },
+        {
+          id: 'sizePicker',
+          label: 'Size',
+          groupClassName: 'size-picker',
+          getter: () => this.state.size,
+          setter: (size) => {
+            this.setState({ size, minis: Array.from(this.state.minis).map(({ mini, baseImg }) => {
+              mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(size));
+              return [ mini, baseImg ];
+            })
+    });
           },
-          {
-            id: 'about',
-            label: 'About',
-            callback: () => {
-              this.modals.about.open();
-            },
+          options: [1, 2, 3, 4].map((v) => {
+            return { label: `${v} inch`, value: v };
+          }),
+        },
+        {
+          id: 'about',
+          label: 'About',
+          callback: () => {
+            this.modals.about.open();
           },
-        ];
-        EditMode.enable();
-      }
-      loadFile() {
-        LoadFile(
-          false,
-          'text',
-          (fileContent) => {
-            const jsonData = JSON.parse(fileContent);
-            const error = validateLoadFileJson(jsonData);
-            if (error) {
-              throw error;
-            }
-            this.setState(jsonData);
-          },
-          (filename, error) => {
-            console.log({ filename, error });
-            alert(filename + ' failed to load. See console for error.');
+        },
+      ];
+      EditMode.enable();
+    }
+    loadFile() {
+      LoadFile(
+        false,
+        'text',
+        (fileContent) => {
+          const jsonData = JSON.parse(fileContent);
+          const error = validateLoadFileJson(jsonData);
+          if (error) {
+            throw error;
           }
-        );
-      }
-      removeZeroCount() {
-        const { size, minis } = this.state;
-        this.setState({ size, minis: minis.filter((t) => t.count > 0) });
-      }
-      loadImage() {
-        const { size } = this.state;
-        LoadFile(
-          true,
-          'dataURL',
-          (dataURL, filename) => {
+          this.setState(jsonData);
+        },
+        (filename, error) => {
+          console.log({ filename, error });
+          alert(filename + ' failed to load. See console for error.');
+        }
+      );
+    }
+    removeZeroCount() {
+      const { minis } = this.state;
+      this.setState({ minis: minis.filter((t) => t.count > 0) });
+    }
+    loadImage() {
+      LoadFile(
+        true,
+        'dataURL',
+        (dataURL, filename) => {
+          const mini = MiniCanvas.initState(dataURL, filename, 1);
+          util.initImageObj(dataURL, (baseImg) => {
+            mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(this.state.size));
             this.setState({
-              size,
-              minis: [].concat(this.state.minis, [{ filename, dataURL, count: 1 }]),
+              minis: [].concat(this.state.minis, [{mini, baseImg}]),
             });
-          },
-          (filename, error) => {
-            console.log({ filename, error });
-            alert(filename + ' failed to load. See console for error.');
-          }
-        );
-      }
-      updateCount(newCount, index) {
-        const { size } = this.state;
-        const minis = Array.from(this.state.minis);
-        minis[index].count = newCount;
-        this.setState({ size, minis });
-      };
-      synchronizeScale(synchronizedScale) {
-        
-      }
-      render() {
-        return (
-          <>
-            <Header menuItems={this.menuItems} appTitle={'Minifier'} />
+          });
+        },
+        (filename, error) => {
+          console.log({ filename, error });
+          alert(filename + ' failed to load. See console for error.');
+        }
+      );
+    }
+    synchronizeScale(synchronizedScale) {
+      this.setState({ 
+        minis: Array.from(this.state.minis).map(({ mini, baseImg }) => {
+          mini.scale = synchronizedScale;
+          mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(this.state.size));
+          return [ mini, baseImg ];
+        })
+      });
+    }
+    buildField(mini, baseImg, label, field, predicate) {
+      predicate = predicate || ((value) => value);
+      return <>
+        <dt>{ label }</dt>
+        <dd>{(predicate(!this.state.editForm))?(<>
+          <span>{ mini[field] }</span>
+        </>):(<>
+          <input 
+            type="number" 
+            value={ this.state.editForm[field] }
+            onClick={(e) => {
+              const editForm = util.copy(this.state.editForm);
+              editForm[field] = parseInt(e.target.value);
+              editForm.canvasURL = MiniCanvas.drawCanvasURL(baseImg, util.merge(mini, editForm), PrintMinis.getFrame(this.state.size));
+              this.setState({ editForm });
+            }}/>
+        </>)}</dd>
+      </>;
+    }
+    render() {
+      return (
+        <>
+          <Header menuItems={this.menuItems} appTitle={'Minifier'} />
+          <div className="d-flex justify-content-center">
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                this.loadImage();
+              }}>
+              Add Image To Minify
+            </button>
+          </div>
+          { this.state.minis.length > 0 &&
             <div className="d-flex justify-content-center">
               <button
                 className="btn btn-success"
                 onClick={() => {
-                  this.loadImage();
+                  PrintMinis.printMiniPages('Print Minifier',this.state.size,this.state.minis);
                 }}>
-                Add Image To Minify
+                Publish Printable
               </button>
-            </div>
-            { this.state.minis.length > 0 &&
-              <div className="d-flex justify-content-center">
-                <button
-                  className="btn btn-success"
-                  onClick={() => {
-                    PrintMinis.printMiniPages('Print Minifier',this.state.size,this.state.minis);
+              { !this.state.editForm && 
+                  <button className="btn btn-primary" onClick={() => {
+                    this.setState({ expandAll: !this.state.expandAll })
                   }}>
-                  Publish Printable
-                </button>
-                <button className="btn btn-primary" onClick={() => {
-                      this.setState({ expandAll: !this.state.expandAll })
-                    }}>
                   { this.expandAll?"Collapse All":"Expand All" }
                 </button>
-                <button
-                  className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
-                  onClick={() => {
-                      this.setState({ synchronize: !this.state.synchronize });
-                    }}>
-                  Synchronize Size
-                </button>
-                {
-                  this.state.synchronize && 
-                  <input
-                    className="form-control align-self-center"
-                    style={{ width: '5em' }}
-                    type="number"
-                    min="0"
-                    value={this.state.synchronizedScale}
-                    onChange={(e) => {
-                      this.synchronizeScale(parseFloat(e.target.value));
-                    }}
-                  />
-                }
-              </div>
-            }
-            <div className="gallery m-3 d-flex flex-wrap justify-content-around">
-              { this.state.minis.map((thumb, index) => {
-                <div className="thumbnail rpg-box d-flex flex-column">
-                  <span className="align-self-center">{thumb.filename}</span>
+              }
+              <button
+                className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
+                onClick={() => {
+                    this.setState({ synchronize: !this.state.synchronize });
+                  }}>
+                Synchronize Size
+              </button>
+              {
+                this.state.synchronize && 
+                <input
+                  className="form-control align-self-center"
+                  style={{ width: '5em' }}
+                  type="number"
+                  min="0"
+                  value={this.state.synchronizedScale}
+                  onChange={(e) => {
+                    this.synchronizeScale(parseFloat(e.target.value));
+                  }}
+                />
+              }
+            </div>
+          }
+          <div className="gallery m-3 d-flex flex-wrap justify-content-around">
+            { this.state.minis.map(({ mini, baseImg }, index) => {
+              <div className="rpg-box d-flex">
+                <div className="thumbnail d-flex flex-column">
+                  <span className="align-self-center">{mini.filename}</span>
                   <div className="frame align-self-center"
-                       style={{ backgroundImage: `url(${thumb.dataURL})` }}>
+                      style={{ backgroundImage: `url(${this.state.editForm?this.state.editForm:mini.canvasURL})` }}>
                   </div>
                   { 
-                    !this.state.expandAll && this.state.specIndex != index &&
-                    <button
-                    className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
-                    onClick={() => {
+                    !this.state.expandAll && (this.state.specIndex != index) &&
+                    <button 
+                      className={"btn btn-" + this.state.synchronize?"secondary":"primary"}
+                      onClick={() => {
                         this.setState({ specIndex: index });
-                      }}>
-                    specs
-                  </button>
+                      }}>Specs</button>
                   }
                 </div>
-                { 
-                  /* TODO - specs / form layout */ 
-                }
-              })}
-            </div>
-          </>
-        );
-      }
+                  { 
+                    (this.specIndex == index || this.state.expandAll) &&
+                    <div className="d-flex flex-column">
+                      <dl>
+                        { buildField(mini, baseImg, "Count", "count") }
+                        { buildField(mini, baseImg, "Scale (pixels/inch)", "scale", (value) => value || this.state.synchronize) }
+                        { buildField(mini, baseImg, "X-Offset", "xOffset") }
+                        { buildField(mini, baseImg, "Y-Offset", "yOffset") }
+                      </dl>
+                      <>
+                        { !this.state.editForm?(<>
+                            <div className="d-flex">
+                              <button 
+                                className="btn btn-primary"
+                                onClick={() => {
+                                  this.setState({ specIndex: index, editForm: util.selectKeys(mini, ["canvasURL","count", "scale", "xOffset", "yOffset"])});
+                                }}>Edit</button>
+                              <button 
+                                className="btn btn-secondary"
+                                onClick={() => {
+                                  this.setState({ specIndex: -1 });
+                                }}>Collapse</button>
+                            </div>
+                          </>):(<>
+                            { this.specIndex == index &&
+                              <div className="d-flex">
+                                <button 
+                                  className="btn btn-success"
+                                  onClick={() => {
+                                    const minis = Array.from(this.state.minis);
+                                    minis[index][0] = util.merge(mini,this.state.editForm);
+                                    this.setState({ minis, editForm: undefined });
+                                  }}>Confirm</button>
+                                <button 
+                                  className="btn btn-danger"
+                                  onClick={() => {
+                                    this.setState({ editForm: undefined });
+                                  }}>Cancel</button>
+                              </div>
+                            }
+                          </>) 
+                        }
+                      </>
+                    </div>
+                  }
+              </div>
+            })}
+          </div>
+        </>
+      );
     }
   }
-);
+});
