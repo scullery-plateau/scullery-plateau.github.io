@@ -7,13 +7,17 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
     const items = [
         ['D&D Animated','acrobat'],
         ['Critical Role: Vox Machina', 'arkhan'],
+        ['Critical Role: Bells Hells', 'ashton'],
         ['Critical Role: Mighty Nein', 'bluud'],
         ['Critical Role: Mighty Nein', 'calianna'],
         ['D&D Animated','cavalier'],
+        ['Critical Role: Bells Hells', 'chetney-wolf'],
         ['Critical Role: Mighty Nein', 'essek'],
+        ['Critical Role: Bells Hells', 'ferne'],
         ['Critical Role: Vox Machina', 'grog'],
         ['Miscellaneous','half-orc-paladin','Half-Orc Paladin'],
         ['Miscellaneous','he-man','He-Man'],
+        ['Critical Role: Bells Hells', 'imogen'],
         ['Miscellaneous','link'],
         ['Critical Role: Vox Machina', 'percy'],
         ['Critical Role: Vox Machina', 'pike'],
@@ -43,7 +47,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         style:{ 
             height: '250px'
         },
-        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'D&D Animated' ],
+        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated' ],
         items
     };
 });
