@@ -188,20 +188,24 @@
         }
         addImage() {
             LoadFile(
-              true,
-              'dataURL',
-              (dataURL, filename) => {
-                  const images = util.merge(this.state.images);
-                  const tiles = util.merge(this.state.tiles);
-                  images[filename] = dataURL;
-                  tiles[filename] = { '': true };
-                  this.setState({ images, tiles });
-              },
-              (filename, error) => {
-                  console.log({ filename, error });
-                  alert(filename + ' failed to load. See console for error.');
-              }
-            );
+                true,
+                'dataURL',
+                (files) => {
+                    const { images, tiles } = files.reduce(({images, tiles}, {filename, dataURL}) => {
+                        images[filename] = dataURL;
+                        tiles[filename] = { '': true };
+                        return {images, tiles};
+                    }, {
+                        images: util.merge(this.state.images),
+                        tiles: util.merge(this.state.tiles)
+                    });
+                    this.setState({ images, tiles });
+                },
+                (errors) => {
+                    console.log({ errors });
+                    alert('Failed to load files. See console for error.');
+                  }
+                );
         }
         editTile(filename) {
             this.modals.tileEditor.open({ filename, dataURL: this.state.images[filename], tiles: this.state.tiles[filename] });

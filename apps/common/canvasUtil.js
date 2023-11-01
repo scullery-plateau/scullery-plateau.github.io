@@ -25,7 +25,7 @@ namespace("sp.common.CanvasUtil",{},({}) => {
       });
       ctx.closePath();
   }
-  const drawRect = function( ctx, { cx, cy, d, lineWidthMult }, { ratioW, ratioH } ) {
+  const drawRect = function( ctx, { cx, cy, d }, { ratioW, ratioH } ) {
     const args = {
       width: d,
       height: d
@@ -64,13 +64,13 @@ namespace("sp.common.CanvasUtil",{},({}) => {
   }
   const strokeShape = function(ctx, dimObj, args) {
     ctx.lineWidth = dimObj.lineWidthMult * args.frameWidth;
-    ctx.strokeStyle = frameColor;
+    ctx.strokeStyle = args.frameColor;
     ctx.beginPath();
     drawShape(ctx,dimObj,args);
     ctx.closePath();
     ctx.stroke();
   }
-  const drawImage = function(ctx, img, x, y, w, h, args) {
+  const drawImage = function(ctx, dimObj, img, x, y, w, h, args) {
     ctx.drawImage(img, x, y, w, h);
     // now we change the gCO
     ctx.globalCompositeOperation='destination-in';

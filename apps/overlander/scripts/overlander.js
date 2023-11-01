@@ -139,19 +139,25 @@ namespace('sp.overlander.Overlander',{
             }];
         }
         addImage() {
+          const filesToTiles = ((files,tiles) => {
+            if (files.length == 0) {
+              this.setState({ tiles });
+            } else {
+              const { filename, dataURL } = files[0];
+              Tile.loadTile(filename, dataURL, (tile) => {
+                filesToTiles(files.slice(1), [].concat(tiles,[tile]));
+              });
+            }
+          });
           LoadFile(
             true,
             'dataURL',
-            (imageURL, filename) => {
-              Tile.loadTile(filename, imageURL, (tile) => {
-                const tiles = this.state.tiles.map(tile => util.merge(tile));
-                tiles.push(tile);
-                this.setState({ tiles });
-              });
+            (files) => {
+              filesToTiles(files, this.state.tiles.map(tile => util.copyObj(tile)));
             },
-            (filename, error) => {
-              console.log({ filename, error });
-              alert(filename + ' failed to load. See console for error.');
+            (errors) => {
+              console.log({ errors });
+              alert('Failed to load files. See console for error.');
             }
           );
         }

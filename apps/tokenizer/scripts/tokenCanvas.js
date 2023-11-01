@@ -25,9 +25,9 @@ namespace("sp.tokenizer.TokenCanvas",{
     }
   }
   const dim = 500;
-  const drawCanvasURL = function(img,token) {
+  const drawCanvasURL = function(canvasId,img,token) {
     applyDrawType(token);
-    const c = document.getElementById("canvas");
+    const c = document.getElementById(canvasId);
     const ctx = c.getContext('2d');
     const dimObj = CanvasUtil.getConstants(dim);
     c.width = dimObj.width;
@@ -45,7 +45,7 @@ namespace("sp.tokenizer.TokenCanvas",{
       CanvasUtil.fillShape(ctx, dimObj, token);
     }
 
-    CanvasUtil.drawImage(ctx, img, ix, iy, iw, ih, token);
+    CanvasUtil.drawImage(ctx, dimObj, img, ix, iy, iw, ih, token);
 
     CanvasUtil.strokeShape(ctx, dimObj, token);
 

@@ -39,6 +39,7 @@
 
     <!-- project namespaces -->
     <script type="text/babel" src="../common/buildAbout.js"></script>
+    <script type="text/babel" src="../common/canvasUtil.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
     <script type="text/babel" src="../common/editMode.js"></script>
@@ -52,13 +53,14 @@
 
     <!-- local namespaces -->
     <script type="text/babel" src="./scripts/minifier2.js"></script>
-    <script type="text/babel" src="./scripts/print-minis.js"></script>
+    <script type="text/babel" src="./scripts/miniCanvas.js"></script>
+    <script type="text/babel" src="./scripts/print-minis2.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
         const { Minifier, Footer } = imports({
-          'sp.minifier.Minifier2': 'Minifier',
+          'sp.minifier.Minifier': 'Minifier',
           'sp.common.Footer': 'Footer',
         });
         const unusedNamespaces = listUnusedNamespaces();
@@ -66,7 +68,7 @@
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <Minifier />
+          <Minifier canvasId="canvas"/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
           <Footer />
@@ -77,5 +79,6 @@
   <body class="bg-dark text-light">
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
+    <canvas style="display: none;" id="canvas"></canvas>
   </body>
 </html>

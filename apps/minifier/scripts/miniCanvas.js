@@ -13,8 +13,8 @@ namespace("sp.minifier.MiniCanvas",{
     }
   }
   const dim = 0.1;
-  const drawCanvasURL = function(img, mini, size) {
-    const c = document.getElementById("canvas");
+  const drawCanvasURL = function(canvasId, img, mini, size) {
+    const c = document.getElementById(canvasId);
     const ctx = c.getContext('2d');
     const dimObj = CanvasUtil.getConstants(dim);
     c.width = dimObj.width;
@@ -27,7 +27,7 @@ namespace("sp.minifier.MiniCanvas",{
     const [icx, icy] = [iw, ih].map((d) => (d / 2));
     const [ix, iy] = [dimObj.cx + mini.xOffset - icx, dimObj.cy + mini.yOffset - icy]
 
-    CanvasUtil.drawImage(ctx, img, ix, iy, iw, ih, util.merge(mini, size));
+    CanvasUtil.drawImage(ctx, dimObj, img, ix, iy, iw, ih, util.merge(mini, size));
 
     // closePath is useless here
     //ctx.closePath();

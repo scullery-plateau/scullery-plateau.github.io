@@ -12,7 +12,7 @@ namespace(
     'sp.tokenizer.TokenCanvas': 'TokenCanvas',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
-  ({ buildAbout, Dialog, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
+  ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
     const about = [
       'Tokenizer is a tool for reframing digital images into printable and downloadable tokens.',
       'Import your images, apply a frame, and download them or print them as tokens of 1", 2", 3", or 4".',
@@ -22,6 +22,7 @@ namespace(
     return class extends React.Component {
       constructor(props) {
         super(props);
+        this.canvasId = props.canvasId;
         this.state = {size: 1, tokens: []};
         this.modals = Dialog.factory({
           about: {
@@ -114,7 +115,7 @@ namespace(
             const allTokens = tokens.map((token) => {
               const t = { token };
               util.initImageObj(token.url,(baseImg) => {
-                token.canvasURL = TokenCanvas.drawCanvasURL(baseImg,token);
+                token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId,baseImg,token);
                 t.baseImg = baseImg;
               });
               return t;
@@ -140,19 +141,29 @@ namespace(
         this.setState({tokens: this.state.tokens.filter((t) => t.token.copyCount > 0)});
       }
       loadImage() {
+        const filesToTokens = ((files, tokens) => {
+          console.log({ files, tokens });
+          if (files.length == 0) {
+            this.setState({ tokens });
+          } else {
+            const { filename, dataURL } = files[0];
+            const token = TokenCanvas.initState(dataURL,filename,1);
+            util.initImageObj(dataURL,(baseImg) => {
+              token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId, baseImg, token);
+              filesToTokens(files.slice(1), [].concat(tokens, [{token, baseImg}]));
+            });
+          }
+        });
         LoadFile(
           true,
           'dataURL',
-          (dataURL, filename) => {
-            const token = TokenCanvas.initState(dataURL,filename,1);
-            util.initImageObj(dataURL,(baseImg) => {
-              token.canvasURL = TokenCanvas.drawCanvasURL(baseImg, token);
-              this.setState({ tokens: [].concat(this.state.tokens, [{token, baseImg}]) });
-            });
+          (files) => {
+            console.log({ files });
+            filesToTokens(files,this.state.tokens);
           },
-          (filename, error) => {
-            console.log({filename, error});
-            alert(filename + ' failed to load. See console for error.');
+          (errors) => {
+            console.log({ errors });
+            alert('Failed to load files. See console for error.');
           }
         );
       }
@@ -209,7 +220,7 @@ namespace(
                     />
                     <button
                       className="btn btn-info"
-                      onClick={ () => { this.modals.tokenFrame.open({ index, token, baseImg }) } }
+                      onClick={ () => { this.modals.tokenFrame.open({ canvasId: this.canvasId, index, token, baseImg }) } }
                     >Apply Frame</button>
                   </div>
                 );

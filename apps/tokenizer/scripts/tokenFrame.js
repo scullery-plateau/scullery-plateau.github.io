@@ -2,19 +2,19 @@ namespace("sp.tokenizer.TokenFrame",{
   "sp.common.ColorPicker":"ColorPicker",
   "sp.common.Colors":"Colors",
   "sp.common.Dialog":"Dialog",
-  'sp.common.Utilities':'util',
   'sp.tokenizer.TokenCanvas':'TokenCanvas',
-},({ ColorPicker, Colors, Dialog, util, TokenCanvas }) => {
+},({ ColorPicker, Colors, Dialog, TokenCanvas }) => {
   return class extends React.Component {
     constructor(props) {
       super(props);
       this.state = TokenCanvas.initState();
       this.onClose = props.onClose;
-      props.setOnOpen(({baseImg,token,index}) => {
+      props.setOnOpen(({canvasId, baseImg, token, index}) => {
         this.setState(token);
+        this.canvasId = canvasId;
         this.tokenIndex = index;
         this.baseImg = baseImg;
-        this.setState({ canvasURL: TokenCanvas.drawCanvasURL(this.baseImg,this.state)});
+        this.setState({ canvasURL: TokenCanvas.drawCanvasURL(this.canvasId, this.baseImg, this.state)});
       });
       this.modals = Dialog.factory({
         frameColorPicker: {
@@ -41,7 +41,7 @@ namespace("sp.tokenizer.TokenFrame",{
       Object.entries(update).forEach(([k,v]) => {
         token[k] = v;
       });
-      token.canvasURL = TokenCanvas.drawCanvasURL(this.baseImg,token);
+      token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId, this.baseImg, token);
       this.setState(token);
     }
     render() {
