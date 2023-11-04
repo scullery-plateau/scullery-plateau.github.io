@@ -46,7 +46,7 @@ namespace('sp.outfitter.Outfitter', {
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {tab:0};
       this.keyHandlers = {};
       Object.entries(keyDownActions).forEach(([event, [field, step, defaultValue]]) => {
         const handler = (() => { this.stepLayer(field, step, defaultValue); });
@@ -307,6 +307,10 @@ namespace('sp.outfitter.Outfitter', {
           this.setColorFromPicker(field,undefined)
         }}>{label}</button>;
     }
+    updateTab(event, tab) {
+      event.preventDefault();
+      this.setState({ tab });
+    }
     render() {
       if (!this.state.schematic) {
         return <>
@@ -344,242 +348,269 @@ namespace('sp.outfitter.Outfitter', {
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="row">
-            <div className="col-4 d-flex flex-column">
-              <div className="rpg-box text-light m-1 d-flex flex-column">
-                <div className="d-flex justify-content-center">
-                  <div className="input-group">
-                    <label htmlFor="layer-select" className="input-group-text">Layer:</label>
-                    <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
-                      this.setState({ selectedLayer: parseInt(e.target.value.toString()) })
-                    }}>
-                      {
-                        this.state.schematic.layers.map((layer, index) => {
-                          return <option key={`layer-option-${index}`} value={index}>{ c.getLayerLabel(index,layer) }</option>;
-                        })
-                      }
-                    </select>
-                  </div>
-                  <button
-                    title="Add Layer"
-                    className="btn btn-success"
-                    onClick={() => this.addLayer()}>+</button>
-                  <button
-                    title="Remove Layer"
-                    className="btn btn-danger"
-                    onClick={() => this.removeLayer()}>-</button>
-
+            <div className="col-6 d-flex flex-column">
+              <div className="card rpg-box text-light p-0">
+                <div className="card-header bg-dark">
+                  <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                      <a class={`nav-link ${this.state.tab==0?"active":""}`} href="#" onClick={(e) => this.updateTab(e,0)}>Layers</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class={`nav-link ${this.state.tab==1?"active":""}`} href="#" onClick={(e) => this.updateTab(e,1)}>Details</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class={`nav-link ${this.state.tab==2?"active":""}`} href="#" onClick={(e) => this.updateTab(e,2)}>Transform</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class={`nav-link ${this.state.tab==3?"active":""}`} href="#" onClick={(e) => this.updateTab(e,3)}>Misc</a>
+                    </li>
+                  </ul>
                 </div>
-                <div className="d-flex justify-content-around">
-                  <button
-                    title="Move To Back"
-                    className="btn btn-secondary"
-                    onClick={() => this.moveLayerToBack()}
-                  >
-                    <i className="fas fa-fast-backward"></i>
-                  </button>
-                  <button
-                    title="Move Back"
-                    className="btn btn-secondary"
-                    onClick={() => this.moveLayerBack()}
-                  >
-                    <i className="fas fa-step-backward"></i>
-                  </button>
-                  <button
-                    title="Move Forward"
-                    className="btn btn-secondary"
-                    onClick={() => this.moveLayerForward()}
-                  >
-                    <i className="fas fa-step-forward"></i>
-                  </button>
-                  <button
-                    title="Move To Front"
-                    className="btn btn-secondary"
-                    onClick={() => this.moveLayerToFront()}
-                  >
-                    <i className="fas fa-fast-forward"></i>
-                  </button>
-                  <button
-                    title="Copy Layer"
-                    className="btn btn-secondary"
-                    onClick={() => this.copyLayer()}
-                  >
-                    <i className="fas fa-copy"></i>
-                  </button>
-                  <button
-                    id="flip-button"
-                    className={`btn ${this.fromSelectedLayer("flip",false)?'flipped':"not-flipped"}`}
-                    onClick={() => this.flipLayer()}
-                  >
-                    Flip?
-                  </button>
-                </div>
-              </div>
-              <div className="rpg-box text-light m-1 d-flex flex-column">
-                <div className="input-group">
-                  <label htmlFor="part-type" className="input-group-text">Part Type:</label>
-                  <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
-                    const part = e.target.value;
-                    const maxIndex = this.state.metadata.parts[part].length - 1;
-                    const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
-                    this.updateLayer({ part, index });
-                  }}>
-                    <option disabled hidden value>Select Part Type</option>
-                    {
-                      c.getPartGroups().map((group,partGroupIndex) => {
-                        return <optgroup key={`part-group-option-${partGroupIndex}`} label={group}>
+                <div className="card-body">
+                  { this.state.tab==0 && <>
+                    <div className="m-1 d-flex flex-column">
+                      <div className="input-group">
+                        <label htmlFor="layer-select" className="input-group-text">Layer:</label>
+                        <select id="layer-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
+                          this.setState({ selectedLayer: parseInt(e.target.value.toString()) })
+                        }}>
                           {
-                            c.getPartTypesByGroup(group).map((partType,partTypeIndex) => {
-                              return <option key={`part-type-index-${partGroupIndex}-${partTypeIndex}`} value={partType.part}>{partType.label}</option>;
+                            this.state.schematic.layers.map((layer, index) => {
+                              return <option key={`layer-option-${index}`} value={index}>{ c.getLayerLabel(index,layer) }</option>;
                             })
                           }
-                        </optgroup>;
-                      })
-                    }
-                  </select>
-                </div>
-                <div className="input-group">
-                  <label htmlFor="part-index" className="input-group-text">Part Index:</label>
-                  <input
-                    id="part-index"
-                    type="number"
-                    className="form-control"
-                    min={0}
-                    max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
-                    style={{ width: "4em" }}
-                    value={ this.fromSelectedLayer('index') }
-                    onChange={(e) => {
-                      this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value || 0))))
-                    }}/>
-                </div>
-              </div>
-              <div className="rpg-box text-light m-1 d-flex flex-column">
-                <div className="input-group">
-                  <label htmlFor="body-scale" className="input-group-text">Body Scale:</label>
-                  <select id="body-scale" className="form-control" value={ this.state.schematic.bodyScale }
-                          onChange={(e) => this.updateSchematic('bodyScale',e.target.value) }>
-                    <option>default</option>
-                    {
-                      OutfitterSVG.getBodyScales().map((bodyScale, index) => {
-                        return <option key={`bodyScale-${index}`} value={bodyScale}>{bodyScale}</option>;
-                      })
-                    }
-                  </select>
-                </div>
-                <div className="d-flex">
-                  <ColorPickerButton label="BG Color" field="background" getter={() => this.state.schematic.bgColor } style={{minWidth:"6em"}}/>
-                  <div className="input-group">
-                    <label htmlFor="bg-pattern" className="input-group-text">BG Pattern:</label>
-                    <input
-                      id="bg-pattern"
-                      type="number"
-                      className="form-control"
-                      min={-1}
-                      max={ this.state.metadata.patternCount }
-                      style={{width: "3em"}}
-                      value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
-                      onChange={(e) => this.updateSchematic('bgPattern',parseInt(e.target.value))}
-                    />
-                  </div>
+                        </select>
+                      </div>
+                      <div className="d-flex justify-content-around m-0">
+                        <button
+                          title="Add Layer"
+                          className="w-100 btn btn-success"
+                          onClick={() => this.addLayer()}>+</button>
+                        <button
+                          title="Remove Layer"
+                          className="w-100 btn btn-danger"
+                          onClick={() => this.removeLayer()}>-</button>
+                        <button
+                          title="Copy Layer"
+                          className="w-100 btn btn-secondary"
+                          onClick={() => this.copyLayer()}
+                        >
+                          <i className="fas fa-copy"></i>
+                        </button>
+                        <button
+                          id="flip-button"
+                          className={`w-100 btn ${this.fromSelectedLayer("flip",false)?'flipped':"not-flipped"}`}
+                          onClick={() => this.flipLayer()}
+                        >
+                          Flip?
+                        </button>
+                      </div>
+                      <div className="d-flex justify-content-around m-0">
+                        <button
+                          title="Move To Back"
+                          className="w-100 btn btn-secondary"
+                          onClick={() => this.moveLayerToBack()}
+                        >
+                          <i className="fas fa-fast-backward"></i>
+                        </button>
+                        <button
+                          title="Move Back"
+                          className="w-100 btn btn-secondary"
+                          onClick={() => this.moveLayerBack()}
+                        >
+                          <i className="fas fa-step-backward"></i>
+                        </button>
+                        <button
+                          title="Move Forward"
+                          className="w-100 btn btn-secondary"
+                          onClick={() => this.moveLayerForward()}
+                        >
+                          <i className="fas fa-step-forward"></i>
+                        </button>
+                        <button
+                          title="Move To Front"
+                          className="w-100 btn btn-secondary"
+                          onClick={() => this.moveLayerToFront()}
+                        >
+                          <i className="fas fa-fast-forward"></i>
+                        </button>
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="part-type" className="input-group-text">Part Type:</label>
+                        <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
+                          const part = e.target.value;
+                          const maxIndex = this.state.metadata.parts[part].length - 1;
+                          const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
+                          this.updateLayer({ part, index });
+                        }}>
+                          <option disabled hidden value>Select Part Type</option>
+                          {
+                            c.getPartGroups().map((group,partGroupIndex) => {
+                              return <optgroup key={`part-group-option-${partGroupIndex}`} label={group}>
+                                {
+                                  c.getPartTypesByGroup(group).map((partType,partTypeIndex) => {
+                                    return <option key={`part-type-index-${partGroupIndex}-${partTypeIndex}`} value={partType.part}>{partType.label}</option>;
+                                  })
+                                }
+                              </optgroup>;
+                            })
+                          }
+                        </select>
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="part-index" className="input-group-text">Part Index:</label>
+                        <input
+                          id="part-index"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
+                          value={ this.fromSelectedLayer('index') }
+                          onChange={(e) => {
+                            this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value || 0))))
+                          }}/>
+                      </div>
+                    </div>
+                  </> }
+                  { this.state.tab==1 && <>
+                    <div className="m-1 d-flex flex-column">
+                      <h4>{ c.getLayerLabel(this.state.selectedLayer,this.state.schematic.layers[this.state.selectedLayer]) }</h4>
+                      <div className="d-flex justify-content-evenly">
+                        <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') } style={{}}/>
+                        <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') } style={{}}/>
+                        <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') } style={{}}/>
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="opacity" className="input-group-text">Opacity:</label>
+                        <input
+                          id="opacity"
+                          type="number"
+                          className="form-control"
+                          step={0.01}
+                          min={0.00}
+                          max={1.00}
+                          value={ this.fromSelectedLayer('opacity',1.0) }
+                          onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
+                        />
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="pattern" className="input-group-text">Pattern:</label>
+                        <input
+                          id="pattern"
+                          type="number"
+                          className="form-control"
+                          min={-1}
+                          max={ this.state.metadata.patternCount }
+                          value={ this.fromSelectedLayer('pattern',-1) }
+                          onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
+                        />
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="shading" className="input-group-text">Shading:</label>
+                        <input
+                          id="shading"
+                          type="number"
+                          className="form-control"
+                          min={-1}
+                          max={ this.state.metadata.shadingCount }
+                          value={ this.fromSelectedLayer('shading',-1) }
+                          onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}/>
+                      </div>
+                    </div>
+                  </> }
+                  { this.state.tab==2 && <>
+                    <div className="m-1 d-flex flex-column">
+                      <h4>{ c.getLayerLabel(this.state.selectedLayer,this.state.schematic.layers[this.state.selectedLayer]) }</h4>
+                      <div className="input-group">
+                        <label className="input-group-text">Resize</label>
+                        <label htmlFor="resize-x" className="input-group-text">X</label>
+                        <input
+                          id="resize-x"
+                          type="number"
+                          className="form-control"
+                          step="0.01"
+                          value={ this.fromSelectedLayer('resizeX',1.00) }
+                          onChange={(e) => this.updateLayer('resizeX',parseFloat(e.target.value))}
+                        />
+                        <label htmlFor="resize-y" className="input-group-text">Y</label>
+                        <input
+                          id="resize-y"
+                          type="number"
+                          className="form-control"
+                          step="0.01"
+                          value={ this.fromSelectedLayer('resizeY',1.00) }
+                          onChange={(e) => this.updateLayer('resizeY',parseFloat(e.target.value))}
+                        />
+                      </div>
+                      <div className="input-group">
+                        <label className="input-group-text">Move</label>
+                        <label htmlFor="move-x" className="input-group-text">X</label>
+                        <input
+                          id="move-x"
+                          type="number"
+                          className="form-control"
+                          value={ this.fromSelectedLayer('moveX',0) }
+                          onChange={(e) => this.updateLayer('moveX',parseFloat(e.target.value))}
+                        />
+                        <label htmlFor="move-y" className="input-group-text">Y</label>
+                        <input
+                          id="move-y"
+                          type="number"
+                          className="form-control"
+                          value={ this.fromSelectedLayer('moveY',0) }
+                          onChange={(e) => this.updateLayer('moveY',parseFloat(e.target.value))}
+                        />
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="rotate" className="input-group-text">Rotate:</label>
+                        <input
+                          id="rotate"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ 360 }
+                          value={ this.fromSelectedLayer('rotate',0) }
+                          onChange={(e) => this.updateLayer('rotate',parseFloat(e.target.value))}/>
+                      </div>
+                    </div>
+                  </> }
+                  { this.state.tab==3 && <>
+                    <div className="m-1 d-flex flex-column">
+                      <div className="input-group">
+                        <label htmlFor="body-scale" className="input-group-text">Body Scale:</label>
+                        <select id="body-scale" className="form-control" value={ this.state.schematic.bodyScale }
+                                onChange={(e) => this.updateSchematic('bodyScale',e.target.value) }>
+                          <option>default</option>
+                          {
+                            OutfitterSVG.getBodyScales().map((bodyScale, index) => {
+                              return <option key={`bodyScale-${index}`} value={bodyScale}>{bodyScale}</option>;
+                            })
+                          }
+                        </select>
+                      </div>
+                      <div className="input-group">
+                        <label htmlFor="bg-pattern" className="input-group-text">BG Pattern:</label>
+                        <input
+                          id="bg-pattern"
+                          type="number"
+                          className="form-control"
+                          min={-1}
+                          max={ this.state.metadata.patternCount }
+                          value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
+                          onChange={(e) => this.updateSchematic('bgPattern',parseInt(e.target.value))}
+                        />
+                      </div>
+                      <ColorPickerButton label="BG Color" field="background" getter={() => this.state.schematic.bgColor } style={{width: "100%!important"}}/>
+                    </div>
+                  </> }
                 </div>
               </div>
             </div>
-            <div className="col-4 d-flex justify-content-center">
+            <div className="col-6 d-flex justify-content-center">
               <div className="rpg-box m-1">
                 <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata } selectLayer={(layerIndex) => {
                   this.setState({ selectedLayer: layerIndex });
                 }}/>
-              </div>
-            </div>
-            <div className="col-4 d-flex flex-column">
-              <div className=" rpg-box text-light m-1 d-flex flex-column">
-                <div className="d-flex justify-content-evenly">
-                  <ColorPickerButton label="Base" field="base" getter={() => this.fromSelectedLayer('base') } style={{}}/>
-                  <ColorPickerButton label="Detail" field="detail" getter={() => this.fromSelectedLayer('detail') } style={{}}/>
-                  <ColorPickerButton label="Outline" field="outline" getter={() => this.fromSelectedLayer('outline') } style={{}}/>
-                </div>
-                <div className="input-group">
-                  <label htmlFor="opacity" className="input-group-text">Opacity:</label>
-                  <input
-                    id="opacity"
-                    type="number"
-                    className="form-control"
-                    step={0.01}
-                    min={0.00}
-                    max={1.00}
-                    style={{width: "2em"}}
-                    value={ this.fromSelectedLayer('opacity',1.0) }
-                    onChange={(e) => this.updateLayer('opacity',parseFloat(e.target.value))}
-                  />
-                </div>
-              </div>
-              <div className=" rpg-box text-light m-1 d-flex flex-column">
-                <div className="input-group">
-                  <label className="input-group-text">Resize</label>
-                  <label htmlFor="resize-x" className="input-group-text">X</label>
-                  <input
-                    id="resize-x"
-                    type="number"
-                    className="form-control"
-                    step="0.01"
-                    value={ this.fromSelectedLayer('resizeX',1.00) }
-                    onChange={(e) => this.updateLayer('resizeX',parseFloat(e.target.value))}
-                  />
-                  <label htmlFor="resize-y" className="input-group-text">Y</label>
-                  <input
-                    id="resize-y"
-                    type="number"
-                    className="form-control"
-                    step="0.01"
-                    value={ this.fromSelectedLayer('resizeY',1.00) }
-                    onChange={(e) => this.updateLayer('resizeY',parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label className="input-group-text">Move</label>
-                  <label htmlFor="move-x" className="input-group-text">X</label>
-                  <input
-                    id="move-x"
-                    type="number"
-                    className="form-control"
-                    value={ this.fromSelectedLayer('moveX',0) }
-                    onChange={(e) => this.updateLayer('moveX',parseFloat(e.target.value))}
-                  />
-                  <label htmlFor="move-y" className="input-group-text">Y</label>
-                  <input
-                    id="move-y"
-                    type="number"
-                    className="form-control"
-                    value={ this.fromSelectedLayer('moveY',0) }
-                    onChange={(e) => this.updateLayer('moveY',parseFloat(e.target.value))}
-                  />
-                </div>
-              </div>
-              <div className=" rpg-box text-light m-1 d-flex flex-column">
-                <div className="input-group">
-                  <label htmlFor="pattern" className="input-group-text">Pattern:</label>
-                  <input
-                    id="pattern"
-                    type="number"
-                    className="form-control"
-                    min={-1}
-                    max={ this.state.metadata.patternCount }
-                    style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('pattern',-1) }
-                    onChange={(e) => this.updateLayer('pattern',parseFloat(e.target.value))}
-                  />
-                </div>
-                <div className="input-group">
-                  <label htmlFor="shading" className="input-group-text">Shading:</label>
-                  <input
-                    id="shading"
-                    type="number"
-                    className="form-control"
-                    min={-1}
-                    max={ this.state.metadata.shadingCount }
-                    style={{width: "4em"}}
-                    value={ this.fromSelectedLayer('shading',-1) }
-                    onChange={(e) => this.updateLayer('shading',parseFloat(e.target.value))}/>
-                </div>
               </div>
             </div>
           </div>

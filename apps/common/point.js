@@ -18,6 +18,9 @@ namespace('sp.common.Point', () => {
         this.max = function ([px, py]) {
             return new Point([Math.max(x, px), Math.max(y, py)]);
         };
+        this.midpoint = function(p) {
+            return this.plus(p).times([0.5,0.5]);
+        }
         this.toString = function () {
         return `(${x},${y})`;
         };
