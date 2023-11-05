@@ -2,6 +2,7 @@ namespace("sp.purview.Purview",{
   'sp.common.Ajax':'Ajax',
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.Dialog':'Dialog',
+  'sp.common.EditMode':'EditMode',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',

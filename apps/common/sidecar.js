@@ -5,13 +5,18 @@ namespace("sp.common.Sidecar",{},({}) => {
     this.open = function() {
       const sidecar = window.open();
       sidecar.document.write(initHTML);
-      ReactDOM.createRoot(sidecar.document.getElementById(appRootId)).render(
-        <ComponentClass
-          setOnUpdate={(setter) => {
-            sidecar.document.addEventListener(sidecarUpdateEvent, (e) => {
-              setter(e.detail);
-            });
-          }}/>);
+      sidecar.document.addEventListener("load",() => {
+        const appRoot = sidecar.document.getElementById(appRootId);
+        if (appRoot) {
+          ReactDOM.createRoot(sidecar.document.getElementById(appRootId)).render(
+            <ComponentClass
+              setOnUpdate={(setter) => {
+                sidecar.document.addEventListener(sidecarUpdateEvent, (e) => {
+                  setter(e.detail);
+                });
+              }}/>);
+        }
+      })
       state.sidecar = sidecar;
     }
     this.update = function(detail) {

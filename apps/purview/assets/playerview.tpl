@@ -41,9 +41,10 @@
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+
     <!-- bind app root -->
   </head>
-  <body class="m-0 p-0">
+  <body class="m-0 p-0" onload="document.dispatchEvent(new CustomEvent('fullyLoaded'))">
     <div id="app-root" class="m-0 p-0"></div>
   </body>
 </html>
