@@ -1,20 +1,18 @@
 namespace("sp.purview.Purview",{
-  'sp.common.Ajax':'Ajax',
   'sp.common.BuildAbout':'buildAbout',
   'sp.common.Dialog':'Dialog',
   'sp.common.EditMode':'EditMode',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
-  "sp.common.Sidecar":"Sidecar",
   "sp.common.Utilities":"util",
   "sp.purview.PlayerView":"PlayerView",
-},({ Ajax, buildAbout, Dialog, EditMode, Header, LoadFile, ProgressBar, Sidecar, util, PlayerView}) => {
+},({ buildAbout, Dialog, EditMode, Header, LoadFile, util, PlayerView}) => {
   const about = [];
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = { canvasId: props.canvasId };
       this.modals = Dialog.factory({
         about: {
           componentClass: buildAbout("Purview",about),
@@ -35,35 +33,11 @@ namespace("sp.purview.Purview",{
         false,
         'dataURL',
         (map) => {
-          Ajax.getLocalStaticFileAsText("https://scullery-plateau.github.io/apps/purview/assets/playerview.tpl",
-          {
-            success: ({ responseText }) => {
-              try{
-                const sidecar = Sidecar.build({
-                  sidecarName: "playerView", 
-                  initHTML: responseText, 
-                  appRootId: "app-root", 
-                  loadEvent: "fullyLoaded",
-                  componentClass: PlayerView
-                });
-                EditMode.enable();
-                sidecar.open(() => {
-                  sidecar.update({ map });
-                  this.setState({ map, sidecar, progress: undefined });
-                });
-              } catch (e) {
-                console.log({ responseText, e });
-              }
-            },
-            failure: (resp) => {
-              console.log(resp);
-              throw resp;
-            },
-            stateChange: (state) => {
-              const progress = (100 * (state.state + 1)) / (state.max + 1);
-              this.setState({ progress })
-            }
-          });
+          const playerView = new PlayerView();
+          playerView.open();
+          playerView.update({ map });
+          playerView.setBackgroundColor("black");
+          this.setState({ map, playerView });
         },
         (filename, error) => {
           console.log({ filename, error });
@@ -74,8 +48,6 @@ namespace("sp.purview.Purview",{
     render() {
       return (<>
         <Header menuItems={this.menuItems} appTitle={'Purview'} />
-        { this.state.progress && 
-          <ProgressBar subject="player view template" progress={this.state.progress}/>}
         { !this.state.map && 
           (<>
             <div className="d-flex justify-content-center">
@@ -83,11 +55,9 @@ namespace("sp.purview.Purview",{
             </div>
           </>) }
         { this.state.map && 
-          <div style={{ 
-            backgroundImage: `url(${this.state.map})`,
-            width: '20em',
-            height: '20em',
-          }}></div>
+          <div className="d-flex justify-content-center">
+            <img style={{width: "20em", height: "20em"}} src={this.state.map}/>
+          </div>
         }
       </>);
     }

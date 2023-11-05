@@ -42,7 +42,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- project namespaces -->
-    <script type="text/babel" src="../common/ajax.js"></script>
     <script type="text/babel" src="../common/buildAbout.js"></script>
     <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
@@ -53,7 +52,6 @@
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
     <script type="text/babel" src="../common/progressBar.js"></script>
-    <script type="text/babel" src="../common/sidecar.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
@@ -72,7 +70,7 @@
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <Purview />
+          <Purview canvasId="canvas"/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
           <Footer />
@@ -83,5 +81,6 @@
   <body class="bg-dark text-light">
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
+    <canvas style="display: none;" id="canvas"></canvas>
   </body>
 </html>
