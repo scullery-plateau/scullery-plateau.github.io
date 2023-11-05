@@ -1,17 +1,18 @@
 namespace("sp.purview.PlayerView",{},({}) => {
-  const template = function({ map }) {
-    return `<img style="max-width: 100%; max-height: 100%; width: auto; height: auto;" src="${map}"/>`;
+  const template = function({ dataURL, frame, img }) {
+    return `<svg width="100%" height="100%" viewbox="${frame.x} ${frame.y} ${frame.width} ${frame.height}" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
+      <image href="${dataURL}" width="${img.width}" height="${img.height}"/>
+    </svg>`;
   }
   return function() {
     const state = {};
     this.open = function() {
-      state.sidecar = window.open();
-      console.log(this.getDimensions());
+      state.sidecar = window.open("", "_blank");
     }
     this.update = function(detail) {
       if (state.sidecar) {
         state.detail = detail;
-        state.sidecar.document.write(template(detail));
+        state.sidecar.document.body.innerHTML = template(detail);
         state.sidecar.document.body.style.margin = 0;
         state.sidecar.document.body.style.padding = 0;
         state.sidecar.document.body.style.textAlign = "center";
@@ -25,7 +26,6 @@ namespace("sp.purview.PlayerView",{},({}) => {
     this.getDimensions = function() {
       if (state.sidecar) {
         const { innerHeight, innerWidth, outerHeight, outerWidth } = state.sidecar;
-        console.log({ innerHeight, innerWidth, outerHeight, outerWidth });
         return { innerHeight, innerWidth, outerHeight, outerWidth };
       }
     }
