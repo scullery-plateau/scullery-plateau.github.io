@@ -45,7 +45,7 @@ namespace("sp.tokenizer.TokenCanvas",{
       CanvasUtil.fillShape(ctx, dimObj, token);
     }
 
-    CanvasUtil.drawImage(ctx, img, ix, iy, iw, ih, token);
+    CanvasUtil.drawImage(ctx, dimObj, img, ix, iy, iw, ih, token);
 
     CanvasUtil.strokeShape(ctx, dimObj, token);
 
