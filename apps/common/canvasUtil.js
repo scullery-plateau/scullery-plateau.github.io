@@ -25,7 +25,7 @@ namespace("sp.common.CanvasUtil",{},({}) => {
       });
       ctx.closePath();
   }
-  const drawRect = function( ctx, { cx, cy, d, lineWidthMult }, { ratioW, ratioH } ) {
+  const drawRect = function( ctx, { cx, cy, d }, { ratioW, ratioH } ) {
     const args = {
       width: d,
       height: d

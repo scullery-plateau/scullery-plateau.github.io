@@ -6,6 +6,7 @@ namespace("sp.purview.PlayerView",{},({}) => {
     const state = {};
     this.open = function() {
       state.sidecar = window.open();
+      console.log(this.getDimensions());
     }
     this.update = function(detail) {
       if (state.sidecar) {
@@ -22,11 +23,16 @@ namespace("sp.purview.PlayerView",{},({}) => {
       }
     }
     this.getDimensions = function() {
-      const { innerHeight, innerWidth, outerHeight, outerWidth } = state.sidecar;
-      return { innerHeight, innerWidth, outerHeight, outerWidth };
+      if (state.sidecar) {
+        const { innerHeight, innerWidth, outerHeight, outerWidth } = state.sidecar;
+        console.log({ innerHeight, innerWidth, outerHeight, outerWidth });
+        return { innerHeight, innerWidth, outerHeight, outerWidth };
+      }
     }
     this.setOnResize = function(onResize) {
-      state.sidecar.addEventListener("resize", onResize);
+      if (state.sidecar) {
+        state.sidecar.addEventListener("resize", onResize);
+      }
     }
   }
 });

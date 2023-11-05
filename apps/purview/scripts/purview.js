@@ -7,17 +7,16 @@ namespace("sp.purview.Purview",{
   'sp.common.ProgressBar':'ProgressBar',
   "sp.common.Utilities":"util",
   "sp.purview.PlayerView":"PlayerView",
-},({ buildAbout, Dialog, EditMode, Header, LoadFile, util, PlayerView}) => {
+  "sp.purview.PurviewCanvas":"PurviewCanvas",
+},({ buildAbout, Dialog, EditMode, Header, LoadFile, util, PlayerView, PurviewCanvas}) => {
   const about = [];
   return class extends React.Component {
     constructor(props) {
       super(props);
+      this.canvasId = props.canvasId;
       this.state = { 
-        canvasId: props.canvasId,
-        scale: 1.0,
-        xOffset: 0,
-        yOffset: 0,
         bgColor: "black",
+        frameColor: "red"
       };
       this.modals = Dialog.factory({
         about: {
@@ -36,11 +35,48 @@ namespace("sp.purview.Purview",{
     }
     applyUpdates(stateUpdates) {
       stateUpdates = stateUpdates || {};
-      const { dataURL, baseImg, playerView } = [ dataURL, baseImg, playerView ]
-      // todo
-      playerView.update({ map: dataURL });
+      const [ dataURL, baseImg, playerView ] = [ "dataURL", "baseImg", "playerView" ].map(field => this.state[field] || stateUpdates[field]);
+      const { innerWidth, innerHeight } = playerView.getDimensions();
+      console.log({ innerWidth, innerHeight });
+      const { width: imgWidth, height: imgHeight } = baseImg;
+      console.log({ baseImg, imgHeight, imgWidth });
+      const init = { scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), xOffset: 0, yOffset: 0 };
+      const scale = stateUpdates.scale || this.state.scale || init.scale;
+      const svg = {
+        width: Math.max(imgWidth, innerWidth/scale),
+        height: Math.max(imgHeight, innerHeight/scale)
+      };
+      if (svg.height > imgHeight) {
+        init.yOffset = (imgHeight - svg.height) / 2;
+      } else if (svg.width > imgWidth) {
+        init.xOffset = (imgWidth - svg.width) / 2;
+      }
+      const [ xOffset, yOffset ] = [ "xOffset", "yOffset" ].map(field => stateUpdates[field] || this.state[field] || init[field]);
+      svg.x = Math.min(xOffset,0);
+      svg.y = Math.min(yOffset,0);
+      const svgFrame = {
+        x: xOffset,
+        y: yOffset,
+        width: innerWidth/scale,
+        height: innerHeight/scale
+      };
+      const canvasDetails = {
+        x: -xOffset * scale,
+        y: -yOffset * scale,
+        w: imgWidth * scale,
+        h: imgHeight * scale
+      };
+      const canvasFrame = {
+        ratioW: innerWidth,
+        ratioH: innerHeight
+      };
+      const canvasURL = PurviewCanvas.drawCanvasURL(this.canvasId, baseImg, canvasDetails, canvasFrame);
+      playerView.update({ map: canvasURL });
+      const bgColor = stateUpdates.bgColor || this.state.bgColor;
       playerView.setBackgroundColor(bgColor);
-      this.setState(stateUpdates);
+      let updates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, svg, svgFrame }
+      console.log(updates)
+      this.setState(updates);
     }
     loadMapImage() {
       LoadFile(
@@ -48,6 +84,7 @@ namespace("sp.purview.Purview",{
         'dataURL',
         (dataURL) => {
           util.initImageObj(dataURL,(baseImg) => {
+            EditMode.enable();
             const playerView = new PlayerView();
             playerView.open();
             playerView.setOnResize(() => {
@@ -76,7 +113,7 @@ namespace("sp.purview.Purview",{
               <button className="btn btn-primary" onClick={() => this.loadMapImage()}>Load Map Image</button>
             </div>
           </>) }
-        { this.state.map && 
+        { this.state.dataURL && 
           <div className="d-flex justify-content-center">
             <div className="rpg-box d-flex flex-column m-2">
               <div className="input-group my-2">
@@ -112,8 +149,18 @@ namespace("sp.purview.Purview",{
                   onChange={(e) => this.update('yOffset',parseFloat(e.target.value))}/>
               </div>
             </div>
-            <div className="rpg-box m-2">
-              <img style={{width: "20em", height: "20em"}} src={this.state.map}/>
+            <div className="rpg-box m-2" style={{width: "20em", height: "20em"}}>
+              <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`}>
+                <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                <rect 
+                  x={this.state.svgFrame.x}
+                  y={this.state.svgFrame.y}
+                  width={this.state.svgFrame.width}
+                  height={this.state.svgFrame.height}
+                  fill="none"
+                  stroke={this.state.frameColor}
+                  strokeWidth="3"/>
+              </svg>
             </div>
           </div>
         }
