@@ -70,7 +70,7 @@ namespace("sp.common.CanvasUtil",{},({}) => {
     ctx.closePath();
     ctx.stroke();
   }
-  const drawImage = function(ctx, img, x, y, w, h, args) {
+  const drawImage = function(ctx, dimObj, img, x, y, w, h, args) {
     ctx.drawImage(img, x, y, w, h);
     // now we change the gCO
     ctx.globalCompositeOperation='destination-in';

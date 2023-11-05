@@ -27,7 +27,7 @@ namespace("sp.minifier.MiniCanvas",{
     const [icx, icy] = [iw, ih].map((d) => (d / 2));
     const [ix, iy] = [dimObj.cx + mini.xOffset - icx, dimObj.cy + mini.yOffset - icy]
 
-    CanvasUtil.drawImage(ctx, img, ix, iy, iw, ih, util.merge(mini, size));
+    CanvasUtil.drawImage(ctx, dimObj, img, ix, iy, iw, ih, util.merge(mini, size));
 
     // closePath is useless here
     //ctx.closePath();
