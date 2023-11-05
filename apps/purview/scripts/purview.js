@@ -47,7 +47,10 @@ namespace("sp.purview.Purview",{
                   componentClass: PlayerView
                 });
                 EditMode.enable();
-                this.setState({ map, sidecar, progress: undefined });
+                sidecar.open(() => {
+                  sidecar.update({ map });
+                  this.setState({ map, sidecar, progress: undefined });
+                });
               } catch (e) {
                 console.log({ responseText, e });
               }
@@ -80,7 +83,11 @@ namespace("sp.purview.Purview",{
             </div>
           </>) }
         { this.state.map && 
-          <></>
+          <div style={{ 
+            backgroundImage: `url(${this.state.map})`,
+            width: '20em',
+            height: '20em',
+          }}></div>
         }
       </>);
     }

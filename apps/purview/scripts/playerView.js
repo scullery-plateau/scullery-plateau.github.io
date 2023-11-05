@@ -10,7 +10,16 @@ namespace("sp.purview.PlayerView",{
       })
     }
     render() {
-      return (<></>);
+      return (<>
+        { this.state.map && 
+          <div style={{ 
+            backgroundImage: `url(${this.state.map})`,
+            width: '20em',
+            height: '20em',
+          }}></div>
+      
+        }
+      </>);
     }
   }
 });

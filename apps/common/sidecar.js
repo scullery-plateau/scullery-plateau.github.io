@@ -2,7 +2,7 @@ namespace("sp.common.Sidecar",{},({}) => {
   const Sidecar = function(sidecarName, initHTML, appRootId, loadEvent, ComponentClass) {
     const sidecarUpdateEvent = 'sidecar.' + sidecarName + '.update';
     const state = {};
-    this.open = function() {
+    this.open = function(onOpenComplete) {
       const sidecar = window.open();
       sidecar.document.addEventListener(loadEvent,() => {
         const appRoot = sidecar.document.getElementById(appRootId);
@@ -14,6 +14,7 @@ namespace("sp.common.Sidecar",{},({}) => {
                   setter(e.detail);
                 });
               }}/>);
+          onOpenComplete();
         }
       });
       sidecar.document.write(initHTML);
