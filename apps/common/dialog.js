@@ -1,5 +1,5 @@
 namespace('sp.common.Dialog', () => {
-  const Dialog = function (dialogName, TemplateClass, onClose, attrs) {
+  const Dialog = function (dialogName, ComponentClass, onClose, attrs) {
     attrs = attrs || {};
     const modalOpenEvent = 'modal.' + dialogName + '.open';
     const dialog = document.createElement('dialog');
@@ -7,7 +7,7 @@ namespace('sp.common.Dialog', () => {
       dialog.setAttribute(k, v);
     });
     ReactDOM.createRoot(dialog).render(
-      <TemplateClass
+      <ComponentClass
         setOnOpen={(setter) => {
           document.addEventListener(modalOpenEvent, (e) => {
             setter(e.detail);
@@ -29,8 +29,8 @@ namespace('sp.common.Dialog', () => {
     };
   };
   Dialog.factory = function (dialogMap) {
-    return Object.entries(dialogMap).reduce((out, [dialogName, { templateClass, onClose, attrs }]) => {
-      out[dialogName] = new Dialog(dialogName, templateClass, onClose, attrs);
+    return Object.entries(dialogMap).reduce((out, [dialogName, { componentClass, onClose, attrs }]) => {
+      out[dialogName] = new Dialog(dialogName, componentClass, onClose, attrs);
       return out;
     }, {});
   };
