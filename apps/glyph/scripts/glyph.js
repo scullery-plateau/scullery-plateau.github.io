@@ -31,22 +31,22 @@ namespace('sp.glyph.Glyph',{
       };
       this.modals = Dialog.factory({
         about: {
-          templateClass: buildAbout("Glyph",about),
+          componentClass: buildAbout("Glyph",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {}
         },
         fileDownload: {
-          templateClass: FileDownload,
+          componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {}
         },
         imageDownload: {
-          templateClass: ImageDownload,
+          componentClass: ImageDownload,
           attrs: { class: 'rpg-box text-light w-50' },
           onClose: () => {}
         },
         colorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
             this.updateSelectedLayer(index,color);

@@ -1,11 +1,10 @@
 namespace("sp.common.Sidecar",{},({}) => {
-  const Sidecar = function(sidecarName, initHTML, appRootId, ComponentClass) {
+  const Sidecar = function(sidecarName, initHTML, appRootId, loadEvent, ComponentClass) {
     const sidecarUpdateEvent = 'sidecar.' + sidecarName + '.update';
     const state = {};
     this.open = function() {
       const sidecar = window.open();
-      sidecar.document.write(initHTML);
-      sidecar.document.addEventListener("load",() => {
+      sidecar.document.addEventListener(loadEvent,() => {
         const appRoot = sidecar.document.getElementById(appRootId);
         if (appRoot) {
           ReactDOM.createRoot(sidecar.document.getElementById(appRootId)).render(
@@ -16,7 +15,8 @@ namespace("sp.common.Sidecar",{},({}) => {
                 });
               }}/>);
         }
-      })
+      });
+      sidecar.document.write(initHTML);
       state.sidecar = sidecar;
     }
     this.update = function(detail) {
@@ -25,8 +25,8 @@ namespace("sp.common.Sidecar",{},({}) => {
       }
     }
   };
-  Sidecar.build = function({ sidecarName, initHTML, appRootId, componentClass }) {
-    return new Sidecar(sidecarName, initHTML, appRootId, componentClass);
+  Sidecar.build = function({ sidecarName, initHTML, appRootId, loadEvent, componentClass }) {
+    return new Sidecar(sidecarName, initHTML, appRootId, loadEvent, componentClass);
   }
   return Sidecar;
 });

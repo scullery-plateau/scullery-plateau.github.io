@@ -21,12 +21,12 @@ namespace('sp.minifier.Minifier2',{
       this.state = { size: 1, minis: [], synchronize: false };
       this.modals = Dialog.factory({
         about: {
-          templateClass: buildAbout("Minifier2",about),
+          componentClass: buildAbout("Minifier2",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {},
         },
         fileDownload: {
-          templateClass: FileDownload,
+          componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {},
         },

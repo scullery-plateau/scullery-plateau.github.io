@@ -22,12 +22,12 @@ namespace(
         this.state = { size: 1, minis: [] };
         this.modals = Dialog.factory({
           about: {
-            templateClass: buildAbout("Minifier",about),
+            componentClass: buildAbout("Minifier",about),
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: () => {},
           },
           fileDownload: {
-            templateClass: FileDownload,
+            componentClass: FileDownload,
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: () => {},
           },

@@ -33,36 +33,36 @@ namespace('sp.overlander.Overlander',{
             };
             this.modals = Dialog.factory({
                 about: {
-                  templateClass: buildAbout("Overlander",about),
+                  componentClass: buildAbout("Overlander",about),
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: () => {}
                 },
                 fileDownload: {
-                  templateClass: FileDownload,
+                  componentClass: FileDownload,
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: () => {}
                 },
                 imageDownload: {
-                  templateClass: Download,
+                  componentClass: Download,
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: () => {}
                 },
                 sizeOrientation: {
-                  templateClass: DimensionSetter,
+                  componentClass: DimensionSetter,
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: ({ size, orientation }) => {
                     this.setState({ size, orientation });
                   }
                 },
                 publish: {
-                  templateClass: Publish,
+                  componentClass: Publish,
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: ({ pages, printOrientation }) => {
                     this.setState({ pages, printOrientation });
                   }
                 },
                 tileEditor: {
-                  templateClass: TileEditor,
+                  componentClass: TileEditor,
                   attrs: { class: 'rpg-box text-light w-75' },
                   onClose: ({ tile }) => {
                     const copiedTiles = this.state.tiles.map(tile => util.merge(tile));

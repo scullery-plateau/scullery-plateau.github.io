@@ -38,7 +38,7 @@ namespace('sp.cobblestone.Publish',{
       });
       this.modals = Dialog.factory({
         pageOutlinePicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
             const pages = this.state.pages.map((p) => util.merge(p));

@@ -6,7 +6,7 @@ namespace('sp.common.Gallery',{
     return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, groups, items } }) {
         const modals = Dialog.factory({
             about: {
-              templateClass: buildAbout(`${sourceApp} Gallery`,[`Click on any of the images in the gallery to download the datafile used to reproduce that image in ${sourceApp}.`]),
+              componentClass: buildAbout(`${sourceApp} Gallery`,[`Click on any of the images in the gallery to download the datafile used to reproduce that image in ${sourceApp}.`]),
               attrs: { class: 'rpg-box text-light w-75' },
               onClose: () => {},
             }
