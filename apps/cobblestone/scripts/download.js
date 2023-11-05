@@ -1,18 +1,19 @@
 namespace('sp.cobblestone.Download',{
+  'sp.common.GridUtilities': 'gridUtil',
   'sp.common.Utilities': 'util',
   'sp.cobblestone.CobblestoneUtil': 'cUtil'
-},({ util, cUtil }) => {
+},({ gridUtil, util, cUtil }) => {
   return class extends React.Component {
     constructor(props) {
       super(props);
       this.state = {scale:5};
-      this.onClose = props.onClose();
+      this.onClose = props.onClose;
       props.setOnOpen((context) => {
         const { images, placements } = context;
         this.repaintImage({
           images, placements,
-          width:cUtil.getWidth(context.size,context.orientation),
-          height:cUtil.getHeight(context.size,context.orientation)
+          width:gridUtil.getWidth(context.size,context.orientation),
+          height:gridUtil.getHeight(context.size,context.orientation)
         });
       });
     }
