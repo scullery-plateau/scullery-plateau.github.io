@@ -18,14 +18,14 @@ namespace("sp.tokenizer.TokenFrame",{
       });
       this.modals = Dialog.factory({
         frameColorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color }) => {
             this.updateState({ frameColor: color });
           },
         },
         bgColorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color }) => {
             this.updateState({ backgroundColor: color });

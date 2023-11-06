@@ -26,17 +26,17 @@ namespace(
         this.state = {size: 1, tokens: []};
         this.modals = Dialog.factory({
           about: {
-            templateClass: buildAbout("Tokenizer",about),
+            componentClass: buildAbout("Tokenizer",about),
             attrs: {class: 'rpg-box text-light w-75'},
             onClose: () => { },
           },
           fileDownload: {
-            templateClass: FileDownload,
+            componentClass: FileDownload,
             attrs: {class: 'rpg-box text-light w-75'},
             onClose: () => { },
           },
           tokenFrame: {
-            templateClass: TokenFrame,
+            componentClass: TokenFrame,
             attrs: {class: 'rpg-box text-light w-75'},
             onClose: ({index,token,baseImg}) => {
               const tokens = Array.from(this.state.tokens);

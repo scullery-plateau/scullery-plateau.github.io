@@ -43,36 +43,36 @@
             };
             this.modals = Dialog.factory({
                 about: {
-                    templateClass: buildAbout("Cobblestone",about),
+                    componentClass: buildAbout("Cobblestone",about),
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
                 fileDownload: {
-                    templateClass: FileDownload,
+                    componentClass: FileDownload,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
                 imageDownload: {
-                    templateClass: Download,
+                    componentClass: Download,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: () => {}
                 },
                 sizeOrientation: {
-                    templateClass: DimensionSetter,
+                    componentClass: DimensionSetter,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: ({ size, orientation }) => {
                         this.setState({ size, orientation });
                     }
                 },
                 publish: {
-                    templateClass: Publish,
+                    componentClass: Publish,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: ({ pages, printOrientation }) => {
                         this.setState({ pages, printOrientation });
                     }
                 },
                 tileEditor: {
-                    templateClass: TileEditor,
+                    componentClass: TileEditor,
                     attrs: { class: 'rpg-box text-light w-75' },
                     onClose: ({filename,tiles}) => {
                         const copiedTiles = Object.entries(this.state.tiles).reduce((out,[k,v]) => {

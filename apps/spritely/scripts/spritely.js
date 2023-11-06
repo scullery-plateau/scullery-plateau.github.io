@@ -71,17 +71,17 @@ namespace(
         };
         this.modals = Dialog.factory({
           about: {
-            templateClass: buildAbout("Spritely",about),
+            componentClass: buildAbout("Spritely",about),
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: () => {},
           },
           imageDownload: {
-            templateClass: ImageDownload,
+            componentClass: ImageDownload,
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: () => {},
           },
           colorPicker: {
-            templateClass: ColorPicker,
+            componentClass: ColorPicker,
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: ({ color, index }) => {
               const palette = Array.from(this.state.palette);
@@ -90,7 +90,7 @@ namespace(
             },
           },
           bgColorPicker: {
-            templateClass: ColorPicker,
+            componentClass: ColorPicker,
             attrs: { class: 'rpg-box text-light w-75' },
             onClose: ({ color }) => {
               this.setState({ bgColor: color });

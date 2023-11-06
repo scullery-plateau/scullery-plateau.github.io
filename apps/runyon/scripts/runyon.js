@@ -19,7 +19,7 @@ namespace('sp.runyon.Runyon',{
       this.state = initState;
       this.modals = Dialog.factory({
         about: {
-          templateClass: buildAbout("Spritely", about),
+          componentClass: buildAbout("Spritely", about),
           attrs: {class: 'rpg-box text-light w-75'},
           onClose: () => {
           },

@@ -55,27 +55,27 @@ namespace('sp.outfitter.Outfitter', {
       });
       this.modals = Dialog.factory({
         about: {
-          templateClass: buildAbout("Outfitter",about),
+          componentClass: buildAbout("Outfitter",about),
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {},
         },
         fileDownload: {
-          templateClass: FileDownload,
+          componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: () => {}
         },
         imageDownload: {
-          templateClass: ImageDownload,
+          componentClass: ImageDownload,
           attrs: { class: 'rpg-box text-light w-50' },
           onClose: () => {}
         },
         linkShare: {
-          templateClass: LinkShare,
+          componentClass: LinkShare,
           attrs: { class: 'rpg-box text-light w-50' },
           onClose: () => {}
         },
         colorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
             this.setColorFromPicker(index, color);

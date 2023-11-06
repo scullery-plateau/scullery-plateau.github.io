@@ -33,7 +33,7 @@ namespace("sp.game-icons.Gallery",{
       this.onClose = props.onClose;
       this.modals = Dialog.factory({
         dlColorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'w-75' },
           onClose: ({ color, index }) => {
             this.setColorFromPicker(index, color);
@@ -114,12 +114,12 @@ namespace("sp.game-icons.Gallery",{
       };
       this.modals = Dialog.factory({
         downloader:{
-          templateClass: Downloader,
+          componentClass: Downloader,
           attrs: { class: '' },
           onClose: () => {}
         },
         colorPicker: {
-          templateClass: ColorPicker,
+          componentClass: ColorPicker,
           attrs: { class: 'w-75' },
           onClose: ({ color, index }) => {
             this.setColorFromPicker(index, color);
