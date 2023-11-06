@@ -51,7 +51,7 @@ namespace("sp.purview.Purview",{
       const { innerWidth, innerHeight } = playerView.getDimensions();
       const { width: imgWidth, height: imgHeight } = baseImg;
       const init = { scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), xOffset: 0, yOffset: 0 };
-      const scale = !isNaN(stateUpdates.scale)?stateUpdates.scale:!isNaN(this.state.scale)?this.state.scale:init.scale;
+      const scale = !isNaN(stateUpdates.scale)?stateUpdates.scale:!isNaN(this.state.scale)?this.state.scale:!isNaN(init.scale)?init.scale:1;
       const svg = {
         width: Math.max(imgWidth, innerWidth/scale),
         height: Math.max(imgHeight, innerHeight/scale)
@@ -80,6 +80,7 @@ namespace("sp.purview.Purview",{
       let updates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame }
       this.setState(updates);
     }
+
     loadMapImage() {
       const playerView = new PlayerView();
       LoadFile(
@@ -90,10 +91,9 @@ namespace("sp.purview.Purview",{
           util.initImageObj(dataURL,(baseImg) => {
             EditMode.enable();
             playerView.setOnResize(() => {
-              this.applyUpdates();
+              this.applyUpdates({ dataURL, baseImg, playerView });
             });
-            this.applyUpdates({ dataURL, baseImg, playerView });
-        });
+          });
         },
         (filename, error) => {
           console.log({ filename, error });
