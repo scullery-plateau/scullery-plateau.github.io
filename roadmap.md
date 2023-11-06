@@ -1,3 +1,25 @@
+## Outfitter
+
+1. condense layout
+2. split layer into multiple layers (both into right and left)
+3. fix part/pattern/shading positioning issues in data
+4. gallery
+  * D&D Character Sheets
+    * Dragonborn Sorcerer (silver)
+    * Drow Rogue
+    * Dwarf Cleric
+    * Half-Elf Bard
+    * High Elf Fighter
+    * High Elf Wizard
+    * Human Barbarian
+    * Human Cleric
+    * Human Druid
+    * Human Fighter
+    * Human Paladin
+    * Tiefling Warlock
+    * Wood Elf Ranger
+
+
 ## Minifier
 
 - individual sizes & printing best fit
@@ -30,27 +52,6 @@
 - allow users to determine rotation of frame
 - allow users to flip image
 
-## Outfitter
-
-1. split layer into multiple layers (both into right and left)
-2. fix part/pattern/shading positioning issues in data
-3. gallery
-  * D&D Character Sheets
-    * Dragonborn Sorcerer (silver)
-    * Drow Rogue
-    * Dwarf Cleric
-    * Half-Elf Bard
-    * High Elf Fighter
-    * High Elf Wizard
-    * Human Barbarian
-    * Human Cleric
-    * Human Druid
-    * Human Fighter
-    * Human Paladin
-    * Tiefling Warlock
-    * Wood Elf Ranger
-
-
 ## Cobblestone
 
 1. reload image from tile edit screen
@@ -64,6 +65,15 @@
 ## Dice Roller app - **Runyon**
 
 2. (future feature) canvas 3d animation?
+
+## Purview
+
+1. hotkeys / button controlls instead of "input" tags
+2. add grid to map
+5. fog of war
+3. sprites (characters) and fixtures (furnature, terrain)
+4. effects (AOE, spell effects)
+6. drag and drop
 
 ## How To D&D?
 
