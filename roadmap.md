@@ -1,9 +1,10 @@
 ## Outfitter
 
 1. condense layout
-2. split layer into multiple layers (both into right and left)
-3. fix part/pattern/shading positioning issues in data
-4. gallery
+2. add Help menu with About
+3. split layer into multiple layers (both into right and left)
+4. fix part/pattern/shading positioning issues in data
+5. gallery
   * D&D Character Sheets
     * Dragonborn Sorcerer (silver)
     * Drow Rogue
@@ -19,9 +20,9 @@
     * Tiefling Warlock
     * Wood Elf Ranger
 
-
 ## Minifier
 
+- more specifics in help
 - individual sizes & printing best fit
 - frame images to mini-frame size / ratio
 - match scale (pixels / inch)
@@ -29,7 +30,14 @@
 
 ## Spritely
 
-- "load as overlay"
+* Re-orient palette and canvas
+* "load as overlay"
+
+## Cobblestone
+
+1. Re-orient palette and canvas
+2. reload image from tile edit screen
+3. improved / condensed paging(how??)
 
 ## Card Builder - **Svengali**
 
@@ -51,11 +59,6 @@
 
 - allow users to determine rotation of frame
 - allow users to flip image
-
-## Cobblestone
-
-1. reload image from tile edit screen
-2. improved / condensed paging(how??)
 
 ## Overall
 
