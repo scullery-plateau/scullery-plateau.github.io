@@ -12,7 +12,7 @@ namespace(
     'sp.tokenizer.TokenCanvas': 'TokenCanvas',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
-  ({ buildAbout, Dialog, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
+  ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
     const about = [
       'Tokenizer is a tool for reframing digital images into printable and downloadable tokens.',
       'Import your images, apply a frame, and download them or print them as tokens of 1", 2", 3", or 4".',
