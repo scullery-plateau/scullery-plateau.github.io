@@ -103,7 +103,7 @@ namespace("sp.purview.Purview",{
     }
     update(field, value) {
       const updates = {};
-      updates[field] = value;
+      updates[field] = parseFloat(value);
       this.applyUpdates(updates);
     }
     launchColorPicker(field) {
@@ -146,9 +146,9 @@ namespace("sp.purview.Purview",{
                   className="form-control"
                   min={ 0 }
                   step={ 0.01 }
-                  value={ this.state.scale }
+                  defaultValue={ this.state.scale }
                   style={{ width: "4em"}}
-                  onChange={(e) => this.update("scale",parseFloat(e.target.value))}/>
+                  onChange={(e) => this.update("scale",e.target.value)}/>
               </div>
               <div className="input-group my-2">
                 <label htmlFor="xOffset" className="input-group-text">X-Offset:</label>
@@ -157,9 +157,9 @@ namespace("sp.purview.Purview",{
                   name="xOffset"
                   type="number"
                   className="form-control"
-                  value={ this.state.xOffset }
+                  defaultValue={ this.state.xOffset }
                   style={{ width: "4em"}}
-                  onChange={(e) => this.update("xOffset",parseFloat(e.target.value))}/>
+                  onChange={(e) => this.update("xOffset",e.target.value)}/>
               </div>
               <div className="input-group my-2">
                 <label htmlFor="yOffset" className="input-group-text">Y-Offset:</label>
@@ -168,9 +168,9 @@ namespace("sp.purview.Purview",{
                   name="yOffset"
                   type="number"
                   className="form-control"
-                  value={ this.state.yOffset }
+                  defaultValue={ this.state.yOffset }
                   style={{ width: "4em"}}
-                  onChange={(e) => this.update('yOffset',parseFloat(e.target.value))}/>
+                  onChange={(e) => this.update('yOffset',e.target.value)}/>
               </div>
               <div className="input-group my-2">
                 <label htmlFor="lineWidth" className="input-group-text">Line Width:</label>
@@ -179,9 +179,9 @@ namespace("sp.purview.Purview",{
                   name="lineWidth"
                   type="number"
                   className="form-control"
-                  value={ this.state.lineWidth }
+                  defaultValue={ this.state.lineWidth }
                   style={{ width: "4em"}}
-                  onChange={(e) => this.update('lineWidth',parseFloat(e.target.value))}/>
+                  onChange={(e) => this.update('lineWidth',e.target.value)}/>
               </div>
               { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
               { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
