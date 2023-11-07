@@ -129,7 +129,7 @@ namespace("sp.game-icons.Gallery",{
     }
     loadGallery () {
       Ajax.getLocalStaticFileAsText('./icons.json',{
-        success: (responseText) => {
+        success: ({ responseText }) => {
           const gallery = JSON.parse(responseText);
           this.setState({ gallery, progress: undefined });
         },
