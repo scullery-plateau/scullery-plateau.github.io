@@ -209,6 +209,13 @@ namespace("sp.purview.Purview",{
               </div>
             </div>
           </div>
+          <div className="d-flex justify-content-center">
+            <button
+              className={`btn btn-${this.state.initGrid.isValid?'success':'secondary disabled'}`}
+              disabled={!this.state.initGrid.isValid}
+              onClick={ (e) => this.acceptGrid() }
+              >Accept&nbsp;Grid&nbsp;&amp;&nbsp;Procede</button>
+          </div>
         </>) }
         { this.state.dataURL && this.state.grid && 
           <div className="d-flex justify-content-center">
