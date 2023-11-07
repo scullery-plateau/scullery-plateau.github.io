@@ -141,6 +141,7 @@ namespace("sp.purview.Purview",{
                 <label htmlFor="scale" className="input-group-text">Scale:</label>
                 <input
                   id="scale"
+                  name="scale"
                   type="number"
                   className="form-control"
                   min={ 0 }
@@ -153,6 +154,7 @@ namespace("sp.purview.Purview",{
                 <label htmlFor="xOffset" className="input-group-text">X-Offset:</label>
                 <input
                   id="xOffset"
+                  name="xOffset"
                   type="number"
                   className="form-control"
                   value={ this.state.xOffset }
@@ -163,6 +165,7 @@ namespace("sp.purview.Purview",{
                 <label htmlFor="yOffset" className="input-group-text">Y-Offset:</label>
                 <input
                   id="yOffset"
+                  name="yOffset"
                   type="number"
                   className="form-control"
                   value={ this.state.yOffset }
@@ -173,6 +176,7 @@ namespace("sp.purview.Purview",{
                 <label htmlFor="lineWidth" className="input-group-text">Line Width:</label>
                 <input
                   id="lineWidth"
+                  name="lineWidth"
                   type="number"
                   className="form-control"
                   value={ this.state.lineWidth }
