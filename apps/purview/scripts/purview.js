@@ -36,6 +36,13 @@ namespace("sp.purview.Purview",{
             this.update(index, color);
           },
         },
+        gridColorPicker: {
+          componentClass: ColorPicker,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: ({ color, index }) => {
+            this.buildGrid(index, color);
+          },
+        },
       });
       this.menuItems = [{
         id: 'about',
@@ -80,7 +87,6 @@ namespace("sp.purview.Purview",{
       let updates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame }
       this.setState(updates);
     }
-
     loadMapImage() {
       const playerView = new PlayerView();
       LoadFile(
@@ -106,24 +112,55 @@ namespace("sp.purview.Purview",{
       updates[field] = parseFloat(value);
       this.applyUpdates(updates);
     }
-    launchColorPicker(field) {
-      this.modals.colorPicker.open({
-        color: this.state[field] || "#999999",
+    launchColorPicker(field, colorPickerName, value) {
+      this.modals[colorPickerName].open({
+        color: value || "#999999",
         index: field
       });
     }
-    buildColorPickerButton(label, field, classes, style) {
-      const value = this.state[field];
+    buildColorPickerButton(label, field, classes, style, colorPickerName, getter, setter) {
+      const value = getter(field);
       return <button
         className={`btn ${value?'btn-secondary':'btn-outline-light'} ${classes}`}
         title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
         style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
-        onClick={() => this.launchColorPicker(field)}
-        onDoubleClick={() => this.update(field,undefined)}
+        onClick={() => this.launchColorPicker(field, value, colorPickerName)}
+        onDoubleClick={() => setter(field, undefined)}
         onContextMenu={(e) => {
           e.preventDefault();
-          this.update(field,undefined)
+          setter(field,undefined)
         }}>{label}</button>;
+    }
+    buildGridInitField(field, label, options) {
+      options = options || {};
+      return <div className="input-group my-2">
+        <label htmlFor={field} className="input-group-text">{label}:</label>
+        <input
+          id={field}
+          name={field}
+          type="number"
+          className="form-control"
+          min={ options.min }
+          step={ options.step }
+          defaultValue={ this.state.initGrid[field] }
+          style={{ width: "4em"}}
+          onChange={(e) => this.buildGrid(field,e.target.value)}/>
+      </div>;
+    }
+    buildControlField(field, label, options) {
+      return <div className="input-group my-2">
+        <label htmlFor={field} className="input-group-text">{label}:</label>
+        <input
+          id={field}
+          name={field}
+          type="number"
+          className="form-control"
+          min={ options.min }
+          step={ options.step }
+          defaultValue={ this.state[field] }
+          style={{ width: "4em"}}
+          onChange={(e) => this.update([field],e.target.value)}/>
+      </div>;
     }
     render() {
       return (<>
@@ -134,60 +171,57 @@ namespace("sp.purview.Purview",{
               <button className="btn btn-primary" onClick={() => this.loadMapImage()}>Load Map Image</button>
             </div>
           </>) }
-        { this.state.dataURL && 
+        { this.state.dataURL && !this.state.grid && (<>
           <div className="d-flex justify-content-center">
             <div className="rpg-box d-flex flex-column m-2">
-              <div className="input-group my-2">
-                <label htmlFor="scale" className="input-group-text">Scale:</label>
-                <input
-                  id="scale"
-                  name="scale"
-                  type="number"
-                  className="form-control"
-                  min={ 0 }
-                  step={ 0.01 }
-                  defaultValue={ this.state.scale }
-                  style={{ width: "4em"}}
-                  onChange={(e) => this.update("scale",e.target.value)}/>
-              </div>
-              <div className="input-group my-2">
-                <label htmlFor="xOffset" className="input-group-text">X-Offset:</label>
-                <input
-                  id="xOffset"
-                  name="xOffset"
-                  type="number"
-                  className="form-control"
-                  defaultValue={ this.state.xOffset }
-                  style={{ width: "4em"}}
-                  onChange={(e) => this.update("xOffset",e.target.value)}/>
-              </div>
-              <div className="input-group my-2">
-                <label htmlFor="yOffset" className="input-group-text">Y-Offset:</label>
-                <input
-                  id="yOffset"
-                  name="yOffset"
-                  type="number"
-                  className="form-control"
-                  defaultValue={ this.state.yOffset }
-                  style={{ width: "4em"}}
-                  onChange={(e) => this.update('yOffset',e.target.value)}/>
-              </div>
-              <div className="input-group my-2">
-                <label htmlFor="lineWidth" className="input-group-text">Line Width:</label>
-                <input
-                  id="lineWidth"
-                  name="lineWidth"
-                  type="number"
-                  className="form-control"
-                  defaultValue={ this.state.lineWidth }
-                  style={{ width: "4em"}}
-                  onChange={(e) => this.update('lineWidth',e.target.value)}/>
-              </div>
-              { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
-              { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
+              { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
+              { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
+              { this.buildGridInitField("squareSize", "Square Size", { min: 1 }) }
+              { this.buildGridInitField("marginTop", "Margin Top", { min: 0 }) }
+              { this.buildGridInitField("marginLeft", "Margin Left", { min: 0 }) }
+              { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
+              { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2", {}, "gridColorPicker", (field) => this.state.initGrid[field], (field,value) => this.buildGrid(field,value)) }
             </div>
-            <div className="rpg-box m-2" style={{width: "20em", height: "20em"}}>
-              <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`}>
+            <div className="rpg-box d-flex flex-column m-2">
+              <div className="btn-group">
+                <button 
+                  className={`btn btn-${this.state.initGrid.viewMode === 'full'?'primary disabled':'secondary'}`}
+                  disabled={ this.state.initGrid.viewMode === 'full' }
+                  onClick={(e) => { this.setInitGridViewMode("full")}}>Full</button>
+                <button 
+                  className={`btn btn-${this.state.initGrid.viewMode === 'cell'?'primary disabled':'secondary'}`}
+                  disabled={ this.state.initGrid.viewMode === 'cell' }
+                  onClick={(e) => { this.setInitGridViewMode("cell") }}>Cell</button>
+              </div>
+              { this.state.initGrid.viewMode === 'full' && this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
+              { this.state.initGrid.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 1 }) }
+              <div>
+                <svg width="100%" height="100%" style={{width: "20em", height: "20em"}}
+                     viewBox={`${this.state.initGrid.x} ${this.state.initGrid.y} ${this.state.initGrid.width} ${this.state.initGrid.height}`}>
+                  <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                  { Array(this.state.initGrid.gridRows).fill("").map((_,rowIndex) => {
+                    return Array(this.state.initGrid.gridColumns).fill("").map((_,columnIndex) => {
+                      const { x, y } = this.getGridCoordinates(columnIndex, rowIndex);
+                      return <rect x={x} y={y} width={this.state.initGrid.squareSize} height={this.state.initGrid.squareSize} fill="none" stroke={this.state.initGrid.gridLineColor} strokeWidth={this.state.initGrid.gridLineWidth} />;
+                    })
+                  }) }
+                </svg>
+              </div>
+            </div>
+          </div>
+        </>) }
+        { this.state.dataURL && this.state.grid && 
+          <div className="d-flex justify-content-center">
+            <div className="rpg-box d-flex flex-column m-2">
+              { this.buildControlField("scale", "Scale", { min: 0, step: 0.01 }) }
+              { this.buildControlField("xOffset", "X-Offset") }
+              { this.buildControlField("yOffset", "Y-Offset") }
+              { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
+              { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {}, "colorPicker", (field) => this.state[field], (field,value) => this.update(field,value))}
+              { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {}, "colorPicker", (field) => this.state[field], (field,value) => this.update(field,value))}
+            </div>
+            <div className="rpg-box m-2" style={{width: "25em", height: "25em"}}>
+              <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`} style={{width: "20em", height: "20em"}}>
                 <rect
                   x={this.state.svg.x}
                   y={this.state.svg.y}
