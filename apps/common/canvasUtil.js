@@ -64,7 +64,7 @@ namespace("sp.common.CanvasUtil",{},({}) => {
   }
   const strokeShape = function(ctx, dimObj, args) {
     ctx.lineWidth = dimObj.lineWidthMult * args.frameWidth;
-    ctx.strokeStyle = frameColor;
+    ctx.strokeStyle = args.frameColor;
     ctx.beginPath();
     drawShape(ctx,dimObj,args);
     ctx.closePath();
