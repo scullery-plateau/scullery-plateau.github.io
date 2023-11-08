@@ -243,8 +243,7 @@ namespace(
             </div>
             <div
               className="rpg-box m-3 d-flex justify-content-between"
-              title="Palette"
-            >
+              title="Palette">
               <button
                 className="btn btn-success"
                 title="Add Color"
@@ -254,10 +253,7 @@ namespace(
                     Constants.defaultColor(),
                   ]);
                   this.setState({ palette, selectedPaletteIndex });
-                }}
-              >
-                +
-              </button>
+                }}>+</button>
               <div className="ml-2 w-100 d-flex flex-wrap">
                 {this.state.palette.map((color, index) => {
                   const id = SpritelyUtil.getPaletteButtonId(index);
@@ -288,9 +284,7 @@ namespace(
                           color: this.state.palette[index],
                         });
                       }}
-                    >
-                      ----
-                    </button>
+                    >----</button>
                   );
                 })}
               </div>
@@ -309,10 +303,7 @@ namespace(
                     palette.length - 1
                   );
                   this.setState({ palette, selectedPaletteIndex, pixels });
-                }}
-              >
-                -
-              </button>
+                }}>-</button>
             </div>
             <div className="rpg-title-box m-3" title="click to paint a pixel">
               <svg

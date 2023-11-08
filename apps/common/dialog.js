@@ -1,14 +1,15 @@
 namespace('sp.common.Dialog', () => {
   const Dialog = function (dialogName, ComponentClass, onClose, attrs, returnInputsOnEsc) {
     attrs = attrs || {};
+    const state = {};
     const modalOpenEvent = 'modal.' + dialogName + '.open';
     const dialog = document.createElement('dialog');
     Object.entries(attrs).forEach(([k, v]) => {
       dialog.setAttribute(k, v);
     });
-    dialog.addEventListener("close",() => {
-      if (onClose !== undefined && dialog.returnValue !== undefined) {
-        onClose(dialog.returnValue);
+    dialog.addEventListener("close",(e) => {
+      if (onClose !== undefined && state.returnValue !== undefined) {
+        onClose(state.returnValue);
       }
       if (dialog.parentElement) {
         dialog.parentElement.removeChild(dialog);
@@ -22,12 +23,12 @@ namespace('sp.common.Dialog', () => {
           });
         }}
         close={(value) => {
-          dialog.returnValue = value;
+          state.returnValue = value;
           dialog.close();
         }}/>);
     this.open = function (detail) {
       if (returnInputsOnEsc) {
-        dialog.returnValue = detail;
+        state.returnValue = detail;
       }
       document.body.appendChild(dialog);
       dialog.showModal();
