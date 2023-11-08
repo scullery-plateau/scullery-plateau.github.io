@@ -7,7 +7,7 @@ namespace('sp.common.LinkShare',{},() => {
         console.log({ url });
         this.setState({ url })
       })
-      this.onClose = props.onClose;
+      this.close = props.close;
     }
     render() {
       return <div className="d-flex flex-column">
@@ -26,7 +26,7 @@ namespace('sp.common.LinkShare',{},() => {
             <button className="btn btn-success" onClick={() => {
               navigator.clipboard.writeText(this.state.url);
             }}>Copy To Clipboard</button> }
-          <button className="btn btn-danger" onClick={() => this.onClose()}>Close</button>
+          <button className="btn btn-danger" onClick={() => this.close()}>Close</button>
         </div>
       </div>
     }

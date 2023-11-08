@@ -7,7 +7,7 @@ namespace("sp.cobblestone.TileEditor",{
     constructor(props) {
       super(props);
       this.state = {tiles:{}};
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen(({filename,dataURL,tiles}) => {
         this.setState({filename,dataURL,tiles:this.copyTiles(tiles)});
       });
@@ -59,8 +59,8 @@ namespace("sp.cobblestone.TileEditor",{
             </div>
           </div>
           <div className="d-flex justify-content-end">
-            <button className="btn btn-success" onClick={() => this.onClose(this.state) }>Apply Changes</button>
-            <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
+            <button className="btn btn-success" onClick={() => this.close(this.state) }>Apply Changes</button>
+            <button className="btn btn-danger" onClick={() => this.close() }>Cancel</button>
           </div>
         </div>;
       }

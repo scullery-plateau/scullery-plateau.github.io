@@ -8,8 +8,9 @@ namespace("sp.purview.Purview",{
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
   "sp.common.Utilities":"util",
+  "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ buildAbout, ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, PlayerView}) => {
+},({ buildAbout, ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, GridConfig, PlayerView}) => {
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
     "Make your dungeon map experience more interactive as the players at your table move thru your dungeon on a digital display.",
@@ -36,11 +37,11 @@ namespace("sp.purview.Purview",{
             this.update(index, color);
           },
         },
-        gridColorPicker: {
-          componentClass: ColorPicker,
+        gridConfig: {
+          componentClass: GridConfig,
           attrs: { class: 'rpg-box text-light w-75' },
-          onClose: ({ color, index }) => {
-            this.buildGrid(index, color);
+          onClose: ({ dataURL, baseImg, grid, gridLineColor, gridLineWidth }) => {
+            this.acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth });
           },
         },
       });
@@ -88,17 +89,13 @@ namespace("sp.purview.Purview",{
       this.setState(updates);
     }
     loadMapImage() {
-      const playerView = new PlayerView();
       LoadFile(
         false,
         'dataURL',
         (dataURL) => {
-          playerView.open();
           util.initImageObj(dataURL,(baseImg) => {
             EditMode.enable();
-            playerView.setOnResize(() => {
-              this.applyUpdates({ dataURL, baseImg, playerView });
-            });
+            this.modals.gridConfig.open({ dataURL, baseImg });
           });
         },
         (filename, error) => {
@@ -107,45 +104,34 @@ namespace("sp.purview.Purview",{
         }
       );
     }
+    acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth  }) {
+      const playerView = new PlayerView();
+      const { gridRows, gridColumns, squareSize, marginTop, marginLeft, gridLineColor, gridLineWidth } = this.state.initGrid;
+      const grid = { gridRows, gridColumns, squareSize, marginTop, marginLeft };
+      playerView.open(() => {
+        this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth, initGrid: undefined });
+      });
+    }
     update(field, value) {
       const updates = {};
       updates[field] = parseFloat(value);
       this.applyUpdates(updates);
     }
-    launchColorPicker(field, colorPickerName, value) {
-      this.modals[colorPickerName].open({
-        color: value || "#999999",
-        index: field
-      });
+    launchColorPicker(field, value) {
+      this.modals.colorPicker.open({ color: value || "#999999", index: field });
     }
-    buildColorPickerButton(label, field, classes, style, colorPickerName, getter, setter) {
-      const value = getter(field);
+    buildColorPickerButton(label, field, classes, style) {
+      const value = this.state[field];
       return <button
         className={`btn ${value?'btn-secondary':'btn-outline-light'} ${classes}`}
         title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
         style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
-        onClick={() => this.launchColorPicker(field, value, colorPickerName)}
-        onDoubleClick={() => setter(field, undefined)}
+        onClick={() => this.modals.colorPicker.open({ color: value || "#999999", index: field })}
+        onDoubleClick={() => this.update(field, undefined) }
         onContextMenu={(e) => {
           e.preventDefault();
-          setter(field,undefined)
+          this.update(field,undefined);
         }}>{label}</button>;
-    }
-    buildGridInitField(field, label, options) {
-      options = options || {};
-      return <div className="input-group my-2">
-        <label htmlFor={field} className="input-group-text">{label}:</label>
-        <input
-          id={field}
-          name={field}
-          type="number"
-          className="form-control"
-          min={ options.min }
-          step={ options.step }
-          defaultValue={ this.state.initGrid[field] }
-          style={{ width: "4em"}}
-          onChange={(e) => this.buildGrid(field,e.target.value)}/>
-      </div>;
     }
     buildControlField(field, label, options) {
       return <div className="input-group my-2">
@@ -171,53 +157,7 @@ namespace("sp.purview.Purview",{
               <button className="btn btn-primary" onClick={() => this.loadMapImage()}>Load Map Image</button>
             </div>
           </>) }
-        { this.state.dataURL && !this.state.grid && (<>
-          <div className="d-flex justify-content-center">
-            <div className="rpg-box d-flex flex-column m-2">
-              { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
-              { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
-              { this.buildGridInitField("squareSize", "Square Size", { min: 1 }) }
-              { this.buildGridInitField("marginTop", "Margin Top", { min: 0 }) }
-              { this.buildGridInitField("marginLeft", "Margin Left", { min: 0 }) }
-              { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
-              { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2", {}, "gridColorPicker", (field) => this.state.initGrid[field], (field,value) => this.buildGrid(field,value)) }
-            </div>
-            <div className="rpg-box d-flex flex-column m-2">
-              <div className="btn-group">
-                <button 
-                  className={`btn btn-${this.state.initGrid.viewMode === 'full'?'primary disabled':'secondary'}`}
-                  disabled={ this.state.initGrid.viewMode === 'full' }
-                  onClick={(e) => { this.setInitGridViewMode("full")}}>Full</button>
-                <button 
-                  className={`btn btn-${this.state.initGrid.viewMode === 'cell'?'primary disabled':'secondary'}`}
-                  disabled={ this.state.initGrid.viewMode === 'cell' }
-                  onClick={(e) => { this.setInitGridViewMode("cell") }}>Cell</button>
-              </div>
-              { this.state.initGrid.viewMode === 'full' && this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
-              { this.state.initGrid.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 1 }) }
-              <div>
-                <svg width="100%" height="100%" style={{width: "20em", height: "20em"}}
-                     viewBox={`${this.state.initGrid.x} ${this.state.initGrid.y} ${this.state.initGrid.width} ${this.state.initGrid.height}`}>
-                  <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
-                  { Array(this.state.initGrid.gridRows).fill("").map((_,rowIndex) => {
-                    return Array(this.state.initGrid.gridColumns).fill("").map((_,columnIndex) => {
-                      const { x, y } = this.getGridCoordinates(columnIndex, rowIndex);
-                      return <rect x={x} y={y} width={this.state.initGrid.squareSize} height={this.state.initGrid.squareSize} fill="none" stroke={this.state.initGrid.gridLineColor} strokeWidth={this.state.initGrid.gridLineWidth} />;
-                    })
-                  }) }
-                </svg>
-              </div>
-            </div>
-          </div>
-          <div className="d-flex justify-content-center">
-            <button
-              className={`btn btn-${this.state.initGrid.isValid?'success':'secondary disabled'}`}
-              disabled={!this.state.initGrid.isValid}
-              onClick={ (e) => this.acceptGrid() }
-              >Accept&nbsp;Grid&nbsp;&amp;&nbsp;Procede</button>
-          </div>
-        </>) }
-        { this.state.dataURL && this.state.grid && 
+        { this.state.dataURL && 
           <div className="d-flex justify-content-center">
             <div className="rpg-box d-flex flex-column m-2">
               { this.buildControlField("scale", "Scale", { min: 0, step: 0.01 }) }

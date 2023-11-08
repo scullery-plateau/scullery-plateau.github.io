@@ -1,10 +1,18 @@
 namespace('sp.common.Dialog', () => {
-  const Dialog = function (dialogName, ComponentClass, onClose, attrs) {
+  const Dialog = function (dialogName, ComponentClass, close, attrs) {
     attrs = attrs || {};
     const modalOpenEvent = 'modal.' + dialogName + '.open';
     const dialog = document.createElement('dialog');
     Object.entries(attrs).forEach(([k, v]) => {
       dialog.setAttribute(k, v);
+    });
+    dialog.addEventListener("close",() => {
+      if (close !== undefined && dialog.returnValue !== undefined) {
+        close(dialog.returnValue);
+      }
+      if (dialog.parentElement) {
+        dialog.parentElement.removeChild(dialog);
+      }
     });
     ReactDOM.createRoot(dialog).render(
       <ComponentClass
@@ -13,14 +21,9 @@ namespace('sp.common.Dialog', () => {
             setter(e.detail);
           });
         }}
-        onClose={(value) => {
-          if (onClose !== undefined && value !== undefined) {
-            onClose(value);
-          }
+        close={(value) => {
+          dialog.returnValue = value;
           dialog.close();
-          if (dialog.parentElement) {
-            dialog.parentElement.removeChild(dialog);
-          }
         }}/>);
     this.open = function (detail) {
       document.body.appendChild(dialog);
@@ -29,8 +32,8 @@ namespace('sp.common.Dialog', () => {
     };
   };
   Dialog.factory = function (dialogMap) {
-    return Object.entries(dialogMap).reduce((out, [dialogName, { componentClass, onClose, attrs }]) => {
-      out[dialogName] = new Dialog(dialogName, componentClass, onClose, attrs);
+    return Object.entries(dialogMap).reduce((out, [dialogName, { componentClass, close, attrs }]) => {
+      out[dialogName] = new Dialog(dialogName, componentClass, close, attrs);
       return out;
     }, {});
   };

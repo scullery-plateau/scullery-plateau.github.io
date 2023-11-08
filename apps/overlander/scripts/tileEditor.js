@@ -3,7 +3,7 @@ namespace('sp.overlander.TileEditor',{},() => {
     constructor(props) {
       super(props);
       this.state = {};
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen(({ tile }) => {
         this.setState(tile);
       })

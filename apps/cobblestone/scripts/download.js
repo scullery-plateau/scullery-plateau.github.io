@@ -7,7 +7,7 @@ namespace('sp.cobblestone.Download',{
     constructor(props) {
       super(props);
       this.state = {scale:5};
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen((context) => {
         const { images, placements } = context;
         this.repaintImage({
@@ -75,7 +75,7 @@ namespace('sp.cobblestone.Download',{
           )}
         </div>
         <div className="d-flex justify-content-end">
-          <button className="btn btn-warning" onClick={() => { this.onClose() }}>Close</button>
+          <button className="btn btn-warning" onClick={() => { this.close() }}>Close</button>
         </div>
       </div>;
     }

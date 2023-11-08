@@ -5,7 +5,7 @@ namespace(
     return class extends React.Component {
       constructor(props) {
         super(props);
-        this.onClose = props.onClose;
+        this.close = props.close;
         this.state = {};
         props.setOnOpen((state) => {
           this.setState(state);
@@ -38,9 +38,9 @@ namespace(
                   } else {
                     Utilities.triggerJSONDownload(this.state.filename,this.state.defaultFilename,this.state.jsonData);
                   }
-                  this.onClose();
+                  this.close();
                 }}>Download & Close</button>
-              <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
+              <button className="btn btn-danger" onClick={() => { this.close(); }}>Close</button>
             </div>
           </>
         );

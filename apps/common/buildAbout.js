@@ -8,7 +8,7 @@ namespace("sp.common.BuildAbout",{},() => {
             <p key={`about-${i}`}>{p}</p>
           ))}
           <div className="d-flex justify-content-end">
-            <button className="btn btn-info" onClick={() => props.onClose()}>
+            <button className="btn btn-info" onClick={() => props.close()}>
               OK
             </button>
           </div>

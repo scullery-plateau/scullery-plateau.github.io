@@ -6,8 +6,9 @@ namespace("sp.purview.PlayerView",{},({}) => {
   }
   return function() {
     const state = {};
-    this.open = function() {
+    this.open = function(onResize) {
       state.sidecar = window.open("", "_blank");
+      state.sidecar.addEventListener("resize", onResize);
     }
     this.update = function(detail) {
       if (state.sidecar) {
@@ -27,11 +28,6 @@ namespace("sp.purview.PlayerView",{},({}) => {
       if (state.sidecar) {
         const { innerHeight, innerWidth, outerHeight, outerWidth } = state.sidecar;
         return { innerHeight, innerWidth, outerHeight, outerWidth };
-      }
-    }
-    this.setOnResize = function(onResize) {
-      if (state.sidecar) {
-        state.sidecar.addEventListener("resize", onResize);
       }
     }
   }

@@ -82,7 +82,7 @@ namespace(
           this.appState = { pixels, palette, size, bgColor, isTransparent };
           repaintImage(this, { width: size, height: size });
         });
-        this.onClose = props.onClose;
+        this.close = props.close;
       }
       render() {
         return (
@@ -148,14 +148,14 @@ namespace(
                 className={'btn btn-success'}
                 onClick={() => {
                   triggerSpritelyDownload(this.state.filename, this.appState);
-                  this.onClose();
+                  this.close();
                 }}
               >
                 Download
               </button>
               <button
                 className={'btn btn-danger'}
-                onClick={() => this.onClose()}
+                onClick={() => this.close()}
               >
                 Cancel
               </button>

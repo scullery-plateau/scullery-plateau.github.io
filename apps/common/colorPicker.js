@@ -73,7 +73,7 @@ namespace(
           this.index = index;
           console.log('set on open');
         });
-        this.onClose = props.onClose;
+        this.close = props.close;
       }
       saveColor() {
         const savedColors = Array.from(this.state.savedColors);
@@ -203,13 +203,13 @@ namespace(
                 <button
                   onClick={ () => {
                     localStorage.setItem(localStorageKey,JSON.stringify(this.state.savedColors));
-                    this.onClose({color: this.state.hex, index: this.index});
+                    this.closecolor: this.state.hex, index: this.index});
                   }}
                   className="btn btn-success">Use Color</button>
                 <button onClick={ () => { this.saveColor() } } className="btn btn-info">Save Color</button>
                 <button onClick={ () => {
                   localStorage.setItem(localStorageKey,JSON.stringify(this.state.savedColors));
-                  this.onClose();
+                  this.close();
                 }} className="btn btn-secondary">Cancel</button>
               </div>
             </div>

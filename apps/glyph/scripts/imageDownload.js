@@ -5,7 +5,7 @@ namespace('sp.glyph.ImageDownload',{
     constructor(props) {
       super(props);
       this.state = {};
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen(({ defaultFilename, canvasURL }) => {
         this.setState({ defaultFilename, placeholder: defaultFilename, canvasURL });
       });
@@ -33,9 +33,9 @@ namespace('sp.glyph.ImageDownload',{
             className="btn btn-info"
             onClick={() => {
               Utilities.triggerPNGDownload(this.state.filename,this.state.defaultFilename,this.state.canvasURL);
-              this.onClose();
+              this.close();
             }}>Download & Close</button>
-          <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
+          <button className="btn btn-danger" onClick={() => { this.close(); }}>Close</button>
         </div>
       </>;
     }
