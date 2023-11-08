@@ -1,5 +1,5 @@
 namespace('sp.common.Dialog', () => {
-  const Dialog = function (dialogName, ComponentClass, close, attrs) {
+  const Dialog = function (dialogName, ComponentClass, onClose, attrs, returnInputsOnEsc) {
     attrs = attrs || {};
     const modalOpenEvent = 'modal.' + dialogName + '.open';
     const dialog = document.createElement('dialog');
@@ -7,8 +7,8 @@ namespace('sp.common.Dialog', () => {
       dialog.setAttribute(k, v);
     });
     dialog.addEventListener("close",() => {
-      if (close !== undefined && dialog.returnValue !== undefined) {
-        close(dialog.returnValue);
+      if (onClose !== undefined && dialog.returnValue !== undefined) {
+        onClose(dialog.returnValue);
       }
       if (dialog.parentElement) {
         dialog.parentElement.removeChild(dialog);
@@ -26,14 +26,17 @@ namespace('sp.common.Dialog', () => {
           dialog.close();
         }}/>);
     this.open = function (detail) {
+      if (returnInputsOnEsc) {
+        dialog.returnValue = detail;
+      }
       document.body.appendChild(dialog);
       dialog.showModal();
       document.dispatchEvent(new CustomEvent(modalOpenEvent, { detail }));
     };
   };
   Dialog.factory = function (dialogMap) {
-    return Object.entries(dialogMap).reduce((out, [dialogName, { componentClass, close, attrs }]) => {
-      out[dialogName] = new Dialog(dialogName, componentClass, close, attrs);
+    return Object.entries(dialogMap).reduce((out, [dialogName, { componentClass, onClose, attrs }]) => {
+      out[dialogName] = new Dialog(dialogName, componentClass, onClose, attrs);
       return out;
     }, {});
   };

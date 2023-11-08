@@ -164,8 +164,8 @@ namespace("sp.purview.Purview",{
               { this.buildControlField("xOffset", "X-Offset") }
               { this.buildControlField("yOffset", "Y-Offset") }
               { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
-              { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {}, "colorPicker", (field) => this.state[field], (field,value) => this.update(field,value))}
-              { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {}, "colorPicker", (field) => this.state[field], (field,value) => this.update(field,value))}
+              { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
+              { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
             </div>
             <div className="rpg-box m-2" style={{width: "25em", height: "25em"}}>
               <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`} style={{width: "20em", height: "20em"}}>

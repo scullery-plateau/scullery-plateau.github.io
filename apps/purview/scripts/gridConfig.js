@@ -14,28 +14,71 @@ namespace("sp.purview.GridConfig",{
   }
   const gridCalcs = {
     gridRows:function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, baseImg: { width, height }}) {
-      // calc squareSize from gridRows and gridColumns
+      const columnWidth = Math.floor((width - marginLeft) / gridColumns);
+      const rowHeight = Math.floor((height - marginTop) / gridRows);
+      squareSize = Math.min(columnWidth, rowHeight);
+      gridColumns = Math.floor((width - marginLeft) / squareSize);
       return { squareSize, gridRows, gridColumns }
     },
     gridColumns:function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, baseImg: { width, height }}) {
-      // calc squareSize from gridRows and gridColumns
+      const columnWidth = Math.floor((width - marginLeft) / gridColumns);
+      const rowHeight = Math.floor((height - marginTop) / gridRows);
+      squareSize = Math.min(columnWidth, rowHeight);
+      gridRows = Math.floor((height - marginTop) / squareSize);
       return { squareSize, gridRows, gridColumns }
     },
     squareSize:function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, baseImg: { width, height }}) {
-      // calc gridColumns and gridRows from squareSize
+      gridColumns = Math.floor((width - marginLeft) / squareSize);
+      gridRows = Math.floor((height - marginTop) / squareSize);
+      return { squareSize, gridRows, gridColumns }
+    },
+    marginLeft:function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, baseImg: { width, height }}) {
+      const columnWidth = Math.floor((width - marginLeft) / gridColumns);
+      const rowHeight = Math.floor((height - marginTop) / gridRows);
+      squareSize = Math.min(columnWidth, rowHeight);
+      gridColumns = Math.floor((width - marginLeft) / squareSize);
+      gridRows = Math.floor((height - marginTop) / squareSize);
+      return { squareSize, gridRows, gridColumns }
+    },
+    marginTop:function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, baseImg: { width, height }}) {
+      const columnWidth = Math.floor((width - marginLeft) / gridColumns);
+      const rowHeight = Math.floor((height - marginTop) / gridRows);
+      squareSize = Math.min(columnWidth, rowHeight);
+      gridColumns = Math.floor((width - marginLeft) / squareSize);
+      gridRows = Math.floor((height - marginTop) / squareSize);
       return { squareSize, gridRows, gridColumns }
     }
   }
-  const calcFrame = function({}) {
-    // todo 
+  const frameCalcs = {
+    cell:function({ squareSize, gridColumns, marginLeft, marginTop, cellIndex }){
+      const rowIndex = Math.floor(cellIndex / gridColumns);
+      const columnIndex = cellIndex % gridColumns;
+      return {
+        viewX: marginLeft + columnIndex * squareSize,
+        viewY: marginTop + rowIndex * squareSize,
+        viewWidth: squareSize,
+        viewHeight: squareSize
+      }
+    },
+    full:function({baseImg: { width, height }}){
+      return {
+        viewX: 0,
+        viewY: 0,
+        viewWidth: width,
+        viewHeight: height
+      };
+    }
   }
-  const updateSetter = function(updates) {
-    return (([key,value]) => { updates[key] = value; })
+  const getGridCoordinates = function(columnIndex, rowIndex, { squareSize, marginLeft, marginTop}) {
+    return {
+      x: columnIndex * squareSize + marginLeft,
+      y: rowIndex * squareSize + marginTop
+    }
   }
   return class extends React.Component {
     constructor(props){
       super(props);
-      this.state = {};
+      this.state = { viewMode: "full" };
       this.close = props.close;
       props.setOnOpen(({ dataURL, baseImg }) => {
         const { width, height } = baseImg;
@@ -60,6 +103,7 @@ namespace("sp.purview.GridConfig",{
         colorPicker: {
           componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
+          returnInputsOnEsc: true,
           onClose: ({ color, index }) => {
             this.buildGrid(index, color);
           },
@@ -79,23 +123,14 @@ namespace("sp.purview.GridConfig",{
           this.buildGrid(field,undefined);
         }}>{label}</button>;
     }
-    getGridCoordinates(columnIndex, rowIndex) {
-      return {
-        x: columnIndex * this.state.squareSize + this.state.marginLeft,
-        y: rowIndex * this.state.squareSize + this.state.marginTop
-      }
-    }
     buildGrid(field,value){
       const updates = util.merge(this.state, util.assoc({},field,value));
       const gridCalc = gridCalcs[field];
       if (gridCalc) {
-        Object.entries(gridCalc(updates)).forEach(updateSetter(updates));
+        Object.entries(gridCalc(updates)).forEach(([k,v]) => { updates[k] = v; });
       }
-      Object.entries(calcFrame(updates)).forEach(updateSetter(updates));
+      Object.entries(frameCalcs[updates.viewMode](updates)).forEach(([k,v]) => { updates[k] = v; });
       this.setState(util.merge(updates,frame));
-    }
-    setInitGridViewMode(viewMode) {
-      this.buildGrid("viewMode",viewMode);
     }
     buildGridInitField(field, label, options) {
       options = options || {};
@@ -110,7 +145,7 @@ namespace("sp.purview.GridConfig",{
           step={ options.step }
           defaultValue={ this.state.initGrid[field] }
           style={{ width: "4em"}}
-          onChange={(e) => this.buildGrid(field,e.target.value)}/>
+          onChange={(e) => this.buildGrid(field,parseFloat(e.target.value))}/>
       </div>;
     }
     render() {
@@ -130,21 +165,21 @@ namespace("sp.purview.GridConfig",{
               <button 
                 className={`btn btn-${this.state.viewMode === 'full'?'primary disabled':'secondary'}`}
                 disabled={ this.state.viewMode === 'full' }
-                onClick={(e) => { this.setInitGridViewMode("full")}}>Full</button>
+                onClick={(e) => { this.buildGrid("viewMode","full")}}>Full</button>
               <button 
                 className={`btn btn-${this.state.viewMode === 'cell'?'primary disabled':'secondary'}`}
                 disabled={ this.state.viewMode === 'cell' }
-                onClick={(e) => { this.setInitGridViewMode("cell") }}>Cell</button>
+                onClick={(e) => { this.buildGrid("viewMode","cell") }}>Cell</button>
             </div>
             { this.state.viewMode === 'full' && this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
-            { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 1 }) }
+            { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 0, max: (this.gridColumns * this.gridRows) - 1 }) }
             <div>
               <svg width="100%" height="100%" style={{width: "20em", height: "20em"}}
-                    viewBox={`${this.state.x} ${this.state.y} ${this.state.width} ${this.state.height}`}>
+                    viewBox={`${this.state.viewX} ${this.state.viewY} ${this.state.viewWidth} ${this.state.viewHeight}`}>
                 <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
                 { Array(this.state.gridRows).fill("").map((_,rowIndex) => {
                   return Array(this.state.gridColumns).fill("").map((_,columnIndex) => {
-                    const { x, y } = this.getGridCoordinates(columnIndex, rowIndex);
+                    const { x, y } = getGridCoordinates(columnIndex, rowIndex, this.state);
                     return <rect x={x} y={y} width={this.state.squareSize} height={this.state.squareSize} fill="none" stroke={this.state.gridLineColor} strokeWidth={this.state.gridLineWidth} />;
                   })
                 }) }
