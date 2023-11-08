@@ -1,8 +1,9 @@
 namespace("sp.purview.GridConfig",{
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
+  'sp.common.Dialog':'Dialog',
   'sp.common.Utilities':'util'
-},({ ColorPicker, Colors, util}) => {
+},({ ColorPicker, Colors, Dialog, util }) => {
   const gcf = function(a, b) {
     if (a === b) {
       return a;
@@ -80,7 +81,9 @@ namespace("sp.purview.GridConfig",{
       super(props);
       this.state = { viewMode: "full" };
       this.close = props.close;
-      props.setOnOpen(({ dataURL, baseImg }) => {
+      props.setOnOpen((openValue) => {
+        console.log({openValue})
+        const { dataURL, baseImg } = openValue;
         const { width, height } = baseImg;
         const squareSize = gcf(width, height);
         const gridColumns = width / squareSize;
@@ -143,64 +146,66 @@ namespace("sp.purview.GridConfig",{
           className="form-control"
           min={ options.min }
           step={ options.step }
-          defaultValue={ this.state.initGrid[field] }
+          defaultValue={ this.state[field] }
           style={{ width: "4em"}}
           onChange={(e) => this.buildGrid(field,parseFloat(e.target.value))}/>
       </div>;
     }
     render() {
-      return (<>
-        <div className="d-flex justify-content-center">
-          <div className="rpg-box d-flex flex-column m-2">
-            { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
-            { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
-            { this.buildGridInitField("squareSize", "Square Size", { min: 1 }) }
-            { this.buildGridInitField("marginTop", "Margin Top", { min: 0 }) }
-            { this.buildGridInitField("marginLeft", "Margin Left", { min: 0 }) }
-            { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
-            { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2", {}, "gridColorPicker", (field) => this.state.initGrid[field], (field,value) => this.buildGrid(field,value)) }
-          </div>
-          <div className="rpg-box d-flex flex-column m-2">
-            <div className="btn-group">
-              <button 
-                className={`btn btn-${this.state.viewMode === 'full'?'primary disabled':'secondary'}`}
-                disabled={ this.state.viewMode === 'full' }
-                onClick={(e) => { this.buildGrid("viewMode","full")}}>Full</button>
-              <button 
-                className={`btn btn-${this.state.viewMode === 'cell'?'primary disabled':'secondary'}`}
-                disabled={ this.state.viewMode === 'cell' }
-                onClick={(e) => { this.buildGrid("viewMode","cell") }}>Cell</button>
+      if (this.state.dataURL && this.state.baseImg) {
+        return (<>
+          <div className="d-flex justify-content-center">
+            <div className="rpg-box d-flex flex-column m-2">
+              { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
+              { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
+              { this.buildGridInitField("squareSize", "Square Size", { min: 1 }) }
+              { this.buildGridInitField("marginTop", "Margin Top", { min: 0 }) }
+              { this.buildGridInitField("marginLeft", "Margin Left", { min: 0 }) }
+              { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
+              { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2", {} ) }
             </div>
-            { this.state.viewMode === 'full' && this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
-            { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 0, max: (this.gridColumns * this.gridRows) - 1 }) }
-            <div>
-              <svg width="100%" height="100%" style={{width: "20em", height: "20em"}}
-                    viewBox={`${this.state.viewX} ${this.state.viewY} ${this.state.viewWidth} ${this.state.viewHeight}`}>
-                <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
-                { Array(this.state.gridRows).fill("").map((_,rowIndex) => {
-                  return Array(this.state.gridColumns).fill("").map((_,columnIndex) => {
-                    const { x, y } = getGridCoordinates(columnIndex, rowIndex, this.state);
-                    return <rect x={x} y={y} width={this.state.squareSize} height={this.state.squareSize} fill="none" stroke={this.state.gridLineColor} strokeWidth={this.state.gridLineWidth} />;
-                  })
-                }) }
-              </svg>
+            <div className="rpg-box d-flex flex-column m-2">
+              <div className="btn-group">
+                <button 
+                  className={`btn btn-${this.state.viewMode === 'full'?'primary disabled':'secondary'}`}
+                  disabled={ this.state.viewMode === 'full' }
+                  onClick={(e) => { this.buildGrid("viewMode","full")}}>Full</button>
+                <button 
+                  className={`btn btn-${this.state.viewMode === 'cell'?'primary disabled':'secondary'}`}
+                  disabled={ this.state.viewMode === 'cell' }
+                  onClick={(e) => { this.buildGrid("viewMode","cell") }}>Cell</button>
+              </div>
+              { this.state.viewMode === 'full' && this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
+              { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 0, max: (this.gridColumns * this.gridRows) - 1 }) }
+              <div>
+                <svg width="100%" height="100%" style={{width: "20em", height: "20em"}}
+                      viewBox={`${this.state.viewX} ${this.state.viewY} ${this.state.viewWidth} ${this.state.viewHeight}`}>
+                  <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                  { Array(this.state.gridRows).fill("").map((_,rowIndex) => {
+                    return Array(this.state.gridColumns).fill("").map((_,columnIndex) => {
+                      const { x, y } = getGridCoordinates(columnIndex, rowIndex, this.state);
+                      return <rect x={x} y={y} width={this.state.squareSize} height={this.state.squareSize} fill="none" stroke={this.state.gridLineColor} strokeWidth={this.state.gridLineWidth} />;
+                    })
+                  }) }
+                </svg>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="d-flex justify-content-center">
-        <button
-            className={`btn btn-${this.state.isValid?'success':'secondary disabled'}`}
-            disabled={!this.state.isValid}
-            onClick={ (e) => {
-              const { dataURL, baseImg, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize, marginTop, marginLeft } = this.state;
-              const grid = { gridRows, gridColumns, squareSize, marginTop, marginLeft };
-              this.close({dataURL, baseImg, grid, gridLineColor, gridLineWidth});
-            }}>Accept&nbsp;Grid&nbsp;&amp;&nbsp;Procede</button>
+          <div className="d-flex justify-content-center">
           <button
-            className="btn btn-warning"
-            onClick={ (e) => this.close({ dataURL, baseImg }) }>Ignore&nbsp;Grid</button>
-        </div>
-      </>);
+              className={`btn btn-${this.state.isValid?'success':'secondary disabled'}`}
+              disabled={!this.state.isValid}
+              onClick={ (e) => {
+                const { dataURL, baseImg, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize, marginTop, marginLeft } = this.state;
+                const grid = { gridRows, gridColumns, squareSize, marginTop, marginLeft };
+                this.close({dataURL, baseImg, grid, gridLineColor, gridLineWidth});
+              }}>Accept&nbsp;Grid&nbsp;&amp;&nbsp;Procede</button>
+            <button
+              className="btn btn-warning"
+              onClick={ (e) => this.close({ dataURL, baseImg }) }>Ignore&nbsp;Grid</button>
+          </div>
+        </>);
+      }
     }
   }
 });

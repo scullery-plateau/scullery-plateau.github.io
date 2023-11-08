@@ -104,12 +104,10 @@ namespace("sp.purview.Purview",{
         }
       );
     }
-    acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth  }) {
+    acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth}) {
       const playerView = new PlayerView();
-      const { gridRows, gridColumns, squareSize, marginTop, marginLeft, gridLineColor, gridLineWidth } = this.state.initGrid;
-      const grid = { gridRows, gridColumns, squareSize, marginTop, marginLeft };
       playerView.open(() => {
-        this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth, initGrid: undefined });
+        this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth });
       });
     }
     update(field, value) {
