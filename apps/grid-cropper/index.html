@@ -1,0 +1,84 @@
+<html>
+  <head>
+    <title>Scullery Plateau: Grid Cropper</title>
+    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+
+    <!-- external styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/d550ee8263.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- project styles -->
+    <link rel="stylesheet" href="../../style/rpg.css" />
+    <link rel="stylesheet" href="../../style/font.css" />
+    <link rel="stylesheet" href="../../style/menu.css" />
+
+    <!-- local styles -->
+    <link rel="stylesheet" href="./style.css" />
+
+    <!-- external scripts -->
+    <script src="https://voltron42.github.io/gizmo-atheneum/structure/importnamespace/script.js"></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- project namespaces -->
+    <script type="text/babel" src="../common/buildAbout.js"></script>
+    <script type="text/babel" src="../common/colorPicker.js"></script>
+    <script type="text/babel" src="../common/colors.js"></script>
+    <script type="text/babel" src="../common/dialog.js"></script>
+    <script type="text/babel" src="../common/editMode.js"></script>
+    <script type="text/babel" src="../common/fileLoader.js"></script>
+    <script type="text/babel" src="../common/footer.js"></script>
+    <script type="text/babel" src="../common/header.js"></script>
+    <script type="text/babel" src="../common/menu.js"></script>
+    <script type="text/babel" src="../common/progressBar.js"></script>
+    <script type="text/babel" src="../common/utilities.js"></script>
+
+    <!-- local namespaces -->
+    <script type="text/babel" src="./scripts/gridCropper.js"></script>
+
+    <!-- bind app root -->
+    <script type="text/babel">
+      (function () {
+        const { GridCropper, Footer } = imports({
+          'sp.grid-cropper.GridCropper': 'GridCropper',
+          'sp.common.Footer': 'Footer',
+        });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
+        ReactDOM.createRoot(document.getElementById('app-root')).render(
+          <GridCropper/>
+        );
+        ReactDOM.createRoot(document.getElementById('footer')).render(
+          <Footer />
+        );
+      })();
+    </script>
+  </head>
+  <body class="bg-dark text-light">
+    <div id="app-root" class="container"></div>
+    <footer id="footer" class="text-center"></footer>
+  </body>
+</html>

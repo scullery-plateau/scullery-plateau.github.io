@@ -1,18 +1,9 @@
-namespace("sp.purview.GridConfig",{
+namespace("sp.grid-cropper.GridCropper", {
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.Utilities':'util'
-},({ ColorPicker, Colors, Dialog, util }) => {
-  const gcf = function(a, b) {
-    if (a === b) {
-      return a;
-    } else if ( a > b) {
-      return gcf(a - b, b);
-    } else if ( a < b) {
-      return gcf(a, b - a);
-    }
-  }
+}, ({ ColorPicker, Colors, Dialog, util }) => {
   const calcGridFromMargins = function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, marginRight, marginBottom, baseImg: { width, height }}) {
     gridColumns = Math.floor((width - marginLeft - marginRight) / squareSize);
     gridRows = Math.floor((height - marginTop - marginBottom) / squareSize);
@@ -70,7 +61,7 @@ namespace("sp.purview.GridConfig",{
     }
   }
   return class extends React.Component {
-    constructor(props){
+    constructor(props) {
       super(props);
       this.state = { 
         viewMode: "full",
@@ -84,23 +75,6 @@ namespace("sp.purview.GridConfig",{
         cellIndex: 0,
         squareSizeInterval: 1
       };
-      this.close = props.close;
-      props.setOnOpen((openValue) => {
-        const { dataURL, baseImg } = openValue;
-        const { width, height } = baseImg;
-        const squareSize = Math.min(width, height);
-        const gridColumns = Math.floor(width / squareSize);
-        const gridRows = Math.floor(height / squareSize);
-        const updates = util.merge(this.state,{
-          dataURL, 
-          baseImg, 
-          squareSize,
-          gridColumns,
-          gridRows,
-        });
-        Object.entries(frameCalcs[updates.viewMode](updates)).forEach(([k,v]) => { updates[k] = v; });
-        this.setState(updates);
-      });
       this.modals = Dialog.factory({
         colorPicker: {
           componentClass: ColorPicker,
@@ -110,7 +84,7 @@ namespace("sp.purview.GridConfig",{
             this.buildGrid(index, color);
           },
         },
-      })
+      });
     }
     buildGrid(field,value){
       const updates = util.merge(this.state, util.assoc({},field,value));
@@ -153,8 +127,8 @@ namespace("sp.purview.GridConfig",{
       </div>;
     }
     render() {
-      if (this.state.dataURL && this.state.baseImg) {
-        return (<>
+      return (<>
+        <div>
           <div className="d-flex justify-content-center">
             <div className="rpg-box d-flex flex-column m-2">
               { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
@@ -225,8 +199,8 @@ namespace("sp.purview.GridConfig",{
                 this.close({ dataURL, baseImg }) 
               }}>Ignore&nbsp;Grid</button>
           </div>
-        </>);
-      }
+        </div>
+      </>);
     }
   }
 });
