@@ -132,6 +132,7 @@ namespace("sp.purview.Purview",{
         }}>{label}</button>;
     }
     buildControlField(field, label, options) {
+      options = options || {};
       return <div className="input-group my-2">
         <label htmlFor={field} className="input-group-text">{label}:</label>
         <input
