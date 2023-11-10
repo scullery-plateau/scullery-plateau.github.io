@@ -1,5 +1,5 @@
 namespace("sp.common.BuildAbout",{},() => {
-  return function(label,lines) {
+  return function(label, lines) {
     return function (props) {
       return (
         <>

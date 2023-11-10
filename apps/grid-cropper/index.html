@@ -42,7 +42,6 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- project namespaces -->
-    <script type="text/babel" src="../common/buildAbout.js"></script>
     <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
@@ -51,11 +50,11 @@
     <script type="text/babel" src="../common/footer.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
-    <script type="text/babel" src="../common/progressBar.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
     <script type="text/babel" src="./scripts/gridCropper.js"></script>
+    <script type="text/babel" src="./scripts/imageDownload.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
@@ -80,5 +79,6 @@
   <body class="bg-dark text-light">
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
+    <canvas id="canvas" style="display: none;"></canvas>
   </body>
 </html>

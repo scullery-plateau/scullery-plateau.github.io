@@ -1,5 +1,4 @@
 namespace("sp.purview.Purview",{
-  'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -10,7 +9,8 @@ namespace("sp.purview.Purview",{
   "sp.common.Utilities":"util",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ buildAbout, ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, GridConfig, PlayerView}) => {
+},({ ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, GridConfig, PlayerView}) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
     "Make your dungeon map experience more interactive as the players at your table move thru your dungeon on a digital display.",
@@ -25,11 +25,6 @@ namespace("sp.purview.Purview",{
         lineWidth: 3,
       };
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Purview",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {},
-        },
         colorPicker: {
           componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -49,7 +44,10 @@ namespace("sp.purview.Purview",{
         id: 'about',
         label: 'About',
         callback: () => {
-          this.modals.about.open();
+          Dialog.alert({
+            label: "Purview",
+            lines: about
+          });
         }
       }];
     }

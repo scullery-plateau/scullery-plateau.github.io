@@ -2,8 +2,14 @@ namespace("sp.grid-cropper.GridCropper", {
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
-  'sp.common.Utilities':'util'
-}, ({ ColorPicker, Colors, Dialog, util }) => {
+  'sp.common.EditMode':'EditMode',
+  'sp.common.Header':'Header',
+  'sp.common.LoadFile':'LoadFile',
+  'sp.common.Utilities':'util',
+  'sp.grid-cropper.ImageDownload':'ImageDownload'
+}, ({ ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, ImageDownload }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
+  const about = [];
   const calcGridFromMargins = function({ squareSize, gridRows, gridColumns, marginLeft, marginTop, marginRight, marginBottom, baseImg: { width, height }}) {
     gridColumns = Math.floor((width - marginLeft - marginRight) / squareSize);
     gridRows = Math.floor((height - marginTop - marginBottom) / squareSize);
@@ -84,7 +90,46 @@ namespace("sp.grid-cropper.GridCropper", {
             this.buildGrid(index, color);
           },
         },
+        imageDownload: {
+          componentClass: ImageDownload,
+          attrs: { class: 'rpg-box text-light w-75' },
+        }
       });
+      this.menuItems = [{
+        id: 'about',
+        label: 'About',
+        callback: () => {
+          Dialog.alert({ title: "Grid Cropper", lines: about });
+        }
+      }];
+    }
+    loadMapImage() {
+      LoadFile(
+        false,
+        'dataURL',
+        (dataURL) => {
+          util.initImageObj(dataURL,(baseImg) => {
+            EditMode.enable();
+            const { width, height } = baseImg;
+            const squareSize = Math.min(width, height);
+            const gridColumns = Math.floor(width / squareSize);
+            const gridRows = Math.floor(height / squareSize);
+            const updates = util.merge(this.state,{
+              dataURL, 
+              baseImg, 
+              squareSize,
+              gridColumns,
+              gridRows,
+            });
+            Object.entries(frameCalcs[updates.viewMode](updates)).forEach(([k,v]) => { updates[k] = v; });
+            this.setState(updates);
+          });
+        },
+        (filename, error) => {
+          console.log({ filename, error });
+          alert(filename + ' failed to load. See console for error.');
+        }
+      );
     }
     buildGrid(field,value){
       const updates = util.merge(this.state, util.assoc({},field,value));
@@ -104,7 +149,7 @@ namespace("sp.grid-cropper.GridCropper", {
         title={`${label}: ${value}; click to select color, double click or right click to select 'none'`}
         style={ value?util.merge({ backgroundColor: value, color: Colors.getForegroundColor(value) },style):style }
         onClick={() => this.modals.colorPicker.open({ color: value || "#999999", index: field })}
-        onDoubleClick={() => this.update(field, undefined) }
+        onDoubleClick={() => this.buildGrid(field, undefined) }
         onContextMenu={(e) => {
           e.preventDefault();
           this.buildGrid(field,undefined);
@@ -112,8 +157,8 @@ namespace("sp.grid-cropper.GridCropper", {
     }
     buildGridInitField(field, label, options) {
       options = options || {};
-      return <div className="input-group my-2">
-        <label htmlFor={field} className="input-group-text">{label}:</label>
+      return <div className="form-group my-2">
+        <label htmlFor={field} className="form-label">{label.split(" ").join("\xa0")}:</label>
         <input
           id={field}
           name={field}
@@ -121,85 +166,123 @@ namespace("sp.grid-cropper.GridCropper", {
           className="form-control"
           min={ options.min }
           step={ options.step }
+          style={{ width: "10em" }}
           value={ this.state[field] }
-          style={{ width: "4em"}}
           onChange={(e) => this.buildGrid(field,parseFloat(e.target.value))}/>
       </div>;
     }
     render() {
       return (<>
-        <div>
-          <div className="d-flex justify-content-center">
-            <div className="rpg-box d-flex flex-column m-2">
-              { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
-              { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
-              { this.buildGridInitField("squareSizeInterval", "Square Size Interval", { min: 0}) }
-              <div className="input-group my-2">
-                <label htmlFor="squareSize" className="input-group-text">SquareSize:</label>
-                <input
-                  id="squareSize"
-                  name="squareSize"
-                  type="number"
-                  className="form-control"
-                  value={ this.state.squareSize }
-                  style={{ width: "4em"}}
-                  disabled/>
-                <button className="btn btn-secondary" onClick={(e) => { this.setState({ squareSize: this.state.squareSize + this.state.squareSizeInterval }) }}>+</button>
-                <button className="btn btn-secondary" onClick={(e) => { this.setState({ squareSize: this.state.squareSize - this.state.squareSizeInterval }) }}>-</button>
-              </div>
-              { this.buildGridInitField("marginTop", "Margin Top") }
-              { this.buildGridInitField("marginLeft", "Margin Left") }
-              { this.buildGridInitField("marginBottom", "Margin Bottom") }
-              { this.buildGridInitField("marginRight", "Margin Right") }
-              { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
-              { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2", {} ) }
+        <Header menuItems={this.menuItems} appTitle={'Grid Cropper'} />
+        { !this.state.dataURL && 
+          (<>
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-primary" onClick={() => this.loadMapImage()}>Load Map Image</button>
             </div>
-            <div className="rpg-box d-flex flex-column m-2">
-              <div className="btn-group">
-                <button 
-                  className={`btn btn-${this.state.viewMode === 'full'?'primary disabled':'secondary'}`}
-                  disabled={ this.state.viewMode === 'full' }
-                  onClick={(e) => { this.buildGrid("viewMode","full")}}>Full</button>
-                <button 
-                  className={`btn btn-${this.state.viewMode === 'cell'?'primary disabled':'secondary'}`}
-                  disabled={ this.state.viewMode === 'cell' }
-                  onClick={(e) => { this.buildGrid("viewMode","cell") }}>Cell</button>
+          </>) }
+        { this.state.dataURL && 
+          (<>
+            <div className="row justify-content-center">
+              <div className="col-7">
+                <div className="rpg-box m-2 row justify-content-center">
+                  <div className="col-4">
+                    { this.buildGridInitField("gridRows", "Grid Rows", { min: 1 }) }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("gridColumns", "Grid Columns", { min: 1 }) }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("squareSizeInterval", "Square Size Interval", { min: 0}) }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("marginTop", "Margin Top") }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("marginLeft", "Margin Left") }
+                  </div>
+                  <div className="col-4">
+                    <div className="form-group my-2">
+                      <label htmlFor="squareSize" className="form-label">SquareSize:</label>
+                      <div className="d-flex justify-content-left">
+                        <input id="squareSize" name="squareSize" type="number" className="form-control" style={{ width: "6em" }} value={ this.state.squareSize } disabled/>
+                        <button className="btn btn-secondary" onClick={() => { this.setState({ squareSize: this.state.squareSize + this.state.squareSizeInterval }) }}>+</button>
+                        <button className="btn btn-secondary" onClick={() => { this.setState({ squareSize: this.state.squareSize - this.state.squareSizeInterval }) }}>-</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("marginBottom", "Margin Bottom") }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("marginRight", "Margin Right") }
+                  </div>
+                  <div className="col-4">
+                    { this.buildGridInitField("gridLineWidth", "Grid Line Width", { min: 1 }) }
+                  </div>
+                  <div className="col-6">
+                    { this.buildColorPickerButton("Background Color", "bgColor", "my-2 w-100", {} ) }
+                  </div>
+                  <div className="col-6">
+                    { this.buildColorPickerButton("Grid Line Color", "gridLineColor", "my-2 w-100", {} ) }
+                  </div>
+                </div>
               </div>
-              <div className="d-flex justify-content-center">
-                { this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
-                { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 0, max: (this.gridColumns * this.gridRows) - 1 }) }
-              </div>
-              <div style={{maxHeight: "23em", maxWidth: "23em", overflow: "scroll"}}>
-                <svg width="100%" height="100%" style={{width: `${this.state.zoom}em`, height: `${this.state.zoom}em`}}
-                      viewBox={`${this.state.viewX} ${this.state.viewY} ${this.state.viewWidth} ${this.state.viewHeight}`}>
-                  <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
-                  { Array(this.state.gridRows).fill("").map((_,rowIndex) => {
-                    return Array(this.state.gridColumns).fill("").map((_,columnIndex) => {
-                      const { x, y } = getGridCoordinates(columnIndex, rowIndex, this.state);
-
-                      return <rect x={x} y={y} width={this.state.squareSize} height={this.state.squareSize} fill="none" stroke={this.state.gridLineColor} strokeWidth={this.state.gridLineWidth} />;
-                    })
-                  }) }
-                </svg>
+              <div className="col-5">
+                <div className="rpg-box m-2">
+                  <div className="row">
+                    <div className="col">
+                      <div className="btn-group w-100">
+                        <button 
+                          className={`btn btn-${this.state.viewMode === 'full'?'primary disabled':'secondary'}`}
+                          disabled={ this.state.viewMode === 'full' }
+                          onClick={(e) => { this.buildGrid("viewMode","full")}}>Full</button>
+                        <button 
+                          className={`btn btn-${this.state.viewMode === 'cell'?'primary disabled':'secondary'}`}
+                          disabled={ this.state.viewMode === 'cell' }
+                          onClick={(e) => { this.buildGrid("viewMode","cell") }}>Cell</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-6">
+                      { this.buildGridInitField("zoom", "Zoom", { min: 1 }) }
+                    </div>
+                    <div className="col-6">
+                      { this.state.viewMode === 'cell' && this.buildGridInitField("cellIndex", "Cell #", { min: 0, max: (this.gridColumns * this.gridRows) - 1 }) }
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="w-100 overflow-scroll" style={{ maxHeight: "22em" }}>
+                        <svg width="100%" height="100%" style={{width: `${this.state.zoom}em`, height: `${this.state.zoom}em`}}
+                              viewBox={`${this.state.viewX} ${this.state.viewY} ${this.state.viewWidth} ${this.state.viewHeight}`}>
+                          <rect x={this.state.viewX} y={this.state.viewY} width={this.state.viewWidth} height={this.state.viewHeight} fill={this.state.bgColor}/>
+                          <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                          { Array(this.state.gridRows).fill("").map((_,rowIndex) => {
+                            return Array(this.state.gridColumns).fill("").map((_,columnIndex) => {
+                              const { x, y } = getGridCoordinates(columnIndex, rowIndex, this.state);
+                              return <rect x={x} y={y} width={this.state.squareSize} height={this.state.squareSize} fill="none" stroke={this.state.gridLineColor} strokeWidth={this.state.gridLineWidth} />;
+                            })
+                          }) }
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="d-flex justify-content-center">
-            <button
-              className="btn btn-success"
-              onClick={ () => {
-                const { dataURL, baseImg, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize, marginTop, marginLeft } = this.state;
-                const grid = { gridRows, gridColumns, squareSize, marginTop, marginLeft, marginRight, marginBottom };
-                this.close({dataURL, baseImg, grid, gridLineColor, gridLineWidth});
-              }}>Accept&nbsp;Grid&nbsp;&amp;&nbsp;Procede</button>
-            <button
-              className="btn btn-warning"
-              onClick={ (e) => { 
-                const { dataURL, baseImg } = this.state;
-                this.close({ dataURL, baseImg }) 
-              }}>Ignore&nbsp;Grid</button>
-          </div>
-        </div>
+            <div className="d-flex justify-content-center">
+              <button
+                className="btn btn-success"
+                onClick={ () => {
+                  this.modals.imageDownload.open({
+                    cropData: this.state,
+                    defaultFilename: "gridCropper"
+                  });
+                }}>Download&nbsp;Cropped&nbsp;Image</button>
+            </div>
+          </>)
+        }
       </>);
     }
   }
