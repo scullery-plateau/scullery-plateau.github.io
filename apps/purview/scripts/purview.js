@@ -149,11 +149,17 @@ namespace("sp.purview.Purview",{
       return (<>
         <Header menuItems={this.menuItems} appTitle={'Purview'} />
         { !this.state.dataURL && 
-          (<>
-            <div className="d-flex justify-content-center">
-              <button className="btn btn-primary" onClick={() => this.loadMapImage()}>Load Map Image</button>
+          (<div className="d-flex justify-content-center">
+            <div className="rpg-box m-2">
+              <div className="d-flex flex-column justify-content-center">
+                <p>Choose an image to load as a map which has already been cropped to be flush with the grid in that image.</p>
+                <p>If your image has not been cropped to be flush, use the <a class="btn btn-link" href="../grid-cropper/index.html">Grid Cropper</a> app here on Scullery Plateau.</p>
+                <div className="d-flex flex-column justify-content-center">
+                  <button className="btn btn-success" onClick={() => this.loadMapImage()}>Load Map Image</button>
+                </div>
+              </div>
             </div>
-          </>) }
+          </div>) }
         { this.state.dataURL && 
           <div className="d-flex justify-content-center">
             <div className="rpg-box d-flex flex-column m-2">
