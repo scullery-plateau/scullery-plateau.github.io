@@ -23,6 +23,7 @@ namespace('sp.spritely.Spritely',{
   Schema,
   SpritelyUtil,
 }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     'Spritely is a canvas for pixel art.',
     'Build your palette below, then select a color in the palette to paint pixels that color, or to unpaint pixels already that color.',
@@ -30,6 +31,7 @@ namespace('sp.spritely.Spritely',{
     'Deleting a color will unpaint all pixels that matching color.',
     'Unpainting pixels will return them to the background color.',
   ];
+  const highlighterFrameId = "highlighterFrame";
   const getTransforms = {
     turnLeft: (size) => (x, y) => [y, size - 1 - x],
     turnRight: (size) => (x, y) => [size - 1 - y, x],
@@ -64,12 +66,8 @@ namespace('sp.spritely.Spritely',{
         isTransparent: true,
         bgColor: Constants.defaultColor(),
       };
+      this.dragState = {};
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Spritely",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {},
-        },
         imageDownload: {
           componentClass: ImageDownload,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -151,12 +149,7 @@ namespace('sp.spritely.Spritely',{
           id: 'about',
           label: 'About',
           callback: () => {
-            Dialog.alert({
-              label: "Spritely",
-              lines: about
-            },{
-              class: 'rpg-box text-light w-75' 
-            });
+            Dialog.alert({ title: "Spritely", lines: about });
           },
         },
       ];
@@ -207,10 +200,42 @@ namespace('sp.spritely.Spritely',{
         } else {
           pixels[pixelId] = this.state.selectedPaletteIndex;
         }
+        document.getElementById(highlighterFrameId).innerHTML = "";
         this.setState({ pixels });
       }
     }
-
+    minMaxStartEnd(startId, endId) {
+      const { x: startX, y: startY } = SpritelyUtil.parsePixelId(startId);
+      const { x: endX, y: endY } = SpritelyUtil.parsePixelId(endId);
+      const minX = Math.min(startX, endX); 
+      const minY = Math.min(startY, endY); 
+      const maxX = Math.max(startX, endX); 
+      const maxY = Math.max(startY, endY); 
+      return { minX, minY, maxX, maxY };
+    }
+    highlight(startId, endId) {
+      const squareSize = Constants.pixelDim();
+      const { minX: minColumn, minY: minRow, maxX: maxColumn, maxY: maxRow } = this.minMaxStartEnd(startId, endId);
+      const rowCount = (1 + maxRow - minRow);
+      const columnCount = (1 + maxColumn - minColumn);
+      const [ x, y, width, height ] = [ minColumn, minRow, columnCount, rowCount ].map((n) => n * squareSize);
+      document.getElementById(highlighterFrameId).innerHTML = `<rect x=${x} y=${y} width=${width} height=${height} fill="none" stroke="red" stroke-width="2"/>`;
+    }
+    togglePerStart(startId, endId) {
+      const pixels = Utilities.merge(this.state.pixels);
+      const setNewState = (pixels[startId] === this.state.selectedPaletteIndex)?((pixels, pixelId) => {
+        delete pixels[pixelId];
+      }):((pixels, pixelId) => { 
+        pixels[pixelId] = this.state.selectedPaletteIndex; 
+      });
+      const { minX, minY, maxX, maxY } = this.minMaxStartEnd(startId, endId);
+      for (let x = minX; x <= maxX; x++) {
+        for (let y = minY; y <= maxY; y++) {
+          setNewState(pixels, SpritelyUtil.getPixelId(x,y));
+        }
+      }
+      this.setState({ pixels });
+    }
     render() {
       return (
         <>
@@ -313,7 +338,47 @@ namespace('sp.spritely.Spritely',{
               viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${
                 this.state.size * Constants.pixelDim()
               }`}
+              onMouseDown={(e) => {
+                if (this.state.selectedPaletteIndex >= 0) {
+                  delete this.dragState.endId;
+                  console.log({ fn: "onMouseDown", startId: e.target.id });
+                  this.dragState.drag = true;
+                  this.dragState.startId = e.target.id;
+                }
+              }}
+              onMouseMove={(e) => {
+                if (this.state.selectedPaletteIndex >= 0 && this.dragState.drag) {
+                  const endId = (e.target.id === ''?this.dragState.endId:e.target.id);
+                  if (this.dragState.endId != endId && this.dragState.startId != endId) {
+                    console.log({ fn: "onMouseMove", startId: this.dragState.startId, endId });
+                    this.dragState.endId = endId;
+                    this.highlight(this.dragState.startId, this.dragState.endId);
+                  }
+                }
+              }}
+              onMouseUp={(e) => {
+                if(this.state.selectedPaletteIndex >= 0 && this.dragState.endId && this.dragState.endId != this.dragState.startId) {
+                  console.log({ fn: "onMouseUp", dragState: this.dragState, allow: true });
+                  this.togglePerStart(this.dragState.startId, this.dragState.endId);
+                } else {
+                  console.log({ fn: "onMouseUp", dragState: this.dragState, allow: false });
+                }
+                delete this.dragState.drag;
+                delete this.dragState.startId;
+                document.getElementById(highlighterFrameId).innerHTML = "";
+              }}
+              onMouseOut={(e) => {
+                if (this.state.selectedPaletteIndex >= 0 && e.target.id === "highlightBounds") {
+                  console.log({ fn: "onMouseOut", dragState: this.dragState, e});
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (this.state.selectedPaletteIndex >= 0 && e.target.id === "highlightBounds") {
+                  console.log({ fn: "onMouseLeave", dragState: this.dragState, e});
+                }
+              }}
             >
+              <rect id="highlightBounds" x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()} fill="none"/>
               {Utilities.range(this.state.size).map((y) => {
                 return Utilities.range(this.state.size).map((x) => {
                   const pixelId = SpritelyUtil.getPixelId(x, y);
@@ -329,6 +394,7 @@ namespace('sp.spritely.Spritely',{
                       key={pixelId}
                       href="#"
                       onClick={(e) => {
+                        console.log({ fn: "onClick", e });
                         e.preventDefault();
                         this.togglePixelColor(pixelId);
                       }}
@@ -343,6 +409,7 @@ namespace('sp.spritely.Spritely',{
                   );
                 });
               })}
+              <g id={highlighterFrameId} x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()}></g>
             </svg>
           </div>
           <div style={{ display: 'none' }}>
