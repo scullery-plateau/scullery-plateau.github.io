@@ -5,11 +5,11 @@ namespace("sp.purview.Purview",{
   'sp.common.EditMode':'EditMode',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
-  'sp.common.ProgressBar':'ProgressBar',
+  'sp.common.Point':'Point',
   "sp.common.Utilities":"util",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, util, GridConfig, PlayerView}) => {
+},({ ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
@@ -23,6 +23,7 @@ namespace("sp.purview.Purview",{
         bgColor: "#000001",
         frameColor: "#FF0000",
         lineWidth: 3,
+        fogOfWar: {}
       };
       this.modals = Dialog.factory({
         colorPicker: {
@@ -35,8 +36,8 @@ namespace("sp.purview.Purview",{
         gridConfig: {
           componentClass: GridConfig,
           attrs: { class: 'rpg-box text-light w-75' },
-          onClose: ({ dataURL, baseImg, grid, gridLineColor, gridLineWidth }) => {
-            this.acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth });
+          onClose: ({ dataURL, baseImg, grid, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize }) => {
+            this.acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize });
           },
         },
       });
@@ -53,7 +54,7 @@ namespace("sp.purview.Purview",{
     }
     applyUpdates(stateUpdates) {
       stateUpdates = stateUpdates || {};
-      const [ dataURL, baseImg, playerView ] = [ "dataURL", "baseImg", "playerView" ].map(field => this.state[field] || stateUpdates[field]);
+      const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize" ].map(field => this.state[field] || stateUpdates[field]);
       const { innerWidth, innerHeight } = playerView.getDimensions();
       const { width: imgWidth, height: imgHeight } = baseImg;
       const init = { scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), xOffset: 0, yOffset: 0 };
@@ -76,15 +77,18 @@ namespace("sp.purview.Purview",{
         width: innerWidth/scale,
         height: innerHeight/scale
       };
+      const [ bgColor, lineWidth, frameColor, fogOfWar ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar" ].map(field => stateUpdates[field] || this.state[field]);
       playerView.update({
         dataURL,
         img: baseImg,
-        frame: svgFrame
+        frame: svgFrame,
+        gridRows, 
+        gridColumns, 
+        squareSize, 
+        fogOfWar
       });
-      const [ bgColor, lineWidth, frameColor ] = [ "bgColor", "lineWidth", "frameColor" ].map(field => stateUpdates[field] || this.state[field]);
       playerView.setBackgroundColor(bgColor);
-      let updates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame }
-      this.setState(updates);
+      this.setState({ dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar });
     }
     loadMapImage() {
       LoadFile(
@@ -102,10 +106,10 @@ namespace("sp.purview.Purview",{
         }
       );
     }
-    acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth}) {
+    acceptGrid({ dataURL, baseImg, grid, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize}) {
       const playerView = new PlayerView();
       playerView.open(() => {
-        this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth });
+        this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize });
       });
     }
     update(field, value) {
@@ -145,7 +149,31 @@ namespace("sp.purview.Purview",{
           onChange={(e) => this.update([field],e.target.value)}/>
       </div>;
     }
+    activateFog() {
+      this.applyUpdates({ 
+        fogOfWar:  Array(this.state.gridRows).fill("").reduce((acc, _, rowIndex) => {
+          return Array(this.state.gridColumns).fill("").reduce((outVal, _, columnIndex) => {
+            return util.assoc(outVal, (new Point([columnIndex, rowIndex])).getCoordinateId(), true);
+          }, acc);
+        }, {})
+      });
+    }
+    deactivateFog() {
+      this.applyUpdates({ fogOfWar: {} });
+    }
+    toggleFog(columnIndex, rowIndex) {
+      const fogOfWar = util.merge(this.state.fogOfWar);
+      const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
+      if (fogOfWar[coordId]) {
+        delete fogOfWar[coordId];
+      } else {
+        fogOfWar[coordId] = true;
+      }
+      this.applyUpdates({ fogOfWar });
+    }
     render() {
+      const { gridRows, gridColumns, squareSize, fogOfWar } = this.state;
+      console.log({ gridRows, gridColumns, squareSize, fogOfWar });
       return (<>
         <Header menuItems={this.menuItems} appTitle={'Purview'} />
         { !this.state.dataURL && 
@@ -189,6 +217,18 @@ namespace("sp.purview.Purview",{
                   fill="none"
                   stroke={this.state.frameColor}
                   strokeWidth={this.state.lineWidth}/>
+                { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
+                  Array(this.state.gridRows).fill("").map((_, rowIndex) => {
+                    return Array(this.state.gridColumns).fill("").map((_, columnIndex) => {
+                      const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
+                      const foggy = this.state.fogOfWar[coordId];
+                      return (<a href="#" onClick={() => this.toggleFog(columnIndex, rowIndex)}>
+                        <rect x={columnIndex * this.state.squareSize} y={rowIndex * this.state.squareSize} 
+                              width={this.state.squareSize} height={this.state.squareSize} fill={foggy?"black":"white"} opacity={foggy?0.3:0.1}/>
+                      </a>);
+                    });
+                  }) 
+                }
               </svg>
             </div>
           </div>

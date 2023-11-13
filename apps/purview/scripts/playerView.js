@@ -1,7 +1,20 @@
-namespace("sp.purview.PlayerView",{},({}) => {
-  const template = function({ dataURL, frame, img }) {
+namespace("sp.purview.PlayerView",{
+  'sp.common.Point':'Point'
+},({ Point }) => {
+  const template = function({ dataURL, frame, img, gridRows, gridColumns, squareSize, fogOfWar }) {
+    fogOfWar = fogOfWar || {};
+    console.log({ gridRows, gridColumns, squareSize, fogOfWar });
     return `<svg width="100%" height="100%" viewbox="${frame.x} ${frame.y} ${frame.width} ${frame.height}" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
       <image href="${dataURL}" width="${img.width}" height="${img.height}"/>
+      ${Array(gridRows).fill("").reduce((acc, _, rowIndex) => {
+        return Array(gridColumns).fill("").reduce((outval, _, columnIndex) => {
+          const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
+          if (fogOfWar[coordId]) {
+            return [].concat(outval, [ `<rect x="${columnIndex * squareSize}" y="${rowIndex * squareSize}" width="${squareSize}" height="${squareSize}" fill="black"/>` ]);
+          }
+          return outval;
+        }, acc);
+      }, []).join("\n")}
     </svg>`;
   }
   return function() {
