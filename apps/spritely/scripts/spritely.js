@@ -286,16 +286,10 @@ namespace('sp.spritely.Spritely',{
                   <button
                     key={id}
                     id={id}
-                    className={`palette-color rounded-pill mr-2 ml-2${
-                      index === this.state.selectedPaletteIndex
-                        ? ' selected-color'
-                        : ''
-                    }`}
+                    className={`palette-color rounded-pill mr-2 ml-2${index === this.state.selectedPaletteIndex?' selected-color':''}`}
                     title={`Color: ${ color }; click to select, double click or right click to change this color`}
                     style={{ color, backgroundColor: color }}
-                    onClick={() => {
-                      this.setState({ selectedPaletteIndex: index });
-                    }}
+                    onClick={() => { this.setState({ selectedPaletteIndex: index }) }}
                     onDoubleClick={() => {
                       this.modals.colorPicker.open({
                         index,
@@ -335,13 +329,10 @@ namespace('sp.spritely.Spritely',{
               width="100%"
               height="100%"
               preserveAspectRatio="xMidYMin meet"
-              viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${
-                this.state.size * Constants.pixelDim()
-              }`}
+              viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}
               onMouseDown={(e) => {
-                if (this.state.selectedPaletteIndex >= 0) {
+                if (this.state.selectedPaletteIndex >= 0 && e.target.tagName === "use") {
                   delete this.dragState.endId;
-                  console.log({ fn: "onMouseDown", startId: e.target.id });
                   this.dragState.drag = true;
                   this.dragState.startId = e.target.id;
                 }
@@ -350,65 +341,58 @@ namespace('sp.spritely.Spritely',{
                 if (this.state.selectedPaletteIndex >= 0 && this.dragState.drag) {
                   const endId = (e.target.id === ''?this.dragState.endId:e.target.id);
                   if (this.dragState.endId != endId && this.dragState.startId != endId) {
-                    console.log({ fn: "onMouseMove", startId: this.dragState.startId, endId });
                     this.dragState.endId = endId;
                     this.highlight(this.dragState.startId, this.dragState.endId);
                   }
                 }
               }}
               onMouseUp={(e) => {
-                if(this.state.selectedPaletteIndex >= 0 && this.dragState.endId && this.dragState.endId != this.dragState.startId) {
-                  console.log({ fn: "onMouseUp", dragState: this.dragState, allow: true });
+                if(this.state.selectedPaletteIndex >= 0 && this.dragState.drag && this.dragState.endId && this.dragState.endId != this.dragState.startId) {
                   this.togglePerStart(this.dragState.startId, this.dragState.endId);
-                } else {
-                  console.log({ fn: "onMouseUp", dragState: this.dragState, allow: false });
                 }
                 delete this.dragState.drag;
                 delete this.dragState.startId;
+                delete this.dragState.endId;
                 document.getElementById(highlighterFrameId).innerHTML = "";
               }}
               onMouseOut={(e) => {
-                if (this.state.selectedPaletteIndex >= 0 && e.target.id === "highlightBounds") {
-                  console.log({ fn: "onMouseOut", dragState: this.dragState, e});
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (this.state.selectedPaletteIndex >= 0 && e.target.id === "highlightBounds") {
-                  console.log({ fn: "onMouseLeave", dragState: this.dragState, e});
+                if (this.state.selectedPaletteIndex >= 0 && this.dragState.drag && ["use","rect"].indexOf(e.target?.tagName) >= 0 && ["use","rect"].indexOf(e.relatedTarget?.tagName) < 0) {
+                  if (this.dragState.endId && this.dragState.endId != this.dragState.startId) {
+                    this.togglePerStart(this.dragState.startId, this.dragState.endId);
+                  }
+                  delete this.dragState.drag;
+                  delete this.dragState.startId;
+                  delete this.dragState.endId;
+                  document.getElementById(highlighterFrameId).innerHTML = "";
                 }
               }}
             >
-              <rect id="highlightBounds" x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()} fill="none"/>
-              {Utilities.range(this.state.size).map((y) => {
-                return Utilities.range(this.state.size).map((x) => {
-                  const pixelId = SpritelyUtil.getPixelId(x, y);
-                  const pixel = this.state.pixels[pixelId];
-                  const altColor = this.state.isTransparent
-                    ? Constants.clearedPixelId()
-                    : Constants.bgColorPixelId();
-                  const colorId = isNaN(pixel)
-                    ? `#${altColor}`
-                    : `#${SpritelyUtil.getPaletteId(pixel)}`;
-                  return (
-                    <a
-                      key={pixelId}
-                      href="#"
-                      onClick={(e) => {
-                        console.log({ fn: "onClick", e });
-                        e.preventDefault();
-                        this.togglePixelColor(pixelId);
-                      }}
-                    >
-                      <use
-                        id={pixelId}
-                        x={x * Constants.pixelDim()}
-                        y={y * Constants.pixelDim()}
-                        href={colorId}
-                      />
-                    </a>
-                  );
-                });
-              })}
+              <g>
+                {Utilities.range(this.state.size).map((y) => {
+                  return Utilities.range(this.state.size).map((x) => {
+                    const pixelId = SpritelyUtil.getPixelId(x, y);
+                    const pixel = this.state.pixels[pixelId];
+                    const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
+                    const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
+                    return (
+                      <a
+                        key={pixelId}
+                        href="#"
+                        onClick={(e) => {
+                          console.log({ fn: "onClick", e });
+                          e.preventDefault();
+                          this.togglePixelColor(pixelId);
+                        }}>
+                        <use
+                          id={pixelId}
+                          x={x * Constants.pixelDim()}
+                          y={y * Constants.pixelDim()}
+                          href={colorId}/>
+                      </a>
+                    );
+                  });
+                })}
+              </g>
               <g id={highlighterFrameId} x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()}></g>
             </svg>
           </div>

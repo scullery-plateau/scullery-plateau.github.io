@@ -52,7 +52,6 @@ namespace('sp.common.Dialog', () => {
       });
     }
     render() {
-      console.log({ state: this.state });
       return (
         <>
           <h3>{this.state.title}</h3>
