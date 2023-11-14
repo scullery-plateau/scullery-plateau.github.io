@@ -78,6 +78,12 @@
 4. effects (AOE, spell effects)
 6. drag and drop
 
+## Quirkopolis
+
+* city builder wizard: generate a random city / town / village based on user answers from wizard
+* builds a map and an encyclopedia-style entry 
+* design / architecture
+
 ## How To D&D?
 
 - Build Page as blog post
