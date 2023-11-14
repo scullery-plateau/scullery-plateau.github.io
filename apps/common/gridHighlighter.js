@@ -47,7 +47,7 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
   }
   return { 
     init: function({squareSize, highlighterFrameId, outlineColor, outlineWidth, allowDragEvents, onDrop, onOutOfBounds}) {
-      const dragState = {};
+      const dragState = { outlineColor, outlineWidth };
       document.addEventListener("mousedown",(e) => {
         if (allowDragEvents() && isDraggable(e.target)) {
           delete dragState.endId;
@@ -58,9 +58,12 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
       document.addEventListener("mousemove",(e) => {
         if (allowDragEvents() && dragState.drag) {
           const endId = (e.target.id === ''?dragState.endId:e.target.id);
-          if (dragState.endId != endId && dragState.startId != endId) {
+          if (dragState.endId !== endId && dragState.startId !== endId) {
             dragState.endId = endId;
-            highlight(squareSize, highlighterFrameId, outlineColor, outlineWidth, dragState.startId, dragState.endId);
+            highlight(squareSize, highlighterFrameId, dragState.outlineColor, dragState.outlineWidth, dragState.startId, dragState.endId);
+          } else if (dragState.endId !== endId && dragState.startId === endId) {
+            delete dragState.endId;
+            document.getElementById(highlighterFrameId).innerHTML = "";
           }
         }
       });
@@ -82,6 +85,14 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
           document.getElementById(highlighterFrameId).innerHTML = "";
         }
       });
+      return {
+        setOutlineColor:function(color) {
+          dragState.outlineColor = color;
+        },
+        setOutlineWidth:function(width) {
+          dragState.outlineWidth = width;
+        }
+      }
     }
   };
 })

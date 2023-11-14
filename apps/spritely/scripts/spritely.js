@@ -231,120 +231,106 @@ namespace('sp.spritely.Spritely',{
         <>
           <Header menuItems={this.menuItems} appTitle={'Spritely'} />
           <h4 className="text-center">Click <a href="./gallery.html">here</a> view a gallery of Spritely images with datafiles!</h4>
-          <div className="d-flex justify-content-center rpg-box m-3">
-            <button
-              className="rounded w-25"
-              style={{
-                backgroundColor: this.state.bgColor,
-                color: Colors.getForegroundColor(this.state.bgColor),
-              }}
-              onClick={() => {
-                this.modals.bgColorPicker.open({ color: this.state.bgColor });
-              }}
-            >
-              BG Color
-            </button>
-            <span className="m-3"></span>
-            <button
-              className={`rounded w-25 btn ${
-                this.state.isTransparent ? 'btn-outline-light' : 'btn-dark'
-              }`}
-              onClick={() => {
-                this.setState({ isTransparent: !this.state.isTransparent });
-              }}
-            >
-              {this.state.isTransparent ? 'Transparent' : 'Opaque'}
-            </button>
-          </div>
-          <div
-            className="rpg-box m-3 d-flex justify-content-between"
-            title="Palette">
-            <button
-              className="btn btn-success"
-              title="Add Color"
-              onClick={() => {
-                const selectedPaletteIndex = this.state.palette.length;
-                const palette = [].concat(this.state.palette, [
-                  Constants.defaultColor(),
-                ]);
-                this.setState({ palette, selectedPaletteIndex });
-              }}>+</button>
-            <div className="ml-2 w-100 d-flex flex-wrap">
-              {this.state.palette.map((color, index) => {
-                const id = SpritelyUtil.getPaletteButtonId(index);
-                return (
-                  <button
-                    key={id}
-                    id={id}
-                    className={`palette-color rounded-pill mr-2 ml-2${index === this.state.selectedPaletteIndex?' selected-color':''}`}
-                    title={`Color: ${ color }; click to select, double click or right click to change this color`}
-                    style={{ color, backgroundColor: color }}
-                    onClick={() => { this.setState({ selectedPaletteIndex: index }) }}
-                    onDoubleClick={() => {
-                      this.modals.colorPicker.open({
-                        index,
-                        color: this.state.palette[index],
-                      });
-                    }}
-                    onContextMenu={(e) => {
-                      e.preventDefault();
-                      this.modals.colorPicker.open({
-                        index,
-                        color: this.state.palette[index],
-                      });
-                    }}
-                  >----</button>
-                );
-              })}
+          <div class="row">
+            <div class="col-4">
+              <div className="d-flex flex-column rpg-box m-3">
+                <div className="d-flex justify-content-around">
+                  <button className="rounded m-1 btn btn-outline-light"
+                          style={{ backgroundColor: this.state.bgColor, color: Colors.getForegroundColor(this.state.bgColor) }}
+                          onClick={() => { this.modals.bgColorPicker.open({ color: this.state.bgColor }) }}>BG&nbsp;Color</button>
+                  <button className={`rounded m-1 btn ${this.state.isTransparent ? 'btn-outline-light' : 'btn-dark'}`}
+                          onClick={() => { this.setState({ isTransparent: !this.state.isTransparent }); }}>
+                    {this.state.isTransparent ? 'Transparent' : 'Opaque'}
+                  </button>
+                </div>
+                <div className="d-flex justify-content-around">
+                  <button className="btn btn-success m-1 w-100" title="Add Color"
+                      onClick={() => {
+                        const selectedPaletteIndex = this.state.palette.length;
+                        const palette = [].concat(this.state.palette, [
+                          Constants.defaultColor(),
+                        ]);
+                        this.setState({ palette, selectedPaletteIndex });
+                      }}>+</button>
+                  <button className="btn btn-danger m-1 w-100" title="Remove Color"
+                    onClick={() => {
+                      const palette = Array.from(this.state.palette);
+                      palette.splice(this.state.selectedPaletteIndex, 1);
+                      const pixels = Object.entries(this.state.pixels).reduce((out,[k,v]) => {
+                        out[k] = v - ((v >= this.state.selectedPaletteIndex)?1:0);
+                        return out;
+                      }, {});
+                      const selectedPaletteIndex = Math.min(
+                        this.state.selectedPaletteIndex,
+                        palette.length - 1
+                      );
+                      this.setState({ palette, selectedPaletteIndex, pixels });
+                    }}>-</button>
+                </div>
+                <div className="ml-2 w-100 d-flex flex-wrap">
+                  {this.state.palette.map((color, index) => {
+                    const id = SpritelyUtil.getPaletteButtonId(index);
+                    return (
+                      <button
+                        key={id}
+                        id={id}
+                        className={`palette-color rounded-pill m-1 ${index === this.state.selectedPaletteIndex?' selected-color':''}`}
+                        title={`Color: ${ color }; click to select, double click or right click to change this color`}
+                        style={{ color, backgroundColor: color }}
+                        onClick={() => { this.setState({ selectedPaletteIndex: index }) }}
+                        onDoubleClick={() => {
+                          this.modals.colorPicker.open({
+                            index,
+                            color: this.state.palette[index],
+                          });
+                        }}
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          this.modals.colorPicker.open({
+                            index,
+                            color: this.state.palette[index],
+                          });
+                        }}
+                      >---</button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-            <button
-              className="btn btn-danger"
-              title="Remove Color"
-              onClick={() => {
-                const palette = Array.from(this.state.palette);
-                palette.splice(this.state.selectedPaletteIndex, 1);
-                const pixels = Object.entries(this.state.pixels).reduce((out,[k,v]) => {
-                  out[k] = v - ((v >= this.state.selectedPaletteIndex)?1:0);
-                  return out;
-                }, {});
-                const selectedPaletteIndex = Math.min(
-                  this.state.selectedPaletteIndex,
-                  palette.length - 1
-                );
-                this.setState({ palette, selectedPaletteIndex, pixels });
-              }}>-</button>
-          </div>
-          <div className="rpg-title-box m-3" title="click to paint a pixel">
-            <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
-                 viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
-              {Utilities.range(this.state.size).map((y) => {
-                return Utilities.range(this.state.size).map((x) => {
-                  const pixelId = SpritelyUtil.getPixelId(x, y);
-                  const pixel = this.state.pixels[pixelId];
-                  const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
-                  const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
-                  return (
-                    <a
-                      key={pixelId}
-                      href="#"
-                      onClick={(e) => {
-                        console.log({ fn: "onClick", e });
-                        e.preventDefault();
-                        this.togglePixelColor(pixelId);
-                      }}>
-                      <use
-                        id={pixelId}
-                        x={x * Constants.pixelDim()}
-                        y={y * Constants.pixelDim()}
-                        href={colorId}
-                        droptarget="true"
-                        draggable="true"/>
-                    </a>
-                  );
-                });
-              })}
-              <g id={highlighterFrameId} x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()}></g>
-            </svg>
+            <div class="col-8">
+              <div className="rpg-title-box m-3" title="click to paint a pixel">
+                <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
+                     viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
+                  {Utilities.range(this.state.size).map((y) => {
+                    return Utilities.range(this.state.size).map((x) => {
+                      const pixelId = SpritelyUtil.getPixelId(x, y);
+                      const pixel = this.state.pixels[pixelId];
+                      const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
+                      const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
+                      return (
+                        <a
+                          key={pixelId}
+                          href="#"
+                          onClick={(e) => {
+                            console.log({ fn: "onClick", e });
+                            e.preventDefault();
+                            this.togglePixelColor(pixelId);
+                          }}>
+                          <use
+                            id={pixelId}
+                            x={x * Constants.pixelDim()}
+                            y={y * Constants.pixelDim()}
+                            href={colorId}
+                            droptarget="true"
+                            draggable="true"/>
+                        </a>
+                      );
+                    });
+                  })}
+                  <g id={highlighterFrameId} x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()}></g>
+                </svg>
+              </div>
+            </div>
           </div>
           <div style={{ display: 'none' }}>
             <svg width="0" height="0">
