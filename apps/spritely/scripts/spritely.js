@@ -3,6 +3,7 @@ namespace('sp.spritely.Spritely',{
   'sp.common.Colors': 'Colors',
   'sp.common.Dialog': 'Dialog',
   'sp.common.EditMode':'EditMode',
+  'sp.common.GridHighlighter':'GridHighlighter',
   'sp.common.Header': 'Header',
   'sp.common.LoadFile': 'LoadFile',
   'sp.common.Utilities': 'Utilities',
@@ -15,6 +16,7 @@ namespace('sp.spritely.Spritely',{
   Colors,
   Dialog,
   EditMode,
+  GridHighlighter,
   Header,
   LoadFile,
   Utilities,
@@ -66,7 +68,6 @@ namespace('sp.spritely.Spritely',{
         isTransparent: true,
         bgColor: Constants.defaultColor(),
       };
-      this.dragState = {};
       this.modals = Dialog.factory({
         imageDownload: {
           componentClass: ImageDownload,
@@ -153,6 +154,27 @@ namespace('sp.spritely.Spritely',{
           },
         },
       ];
+      GridHighlighter.init({
+        squareSize: Constants.pixelDim(),
+        highlighterFrameId,
+        outlineColor: "red", 
+        outlineWidth: 2, 
+        allowDragEvents: (() => (this.state.selectedPaletteIndex >= 0)),
+        onOutOfBounds:(() => {}),
+        onDrop:((startId, ids) => {
+          const pixels = Utilities.merge(this.state.pixels);
+          const setNewState = (pixels[startId] === this.state.selectedPaletteIndex)?((pixels, pixelId) => {
+            delete pixels[pixelId];
+          }):((pixels, pixelId) => { 
+            pixels[pixelId] = this.state.selectedPaletteIndex; 
+          });
+          setNewState(pixels, startId);
+          ids.forEach((id) => {
+            setNewState(pixels, id);
+          });
+          this.setState({ pixels });
+        })
+      });
       EditMode.enable();
     }
     loadFile() {
@@ -203,38 +225,6 @@ namespace('sp.spritely.Spritely',{
         document.getElementById(highlighterFrameId).innerHTML = "";
         this.setState({ pixels });
       }
-    }
-    minMaxStartEnd(startId, endId) {
-      const { x: startX, y: startY } = SpritelyUtil.parsePixelId(startId);
-      const { x: endX, y: endY } = SpritelyUtil.parsePixelId(endId);
-      const minX = Math.min(startX, endX); 
-      const minY = Math.min(startY, endY); 
-      const maxX = Math.max(startX, endX); 
-      const maxY = Math.max(startY, endY); 
-      return { minX, minY, maxX, maxY };
-    }
-    highlight(startId, endId) {
-      const squareSize = Constants.pixelDim();
-      const { minX: minColumn, minY: minRow, maxX: maxColumn, maxY: maxRow } = this.minMaxStartEnd(startId, endId);
-      const rowCount = (1 + maxRow - minRow);
-      const columnCount = (1 + maxColumn - minColumn);
-      const [ x, y, width, height ] = [ minColumn, minRow, columnCount, rowCount ].map((n) => n * squareSize);
-      document.getElementById(highlighterFrameId).innerHTML = `<rect x=${x} y=${y} width=${width} height=${height} fill="none" stroke="red" stroke-width="2"/>`;
-    }
-    togglePerStart(startId, endId) {
-      const pixels = Utilities.merge(this.state.pixels);
-      const setNewState = (pixels[startId] === this.state.selectedPaletteIndex)?((pixels, pixelId) => {
-        delete pixels[pixelId];
-      }):((pixels, pixelId) => { 
-        pixels[pixelId] = this.state.selectedPaletteIndex; 
-      });
-      const { minX, minY, maxX, maxY } = this.minMaxStartEnd(startId, endId);
-      for (let x = minX; x <= maxX; x++) {
-        for (let y = minY; y <= maxY; y++) {
-          setNewState(pixels, SpritelyUtil.getPixelId(x,y));
-        }
-      }
-      this.setState({ pixels });
     }
     render() {
       return (
@@ -325,74 +315,34 @@ namespace('sp.spritely.Spritely',{
               }}>-</button>
           </div>
           <div className="rpg-title-box m-3" title="click to paint a pixel">
-            <svg
-              width="100%"
-              height="100%"
-              preserveAspectRatio="xMidYMin meet"
-              viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}
-              onMouseDown={(e) => {
-                if (this.state.selectedPaletteIndex >= 0 && e.target.tagName === "use") {
-                  delete this.dragState.endId;
-                  this.dragState.drag = true;
-                  this.dragState.startId = e.target.id;
-                }
-              }}
-              onMouseMove={(e) => {
-                if (this.state.selectedPaletteIndex >= 0 && this.dragState.drag) {
-                  const endId = (e.target.id === ''?this.dragState.endId:e.target.id);
-                  if (this.dragState.endId != endId && this.dragState.startId != endId) {
-                    this.dragState.endId = endId;
-                    this.highlight(this.dragState.startId, this.dragState.endId);
-                  }
-                }
-              }}
-              onMouseUp={(e) => {
-                if(this.state.selectedPaletteIndex >= 0 && this.dragState.drag && this.dragState.endId && this.dragState.endId != this.dragState.startId) {
-                  this.togglePerStart(this.dragState.startId, this.dragState.endId);
-                }
-                delete this.dragState.drag;
-                delete this.dragState.startId;
-                delete this.dragState.endId;
-                document.getElementById(highlighterFrameId).innerHTML = "";
-              }}
-              onMouseOut={(e) => {
-                if (this.state.selectedPaletteIndex >= 0 && this.dragState.drag && ["use","rect"].indexOf(e.target?.tagName) >= 0 && ["use","rect"].indexOf(e.relatedTarget?.tagName) < 0) {
-                  if (this.dragState.endId && this.dragState.endId != this.dragState.startId) {
-                    this.togglePerStart(this.dragState.startId, this.dragState.endId);
-                  }
-                  delete this.dragState.drag;
-                  delete this.dragState.startId;
-                  delete this.dragState.endId;
-                  document.getElementById(highlighterFrameId).innerHTML = "";
-                }
-              }}
-            >
-              <g>
-                {Utilities.range(this.state.size).map((y) => {
-                  return Utilities.range(this.state.size).map((x) => {
-                    const pixelId = SpritelyUtil.getPixelId(x, y);
-                    const pixel = this.state.pixels[pixelId];
-                    const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
-                    const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
-                    return (
-                      <a
-                        key={pixelId}
-                        href="#"
-                        onClick={(e) => {
-                          console.log({ fn: "onClick", e });
-                          e.preventDefault();
-                          this.togglePixelColor(pixelId);
-                        }}>
-                        <use
-                          id={pixelId}
-                          x={x * Constants.pixelDim()}
-                          y={y * Constants.pixelDim()}
-                          href={colorId}/>
-                      </a>
-                    );
-                  });
-                })}
-              </g>
+            <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
+                 viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
+              {Utilities.range(this.state.size).map((y) => {
+                return Utilities.range(this.state.size).map((x) => {
+                  const pixelId = SpritelyUtil.getPixelId(x, y);
+                  const pixel = this.state.pixels[pixelId];
+                  const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
+                  const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
+                  return (
+                    <a
+                      key={pixelId}
+                      href="#"
+                      onClick={(e) => {
+                        console.log({ fn: "onClick", e });
+                        e.preventDefault();
+                        this.togglePixelColor(pixelId);
+                      }}>
+                      <use
+                        id={pixelId}
+                        x={x * Constants.pixelDim()}
+                        y={y * Constants.pixelDim()}
+                        href={colorId}
+                        droptarget="true"
+                        draggable="true"/>
+                    </a>
+                  );
+                });
+              })}
               <g id={highlighterFrameId} x="0" y="0" width={this.state.size * Constants.pixelDim()} height={this.state.size * Constants.pixelDim()}></g>
             </svg>
           </div>
