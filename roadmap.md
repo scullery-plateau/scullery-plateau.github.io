@@ -30,7 +30,7 @@
 
 ## Spritely
 
-* Re-orient palette and canvas
+* hot keys
 * "load as overlay"
 
 ## Cobblestone
