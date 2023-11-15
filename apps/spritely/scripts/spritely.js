@@ -319,7 +319,7 @@ namespace('sp.spritely.Spritely',{
                 </div>
               </div>
             </div>
-            <div class="col-7">
+            <div class="col-7 h-100">
               <div className="rpg-title-box m-3" title="click to paint a pixel">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
                      viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
