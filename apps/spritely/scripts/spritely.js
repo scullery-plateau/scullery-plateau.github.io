@@ -57,6 +57,16 @@ namespace('sp.spritely.Spritely',{
       />
     );
   };
+  const transformLabels = [
+    ['turnLeft', 'Turn Left', 'fa-rotate-left'],
+    ['turnRight', 'Turn Right', 'fa-rotate-right'],
+    ['flipOver', 'Flip Over', 'fa-right-left'],
+    ['flipDown', 'Flip Down', 'fa-right-left fa-rotate-90'],
+    ['shiftLeft', 'Shift Left', 'fa-arrow-left'],
+    ['shiftRight', 'Shift Right', 'fa-arrow-right'],
+    ['shiftUp', 'Shift Up', 'fa-arrow-up'],
+    ['shiftDown', 'Shift Down', 'fa-arrow-down'],
+  ];
   return class Spritely extends React.Component {
     constructor(props) {
       super(props);
@@ -127,16 +137,7 @@ namespace('sp.spritely.Spritely',{
         {
           id: 'transformMenu',
           label: 'Transform',
-          items: [
-            ['turnLeft', 'Turn Left'],
-            ['turnRight', 'Turn Right'],
-            ['flipOver', 'Flip Over'],
-            ['flipDown', 'Flip Down'],
-            ['shiftLeft', 'Shift Left'],
-            ['shiftRight', 'Shift Right'],
-            ['shiftUp', 'Shift Up'],
-            ['shiftDown', 'Shift Down'],
-          ].map(([id, label]) => {
+          items: transformLabels.map(([id, label]) => {
             return {
               id: `transform-${id}`,
               label,
@@ -232,18 +233,36 @@ namespace('sp.spritely.Spritely',{
           <Header menuItems={this.menuItems} appTitle={'Spritely'} />
           <h4 className="text-center">Click <a href="./gallery.html">here</a> view a gallery of Spritely images with datafiles!</h4>
           <div class="row">
-            <div class="col-4">
+            <div class="col-2">
+              <div className="d-flex justify-content-around rpg-box m-3 row">
+                <button title="Load File" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-folder-open"></i></button>
+                <button title="Download" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-floppy-disk"></i></button>
+                <button title="About" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-circle-question"></i></button>
+              </div>
+              <div className="justify-content-center rpg-box m-3 row">
+                { 
+                  transformLabels.map(([id, label, faClass]) => {
+                    return <div className="col-6 justify-content-center m-1">
+                      <button title={label} className="btn btn-primary text-light" onClick={() => {
+                        this.transform(id);
+                      }}><i className={`fas ${faClass}`}></i></button>
+                    </div>;
+                  })
+                }
+              </div>
               <div className="d-flex flex-column rpg-box m-3">
-                <div className="d-flex justify-content-around">
-                  <button className="rounded m-1 btn btn-outline-light"
-                          style={{ backgroundColor: this.state.bgColor, color: Colors.getForegroundColor(this.state.bgColor) }}
-                          onClick={() => { this.modals.bgColorPicker.open({ color: this.state.bgColor }) }}>BG&nbsp;Color</button>
-                  <button className={`rounded m-1 btn ${this.state.isTransparent ? 'btn-outline-light' : 'btn-dark'}`}
-                          onClick={() => { this.setState({ isTransparent: !this.state.isTransparent }); }}>
-                    {this.state.isTransparent ? 'Transparent' : 'Opaque'}
-                  </button>
-                </div>
-                <div className="d-flex justify-content-around">
+                <button className="rounded m-1 btn btn-outline-light"
+                        style={{ backgroundColor: this.state.bgColor, color: Colors.getForegroundColor(this.state.bgColor) }}
+                        onClick={() => { this.modals.bgColorPicker.open({ color: this.state.bgColor }) }}>BG&nbsp;Color</button>
+                <button className={`rounded m-1 btn ${this.state.isTransparent ? 'btn-outline-light' : 'btn-dark'}`}
+                        onClick={() => { this.setState({ isTransparent: !this.state.isTransparent }); }}>
+                  {this.state.isTransparent ? 'Transparent' : 'Opaque'}
+                </button>
+              </div>
+            </div>
+            <div class="col-2">
+              <div className="d-flex flex-column rpg-box m-3">
+                <div className="row">
                   <button className="btn btn-success m-1 w-100" title="Add Color"
                       onClick={() => {
                         const selectedPaletteIndex = this.state.palette.length;
