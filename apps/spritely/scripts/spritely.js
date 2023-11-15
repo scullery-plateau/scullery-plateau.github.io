@@ -236,9 +236,9 @@ namespace('sp.spritely.Spritely',{
             <div class="col-3">
               <div className="rpg-box m-3">
                 <div className="d-flex justify-content-around">
-                  <button title="Load File" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-folder-open"></i></button>
-                  <button title="Download" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-floppy-disk"></i></button>
-                  <button title="About" className="btn btn-primary text-light" onClick={() => {}}><i className="far fa-circle-question"></i></button>
+                  <button title="Load File" className="btn btn-primary text-light" onClick={() => { this.loadFile() }}><i className="far fa-folder-open"></i></button>
+                  <button title="Download" className="btn btn-primary text-light" onClick={() => { this.modals.imageDownload.open(this.state) }}><i className="far fa-floppy-disk"></i></button>
+                  <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
                 </div>
               </div>
               <div className="d-flex flex-column justify-content-center rpg-box m-3">
