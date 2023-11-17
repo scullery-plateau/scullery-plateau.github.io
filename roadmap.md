@@ -36,8 +36,9 @@
 ## Cobblestone
 
 1. Re-orient palette and canvas
-2. reload image from tile edit screen
-3. improved / condensed paging(how??)
+2. Highlight - bulk select
+3. reload image from tile edit screen
+4. improved / condensed paging(how??)
 
 ## Card Builder - **Svengali**
 
@@ -74,9 +75,11 @@
 1. hotkeys / button controlls instead of "input" tags
 2. add grid to map
 5. fog of war
+  * highlight - bulk select toggle
 3. sprites (characters) and fixtures (furnature, terrain)
 4. effects (AOE, spell effects)
 6. drag and drop
+7. scroll to zoom
 
 ## Quirkopolis
 
