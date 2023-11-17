@@ -3,19 +3,21 @@ namespace("sp.purview.Purview",{
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.EditMode':'EditMode',
+  'sp.common.GridHighlighter':'GridHighlighter',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Point':'Point',
   "sp.common.Utilities":"util",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ ColorPicker, Colors, Dialog, EditMode, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
+},({ ColorPicker, Colors, Dialog, EditMode, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
     "Make your dungeon map experience more interactive as the players at your table move thru your dungeon on a digital display.",
     "Scale any image to fit any screen from convenient and easy to use controls."
   ];
+  const highlighterFrameId = "highlighterFrame";
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -110,7 +112,37 @@ namespace("sp.purview.Purview",{
       const playerView = new PlayerView();
       playerView.open(() => {
         this.applyUpdates({ dataURL, baseImg, playerView, grid, gridLineColor, gridLineWidth, gridRows, gridColumns, squareSize });
+        this.gridHighlighter = GridHighlighter.init({
+          squareSize,
+          highlighterFrameId,
+          outlineColor: "white",
+          outlineWidth: 3, 
+          allowDragEvents: (() => true),
+          onOutOfBounds:(() => {}),
+          onDrop:((startId, ids) => {
+            const fogOfWar = util.merge(this.state.fogOfWar);
+            const setNewState = (fogOfWar[startId])?((fogOfWar, cellId) => {
+              delete fogOfWar[cellId];
+            }):((fogOfWar, cellId) => { 
+              fogOfWar[cellId] = true;
+            });
+            setNewState(fogOfWar, startId);
+            ids.forEach((id) => {
+              setNewState(fogOfWar, id);
+            });
+            this.applyUpdates({ fogOfWar });
+          })
+        });
       });
+    }
+    toggleFog(coordId) {
+      const fogOfWar = util.merge(this.state.fogOfWar);
+      if (fogOfWar[coordId]) {
+        delete fogOfWar[coordId];
+      } else {
+        fogOfWar[coordId] = true;
+      }
+      this.applyUpdates({ fogOfWar });
     }
     update(field, value) {
       const updates = {};
@@ -161,16 +193,6 @@ namespace("sp.purview.Purview",{
     deactivateFog() {
       this.applyUpdates({ fogOfWar: {} });
     }
-    toggleFog(columnIndex, rowIndex) {
-      const fogOfWar = util.merge(this.state.fogOfWar);
-      const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
-      if (fogOfWar[coordId]) {
-        delete fogOfWar[coordId];
-      } else {
-        fogOfWar[coordId] = true;
-      }
-      this.applyUpdates({ fogOfWar });
-    }
     render() {
       const { gridRows, gridColumns, squareSize, fogOfWar } = this.state;
       console.log({ gridRows, gridColumns, squareSize, fogOfWar });
@@ -181,7 +203,7 @@ namespace("sp.purview.Purview",{
             <div className="rpg-box m-2">
               <div className="d-flex flex-column justify-content-center">
                 <p>Choose an image to load as a map which has already been cropped to be flush with the grid in that image.</p>
-                <p>If your image has not been cropped to be flush, use the <a class="btn btn-link" href="../grid-cropper/index.html">Grid Cropper</a> app here on Scullery Plateau.</p>
+                <p>If your image has not been cropped to be flush, use the <a className="btn btn-link" href="../grid-cropper/index.html">Grid Cropper</a> app here on Scullery Plateau.</p>
                 <div className="d-flex flex-column justify-content-center">
                   <button className="btn btn-success" onClick={() => this.loadMapImage()}>Load Map Image</button>
                 </div>
@@ -189,47 +211,54 @@ namespace("sp.purview.Purview",{
             </div>
           </div>) }
         { this.state.dataURL && 
-          <div className="d-flex justify-content-center">
-            <div className="rpg-box d-flex flex-column m-2">
-              { this.buildControlField("scale", "Scale", { min: 0, step: 0.01 }) }
-              { this.buildControlField("xOffset", "X-Offset") }
-              { this.buildControlField("yOffset", "Y-Offset") }
-              { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
-              { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
-              { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
+          <div className="row justify-content-center">
+            <div className="col-4">
+              <div className="rpg-box d-flex flex-column m-2">
+                { this.buildControlField("scale", "Scale", { min: 0, step: 0.01 }) }
+                { this.buildControlField("xOffset", "X-Offset") }
+                { this.buildControlField("yOffset", "Y-Offset") }
+                { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
+                { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
+                { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
+              </div>
             </div>
-            <div className="rpg-box m-2" style={{width: "25em", height: "25em"}}>
-              <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`} style={{width: "20em", height: "20em"}}>
-                <rect
-                  x={this.state.svg.x}
-                  y={this.state.svg.y}
-                  width={this.state.svg.width}
-                  height={this.state.svg.height}
-                  fill={this.state.bgColor}
-                  stroke="none"
-                />
-                <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
-                <rect 
-                  x={this.state.svgFrame.x}
-                  y={this.state.svgFrame.y}
-                  width={this.state.svgFrame.width}
-                  height={this.state.svgFrame.height}
-                  fill="none"
-                  stroke={this.state.frameColor}
-                  strokeWidth={this.state.lineWidth}/>
-                { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
-                  Array(this.state.gridRows).fill("").map((_, rowIndex) => {
-                    return Array(this.state.gridColumns).fill("").map((_, columnIndex) => {
-                      const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
-                      const foggy = this.state.fogOfWar[coordId];
-                      return (<a href="#" onClick={() => this.toggleFog(columnIndex, rowIndex)}>
-                        <rect x={columnIndex * this.state.squareSize} y={rowIndex * this.state.squareSize} 
-                              width={this.state.squareSize} height={this.state.squareSize} fill={foggy?"black":"white"} opacity={foggy?0.3:0.1}/>
-                      </a>);
-                    });
-                  }) 
-                }
-              </svg>
+            <div className="col-8 h-100">
+              <div className="rpg-box m-2">
+                <svg width="100%" height="100%" viewBox={`${this.state.svg.x} ${this.state.svg.y} ${this.state.svg.width} ${this.state.svg.height}`}>
+                  <rect
+                    x={this.state.svg.x}
+                    y={this.state.svg.y}
+                    width={this.state.svg.width}
+                    height={this.state.svg.height}
+                    fill={this.state.bgColor}
+                    stroke="none"
+                  />
+                  <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                  <rect 
+                    x={this.state.svgFrame.x}
+                    y={this.state.svgFrame.y}
+                    width={this.state.svgFrame.width}
+                    height={this.state.svgFrame.height}
+                    fill="none"
+                    stroke={this.state.frameColor}
+                    strokeWidth={this.state.lineWidth}/>
+                  { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
+                    Array(this.state.gridRows).fill("").map((_, rowIndex) => {
+                      return Array(this.state.gridColumns).fill("").map((_, columnIndex) => {
+                        const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
+                        const foggy = this.state.fogOfWar[coordId];
+                        return (<a href="#" onClick={() => this.toggleFog(coordId)}>
+                          <rect id={coordId} x={columnIndex * this.state.squareSize} y={rowIndex * this.state.squareSize} 
+                                width={this.state.squareSize} height={this.state.squareSize} 
+                                fill={foggy?"black":"white"} opacity={foggy?0.3:0.1}
+                                draggable="true" droptarget="true"/>
+                        </a>);
+                      });
+                    }) 
+                  }
+                  <g id={highlighterFrameId} x="0" y="0" width={this.state.squareSize * this.state.gridColumns} height={this.state.squareSize * this.state.gridRows}></g>
+                </svg>
+              </div>
             </div>
           </div>
         }
