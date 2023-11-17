@@ -28,7 +28,7 @@ namespace('sp.cobblestone.Publish',{
         fullWidth:0,
         fullHeight:0,
       };
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen(({images,tiles,placements,size,orientation,printOrientation,pages}) => {
         pages = pages || [];
         const selectedIndex = ((pages.length > 0) ? 0 : -1);
@@ -213,12 +213,12 @@ namespace('sp.cobblestone.Publish',{
           <button className="btn btn-secondary" onClick={() => this.togglePrintOrientation() }>{ this.displayPrintOrientation() }</button>
           <button className="btn btn-info" onClick={() => this.publish() }>Publish</button>
           <button className="btn btn-success" onClick={() => {
-            this.onClose({
+            this.close({
               pages: this.state.pages,
               printOrientation: this.state.printOrientation
             });
           }}>Apply Pages</button>
-          <button className="btn btn-danger" onClick={() => this.onClose() }>Cancel</button>
+          <button className="btn btn-danger" onClick={() => this.close() }>Cancel</button>
         </div>
       </div>;
     }

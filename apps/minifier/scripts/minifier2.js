@@ -1,5 +1,4 @@
 namespace('sp.minifier.Minifier2',{
-  'sp.common.BuildAbout': 'buildAbout',
   'sp.common.Dialog': 'Dialog',
   'sp.common.EditMode': 'EditMode',
   'sp.common.FileDownload': 'FileDownload',
@@ -8,7 +7,8 @@ namespace('sp.minifier.Minifier2',{
   'sp.common.Utilities':'util',
   'sp.minifier.MiniCanvas': 'MiniCanvas',
   'sp.minifier.PrintMinis': 'PrintMinis',
-}, ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, util, MiniCanvas, PrintMinis }) => {
+}, ({ Dialog, EditMode, FileDownload, Header, LoadFile, util, MiniCanvas, PrintMinis }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     'Minifier is a tool for turning digital images into printable standing miniatures.',
     'Import your images and print them as miniatures of 1", 2", 3", or 4".',
@@ -20,11 +20,6 @@ namespace('sp.minifier.Minifier2',{
       super(props);
       this.state = { size: 1, minis: [], synchronize: false };
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Minifier2",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {},
-        },
         fileDownload: {
           componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -74,9 +69,9 @@ namespace('sp.minifier.Minifier2',{
             this.setState({ size, minis: Array.from(this.state.minis).map(({ mini, baseImg }) => {
               mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(size));
               return [ mini, baseImg ];
-            })
-    });
-          },
+            }) 
+          });
+        },
           options: [1, 2, 3, 4].map((v) => {
             return { label: `${v} inch`, value: v };
           }),
@@ -85,7 +80,10 @@ namespace('sp.minifier.Minifier2',{
           id: 'about',
           label: 'About',
           callback: () => {
-            this.modals.about.open();
+            Dialog.alert({
+              label: "Minifier",
+              lines: about
+            });
           },
         },
       ];

@@ -9,7 +9,7 @@ namespace("sp.tokenizer.TokenFrame",{
     constructor(props) {
       super(props);
       this.state = TokenCanvas.initState();
-      this.onClose = props.onClose;
+      this.close = props.close;
       props.setOnOpen(({baseImg,token,index}) => {
         this.setState(token);
         this.tokenIndex = index;
@@ -140,7 +140,7 @@ namespace("sp.tokenizer.TokenFrame",{
         <div className="d-flex justify-content-end">
           <button
             className="btn btn-success"
-            onClick={ () => { this.onClose({
+            onClick={ () => { this.close({
               token: this.state,
               index: this.tokenIndex,
               baseImg: this.baseImg
@@ -148,7 +148,7 @@ namespace("sp.tokenizer.TokenFrame",{
           >Apply Updates</button>
           <button
             className="btn btn-danger"
-            onClick={ () => this.onClose() }
+            onClick={ () => this.close() }
           >Close</button>
         </div>
       </div>;

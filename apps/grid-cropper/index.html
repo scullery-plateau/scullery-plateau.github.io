@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Scullery Plateau: Svengali</title>
+    <title>Scullery Plateau: Grid Cropper</title>
     <link rel="icon" type="image/x-icon" href="../../favicon.ico">
 
     <!-- external styles -->
@@ -41,28 +41,26 @@
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
     <!-- project namespaces -->
     <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
-    <script type="text/babel" src="../common/fileDownload.js"></script>
+    <script type="text/babel" src="../common/editMode.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
     <script type="text/babel" src="../common/footer.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
-    <script type="text/babel" src="../common/point.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
-    <script type="text/babel" src="./scripts/svengali.js"></script>
+    <script type="text/babel" src="./scripts/gridCropper.js"></script>
+    <script type="text/babel" src="./scripts/imageDownload.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { Svengali, Footer } = imports({
-          'sp.svengali.Svengali': 'Svengali',
+        const { GridCropper, Footer } = imports({
+          'sp.grid-cropper.GridCropper': 'GridCropper',
           'sp.common.Footer': 'Footer',
         });
         const unusedNamespaces = listUnusedNamespaces();
@@ -70,7 +68,7 @@
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <Svengali />
+          <GridCropper/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
           <Footer />
@@ -81,6 +79,6 @@
   <body class="bg-dark text-light">
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
-    <canvas style="display: none;" id="canvas"></canvas>
+    <canvas id="canvas" style="display: none;"></canvas>
   </body>
 </html>

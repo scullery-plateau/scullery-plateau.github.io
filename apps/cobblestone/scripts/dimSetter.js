@@ -13,7 +13,7 @@ namespace("sp.cobblestone.DimensionSetter",{
                 height: 10,
                 orientation: 'portrait'
             }
-            this.onClose = props.onClose;
+            this.close = props.close;
             props.setOnOpen(({size,orientation}) => {
                 const width = gUtil.getWidth(size,orientation);
                 const height = gUtil.getHeight(size,orientation);
@@ -106,8 +106,8 @@ namespace("sp.cobblestone.DimensionSetter",{
                     </svg>
                 </div>
                 <div className="d-flex justify-content-end">
-                    <button className="btn btn-success" onClick={ () => this.onClose(this.getOutput(this.state)) }>Apply</button>
-                    <button className="btn btn-danger" onClick={ () => this.onClose() }>Cancel</button>
+                    <button className="btn btn-success" onClick={ () => this.close(this.getOutput(this.state)) }>Apply</button>
+                    <button className="btn btn-danger" onClick={ () => this.close() }>Cancel</button>
                 </div>
             </div>;
         }

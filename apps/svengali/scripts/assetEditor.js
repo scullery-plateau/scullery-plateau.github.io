@@ -10,11 +10,11 @@ namespace('sp.svengali.AssetEditor',{
         columns:{},
         images:{}
       }) });
-      this.onClose = props.onClose;
+      this.close = props.close;
     }
     complete() {
       const { columns, images } = this.state;
-      this.onClose({ columns, images });
+      this.close({ columns, images });
     }
     render() {
       return <>
