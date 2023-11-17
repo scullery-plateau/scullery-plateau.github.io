@@ -1,47 +1,15 @@
-## Minifier
-
-- individual sizes & printing best fit
-- frame images to mini-frame size / ratio
-- match scale (pixels / inch)
-- individual offsets by thumbnail
-
-## Spritely
-
-- "load as overlay"
-
-## Card Builder - **Svengali**
-
-1. _impl_ (with REACT)
-  - Define layout / template
-    - borders / lines / shapes / images / icons
-    - size (business card to full page)
-  - apply data
-
-## Hex Map builder - **Overlander**
-
-1. _impl_ (with REACT)
-
-## SVG Canvas - **Mondrian**
-
-1. _impl_ (with REACT)
-
-## Tokenizer
-
-- allow users to determine rotation of frame
-- allow users to flip image
-
 ## Outfitter
 
-1. split layer into multiple layers (both into right and left)
-2. fix part/pattern/shading positioning issues in data
-3. gallery
+1. condense layout
+2. add Help menu with About
+3. split layer into multiple layers (both into right and left)
+4. fix part/pattern/shading positioning issues in data
+5. gallery
   * D&D Character Sheets
     * Dragonborn Sorcerer (silver)
     * Drow Rogue
     * Dwarf Cleric
     * Half-Elf Bard
-    * Halfling Monk
-    * Halfling Rogue
     * High Elf Fighter
     * High Elf Wizard
     * Human Barbarian
@@ -78,12 +46,47 @@
     * Evil-lynn
     * Mer-man
     * Beast-man
-    *
+
+## Minifier
+
+- more specifics in help
+- individual sizes & printing best fit
+- frame images to mini-frame size / ratio
+- match scale (pixels / inch)
+- individual offsets by thumbnail
+
+## Spritely
+
+* hot keys
+* "load as overlay"
 
 ## Cobblestone
 
-1. reload image from tile edit screen
-2. improved / condensed paging(how??)
+1. Re-orient palette and canvas
+2. Highlight - bulk select
+3. reload image from tile edit screen
+4. improved / condensed paging(how??)
+
+## Card Builder - **Svengali**
+
+1. _impl_ (with REACT)
+  - Define layout / template
+    - borders / lines / shapes / images / icons
+    - size (business card to full page)
+  - apply data
+
+## Hex Map builder - **Overlander**
+
+1. _impl_ (with REACT)
+
+## SVG Canvas - **Mondrian**
+
+1. _impl_ (with REACT)
+
+## Tokenizer
+
+- allow users to determine rotation of frame
+- allow users to flip image
 
 ## Overall
 
@@ -93,6 +96,23 @@
 ## Dice Roller app - **Runyon**
 
 2. (future feature) canvas 3d animation?
+
+## Purview
+
+1. hotkeys / button controlls instead of "input" tags
+2. add grid to map
+5. fog of war
+  * highlight - bulk select toggle
+3. sprites (characters) and fixtures (furnature, terrain)
+4. effects (AOE, spell effects)
+6. drag and drop
+7. scroll to zoom
+
+## Quirkopolis
+
+* city builder wizard: generate a random city / town / village based on user answers from wizard
+* builds a map and an encyclopedia-style entry 
+* design / architecture
 
 ## How To D&D?
 

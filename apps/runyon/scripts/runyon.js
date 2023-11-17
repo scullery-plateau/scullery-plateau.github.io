@@ -1,9 +1,9 @@
 namespace('sp.runyon.Runyon',{
-  'sp.common.BuildAbout':'buildAbout',
   'sp.common.Dialog':'Dialog',
   'sp.common.Header':'Header',
   'sp.common.Utilities':'util'
-},({ buildAbout, Dialog, Header, util }) => {
+},({ Dialog, Header, util }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [];
   const initStateDice = {
     count:1,
@@ -17,14 +17,6 @@ namespace('sp.runyon.Runyon',{
     constructor(props) {
       super(props);
       this.state = initState;
-      this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Spritely", about),
-          attrs: {class: 'rpg-box text-light w-75'},
-          onClose: () => {
-          },
-        },
-      });
       this.menuItems = [{
         id: 'toggleHiLo',
         label: 'Toggle Lowest & Highest',
@@ -35,7 +27,10 @@ namespace('sp.runyon.Runyon',{
         id: 'about',
         label: 'About',
         callback: () => {
-          this.modals.about.open();
+          Dialog.alert({
+            label: "Runyon",
+            lines: about
+          });
         },
       }];
     }

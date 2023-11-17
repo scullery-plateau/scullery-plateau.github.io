@@ -30,7 +30,7 @@ namespace("sp.game-icons.Gallery",{
         bgColor: undefined,
         canvasURL: undefined
       };
-      this.onClose = props.onClose;
+      this.close = props.close;
       this.modals = Dialog.factory({
         dlColorPicker: {
           componentClass: ColorPicker,
@@ -91,7 +91,7 @@ namespace("sp.game-icons.Gallery",{
           { this.state.canvasURL && <a href={this.state.canvasURL} download={this.state.download}><img src={this.state.canvasURL}/></a> }
         </div>
         <div className="d-flex justify-content-end">
-          <button className="btn btn-danger" onClick={() => { this.onClose(); }}>Close</button>
+          <button className="btn btn-danger" onClick={() => { this.close(); }}>Close</button>
         </div>
       </div>;
     }
@@ -129,7 +129,7 @@ namespace("sp.game-icons.Gallery",{
     }
     loadGallery () {
       Ajax.getLocalStaticFileAsText('./icons.json',{
-        success: (responseText) => {
+        success: ({ responseText }) => {
           const gallery = JSON.parse(responseText);
           this.setState({ gallery, progress: undefined });
         },

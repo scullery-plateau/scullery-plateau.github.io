@@ -1,7 +1,4 @@
-namespace(
-  'sp.tokenizer.Tokenizer',
-  {
-    'sp.common.BuildAbout': 'buildAbout',
+namespace('sp.tokenizer.Tokenizer',{
     'sp.common.Dialog': 'Dialog',
     'sp.common.EditMode': 'EditMode',
     'sp.common.FileDownload': 'FileDownload',
@@ -12,7 +9,8 @@ namespace(
     'sp.tokenizer.TokenCanvas': 'TokenCanvas',
     'sp.tokenizer.TokenFrame': 'TokenFrame',
   },
-  ({ buildAbout, Dialog, EditMode, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
+  ({ Dialog, EditMode, FileDownload, Header, LoadFile, util, PrintTokens, TokenCanvas, TokenFrame}) => {
+    Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
     const about = [
       'Tokenizer is a tool for reframing digital images into printable and downloadable tokens.',
       'Import your images, apply a frame, and download them or print them as tokens of 1", 2", 3", or 4".',
@@ -25,11 +23,6 @@ namespace(
         this.canvasId = props.canvasId;
         this.state = {size: 1, tokens: []};
         this.modals = Dialog.factory({
-          about: {
-            componentClass: buildAbout("Tokenizer",about),
-            attrs: {class: 'rpg-box text-light w-75'},
-            onClose: () => { },
-          },
           fileDownload: {
             componentClass: FileDownload,
             attrs: {class: 'rpg-box text-light w-75'},
@@ -115,7 +108,7 @@ namespace(
             const allTokens = tokens.map((token) => {
               const t = { token };
               util.initImageObj(token.url,(baseImg) => {
-                token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId,baseImg,token);
+                token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId, baseImg, token);
                 t.baseImg = baseImg;
               });
               return t;

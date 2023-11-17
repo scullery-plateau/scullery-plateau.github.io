@@ -1,6 +1,5 @@
 namespace('sp.outfitter.Outfitter', {
   'sp.common.Ajax':'Ajax',
-  'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -16,7 +15,8 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, buildAbout, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Ajax, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
   const about = [];
@@ -54,11 +54,6 @@ namespace('sp.outfitter.Outfitter', {
         document.addEventListener(event, handler);
       });
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Outfitter",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {},
-        },
         fileDownload: {
           componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -111,7 +106,10 @@ namespace('sp.outfitter.Outfitter', {
         id: 'about',
         label: 'About',
         callback: () => {
-          this.modals.about.open();
+          Dialog.alert({
+            label: "Outfitter",
+            lines: about
+          });
         }
       }];
       const schematic = Shareable.parse();

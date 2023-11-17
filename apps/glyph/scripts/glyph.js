@@ -1,5 +1,4 @@
 namespace('sp.glyph.Glyph',{
-  'sp.common.BuildAbout':'buildAbout',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -10,7 +9,8 @@ namespace('sp.glyph.Glyph',{
   'sp.glyph.ImageDownload':'ImageDownload',
   'sp.glyph.LayerArgs':'LayerArgs',
   'sp.glyph.GlyphSVG':'GlyphSVG'
-},({ buildAbout, ColorPicker, Colors, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, GlyphSVG }) => {
+},({ ColorPicker, Colors, Dialog, FileDownload, Header, LoadFile, util, ImageDownload, LayerArgs, GlyphSVG }) => {
+  Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [];
   const validateLoadFileJson = function() {};
   const layerTypes = [
@@ -30,11 +30,6 @@ namespace('sp.glyph.Glyph',{
         schematic: GlyphSVG.newSchematic(),
       };
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Glyph",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {}
-        },
         fileDownload: {
           componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -95,7 +90,10 @@ namespace('sp.glyph.Glyph',{
         id: 'about',
         label: 'About',
         callback: () => {
-          this.modals.about.open();
+          Dialog.alert({
+            label: "Glyph",
+            lines: about
+          });
         }
       }];
     }
