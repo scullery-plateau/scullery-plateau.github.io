@@ -26,6 +26,12 @@ namespace('sp.cobblestone.Cobblestone',{
     shiftUp: () => (x, y) => [x, y - 1],
     shiftDown: () => (x, y) => [x, y + 1],
   };
+  const transformLabels = [
+    ['shiftLeft', 'Shift Left', 'fa-arrow-left'],
+    ['shiftRight', 'Shift Right', 'fa-arrow-right'],
+    ['shiftUp', 'Shift Up', 'fa-arrow-up'],
+    ['shiftDown', 'Shift Down', 'fa-arrow-down'],
+  ];
   const validateLoadFileJson = function() {};
   return class extends React.Component {
     constructor(props) {
@@ -86,37 +92,13 @@ namespace('sp.cobblestone.Cobblestone',{
           id: 'loadFile',
           label: 'Load File',
           callback: () => {
-            LoadFile(
-              false,
-              'text',
-              (fileContent) => {
-                const jsonData = JSON.parse(fileContent);
-                const { images, tiles, placements, size, orientation, pages, printOrientation } = jsonData;
-                const stateData = { images, tiles, placements, size, orientation, pages, printOrientation };
-                const error = validateLoadFileJson(stateData);
-                if (error) {
-                  throw error;
-                }
-                const [filename, tfs] = Object.entries(tiles)[0];
-                const firstTF = Object.keys(tfs)[0];
-                stateData.selectedTile = [filename, firstTF];
-                this.setState(stateData);
-              },
-              (fileName, error) => {
-                console.log({ fileName, error });
-                alert(fileName + ' failed to load. See console for error.');
-              }
-              );
+            this.loadFile();
           },
         },{
           id: 'downloadFile',
           label: 'Download File',
           callback: () => {
-            const { images, tiles, placements, size, orientation, pages, printOrientation } = this.state;
-            this.modals.fileDownload.open({
-              defaultFilename:"cobblestone",
-              jsonData:{ images, tiles, placements, size, orientation, pages, printOrientation }
-            });
+            this.downloadFile();
           }
         },{
           id: 'downloadImage',
@@ -141,18 +123,13 @@ namespace('sp.cobblestone.Cobblestone',{
       },{
         id: 'transformMenu',
         label: 'Transform',
-        items: [
-          ['shiftLeft', 'Shift Left'],
-          ['shiftRight', 'Shift Right'],
-          ['shiftUp', 'Shift Up'],
-          ['shiftDown', 'Shift Down'],
-        ].map(([id, label]) => {
+        items: transformLabels.map(([id, label]) => {
           return {
-          id: `transform-${id}`,
-          label,
-          callback: () => {
-            this.transform(id);
-          },
+            id: `transform-${id}`,
+            label,
+            callback: () => {
+              this.transform(id);
+            },
           };
         }),
       },{
@@ -162,6 +139,36 @@ namespace('sp.cobblestone.Cobblestone',{
           Dialog.alert({ label: "Cobblestone", lines: about });
         },
       }];
+    }
+    loadFile() {
+      LoadFile(
+        false,
+        'text',
+        (fileContent) => {
+          const jsonData = JSON.parse(fileContent);
+          const { images, tiles, placements, size, orientation, pages, printOrientation } = jsonData;
+          const stateData = { images, tiles, placements, size, orientation, pages, printOrientation };
+          const error = validateLoadFileJson(stateData);
+          if (error) {
+            throw error;
+          }
+          const [filename, tfs] = Object.entries(tiles)[0];
+          const firstTF = Object.keys(tfs)[0];
+          stateData.selectedTile = [filename, firstTF];
+          this.setState(stateData);
+        },
+        (fileName, error) => {
+          console.log({ fileName, error });
+          alert(fileName + ' failed to load. See console for error.');
+        }
+      );
+    }
+    downloadFile() {
+      const { images, tiles, placements, size, orientation, pages, printOrientation } = this.state;
+      this.modals.fileDownload.open({
+        defaultFilename:"cobblestone",
+        jsonData:{ images, tiles, placements, size, orientation, pages, printOrientation }
+      });
     }
     transform(transformType) {
       const width = gUtil.getWidth(this.state.size,this.state.orientation);
@@ -214,6 +221,19 @@ namespace('sp.cobblestone.Cobblestone',{
         this.setState({placements});
       }
     }
+    componentDidMount() {
+      this.afterRender();
+    }
+    componentDidUpdate() {
+      this.afterRender();
+    }
+    afterRender() {
+      const elements = ['paletteScroll','canvasSVG','paletteAddButton'].reduce((outVal,id) => {
+        outVal[id] = document.getElementById(id);
+        return outVal;
+      }, {});
+      elements.paletteScroll.style.maxHeight = elements.canvasSVG.clientHeight - elements.paletteAddButton.clientHeight;
+    }
     render() {
       const width = gUtil.getWidth(this.state.size, this.state.orientation);
       const height = gUtil.getHeight(this.state.size, this.state.orientation);
@@ -223,53 +243,84 @@ namespace('sp.cobblestone.Cobblestone',{
         <Header menuItems={this.menuItems} appTitle={'Cobblestone'} />
         <TileDefs tiles={this.state.tiles} images={this.state.images} tileDim={tileDim}/>
         <h4 className="text-center">Click <a href="resources/delian.zip">here</a> to download an example!</h4>
-        <div className="rpg-title-box m-3 d-flex justify-content-between" title="Palette" >
-          <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
-          <div className="ml-2 w-100 d-flex flex-nowrap tile-buttons">
-            { Object.entries(this.state.tiles).map(([filename, transforms]) => {
-              return Object.keys(transforms).map((tf) => {
-                const tileRef = cUtil.getTileId(filename, tf);
-                return <button
-                  key={`btn.${tileRef}.key`}
-                  id={`btn.${tileRef}`}
-                  className={'tile m-2 p-0'+
-                  (Array.isArray(this.state.selectedTile) && this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
-                    ? ' selected-tile'
-                    : '')}
-                  title={`Tile: ${filename}, ${tf}; click to select, double click or right click to edit`}
-                  onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
-                  onDoubleClick={ () => {
-                    this.editTile(filename)
-                  }}
-                  onContextMenu={ (e) => {
-                    e.preventDefault();
-                    this.editTile(filename);
-                  }}>
-                  <svg key={`btn.${tileRef}.svg.key`} width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
-                    <use href={`#${tileRef}`}/>
-                  </svg>
-                </button>;
-              });
-            }) }
+        <div className="row justify-content-center">
+          <div className="col-5">
+            <div className="rpg-box m-3">
+              <div className="d-flex justify-content-around">
+                <button title="Load File" className="btn btn-primary text-light" onClick={() => { this.loadFile() }}><i className="far fa-folder-open"></i></button>
+                <button title="Download Datafile" className="btn btn-primary text-light" onClick={() => { this.downloadFile() }}><i className="far fa-floppy-disk"></i></button>
+                <button title="Download Image" className="btn btn-primary text-light" onClick={() => { this.modals.imageDownload.open(this.state) }}><i className="far fa-file-image"></i></button>
+                <button title="Publish Printable" className="btn btn-primary text-light" onClick={() => { this.modals.publish.open(this.state) }}><i className="fas fa-print"></i></button>
+                <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
+              </div>
+            </div>
+          </div>
+          <div className="col-4">
+            <div className="rpg-box m-3">
+              <div className="d-flex justify-content-around">
+                <button title="Shift Left" className="btn btn-primary text-light" onClick={() => { this.transform("shiftLeft") }}><i className={`fas fa-arrow-left`}></i></button>
+                <button title="Shift Right" className="btn btn-primary text-light" onClick={() => { this.transform("shiftRight") }}><i className={`fas fa-arrow-right`}></i></button>
+                <button title="Shift Up" className="btn btn-primary text-light" onClick={() => { this.transform("shiftUp") }}><i className={`fas fa-arrow-up`}></i></button>
+                <button title="Shift Down" className="btn btn-primary text-light" onClick={() => { this.transform("shiftDown") }}><i className={`fas fa-arrow-down`}></i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="rpg-title-box m-3" title="click to place a tile" >
-          <svg key="svg-canvas" width="100%" height="75%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${fullWidth} ${fullHeight}`}>
-          {
-            util.range(width).map((x) => {
-              return util.range(height).map((y) => {
-                const tile = this.state.placements[gUtil.getCoordinateId(x, y)];
-                const tileId = tile ? cUtil.getTileId(tile[0], tile[1]) : emptyCellId;
-                return <a href="#" onClick={(e) => {
-                  e.preventDefault();
-                  this.toggleTile(x,y)
-                }}>
-                  <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
-                </a>;
-              });
-            })
-          }
-          </svg>
+        <div className="row justify-content-center">
+          <div className="col-4 h-100" >
+            <div className="rpg-title-box m-3 d-flex flex-column" title="Palette">
+              <div id="paletteAddButton" className="d-flex justify-content-center mb-1">
+                <button className="btn btn-success" title="Add Image" onClick={() => this.addImage()}>+</button>
+              </div>
+              <div className="w-100 d-flex flex-wrap justify-content-center tile-buttons" id="paletteScroll">
+                { Object.entries(this.state.tiles).map(([filename, transforms]) => {
+                  return Object.keys(transforms).map((tf) => {
+                    const tileRef = cUtil.getTileId(filename, tf);
+                    return <button
+                      key={`btn.${tileRef}.key`}
+                      id={`btn.${tileRef}`}
+                      className={'tile m-2 p-0'+
+                      (Array.isArray(this.state.selectedTile) && this.state.selectedTile[0] === filename && this.state.selectedTile[1] === tf
+                        ? ' selected-tile'
+                        : '')}
+                      title={`Tile: ${filename}, ${tf}; click to select, double click or right click to edit`}
+                      onClick={ () => this.setState({ selectedTile: [ filename, tf] }) }
+                      onDoubleClick={ () => {
+                        this.editTile(filename)
+                      }}
+                      onContextMenu={ (e) => {
+                        e.preventDefault();
+                        this.editTile(filename);
+                      }}>
+                      <svg key={`btn.${tileRef}.svg.key`} width="100%" height="100%" viewBox={`0 0 ${tileDim} ${tileDim}`}>
+                        <use href={`#${tileRef}`}/>
+                      </svg>
+                    </button>;
+                  });
+                }) }
+              </div>
+            </div>
+          </div>
+          <div className="col-7 h-100">
+            <div className="rpg-title-box m-3" title="click to place a tile" >
+              <svg id="canvasSVG" key="svg-canvas" width="100%" height="75%" preserveAspectRatio="xMidYMin meet" viewBox={`0 0 ${fullWidth} ${fullHeight}`}>
+              {
+                util.range(width).map((x) => {
+                  return util.range(height).map((y) => {
+                    const tile = this.state.placements[gUtil.getCoordinateId(x, y)];
+                    const tileId = tile ? cUtil.getTileId(tile[0], tile[1]) : emptyCellId;
+                    return <a href="#" onClick={(e) => {
+                      e.preventDefault();
+                      this.toggleTile(x,y)
+                    }}>
+                      <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
+                    </a>;
+                  });
+                })
+              }
+              </svg>
+            </div>
+          </div>
         </div>
       </>;
     }
