@@ -232,8 +232,8 @@ namespace('sp.spritely.Spritely',{
         <>
           <Header menuItems={this.menuItems} appTitle={'Spritely'} />
           <h4 className="text-center">Click <a href="./gallery.html">here</a> view a gallery of Spritely images with datafiles!</h4>
-          <div class="row justify-content-center">
-            <div class="col-3">
+          <div className="row justify-content-center">
+            <div className="col-3">
               <div className="rpg-box m-3">
                 <div className="d-flex justify-content-around">
                   <button title="Load File" className="btn btn-primary text-light" onClick={() => { this.loadFile() }}><i className="far fa-folder-open"></i></button>
@@ -319,7 +319,7 @@ namespace('sp.spritely.Spritely',{
                 </div>
               </div>
             </div>
-            <div class="col-7 h-100">
+            <div className="col-7 h-100">
               <div className="rpg-title-box m-3" title="click to paint a pixel">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
                      viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
