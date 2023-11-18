@@ -25,6 +25,8 @@ namespace("sp.purview.Purview",{
         bgColor: "#000001",
         frameColor: "#FF0000",
         lineWidth: 3,
+        moveStep:1,
+        scaleStep:0.01,
         fogOfWar: {}
       };
       this.modals = Dialog.factory({
@@ -55,6 +57,7 @@ namespace("sp.purview.Purview",{
       }];
     }
     applyUpdates(stateUpdates) {
+      console.log({ stateUpdates });
       stateUpdates = stateUpdates || {};
       const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize" ].map(field => this.state[field] || stateUpdates[field]);
       const { innerWidth, innerHeight } = playerView.getDimensions();
@@ -79,7 +82,7 @@ namespace("sp.purview.Purview",{
         width: innerWidth/scale,
         height: innerHeight/scale
       };
-      const [ bgColor, lineWidth, frameColor, fogOfWar ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar" ].map(field => stateUpdates[field] || this.state[field]);
+      const [ bgColor, lineWidth, frameColor, fogOfWar, moveStep ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar", "moveStep" ].map(field => stateUpdates[field] || this.state[field]);
       playerView.update({
         dataURL,
         img: baseImg,
@@ -90,7 +93,9 @@ namespace("sp.purview.Purview",{
         fogOfWar
       });
       playerView.setBackgroundColor(bgColor);
-      this.setState({ dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar });
+      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep };
+      console.log({ allUpdates });
+      this.setState(allUpdates);
     }
     loadMapImage() {
       LoadFile(
@@ -176,7 +181,7 @@ namespace("sp.purview.Purview",{
           className="form-control"
           min={ options.min }
           step={ options.step }
-          defaultValue={ this.state[field] }
+          value={ this.state[field] }
           style={{ width: "4em"}}
           onChange={(e) => this.update([field],e.target.value)}/>
       </div>;
@@ -192,6 +197,16 @@ namespace("sp.purview.Purview",{
     }
     deactivateFog() {
       this.applyUpdates({ fogOfWar: {} });
+    }
+    isOnGrid() {
+      return this.state.moveStep === this.state.squareSize && this.state.xOffset % this.state.squareSize === 0 && this.state.yOffset % this.state.squareSize === 0;
+    }
+    snapToGrid() {
+      this.applyUpdates({
+        moveStep: this.state.squareSize,
+        xOffset: (this.state.xOffset - (this.state.xOffset % this.state.squareSize)),
+        yOffset: (this.state.yOffset - (this.state.yOffset % this.state.squareSize))
+      });
     }
     render() {
       const { gridRows, gridColumns, squareSize, fogOfWar } = this.state;
@@ -214,9 +229,39 @@ namespace("sp.purview.Purview",{
           <div className="row justify-content-center">
             <div className="col-4">
               <div className="rpg-box d-flex flex-column m-2">
-                { this.buildControlField("scale", "Scale", { min: 0, step: 0.01 }) }
-                { this.buildControlField("xOffset", "X-Offset") }
-                { this.buildControlField("yOffset", "Y-Offset") }
+                { this.buildControlField("scale", "Scale", { min: 0, step: this.state.scaleStep }) }
+                <div className="input-group my-2">
+                  <label htmlFor="scaleStep" className="input-group-text">Scale Step:</label>
+                  <input
+                    id="scaleStep"
+                    name="scaleStep"
+                    type="number"
+                    className="form-control"
+                    min={0.01}
+                    step={0.01}
+                    value={ this.state.scaleStep }
+                    style={{ width: "4em"}}
+                    onChange={(e) => this.setState({ scaleStep: parseFloat(e.target.value) })}/>
+                </div>
+                { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
+                { this.buildControlField("yOffset", "Y-Offset", { step: this.state.moveStep }) }
+                <div className="input-group my-2">
+                  <label htmlFor="moveStep" className="input-group-text">Move Step:</label>
+                  <input
+                    id="moveStep"
+                    name="moveStep"
+                    type="number"
+                    className="form-control"
+                    min={ 1 }
+                    step={ 1 }
+                    value={ this.state.moveStep }
+                    style={{ width: "4em"}}
+                    onChange={(e) => this.setState({ moveStep: parseFloat(e.target.value) })}/>
+                </div>
+                <button 
+                  className={`btn ${ this.isOnGrid()?'btn-disabled':'btn-success' }`}
+                  disabled={ this.isOnGrid() }
+                  onClick={() => { this.snapToGrid() }}>Snap To Grid</button>
                 { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
                 { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
                 { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
