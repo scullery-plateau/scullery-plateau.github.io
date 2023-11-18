@@ -1,6 +1,7 @@
 namespace('sp.cobblestone.Cobblestone',{
   'sp.common.Dialog': 'Dialog',
   'sp.common.FileDownload': 'FileDownload',
+  'sp.common.GridHighlighter': 'GridHighlighter',
   'sp.common.GridUtilities': 'gUtil',
   'sp.common.Header': 'Header',
   'sp.common.LoadFile': 'LoadFile',
@@ -11,10 +12,11 @@ namespace('sp.cobblestone.Cobblestone',{
   'sp.cobblestone.Publish': 'Publish',
   'sp.cobblestone.TileDefs': 'TileDefs',
   'sp.cobblestone.TileEditor': 'TileEditor',
-},({ Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, gUtil, util, cUtil, Publish, Download, DimensionSetter }) => {
+},({ Dialog, FileDownload, GridHighlighter, Header, LoadFile, TileDefs, TileEditor, gUtil, util, cUtil, Publish, Download, DimensionSetter }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const tileDim = cUtil.getTileDim();
   const emptyCellId = gUtil.getEmptyCellId();
+  const highlighterFrameId = "highlighterFrame";
   const about = [
     'Cobblestone is a canvas for game boards and battle maps.',
     'Build your map a page at a time. Publish them as printable or download them as images.',
@@ -139,6 +141,28 @@ namespace('sp.cobblestone.Cobblestone',{
           Dialog.alert({ label: "Cobblestone", lines: about });
         },
       }];
+      GridHighlighter.init({
+        squareSize: tileDim,
+        highlighterFrameId,
+        outlineColor: "red", 
+        outlineWidth: 2, 
+        allowDragEvents: (() => this.state.selectedTile),
+        onOutOfBounds:(() => {}),
+        onDrop:((startId, ids) => {
+          const placements = util.merge(this.state.placements);
+          const setNewState = (placements[startId])?((placements, coordId) => {
+            delete placements[coordId];
+          }):((placements, coordId) => { 
+            placements[coordId] = this.state.selectedTile.map(st => st); 
+          });
+          setNewState(placements, startId);
+          ids.forEach((id) => {
+            setNewState(placements, id);
+          });
+          this.setState({ placements });
+        })
+      });
+
     }
     loadFile() {
       LoadFile(
@@ -208,10 +232,9 @@ namespace('sp.cobblestone.Cobblestone',{
     editTile(filename) {
       this.modals.tileEditor.open({ filename, dataURL: this.state.images[filename], tiles: this.state.tiles[filename] });
     }
-    toggleTile(x,y) {
+    toggleTile(coordId) {
       if (this.state.selectedTile) {
         const placements = util.merge(this.state.placements);
-        const coordId = gUtil.getCoordinateId(x, y);
         const tile = placements[coordId];
         if (tile) {
           delete placements[coordId];
@@ -307,17 +330,19 @@ namespace('sp.cobblestone.Cobblestone',{
               {
                 util.range(width).map((x) => {
                   return util.range(height).map((y) => {
-                    const tile = this.state.placements[gUtil.getCoordinateId(x, y)];
+                    const coordId = gUtil.getCoordinateId(x, y);
+                    const tile = this.state.placements[coordId];
                     const tileId = tile ? cUtil.getTileId(tile[0], tile[1]) : emptyCellId;
                     return <a href="#" onClick={(e) => {
                       e.preventDefault();
-                      this.toggleTile(x,y)
+                      this.toggleTile(coordId);
                     }}>
-                      <use x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2"/>
+                      <use id={coordId} x={tileDim * x} y={tileDim * y} href={`#${tileId}`} stroke="black" strokeWidth="2" draggable="true" droptarget="true"/>
                     </a>;
                   });
                 })
               }
+                <g id={highlighterFrameId} x="0" y="0" width={fullWidth} height={fullHeight}></g>
               </svg>
             </div>
           </div>
