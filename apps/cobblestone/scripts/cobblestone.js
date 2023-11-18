@@ -1,5 +1,4 @@
 namespace('sp.cobblestone.Cobblestone',{
-  'sp.common.BuildAbout': 'buildAbout',
   'sp.common.Dialog': 'Dialog',
   'sp.common.FileDownload': 'FileDownload',
   'sp.common.GridUtilities': 'gUtil',
@@ -12,7 +11,7 @@ namespace('sp.cobblestone.Cobblestone',{
   'sp.cobblestone.Publish': 'Publish',
   'sp.cobblestone.TileDefs': 'TileDefs',
   'sp.cobblestone.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, gUtil, util, cUtil, Publish, Download, DimensionSetter }) => {
+},({ Dialog, FileDownload, Header, LoadFile, TileDefs, TileEditor, gUtil, util, cUtil, Publish, Download, DimensionSetter }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const tileDim = cUtil.getTileDim();
   const emptyCellId = gUtil.getEmptyCellId();
@@ -43,11 +42,6 @@ namespace('sp.cobblestone.Cobblestone',{
         }
       };
       this.modals = Dialog.factory({
-        about: {
-          componentClass: buildAbout("Cobblestone",about),
-          attrs: { class: 'rpg-box text-light w-75' },
-          onClose: () => {}
-        },
         fileDownload: {
           componentClass: FileDownload,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -165,10 +159,7 @@ namespace('sp.cobblestone.Cobblestone',{
         id: 'about',
         label: 'About',
         callback: () => {
-          Dialog.alert({
-            label: "Cobblestone",
-            lines: about
-          });
+          Dialog.alert({ label: "Cobblestone", lines: about });
         },
       }];
     }
