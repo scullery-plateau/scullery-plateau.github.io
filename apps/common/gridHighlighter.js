@@ -50,7 +50,6 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
       const dragState = { outlineColor, outlineWidth };
       document.addEventListener("mousedown",(e) => {
         if (allowDragEvents(e) && isDraggable(e.target)) {
-          console.log({ event: "draggable", e, id:e.target.id})
           delete dragState.endId;
           dragState.drag = true;
           dragState.startId = e.target.id;
@@ -59,13 +58,10 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
       document.addEventListener("mousemove",(e) => {
         if (allowDragEvents(e) && dragState.drag) {
           const endId = (e.target.id === ''?dragState.endId:e.target.id);
-          console.log({ event: "ondrag", e, endId})
           if (dragState.endId !== endId && dragState.startId !== endId) {
-            console.log({ event: "highlight", e})
             dragState.endId = endId;
             highlight(squareSize, highlighterFrameId, dragState.outlineColor, dragState.outlineWidth, dragState.startId, dragState.endId);
           } else if (dragState.endId !== endId && dragState.startId === endId) {
-            console.log({ event: "canceldrag", e})
             delete dragState.endId;
             document.getElementById(highlighterFrameId).innerHTML = "";
           }
@@ -73,7 +69,6 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
       });
       document.addEventListener("mouseup",(e) => {
         if(allowDragEvents(e) && dragState.drag && dragState.endId && dragState.endId != dragState.startId) {
-          console.log({ event: "ondrop", e})
           togglePerStart(dragState.startId, dragState.endId, onDrop);
         }
         delete dragState.drag;
@@ -82,7 +77,6 @@ namespace("sp.common.GridHighlighter",{}, ({}) => {
         document.getElementById(highlighterFrameId).innerHTML = "";
       });
       document.addEventListener("mouseout",(e) => {
-        //console.log({ event: "mouseout", e})
         if (allowDragEvents(e) && dragState.drag && isDropTarget(e.target) && !isDropTarget(e.relatedTarget)) {
           onOutOfBounds();
           delete dragState.drag;

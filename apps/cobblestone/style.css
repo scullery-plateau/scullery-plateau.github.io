@@ -5,7 +5,7 @@ button.tile {
     height: 60px!important;
 }
 .tile-buttons {
-    overflow-x: scroll;
+    overflow-y: scroll;
 }
 .tile.active-tile {
     border: 5px solid green;
