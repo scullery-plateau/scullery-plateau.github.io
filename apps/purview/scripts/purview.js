@@ -59,7 +59,7 @@ namespace("sp.purview.Purview",{
     applyUpdates(stateUpdates) {
       console.log({ stateUpdates });
       stateUpdates = stateUpdates || {};
-      const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize" ].map(field => this.state[field] || stateUpdates[field]);
+      const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize, gridLineColor, gridLineWidth ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize", "gridLineColor", "gridLineWidth" ].map(field => this.state[field] || stateUpdates[field]);
       const { innerWidth, innerHeight } = playerView.getDimensions();
       const { width: imgWidth, height: imgHeight } = baseImg;
       const init = { scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), xOffset: 0, yOffset: 0 };
@@ -93,7 +93,7 @@ namespace("sp.purview.Purview",{
         fogOfWar
       });
       playerView.setBackgroundColor(bgColor);
-      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep };
+      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth };
       console.log({ allUpdates });
       this.setState(allUpdates);
     }

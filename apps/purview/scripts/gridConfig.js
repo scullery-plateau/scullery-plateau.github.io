@@ -45,7 +45,8 @@ namespace("sp.purview.GridConfig",{
           gridColumns, 
           gridRows, 
           initGridColumns: gridColumns, 
-          initGridRows: gridRows, 
+          initGridRows: gridRows,
+          initSquareSize: squareSize
         });
         if (squareCount > c.maxSquareCount()) {
           this.modals.calibrator.open(updates);
@@ -69,9 +70,11 @@ namespace("sp.purview.GridConfig",{
       })
     }
     buildGrid(field,value){
-      const updates = util.merge(this.state, util.assoc({},field,value));
+      const updates = util.assoc(this.state, field, value);
       if (field === "multiplier") {
-        // todo calc grid rows, grid columns, and square size from inits and multiplier
+        updates.squareSize = updates.initSquareSize / value;
+        updates.gridColumns = updates.initGridColumns * value;
+        updates.gridRows = updates.initGridRows * value;
       }
       this.setState(updates);
     }
