@@ -29,6 +29,20 @@ namespace("sp.font-awesome-sampler.FontAwesomeSampler", {
     render() {
       return (<>
         <h2 className="text-center">FontAwesome Sampler</h2>
+        <div className="rpg-box">
+          <button className="btn btn-secondary">
+            <i className="fas fa-down-left-and-up-right-to-center" style={{ transform: "rotate(45deg)"}}></i>
+          </button>
+          <button className="btn btn-secondary">
+            <i className="fas fa-down-left-and-up-right-to-center" style={{ transform: "rotate(135deg)"}}></i>
+          </button>
+          <button className="btn btn-secondary">
+            <i className="fas fa-arrows-left-right"></i>
+          </button>
+          <button className="btn btn-secondary">
+            <i className="fas fa-arrows-left-right fa-rotate-90"></i>
+          </button>
+        </div>
         <div className="d-flex flex-wrap">
           { irregular.map((key) => {
             return (<>
