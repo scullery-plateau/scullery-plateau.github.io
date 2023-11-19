@@ -19,9 +19,15 @@ namespace("sp.purview.PlayerView",{
   }
   return function() {
     const state = {};
-    this.open = function(onResize) {
+    this.open = function(onOpen, onResize) {
       state.sidecar = window.open("", "_blank");
-      state.sidecar.addEventListener("resize", onResize);
+      const openingState = {};
+      openingState.opener = (() => {
+        onOpen();
+        state.sidecar.removeEventListener("resize", openingState.opener);
+        state.sidecar.addEventListener("resize", onResize);
+      });
+      state.sidecar.addEventListener("resize", openingState.opener);
     }
     this.update = function(detail) {
       if (state.sidecar) {

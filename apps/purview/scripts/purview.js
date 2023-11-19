@@ -138,6 +138,8 @@ namespace("sp.purview.Purview",{
             this.applyUpdates({ fogOfWar });
           })
         });
+      }, () => {
+        this.applyUpdates();
       });
     }
     toggleFog(coordId) {
