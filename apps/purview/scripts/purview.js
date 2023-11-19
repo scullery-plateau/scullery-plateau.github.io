@@ -57,7 +57,6 @@ namespace("sp.purview.Purview",{
       }];
     }
     applyUpdates(stateUpdates) {
-      console.log({ stateUpdates });
       stateUpdates = stateUpdates || {};
       const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize, gridLineColor, gridLineWidth ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize", "gridLineColor", "gridLineWidth" ].map(field => this.state[field] || stateUpdates[field]);
       const { innerWidth, innerHeight } = playerView.getDimensions();
@@ -94,7 +93,6 @@ namespace("sp.purview.Purview",{
       });
       playerView.setBackgroundColor(bgColor);
       const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth };
-      console.log({ allUpdates });
       this.setState(allUpdates);
     }
     loadMapImage() {
@@ -211,8 +209,6 @@ namespace("sp.purview.Purview",{
       });
     }
     render() {
-      const { gridRows, gridColumns, squareSize, fogOfWar } = this.state;
-      console.log({ gridRows, gridColumns, squareSize, fogOfWar });
       return (<>
         <Header menuItems={this.menuItems} appTitle={'Purview'} />
         { !this.state.dataURL && 
