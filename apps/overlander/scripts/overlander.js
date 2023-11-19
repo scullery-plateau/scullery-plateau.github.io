@@ -12,7 +12,7 @@ namespace('sp.overlander.Overlander',{
   'sp.overlander.Tile': 'Tile',
   'sp.overlander.TileDefs': 'TileDefs',
   'sp.overlander.TileEditor': 'TileEditor',
-},({ buildAbout, Dialog, FileDownload, Header, LoadFile, gUtil, util, oUtil, Publish, Download, DimensionSetter, Tile, TileDefs, TileEditor }) => {
+},({ Dialog, FileDownload, Header, LoadFile, gUtil, util, oUtil, Publish, Download, DimensionSetter, Tile, TileDefs, TileEditor }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const { columnWidth, tileHeight, extraWidth, tileWidth, columnOffset } = Tile.getConstants();
   const about = [];
