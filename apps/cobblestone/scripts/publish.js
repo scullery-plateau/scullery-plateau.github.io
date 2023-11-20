@@ -1,13 +1,13 @@
 namespace('sp.cobblestone.Publish',{
   "sp.common.ColorPicker":'ColorPicker',
-  "sp.common.Colors":'colors',
+  "sp.common.Colors":'Colors',
   "sp.common.Dialog":'Dialog',
   "sp.common.GridUtilities":"gUtil",
   "sp.common.Utilities":"util",
   "sp.cobblestone.CobblestoneUtil":'cUtil',
   "sp.cobblestone.PrintPages":"Print",
   "sp.cobblestone.TileDefs":"TileDefs"
-},({ ColorPicker, Dialog, util, cUtil, gUtil, TileDefs, Print }) => {
+},({ ColorPicker, Colors, Dialog, util, cUtil, gUtil, TileDefs, Print }) => {
   const emptyCellId = gUtil.getEmptyCellId();
   const oppositeOrientation = { portrait: 'landscape', landscape: 'portrait' };
   const defaultColors = [
@@ -103,7 +103,12 @@ namespace('sp.cobblestone.Publish',{
         w: tileDim * (pageWidth + 1),
         h: tileDim * (pageHeight + 1)
       };
-      console.log({ tileDim, current, pageDim, pageWidth, pageHeight, fullWidth:this.state.fullWidth, fullHeight:this.state.fullHeight});
+      console.log({ 
+        tileDim, current, pageDim, pageWidth, pageHeight, 
+        fullWidth:this.state.fullWidth, 
+        fullHeight:this.state.fullHeight, 
+        printOrientation: this.state.printOrientation 
+      });
       return <div className="d-flex flex-column">
         <div className="d-flex justify-content-center">
           <button className="btn btn-success" onClick={ () => this.addPage() }>Add</button>
