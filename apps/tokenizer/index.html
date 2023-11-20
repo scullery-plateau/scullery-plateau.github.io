@@ -67,7 +67,7 @@
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
-        ReactDOM.createRoot(document.getElementById('app-root')).render(<Tokenizer/>);
+        ReactDOM.createRoot(document.getElementById('app-root')).render(<Tokenizer canvasId="canvas"/>);
         ReactDOM.createRoot(document.getElementById('footer')).render(<Footer/>);
       })();
     </script>

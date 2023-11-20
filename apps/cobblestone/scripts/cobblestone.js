@@ -112,6 +112,7 @@ namespace('sp.cobblestone.Cobblestone',{
           id: 'publish',
           label: 'Publish',
           callback: () => {
+            console.log({ publishState: this.state });
             this.modals.publish.open(this.state);
           }
         }]
@@ -171,7 +172,7 @@ namespace('sp.cobblestone.Cobblestone',{
         (fileContent) => {
           const jsonData = JSON.parse(fileContent);
           const { images, tiles, placements, size, orientation, pages, printOrientation } = jsonData;
-          const stateData = { images, tiles, placements, size, orientation, pages, printOrientation };
+          const stateData = { images, tiles, placements, size, orientation, pages, printOrientation: (printOrientation || 'portrait') };
           const error = validateLoadFileJson(stateData);
           if (error) {
             throw error;
@@ -216,16 +217,20 @@ namespace('sp.cobblestone.Cobblestone',{
       LoadFile(
         true,
         'dataURL',
-        (dataURL, filename) => {
-          const images = util.merge(this.state.images);
-          const tiles = util.merge(this.state.tiles);
-          images[filename] = dataURL;
-          tiles[filename] = { '': true };
+        (files) => {
+          const { images, tiles } = files.reduce(({images, tiles}, {filename, dataURL}) => {
+            images[filename] = dataURL;
+            tiles[filename] = { '': true };
+            return {images, tiles};
+          }, {
+            images: util.merge(this.state.images),
+            tiles: util.merge(this.state.tiles)
+          });
           this.setState({ images, tiles });
         },
-        (filename, error) => {
-          console.log({ filename, error });
-          alert(filename + ' failed to load. See console for error.');
+        (errors) => {
+          console.log({ errors });
+          alert('Failed to load files. See console for error.');
         }
       );
     }
@@ -273,7 +278,10 @@ namespace('sp.cobblestone.Cobblestone',{
                 <button title="Load File" className="btn btn-primary text-light" onClick={() => { this.loadFile() }}><i className="far fa-folder-open"></i></button>
                 <button title="Download Datafile" className="btn btn-primary text-light" onClick={() => { this.downloadFile() }}><i className="far fa-floppy-disk"></i></button>
                 <button title="Download Image" className="btn btn-primary text-light" onClick={() => { this.modals.imageDownload.open(this.state) }}><i className="far fa-file-image"></i></button>
-                <button title="Publish Printable" className="btn btn-primary text-light" onClick={() => { this.modals.publish.open(this.state) }}><i className="fas fa-print"></i></button>
+                <button title="Publish Printable" className="btn btn-primary text-light" onClick={() => { 
+                  console.log({ publishState: this.state });
+                  this.modals.publish.open(this.state);
+                }}><i className="fas fa-print"></i></button>
                 <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
               </div>
             </div>

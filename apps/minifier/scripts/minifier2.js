@@ -18,6 +18,7 @@ namespace('sp.minifier.Minifier2',{
   return class extends React.Component {
     constructor(props) {
       super(props);
+      this.canvasId = props.canvasId;
       this.state = { size: 1, minis: [], synchronize: false };
       this.modals = Dialog.factory({
         fileDownload: {
@@ -68,10 +69,9 @@ namespace('sp.minifier.Minifier2',{
           setter: (size) => {
             this.setState({ size, minis: Array.from(this.state.minis).map(({ mini, baseImg }) => {
               mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(size));
-              return [ mini, baseImg ];
-            }) 
-          });
-        },
+              return { mini, baseImg };
+            }) });
+          },
           options: [1, 2, 3, 4].map((v) => {
             return { label: `${v} inch`, value: v };
           }),
@@ -80,10 +80,7 @@ namespace('sp.minifier.Minifier2',{
           id: 'about',
           label: 'About',
           callback: () => {
-            Dialog.alert({
-              label: "Minifier",
-              lines: about
-            });
+            Dialog.alert({ label: "Minifier", lines: about });
           },
         },
       ];
@@ -108,34 +105,39 @@ namespace('sp.minifier.Minifier2',{
       );
     }
     removeZeroCount() {
-      const { minis } = this.state;
-      this.setState({ minis: minis.filter((t) => t.count > 0) });
+      this.setState({ minis: this.state.minis.filter(({mini}) => mini.count > 0) });
     }
     loadImage() {
+      const filesToMinis = ((files, minis) => {
+        if (files.length == 0) {
+          this.setState({ minis });
+        } else {
+          const { filename, dataURL } = files[0];
+          const mini = MiniCanvas.initState(dataURL, filename, 1);
+          util.initImageObj(dataURL, (baseImg) => {
+            mini.canvasURL = MiniCanvas.drawCanvasURL(this.canvasId, baseImg, mini, PrintMinis.getRatio(this.state.size));
+            filesToMinis(files.slice(1), [].concat(minis, [{mini, baseImg}]));
+          });
+        }
+      });
       LoadFile(
         true,
         'dataURL',
-        (dataURL, filename) => {
-          const mini = MiniCanvas.initState(dataURL, filename, 1);
-          util.initImageObj(dataURL, (baseImg) => {
-            mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(this.state.size));
-            this.setState({
-              minis: [].concat(this.state.minis, [{mini, baseImg}]),
-            });
-          });
+        (files) => {
+          filesToMinis(files, this.state.minis);
         },
-        (filename, error) => {
-          console.log({ filename, error });
-          alert(filename + ' failed to load. See console for error.');
+        (errors) => {
+          console.log({ errors });
+          alert('Failed to load files. See console for error.');
         }
-      );
+    );
     }
     synchronizeScale(synchronizedScale) {
       this.setState({ 
         minis: Array.from(this.state.minis).map(({ mini, baseImg }) => {
           mini.scale = synchronizedScale;
-          mini.canvasURL = MiniCanvas.drawCanvasURL(baseImg, mini, PrintMinis.getFrame(this.state.size));
-          return [ mini, baseImg ];
+          mini.canvasURL = MiniCanvas.drawCanvasURL(this.canvasId, baseImg, mini, PrintMinis.getRatio(this.state.size));
+          return { mini, baseImg };
         })
       });
     }
@@ -152,7 +154,7 @@ namespace('sp.minifier.Minifier2',{
             onClick={(e) => {
               const editForm = util.copy(this.state.editForm);
               editForm[field] = parseInt(e.target.value);
-              editForm.canvasURL = MiniCanvas.drawCanvasURL(baseImg, util.merge(mini, editForm), PrintMinis.getFrame(this.state.size));
+              editForm.canvasURL = MiniCanvas.drawCanvasURL(this.canvasId, baseImg, util.merge(mini, editForm), PrintMinis.getRatio(this.state.size));
               this.setState({ editForm });
             }}/>
         </>)}</dd>
@@ -210,8 +212,8 @@ namespace('sp.minifier.Minifier2',{
             </div>
           }
           <div className="gallery m-3 d-flex flex-wrap justify-content-around">
-            { this.state.minis.map(({ mini, baseImg }, index) => {
-              <div className="rpg-box d-flex">
+            { this.state.minis.map(([mini, baseImg ], index) => {
+              return <div className="rpg-box d-flex">
                 <div className="thumbnail d-flex flex-column">
                   <span className="align-self-center">{mini.filename}</span>
                   <div className="frame align-self-center"
@@ -230,10 +232,10 @@ namespace('sp.minifier.Minifier2',{
                     (this.specIndex == index || this.state.expandAll) &&
                     <div className="d-flex flex-column">
                       <dl>
-                        { buildField(mini, baseImg, "Count", "count") }
-                        { buildField(mini, baseImg, "Scale (pixels/inch)", "scale", (value) => value || this.state.synchronize) }
-                        { buildField(mini, baseImg, "X-Offset", "xOffset") }
-                        { buildField(mini, baseImg, "Y-Offset", "yOffset") }
+                        { this.buildField(mini, baseImg, "Count", "count") }
+                        { this.buildField(mini, baseImg, "Scale (pixels/inch)", "scale", (value) => value || this.state.synchronize) }
+                        { this.buildField(mini, baseImg, "X-Offset", "xOffset") }
+                        { this.buildField(mini, baseImg, "Y-Offset", "yOffset") }
                       </dl>
                       <>
                         { !this.state.editForm?(<>
@@ -271,7 +273,7 @@ namespace('sp.minifier.Minifier2',{
                       </>
                     </div>
                   }
-              </div>
+              </div>;
             })}
           </div>
         </>

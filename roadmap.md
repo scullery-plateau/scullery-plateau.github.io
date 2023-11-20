@@ -19,6 +19,33 @@
     * Human Paladin
     * Tiefling Warlock
     * Wood Elf Ranger
+  * Vox Machina
+    * Vax
+    * Keyleth
+    * Scanlan
+    * Tary
+    * Doty
+  * Mighty Nein
+    * Beau
+    * Fjord
+    * Molly
+    * Yasha
+    * Nott
+    * Veth
+    * Jester
+    * Kiri
+    * The Bright Queen
+  * Bells Hells
+    * Laudna
+    * Chetney (gnome)
+    * Letters (How?)
+  * Motu (?)
+    * Man-At-Arms
+    * Teela
+    * The Sorceress
+    * Evil-lynn
+    * Mer-man
+    * Beast-man
 
 ## Minifier
 

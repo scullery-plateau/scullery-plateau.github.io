@@ -13,8 +13,8 @@ namespace("sp.minifier.MiniCanvas",{
     }
   }
   const dim = 0.1;
-  const drawCanvasURL = function(img, mini, size) {
-    const c = document.getElementById("canvas");
+  const drawCanvasURL = function(canvasId, img, mini, size) {
+    const c = document.getElementById(canvasId);
     const ctx = c.getContext('2d');
     const dimObj = CanvasUtil.getConstants(dim);
     c.width = dimObj.width;

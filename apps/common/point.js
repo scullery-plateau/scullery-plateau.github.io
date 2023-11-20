@@ -19,11 +19,14 @@ namespace('sp.common.Point', () => {
     this.max = function ([px, py]) {
       return new Point([Math.max(x, px), Math.max(y, py)]);
     };
+    this.midpoint = function(p) {
+      return this.plus(p).times([0.5,0.5]);
+    }
     this.getCoordinateId = function() {
       return [x, y].map((i) => i.toString(radix).toUpperCase()).join('x');
     }
     this.toString = function () {
-      return `(${x},${y})`;
+    return `(${x},${y})`;
     };
   }
   Point.identityMultiplier = function () {

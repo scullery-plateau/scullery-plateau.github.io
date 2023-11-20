@@ -90,6 +90,7 @@ namespace('sp.outfitter.OutfitterSVG',{
     partMax = new XY([maxX, partMaxY]);
     minmax.min = minmax.min.min(partMin.toJSON());
     minmax.max = minmax.max.max(partMax.toJSON());
+    return partMin.midpoint(partMax.toJSON());
   }
   const getImgDim = function(minmax) {
     let [minX, minY] = minmax.min.toJSON();
@@ -145,7 +146,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       const { flip, move } = getFlipMove(layer,headShift,bodyScale);
       const [ flipX, flipY ] = flip.toJSON();
       const [ moveX, moveY ] = move.toJSON();
-      updateMinMax(part,flip,move,minmax)
+      const [cx, cy] = updateMinMax(part,flip,move,minmax).toJSON();
       let group = []
       if (part.layers.base) {
         group.push(`<use href="#${ part.layers.base }" fill="${ layer.base || 'white'}" stroke="none"/>`);
@@ -183,7 +184,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       if (part.layers.shadow) {
         group.push(`<use href="#${part.layers.shadow }" stroke="none"/>`);
       }
-      return `<g opacity="${layer.opacity || 1.0}" transform="matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})">${group.join('')}</g>`
+      return `<g opacity="${layer.opacity || 1.0}" transform="matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})  rotate(${layer.rotate || 0}, ${cx}, ${cy})">${group.join('')}</g>`
     });
     const { minX, minY, width, height, frameWidth, frameHeight} = getImgDim(minmax);
     let viewBox = `${minX} ${minY} ${width} ${height}`;
@@ -215,7 +216,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       const { flip, move } = getFlipMove(layer,headShift,bodyScale);
       const [flipX, flipY] = flip.toJSON();
       const [moveX, moveY] = move.toJSON();
-      updateMinMax(part,flip,move,minmax)
+      const [cx, cy] = updateMinMax(part,flip,move,minmax).toJSON();
       const patternId = getPatternId(layer.pattern);
       if (patternId) {
         defs.patterns[patternId] = true;
@@ -233,7 +234,7 @@ namespace('sp.outfitter.OutfitterSVG',{
         <g 
           key={`group-${index}`} 
           opacity={layer.opacity || 1.0} 
-          transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
+          transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY}) rotate(${layer.rotate || 0}, ${cx}, ${cy})`}>
           <title>{ c.getLayerLabel(index,layer) }</title>
           { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
           { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}

@@ -1,11 +1,11 @@
-namespace('sp.minifier.Minifier',{
-  'sp.common.Dialog': 'Dialog',
-  'sp.common.EditMode': 'EditMode',
-  'sp.common.FileDownload': 'FileDownload',
-  'sp.common.Header': 'Header',
-  'sp.common.LoadFile': 'LoadFile',
-  'sp.minifier.PrintMinis': 'PrintMinis',
-},({ Dialog, EditMode, FileDownload, Header, LoadFile, PrintMinis }) => {
+namespace('sp.minifier.Minifier', {
+    'sp.common.Dialog': 'Dialog',
+    'sp.common.EditMode': 'EditMode',
+    'sp.common.FileDownload': 'FileDownload',
+    'sp.common.Header': 'Header',
+    'sp.common.LoadFile': 'LoadFile',
+    'sp.minifier.PrintMinis': 'PrintMinis',
+}, ({ Dialog, EditMode, FileDownload, Header, LoadFile, PrintMinis }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     'Minifier is a tool for turning digital images into printable standing miniatures.',
@@ -75,10 +75,7 @@ namespace('sp.minifier.Minifier',{
           id: 'about',
           label: 'About',
           callback: () => {
-            Dialog.alert({
-              label: "Minifier",
-              lines: about
-            });
+            Dialog.alert({ label: "Minifier", lines: about });
           },
         },
       ];
@@ -107,19 +104,16 @@ namespace('sp.minifier.Minifier',{
       this.setState({ size, minis: minis.filter((t) => t.count > 0) });
     }
     loadImage() {
-      const { size } = this.state;
       LoadFile(
         true,
         'dataURL',
-        (dataURL, filename) => {
-          this.setState({
-            size,
-            minis: [].concat(this.state.minis, [{ filename, dataURL, count: 1 }]),
-          });
+        (files) => {
+          const minis = files.map(({filename, dataURL}) => { return { filename, dataURL, count: 1 }; });
+          this.setState({ minis: [].concat(this.state.minis, minis) });
         },
-        (filename, error) => {
-          console.log({ filename, error });
-          alert(filename + ' failed to load. See console for error.');
+        (errors) => {
+          console.log({ errors });
+          alert('Failed to load files. See console for error.');
         }
       );
     }

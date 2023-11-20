@@ -18,7 +18,7 @@ namespace('sp.common.Utilities', {
     return Array.from(keys).reduce((acc, key) => {
       acc[key] = obj[key];
       return acc;
-    });
+    }, {});
   }
   const copyObj = function (obj) {
     return selectKeys(obj, Object.keys(obj));
@@ -197,6 +197,8 @@ namespace('sp.common.Utilities', {
     merge,
     assoc,
     dissoc,
+    selectKeys,
+    copyObj,
     normalizeFilename,
     triggerJSONDownload,
     triggerPNGDownload,

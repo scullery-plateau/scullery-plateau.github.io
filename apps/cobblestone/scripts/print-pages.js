@@ -1,8 +1,9 @@
 namespace('sp.cobblestone.PrintPages',{
   'sp.common.PrintJS': 'PrintJS',
   'sp.common.Utilities': 'util',
+  'sp.common.GridUtilities': 'gUtil',
   'sp.cobblestone.CobblestoneUtil': 'cUtil'
-},({ PrintJS, util, cUtil }) =>{
+},({ PrintJS, util, gUtil, cUtil }) =>{
   const tileDim = cUtil.getTileDim();
   const pageSize = { max: 10, min: 8 };
   const buildDefs = function(images, tiles) {
@@ -26,7 +27,7 @@ namespace('sp.cobblestone.PrintPages',{
   }
   const drawPlacements = function(placements, offX, offY) {
     return Object.entries(placements).map(([coordId,[filename,tf]]) => {
-      const { x, y } = cUtil.parseCoordinateId(coordId);
+      const { x, y } = gUtil.parseCoordinateId(coordId);
       const id = cUtil.getTileId(filename, tf);
       return `<use x="${offX + (tileDim * x)}" y="${offY + (tileDim * y)}" href="#${id}"/>`;
     }).join('');
@@ -34,9 +35,9 @@ namespace('sp.cobblestone.PrintPages',{
   const getPagePlacements = function(page, placements) {
     return util.range(page.height).reduce((acc,y) => {
       return util.range(page.width).reduce((out,x) => {
-        const placement = placements[cUtil.getCoordinateId(page.x + x, page.y + y)];
+        const placement = placements[gUtil.getCoordinateId(page.x + x, page.y + y)];
         if (placement) {
-          out[cUtil.getCoordinateId(x, y)] = placement;
+          out[gUtil.getCoordinateId(x, y)] = placement;
         }
         return out;
       },acc);
@@ -50,10 +51,10 @@ namespace('sp.cobblestone.PrintPages',{
     }).join('');
   }
   const buildPages = function(size, orientation, printOrientation, placements, pageSelections) {
-    const pageRatioWidth = cUtil.getWidth(pageSize,printOrientation);
-    const pageRatioHeight = cUtil.getHeight(pageSize,printOrientation);
-    const imageWidth = cUtil.getWidth(size,orientation);
-    const imageHeight = cUtil.getHeight(size,orientation);
+    const pageRatioWidth = gUtil.getWidth(pageSize,printOrientation);
+    const pageRatioHeight = gUtil.getHeight(pageSize,printOrientation);
+    const imageWidth = gUtil.getWidth(size,orientation);
+    const imageHeight = gUtil.getHeight(size,orientation);
     const ratioWidth = imageHeight * pageRatioWidth / pageRatioHeight;
     const ratioHeight = imageWidth * pageRatioHeight / pageRatioWidth;
     const width = Math.max(imageWidth, ratioWidth);
