@@ -1,10 +1,9 @@
 ## Outfitter
 
-1. condense layout
-2. add Help menu with About
-3. split layer into multiple layers (both into right and left)
-4. fix part/pattern/shading positioning issues in data
-5. gallery
+1. add Help menu with About
+2. split layer into multiple layers (both into right and left)
+3. fix part/pattern/shading positioning issues in data
+4. gallery
   * D&D Character Sheets
     * Dragonborn Sorcerer (silver)
     * Drow Rogue
@@ -62,7 +61,6 @@
 
 ## Cobblestone
 
-1. Re-orient palette and canvas
 2. Highlight - bulk select
 3. reload image from tile edit screen
 4. improved / condensed paging(how??)
@@ -101,8 +99,7 @@
 
 1. hotkeys / button controlls instead of "input" tags
 2. add grid to map
-5. fog of war
-  * highlight - bulk select toggle
+2. layers
 3. sprites (characters) and fixtures (furnature, terrain)
 4. effects (AOE, spell effects)
 6. drag and drop

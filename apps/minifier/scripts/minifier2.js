@@ -1,4 +1,4 @@
-namespace('sp.minifier.Minifier2',{
+namespace('sp.minifier.Minifier',{
   'sp.common.Dialog': 'Dialog',
   'sp.common.EditMode': 'EditMode',
   'sp.common.FileDownload': 'FileDownload',
@@ -212,7 +212,7 @@ namespace('sp.minifier.Minifier2',{
             </div>
           }
           <div className="gallery m-3 d-flex flex-wrap justify-content-around">
-            { this.state.minis.map(([mini, baseImg ], index) => {
+            { this.state.minis.map(({mini, baseImg}, index) => {
               return <div className="rpg-box d-flex">
                 <div className="thumbnail d-flex flex-column">
                   <span className="align-self-center">{mini.filename}</span>
