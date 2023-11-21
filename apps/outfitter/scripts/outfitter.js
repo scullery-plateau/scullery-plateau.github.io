@@ -17,13 +17,16 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.Shareable':'Shareable'
 }, ({ Ajax, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
-  const validateLoadFileJson = function(data) {}
   const buttonScale = 1/3;
+  const latestVersion = "0.0.1";
+  const defaultVersion = "0.0.1";
+  const validateLoadFileJson = function(data) {}
   const about = [];
   const getDefaultSchematic = function(bodyType) {
     return {
       bodyType,
       bgColor: '#cccccc',
+      version: latestVersion,
       layers: [
         { part: 'torso', index: 0, shading: 0 },
         { part: 'legs', index: 0, shading: 0 },
@@ -96,7 +99,6 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          // alert("'Download Image' is not available at this time");
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
             svgData: OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata)
@@ -123,7 +125,7 @@ namespace('sp.outfitter.Outfitter', {
       } else {
         this.setState({schematic, progress: 1, selectedLayer: 0});
       }
-      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}2.json`,
+      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.${schematic.version}.json`,
         {
           success: ({ responseText }) => {
             try{
@@ -165,6 +167,7 @@ namespace('sp.outfitter.Outfitter', {
           } catch (e) {
             console.log(e)
           }
+          schematic.version = schematic.version || defaultVersion;
           this.loadMeta(schematic.bodyType,schematic);
         },
         (fileName, error) => {
