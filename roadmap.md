@@ -99,6 +99,7 @@
 
 ## Purview
 
+1. save and load
 1. hotkeys / button controlls instead of "input" tags
 2. add grid to map
 2. layers
