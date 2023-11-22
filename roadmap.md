@@ -1,6 +1,5 @@
 ## Outfitter
 
-1. facilitate dataset versioning
 1. dataset editor
 1. add Help menu with About
 2. split layer into multiple layers (both into right and left)
