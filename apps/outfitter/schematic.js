@@ -20,6 +20,8 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Miscellaneous','he-man','He-Man'],
         ['Critical Role: Bells Hells', 'imogen'],
         ['Miscellaneous','link'],
+        ['Critical Role: Mighty Nein', 'nott1'],
+        ['Critical Role: Mighty Nein', 'nott2'],
         ['Critical Role: Bells Hells', 'orem'],
         ['Critical Role: Vox Machina', 'percy'],
         ['Critical Role: Vox Machina', 'pike'],
@@ -31,6 +33,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['D&D Animated','thief'],
         ['Critical Role: Vox Machina', 'tiberius'],
         ['D&D Animated','venger'],
+        ['Critical Role: Mighty Nein', 'veth'],
         ['Critical Role: Vox Machina', 'vex'],
     ].map(([group,filename,label]) => {
             label = label || makeLabel(filename);
