@@ -3,6 +3,7 @@ namespace("sp.purview.Purview",{
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.EditMode':'EditMode',
+  'sp.common.FileDownload': 'FileDownload',
   'sp.common.GridHighlighter':'GridHighlighter',
   'sp.common.Header':'Header',
   'sp.common.LoadFile':'LoadFile',
@@ -10,7 +11,7 @@ namespace("sp.purview.Purview",{
   "sp.common.Utilities":"util",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ ColorPicker, Colors, Dialog, EditMode, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
+},({ ColorPicker, Colors, Dialog, EditMode, FileDownload, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
@@ -18,6 +19,7 @@ namespace("sp.purview.Purview",{
     "Scale any image to fit any screen from convenient and easy to use controls."
   ];
   const highlighterFrameId = "highlighterFrame";
+  const validateLoadFileJson = function() {};
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -37,6 +39,11 @@ namespace("sp.purview.Purview",{
             this.update(index, color);
           },
         },
+        fileDownload: {
+          componentClass: FileDownload,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: () => {}
+        },
         gridConfig: {
           componentClass: GridConfig,
           attrs: { class: 'rpg-box text-light w-75' },
@@ -46,6 +53,22 @@ namespace("sp.purview.Purview",{
         },
       });
       this.menuItems = [{
+        id: 'fileMenu',
+        label: 'File',
+        items: [{
+          id: 'loadFile',
+          label: 'Load File',
+          callback: () => {
+            this.loadFile();
+          },
+        },{
+          id: 'downloadFile',
+          label: 'Download File',
+          callback: () => {
+            this.downloadFile();
+          }
+        }]
+      },{
         id: 'about',
         label: 'About',
         callback: () => {
@@ -55,6 +78,62 @@ namespace("sp.purview.Purview",{
           });
         }
       }];
+    }
+    loadFile() {
+      LoadFile(
+        false,
+        'text',
+        (fileContent) => {
+          const jsonData = JSON.parse(fileContent);
+          const error = validateLoadFileJson(jsonData);
+          if (error) {
+            throw error;
+          }
+          util.initImageObj(jsonData.dataURL,(baseImg) => {
+            EditMode.enable();
+            const playerView = new PlayerView();
+            playerView.open(() => {
+              jsonData.baseImg = baseImg;
+              jsonData.playerView = playerView;
+              this.applyUpdates(jsonData);
+              this.gridHighlighter = GridHighlighter.init({
+                squareSize: jsonData.squareSize,
+                highlighterFrameId,
+                outlineColor: "white",
+                outlineWidth: 3, 
+                allowDragEvents: (() => true),
+                onOutOfBounds:(() => {}),
+                onDrop:((startId, ids) => {
+                  const fogOfWar = util.merge(this.state.fogOfWar);
+                  const setNewState = (fogOfWar[startId])?((fogOfWar, cellId) => {
+                    delete fogOfWar[cellId];
+                  }):((fogOfWar, cellId) => { 
+                    fogOfWar[cellId] = true;
+                  });
+                  setNewState(fogOfWar, startId);
+                  ids.forEach((id) => {
+                    setNewState(fogOfWar, id);
+                  });
+                  this.applyUpdates({ fogOfWar });
+                })
+              });
+            }, () => {
+              this.applyUpdates();
+            });
+          });
+        },
+        (fileName, error) => {
+          console.log({ fileName, error });
+          alert(fileName + ' failed to load. See console for error.');
+        }
+      );
+    }
+    downloadFile() {
+      const downloadJson = util.dissoc(this.state, ["baseImg", "playerView"]);
+      this.modals.fileDownload.open({
+        defaultFilename:"purview",
+        jsonData: downloadJson
+      })
     }
     applyUpdates(stateUpdates) {
       stateUpdates = stateUpdates || {};

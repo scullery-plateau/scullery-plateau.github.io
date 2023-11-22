@@ -28,9 +28,11 @@ namespace('sp.common.Utilities', {
     out[key] = value;
     return out;
   }
-  const dissoc = function(map, key) {
+  const dissoc = function(map, keys) {
     const out = merge(map);
-    delete out[key];
+    Array.from(keys).forEach(key => {
+      delete out[key];
+    });
     return out;
   }
   const getIn = function(obj,keys,defaultValue) {
