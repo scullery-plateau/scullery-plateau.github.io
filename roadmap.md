@@ -1,3 +1,15 @@
+## Purview
+
+1. hotkeys / button controls instead of "input" tags
+1. Grid Cropper redirect
+1. scale-to-screen
+2. add grid to map
+2. layers
+3. sprites (characters) and fixtures (furnature, terrain)
+4. effects (AOE, spell effects)
+6. drag and drop
+7. scroll to zoom
+
 ## Outfitter
 
 1. dataset editor
@@ -30,8 +42,6 @@
     * Fjord
     * Molly
     * Yasha
-    * Nott
-    * Veth
     * Jester
     * Kiri
     * The Bright Queen
@@ -96,16 +106,6 @@
 
 2. (future feature) canvas 3d animation?
 
-## Purview
-
-1. save and load
-1. hotkeys / button controlls instead of "input" tags
-2. add grid to map
-2. layers
-3. sprites (characters) and fixtures (furnature, terrain)
-4. effects (AOE, spell effects)
-6. drag and drop
-7. scroll to zoom
 
 ## Quirkopolis
 
