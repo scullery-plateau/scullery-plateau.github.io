@@ -184,7 +184,7 @@ namespace('sp.outfitter.OutfitterSVG',{
       if (part.layers.shadow) {
         group.push(`<use href="#${part.layers.shadow }" stroke="none"/>`);
       }
-      return `<g opacity="${layer.opacity || 1.0}" transform="matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})  rotate(${layer.rotate || 0}, ${cx}, ${cy})">${group.join('')}</g>`
+      return `<g opacity="${layer.opacity || 1.0}" transform="rotate(${layer.rotate || 0}, ${cx}, ${cy}) matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})">${group.join('')}</g>`
     });
     const { minX, minY, width, height, frameWidth, frameHeight} = getImgDim(minmax);
     let viewBox = `${minX} ${minY} ${width} ${height}`;
@@ -234,7 +234,7 @@ namespace('sp.outfitter.OutfitterSVG',{
         <g 
           key={`group-${index}`} 
           opacity={layer.opacity || 1.0} 
-          transform={`matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY}) rotate(${layer.rotate || 0}, ${cx}, ${cy})`}>
+          transform={`rotate(${layer.rotate || 0}, ${cx}, ${cy}) matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
           <title>{ c.getLayerLabel(index,layer) }</title>
           { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
           { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}
