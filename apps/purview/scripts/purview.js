@@ -140,20 +140,28 @@ namespace("sp.purview.Purview",{
       const [ dataURL, baseImg, playerView, gridRows, gridColumns, squareSize, gridLineColor, gridLineWidth ] = [ "dataURL", "baseImg", "playerView", "gridRows", "gridColumns", "squareSize", "gridLineColor", "gridLineWidth" ].map(field => this.state[field] || stateUpdates[field]);
       const { innerWidth, innerHeight } = playerView.getDimensions();
       const { width: imgWidth, height: imgHeight } = baseImg;
-      const init = { scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), xOffset: 0, yOffset: 0 };
-      const scale = !isNaN(stateUpdates.scale)?stateUpdates.scale:!isNaN(this.state.scale)?this.state.scale:!isNaN(init.scale)?init.scale:1;
-      const svg = {
-        width: Math.max(imgWidth, innerWidth/scale),
-        height: Math.max(imgHeight, innerHeight/scale)
+      const init = { 
+        scale: Math.max(innerWidth/imgWidth, innerHeight/imgHeight), 
+        xOffset: 0, 
+        yOffset: 0 
       };
-      if (svg.height > imgHeight) {
-        init.yOffset = (imgHeight - svg.height) / 2;
-      } else if (svg.width > imgWidth) {
-        init.xOffset = (imgWidth - svg.width) / 2;
+      init.width = Math.max(imgWidth, innerWidth/scale);
+      init.height = Math.max(imgHeight, innerHeight/scale);
+      const scale = !isNaN(stateUpdates.scale)?stateUpdates.scale:!isNaN(this.state.scale)?this.state.scale:!isNaN(init.scale)?init.scale:1;
+      if (init.height > imgHeight) {
+        init.yOffset = (imgHeight - init.height) / 2;
+      } else if (init.width > imgWidth) {
+        init.xOffset = (imgWidth - init.width) / 2;
       }
       const [ xOffset, yOffset ] = [ "xOffset", "yOffset" ].map(field => !isNaN(stateUpdates[field])?stateUpdates[field]:(!isNaN(this.state[field])?this.state[field]:init[field]));
-      svg.x = Math.min(xOffset,0);
-      svg.y = Math.min(yOffset,0);
+      const maxX = Math.max(imgWidth, xOffset + innerWidth/scale);
+      const maxY = Math.max(imgHeight, yOffset + innerHeight/scale);
+      const svg = {
+        x: Math.min(xOffset,0),
+        y: Math.min(yOffset,0)
+      };
+      svg.width = maxX - svg.x;
+      svg.height = maxY - svg.y;
       const svgFrame = {
         x: xOffset,
         y: yOffset,
