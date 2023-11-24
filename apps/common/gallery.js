@@ -21,12 +21,13 @@ namespace('sp.common.Gallery',{
     return <>
       <Header menuItems={menuItems} appTitle={<><a href="./index.html">{ sourceApp }</a> Gallery</>}/>
       <div class="rpg-box m-3 d-flex flex-column justify-content-center">
-        {groups.map(group => {
+        {groups.map((group, index) => {
           return <>
             <h4 className="text-center">{ group }</h4>
             <div class="d-flex flex-wrap justify-content-center">
               {items[group].map(({filename, label}) => buildThumbnail(filename, label))}
             </div>
+            { (index < groups.length - 1) && <hr/> }
           </>
         })}
       </div>

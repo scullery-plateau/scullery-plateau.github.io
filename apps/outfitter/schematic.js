@@ -13,6 +13,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Critical Role: Mighty Nein', 'calianna'],
         ['D&D Animated','cavalier'],
         ['Critical Role: Bells Hells', 'chetney-wolf'],
+        ['Critical Role: Vox Machina', 'doty'],
         ['Critical Role: Mighty Nein', 'essek'],
         ['Critical Role: Bells Hells', 'ferne'],
         ['Critical Role: Vox Machina', 'grog'],
