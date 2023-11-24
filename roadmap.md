@@ -37,6 +37,7 @@
     * Scanlan
     * Tary
     * Doty
+    * Lord & Lady Briarwood
   * Mighty Nein
     * Beau
     * Fjord
@@ -56,6 +57,29 @@
     * Evil-lynn
     * Mer-man
     * Beast-man
+  * Monsters
+    * skeletons
+    * zombies
+    * goblins
+    * bug bear
+    * ogre
+    * orc
+    * incubus / succubus
+    * rakshasa
+    * oni
+    * shadow demon
+  * races
+    * Aarokochra
+    * Asimar
+    * Genasi
+      * Earth
+      * Air
+      * Fire
+      * Water
+    * Giff
+    * Tabaxi
+    * Tortle (?)
+    * Centaur
 
 ## Minifier
 
