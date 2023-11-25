@@ -11,7 +11,8 @@ namespace("sp.purview.Purview",{
   "sp.common.Utilities":"util",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
-},({ ColorPicker, Colors, Dialog, EditMode, FileDownload, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView}) => {
+  "sp.purview.ScaleToScreen":"ScaleToScreen",
+},({ ColorPicker, Colors, Dialog, EditMode, FileDownload, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView, ScaleToScreen}) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
@@ -37,6 +38,13 @@ namespace("sp.purview.Purview",{
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
             this.update(index, color);
+          },
+        },
+        scaleToScreen: {
+          componentClass: ScaleToScreen,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose: (response) => {
+            this.applyScreenScale(util.merge(this.state),response);
           },
         },
         fileDownload: {
@@ -268,6 +276,7 @@ namespace("sp.purview.Purview",{
           className="form-control"
           min={ options.min }
           step={ options.step }
+          disabled={ options.disabled }
           value={ this.state[field] }
           style={{ width: "4em"}}
           onChange={(e) => this.update([field],e.target.value)}/>
@@ -304,8 +313,12 @@ namespace("sp.purview.Purview",{
               <div className="d-flex flex-column justify-content-center">
                 <p>Choose an image to load as a map which has already been cropped to be flush with the grid in that image.</p>
                 <p>If your image has not been cropped to be flush, use the <a className="btn btn-link" href="../grid-cropper/index.html">Grid Cropper</a> app here on Scullery Plateau.</p>
-                <div className="d-flex flex-column justify-content-center">
+                <div className="d-flex justify-content-center">
                   <button className="btn btn-success" onClick={() => this.loadMapImage()}>Load Map Image</button>
+                </div>
+                <p className="text-center">- OR -</p>
+                <div className="d-flex justify-content-center">
+                  <button className="btn btn-success" onClick={() => this.loadFile()}>Load Saved File</button>
                 </div>
               </div>
             </div>
@@ -314,22 +327,37 @@ namespace("sp.purview.Purview",{
           <div className="row justify-content-center">
             <div className="col-4">
               <div className="rpg-box d-flex flex-column m-2">
-                { this.buildControlField("scale", "Scale", { min: 0, step: this.state.scaleStep }) }
-                <div className="input-group my-2">
-                  <label htmlFor="scaleStep" className="input-group-text">Scale Step:</label>
-                  <input
-                    id="scaleStep"
-                    name="scaleStep"
-                    type="number"
-                    className="form-control"
-                    min={0.01}
-                    step={0.01}
-                    value={ this.state.scaleStep }
-                    style={{ width: "4em"}}
-                    onChange={(e) => this.setState({ scaleStep: parseFloat(e.target.value) })}/>
+                <div className="d-flex justify-content-around">
+                  <button title="Download" className="btn btn-primary text-light" onClick={() => { this.downloadFile() }}><i className="far fa-floppy-disk"></i></button>
+                  <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
                 </div>
-                { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
-                { this.buildControlField("yOffset", "Y-Offset", { step: this.state.moveStep }) }
+                <hr/>
+                <div className="d-flex justify-content-around">
+                  { this.buildControlField("scale", "Scale", { min: 0, step: this.state.scaleStep, disabled: this.state.scaleToScreen }) }
+                  <div className="input-group my-2">
+                    <label htmlFor="scaleStep" className="input-group-text">Scale Step:</label>
+                    <input
+                      id="scaleStep"
+                      name="scaleStep"
+                      type="number"
+                      className="form-control"
+                      min={0.01}
+                      step={0.01}
+                      disabled={ this.state.scaleToScreen }
+                      value={ this.state.scaleStep }
+                      style={{ width: "4em" }}
+                      onChange={(e) => this.setState({ scaleStep: parseFloat(e.target.value) })}/>
+                  </div>
+                </div>
+                <button 
+                  className={`btn ${ this.state.scaleToScreen?'btn-danger':'btn-success' }`}
+                  disabled={ this.state.scaleToScreen }
+                  onClick={() => { this.modals.scaleToScreen.open({}) }}>{this.state.scaleToScreen?'Unlock Scale':'Scale To Screen'}</button>
+                <hr/>
+                <div className="d-flex justify-content-around">
+                  { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
+                  { this.buildControlField("yOffset", "Y-Offset", { step: this.state.moveStep }) }
+                </div>
                 <div className="input-group my-2">
                   <label htmlFor="moveStep" className="input-group-text">Move Step:</label>
                   <input
@@ -347,9 +375,12 @@ namespace("sp.purview.Purview",{
                   className={`btn ${ this.isOnGrid()?'btn-disabled':'btn-success' }`}
                   disabled={ this.isOnGrid() }
                   onClick={() => { this.snapToGrid() }}>Snap To Grid</button>
-                { this.buildControlField("lineWidth", "Line Width", { min: 1 }) }
-                { this.buildColorPickerButton("Frame Color", "frameColor", "my-2", {})}
-                { this.buildColorPickerButton("Background Color", "bgColor", "my-2", {})}
+                <hr/>
+                <div className="d-flex justify-content-around">
+                  { this.buildControlField("lineWidth", "Line\xa0Width", { min: 1 }) }
+                  { this.buildColorPickerButton("Frame\xa0Color", "frameColor", "my-2", {})}
+                </div>
+                { this.buildColorPickerButton("Background\xa0Color", "bgColor", "my-2", {})}
               </div>
             </div>
             <div className="col-8 h-100">
@@ -384,7 +415,7 @@ namespace("sp.purview.Purview",{
                                 draggable="true" droptarget="true"/>
                         </a>);
                       });
-                    }) 
+                    })
                   }
                   <g id={highlighterFrameId} x="0" y="0" width={this.state.squareSize * this.state.gridColumns} height={this.state.squareSize * this.state.gridRows}></g>
                 </svg>

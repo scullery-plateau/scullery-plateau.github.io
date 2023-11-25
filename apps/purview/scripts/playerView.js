@@ -9,7 +9,7 @@ namespace("sp.purview.PlayerView",{
         return Array(gridColumns).fill("").reduce((outval, _, columnIndex) => {
           const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
           if (fogOfWar[coordId]) {
-            return [].concat(outval, [ `<rect x="${columnIndex * squareSize}" y="${rowIndex * squareSize}" width="${squareSize}" height="${squareSize}" fill="black"/>` ]);
+            return [].concat(outval, [ `<rect x="${columnIndex * squareSize}" y="${rowIndex * squareSize}" width="${squareSize}" height="${squareSize}" fill="black" stroke="black" stroke-width="1"/>` ]);
           }
           return outval;
         }, acc);

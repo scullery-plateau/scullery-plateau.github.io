@@ -323,7 +323,7 @@ namespace('sp.spritely.Spritely',{
               <div className="rpg-title-box m-3" title="click to paint a pixel">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
                      viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
-                  {Utilities.range(this.state.size).map((y) => {
+                  { Utilities.range(this.state.size).map((y) => {
                     return Utilities.range(this.state.size).map((x) => {
                       const pixelId = SpritelyUtil.getPixelId(x, y);
                       const pixel = this.state.pixels[pixelId];
@@ -357,11 +357,11 @@ namespace('sp.spritely.Spritely',{
           <div style={{ display: 'none' }}>
             <svg width="0" height="0">
               <defs>
-                {drawPaletteDef(
+                { drawPaletteDef(
                   this.state.bgColor,
                   Constants.bgColorPixelId()
                 )}
-                {this.state.palette.map((c, i) =>
+                { this.state.palette.map((c, i) =>
                   drawPaletteDef(c, SpritelyUtil.getPaletteId(i))
                 )}
               </defs>
