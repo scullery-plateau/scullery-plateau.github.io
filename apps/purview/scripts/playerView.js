@@ -1,8 +1,16 @@
 namespace("sp.purview.PlayerView",{
   'sp.common.Point':'Point'
 },({ Point }) => {
-  const template = function({ dataURL, frame, img, gridRows, gridColumns, squareSize, fogOfWar }) {
+  const spriteTemplate = ((squareSize) => {
+    return (({ dataURL, r, c, rows, cols }) => {
+      return `<image href="${ dataURL }" x="${ c * squareSize }" y="${ r * squareSize }" width="${ cols * squareSize }" height="${ rows * squareSize }"/>`;
+    });
+  });
+  const template = function({ dataURL, frame, img, gridRows, gridColumns, squareSize, fogOfWar, scenery, sprites }) {
     fogOfWar = fogOfWar || {};
+    scenery = scenery || [];
+    sprites = sprites || [];
+    const spriteTpl = spriteTemplate(squareSize);
     return `<svg width="100%" height="100%" viewbox="${frame.x} ${frame.y} ${frame.width} ${frame.height}" style="max-width: 100%; max-height: 100%; width: auto; height: auto;">
       <image href="${dataURL}" width="${img.width}" height="${img.height}"/>
       ${Array(gridRows).fill("").reduce((acc, _, rowIndex) => {
@@ -14,6 +22,8 @@ namespace("sp.purview.PlayerView",{
           return outval;
         }, acc);
       }, []).join("\n")}
+      ${scenery.map(spriteTpl)}
+      ${sprites.map(spriteTpl)}
     </svg>`;
   }
   return function() {

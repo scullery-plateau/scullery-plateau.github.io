@@ -21,6 +21,16 @@ namespace("sp.purview.Purview",{
   ];
   const highlighterFrameId = "highlighterFrame";
   const validateLoadFileJson = function() {};
+  const controlLayers = [{
+    id: "fogOfWar",
+    label: "View Controls"
+  },{
+    id: "scenery",
+    label: "Scenery"
+  },{
+    id: "sprites",
+    label: "Sprites"
+  }]
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -30,7 +40,10 @@ namespace("sp.purview.Purview",{
         lineWidth: 3,
         moveStep:1,
         scaleStep:0.01,
-        fogOfWar: {}
+        fogOfWar: {},
+        sprites: [],
+        scenery: [],
+        controlLayer: "fogOfWar",
       };
       this.modals = Dialog.factory({
         colorPicker: {
@@ -304,6 +317,57 @@ namespace("sp.purview.Purview",{
         yOffset: (this.state.yOffset - (this.state.yOffset % this.state.squareSize))
       });
     }
+    displaySprites(spriteList) {
+      return this.state[spriteList].map(({ dataURL, r, c, rows, cols }) => {
+        return <image href={ dataURL } 
+                      x={ c * this.state.squareSize } 
+                      y={ r * this.state.squareSize } 
+                      width={ cols * this.state.squareSize } 
+                      height={ rows * this.state.squareSize }/>;
+      });
+    }
+    addSprite() {
+      LoadFile(
+        false,
+        'dataURL',
+        (dataURL) => {
+          const newState = util.merge(this.state);
+          const spriteList = Array.from(newState[this.state.controlLayer]);
+          spriteList = spriteList.concat([{
+            dataURL,
+            // todo - imageStats
+          }]);
+          newState.selectedSprite = spriteList.length - 1;
+          newState[this.state.controlLayer] = spriteList;
+          this.setState(newState);
+        },
+        (filename, error) => {
+          console.log({ filename, error });
+          alert(filename + ' failed to load. See console for error.');
+        }
+      );
+    }
+    removeSprite() {
+      const newState = util.merge(this.state);
+      const spriteList = Array.from(newState[this.state.controlLayer]);
+      if (spriteList.length > 1) {
+        spriteList.splice(this.state.selectedSprite,1);
+        newState.selectedSprite = Math.max(this.state.selectedSprite - 1, 0);
+        newState[this.state.controlLayer] = spriteList;
+        this.setState(newState);
+      }
+    }
+    updateSprite(field, value) {
+      const newState = util.merge(this.state);
+      const spriteList = Array.from(newState[this.state.controlLayer]);
+      spriteList[this.state.selectedSprite][field] = value;
+      newState[this.state.controlLayer] = spriteList;
+      this.setState(newState);
+    }
+    fromSelectedSprite(field) {
+      const retval = this.state[this.state.controlLayer][field];
+      return (retval === undefined)?defaultValue:retval;
+    }
     render() {
       return (<>
         <Header menuItems={this.menuItems} appTitle={'Purview'} />
@@ -326,61 +390,152 @@ namespace("sp.purview.Purview",{
         { this.state.dataURL && 
           <div className="row justify-content-center">
             <div className="col-4">
-              <div className="rpg-box d-flex flex-column m-2">
-                <div className="d-flex justify-content-around">
-                  <button title="Download" className="btn btn-primary text-light" onClick={() => { this.downloadFile() }}><i className="far fa-floppy-disk"></i></button>
-                  <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
+              <div className="rpg-box card d-flex m-0">
+                <div className="card-header">
+                  <ul className="nav nav-tabs card-header-tabs">
+                    { controlLayers.map(({ id, label }) => {
+                      return <li className="nav-item">
+                        <a className={`nav-link ${this.state.controlLayer === id?'active':''}`} href="#" onClick={(e) => this.selectTab(e, id)}>{ label }</a>
+                      </li>;
+                    })}
+                  </ul>
                 </div>
-                <hr/>
-                <div className="d-flex justify-content-around">
-                  { this.buildControlField("scale", "Scale", { min: 0, step: this.state.scaleStep, disabled: this.state.scaleToScreen }) }
-                  <div className="input-group my-2">
-                    <label htmlFor="scaleStep" className="input-group-text">Scale Step:</label>
-                    <input
-                      id="scaleStep"
-                      name="scaleStep"
-                      type="number"
-                      className="form-control"
-                      min={0.01}
-                      step={0.01}
+                <div className="card-body d-flex flex-column">
+                  { this.state.controlLayer === "fogOfWar" && <>
+                    <div className="d-flex justify-content-around">
+                      <button title="Download" className="btn btn-primary text-light" onClick={() => { this.downloadFile() }}><i className="far fa-floppy-disk"></i></button>
+                      <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
+                    </div>
+                    <hr/>
+                    <div className="d-flex justify-content-around">
+                      { this.buildControlField("scale", "Scale", { min: 0, step: this.state.scaleStep, disabled: this.state.scaleToScreen }) }
+                      <div className="input-group my-2">
+                        <label htmlFor="scaleStep" className="input-group-text">Scale Step:</label>
+                        <input
+                          id="scaleStep"
+                          name="scaleStep"
+                          type="number"
+                          className="form-control"
+                          min={0.01}
+                          step={0.01}
+                          disabled={ this.state.scaleToScreen }
+                          value={ this.state.scaleStep }
+                          style={{ width: "4em" }}
+                          onChange={(e) => this.setState({ scaleStep: parseFloat(e.target.value) })}/>
+                      </div>
+                    </div>
+                    <button 
+                      className={`btn ${ this.state.scaleToScreen?'btn-danger':'btn-success' }`}
                       disabled={ this.state.scaleToScreen }
-                      value={ this.state.scaleStep }
-                      style={{ width: "4em" }}
-                      onChange={(e) => this.setState({ scaleStep: parseFloat(e.target.value) })}/>
-                  </div>
+                      onClick={() => { this.modals.scaleToScreen.open({}) }}>{this.state.scaleToScreen?'Unlock Scale':'Scale To Screen'}</button>
+                    <hr/>
+                    <div className="d-flex justify-content-around">
+                      { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
+                      { this.buildControlField("yOffset", "Y-Offset", { step: this.state.moveStep }) }
+                    </div>
+                    <div className="input-group my-2">
+                      <label htmlFor="moveStep" className="input-group-text">Move Step:</label>
+                      <input
+                        id="moveStep"
+                        name="moveStep"
+                        type="number"
+                        className="form-control"
+                        min={ 1 }
+                        step={ 1 }
+                        value={ this.state.moveStep }
+                        style={{ width: "4em"}}
+                        onChange={(e) => this.setState({ moveStep: parseFloat(e.target.value) })}/>
+                    </div>
+                    <button 
+                      className={`btn ${ this.isOnGrid()?'btn-disabled':'btn-success' }`}
+                      disabled={ this.isOnGrid() }
+                      onClick={() => { this.snapToGrid() }}>Snap To Grid</button>
+                    <hr/>
+                    <div className="d-flex justify-content-around">
+                      { this.buildControlField("lineWidth", "Line\xa0Width", { min: 1 }) }
+                      { this.buildColorPickerButton("Frame\xa0Color", "frameColor", "my-2", {})}
+                    </div>
+                    { this.buildColorPickerButton("Background\xa0Color", "bgColor", "my-2", {})}
+                  </> }
+                  { (this.state.controlLayer === "scenery" || this.state.controlLayer === "sprites") && <>
+                    <div className="d-flex justify-content-around my-1">
+                      <div className="input-group flex-grow-1 my-0 mx-1">
+                        <label htmlFor="sprite-select" className="input-group-text">Sprite:</label>
+                        <select id="sprite-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
+                          this.setState({ selectedSprite: parseInt(e.target.value.toString()) })
+                        }}>
+                          {
+                            this.state.schematic.layers.map((sprite, index) => {
+                              return <option key={`sprite-option-${index}`} value={index}>{ getSpriteLabel(index,sprite) }</option>;
+                            })
+                          }
+                        </select>
+                      </div>
+                      <button title="Add Sprite" className="btn btn-success my-0 mx-1" onClick={() => this.addSprite()}>+</button>
+                      <button title="Remove Sprite" className="btn btn-danger my-0 mx-1" onClick={() => this.removeSprite()}>-</button>
+                    </div>
+                    <hr/>
+                    <h5>Size:</h5>
+                    <div className="d-flex justify-content-around my-1">
+                      <div className="input-group my-0 mx-1">
+                        <label htmlFor="size-columns" className="input-group-text">Columns:</label>
+                        <input
+                          id="size-columns"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ this.state.gridColumns - 1 }
+                          value={ this.fromSelectedSprite('cols') }
+                          onChange={(e) => {
+                            this.updateSprite('cols', Math.max(0, Math.min(this.state.gridColumns - 1, parseInt(e.target.value || 0))))
+                          }}/>
+                      </div>
+                      <div className="input-group my-0 mx-1">
+                        <label htmlFor="size-columns" className="input-group-text">Rows:</label>
+                        <input
+                          id="size-columns"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ this.state.gridRows - 1 }
+                          value={ this.fromSelectedSprite('rows') }
+                          onChange={(e) => {
+                            this.updateSprite('rows', Math.max(0, Math.min(this.state.gridRows - 1, parseInt(e.target.value || 0))))
+                          }}/>
+                      </div>
+                    </div>
+                    <hr/>
+                    <h5>Position:</h5>
+                    <div className="d-flex justify-content-around my-1">
+                      <div className="input-group my-0 mx-1">
+                        <label htmlFor="position-column" className="input-group-text">Column:</label>
+                        <input
+                          id="position-column"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ this.state.gridColumns - 1 }
+                          value={ this.fromSelectedSprite('c') }
+                          onChange={(e) => {
+                            this.updateSprite('c', Math.max(0, Math.min(this.state.gridColumns - 1, parseInt(e.target.value || 0))))
+                          }}/>
+                      </div>
+                      <div className="input-group my-0 mx-1">
+                        <label htmlFor="position-columns" className="input-group-text">Rows:</label>
+                        <input
+                          id="position-columns"
+                          type="number"
+                          className="form-control"
+                          min={0}
+                          max={ this.state.gridRows - 1 }
+                          value={ this.fromSelectedSprite('r') }
+                          onChange={(e) => {
+                            this.updateSprite('r', Math.max(0, Math.min(this.state.gridRows - 1, parseInt(e.target.value || 0))))
+                          }}/>
+                      </div>
+                    </div>
+                  </> }
                 </div>
-                <button 
-                  className={`btn ${ this.state.scaleToScreen?'btn-danger':'btn-success' }`}
-                  disabled={ this.state.scaleToScreen }
-                  onClick={() => { this.modals.scaleToScreen.open({}) }}>{this.state.scaleToScreen?'Unlock Scale':'Scale To Screen'}</button>
-                <hr/>
-                <div className="d-flex justify-content-around">
-                  { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
-                  { this.buildControlField("yOffset", "Y-Offset", { step: this.state.moveStep }) }
-                </div>
-                <div className="input-group my-2">
-                  <label htmlFor="moveStep" className="input-group-text">Move Step:</label>
-                  <input
-                    id="moveStep"
-                    name="moveStep"
-                    type="number"
-                    className="form-control"
-                    min={ 1 }
-                    step={ 1 }
-                    value={ this.state.moveStep }
-                    style={{ width: "4em"}}
-                    onChange={(e) => this.setState({ moveStep: parseFloat(e.target.value) })}/>
-                </div>
-                <button 
-                  className={`btn ${ this.isOnGrid()?'btn-disabled':'btn-success' }`}
-                  disabled={ this.isOnGrid() }
-                  onClick={() => { this.snapToGrid() }}>Snap To Grid</button>
-                <hr/>
-                <div className="d-flex justify-content-around">
-                  { this.buildControlField("lineWidth", "Line\xa0Width", { min: 1 }) }
-                  { this.buildColorPickerButton("Frame\xa0Color", "frameColor", "my-2", {})}
-                </div>
-                { this.buildColorPickerButton("Background\xa0Color", "bgColor", "my-2", {})}
               </div>
             </div>
             <div className="col-8 h-100">
@@ -395,6 +550,26 @@ namespace("sp.purview.Purview",{
                     stroke="none"
                   />
                   <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                  { this.state.controlLayer === "fogOfWar" &&
+                    <>
+                      { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
+                        Array(this.state.gridRows).fill("").map((_, rowIndex) => {
+                          return Array(this.state.gridColumns).fill("").map((_, columnIndex) => {
+                            const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
+                            const foggy = this.state.fogOfWar[coordId];
+                            return (<a href="#" onClick={() => this.toggleFog(coordId)}>
+                              <rect id={coordId} x={columnIndex * this.state.squareSize} y={rowIndex * this.state.squareSize} 
+                                    width={this.state.squareSize} height={this.state.squareSize} 
+                                    fill={foggy?"black":"white"} opacity={foggy?0.3:0.1}
+                                    draggable="true" droptarget="true"/>
+                            </a>);
+                          });
+                        })
+                      }
+                      <g id={highlighterFrameId} x="0" y="0" width={this.state.squareSize * this.state.gridColumns} height={this.state.squareSize * this.state.gridRows}></g>
+                    </>
+                  }
+                  { (this.state.controlLayer === "scenery" || this.state.controlLayer === "sprites") && this.displaySprites(this.state.controlLayer) }
                   <rect 
                     x={this.state.svgFrame.x}
                     y={this.state.svgFrame.y}
@@ -403,21 +578,6 @@ namespace("sp.purview.Purview",{
                     fill="none"
                     stroke={this.state.frameColor}
                     strokeWidth={this.state.lineWidth}/>
-                  { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
-                    Array(this.state.gridRows).fill("").map((_, rowIndex) => {
-                      return Array(this.state.gridColumns).fill("").map((_, columnIndex) => {
-                        const coordId = (new Point([columnIndex, rowIndex])).getCoordinateId();
-                        const foggy = this.state.fogOfWar[coordId];
-                        return (<a href="#" onClick={() => this.toggleFog(coordId)}>
-                          <rect id={coordId} x={columnIndex * this.state.squareSize} y={rowIndex * this.state.squareSize} 
-                                width={this.state.squareSize} height={this.state.squareSize} 
-                                fill={foggy?"black":"white"} opacity={foggy?0.3:0.1}
-                                draggable="true" droptarget="true"/>
-                        </a>);
-                      });
-                    })
-                  }
-                  <g id={highlighterFrameId} x="0" y="0" width={this.state.squareSize * this.state.gridColumns} height={this.state.squareSize * this.state.gridRows}></g>
                 </svg>
               </div>
             </div>
