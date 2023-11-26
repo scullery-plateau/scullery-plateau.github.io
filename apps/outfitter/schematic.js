@@ -9,6 +9,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Critical Role: Vox Machina', 'arkhan'],
         ['Critical Role: Bells Hells', 'ashton'],
         ['Critical Role: Mighty Nein', 'bluud'],
+        ['D&D / Pathfinder','bugbear'],
         ['Critical Role: Mighty Nein', 'caleb'],
         ['Critical Role: Mighty Nein', 'calianna'],
         ['D&D Animated','cavalier'],
@@ -16,8 +17,10 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Critical Role: Vox Machina', 'doty'],
         ['Critical Role: Mighty Nein', 'essek'],
         ['Critical Role: Bells Hells', 'ferne'],
+        ['D&D / Pathfinder','giff'],
+        ['D&D / Pathfinder','goblin'],
         ['Critical Role: Vox Machina', 'grog'],
-        ['Miscellaneous','half-orc-paladin','Half-Orc Paladin'],
+        ['D&D / Pathfinder','half-orc-paladin','Half-Orc Paladin'],
         ['Miscellaneous','he-man','He-Man'],
         ['Critical Role: Bells Hells', 'imogen'],
         ['Miscellaneous','link'],
@@ -29,13 +32,14 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['D&D Animated','presto'],
         ['D&D Animated','ranger'],
         ['Critical Role: Mighty Nein', 'ruby', 'Marion Lavore'],
-        ['Miscellaneous','skeleton'],
+        ['D&D / Pathfinder','skeleton'],
         ['Miscellaneous','skeletor'],
         ['D&D Animated','thief'],
         ['Critical Role: Vox Machina', 'tiberius'],
         ['D&D Animated','venger'],
         ['Critical Role: Mighty Nein', 'veth'],
         ['Critical Role: Vox Machina', 'vex'],
+        ['D&D / Pathfinder','zombie'],
     ].map(([group,filename,label]) => {
             label = label || makeLabel(filename);
             return { group, filename, label};
@@ -53,7 +57,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         style:{ 
             height: '250px'
         },
-        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated' ],
+        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated', 'D&D / Pathfinder' ],
         items
     };
 });
