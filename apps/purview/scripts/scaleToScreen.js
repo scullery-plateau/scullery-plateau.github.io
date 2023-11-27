@@ -4,7 +4,8 @@ namespace("sp.purview.ScaleToScreen",{
     constructor(props) {
       super(props);
       this.state = {
-        scaleToScreen: true
+        scaleToScreen: true,
+        screenUnit: "in"
       };
       this.close = props.close;
       props.setOnOpen((value) => this.setState(value));
@@ -14,17 +15,17 @@ namespace("sp.purview.ScaleToScreen",{
         <h3>Set Scale To Screen</h3>
         <div className="d-flex flex-column justify-content-center">
           <div className="input-group">
-            <label for="screenUnit" className="input-group-text">Screen Units</label>
+            <label htmlFor="screenUnit" className="input-group-text">Screen Units</label>
             <select id="screenUnit" value={this.state.screenUnit} 
                     className="form-control"
                     onChange={(e) => this.setState({ screenUnit: e.target.value })}>
-              <option value="in" selected>Inches</option>
+              <option value="in">Inches</option>
               <option value="cm">Centimeters</option>
               <option value="mm">Millimeters</option>
             </select>
           </div>
           <div className="input-group">
-            <label for="screenWidth" className="input-group-text">Screen Width (in units)</label>
+            <label htmlFor="screenWidth" className="input-group-text">Screen Width (in units)</label>
             <input type="number"
                    className="form-control"
                    id="screenWidth"
@@ -38,7 +39,7 @@ namespace("sp.purview.ScaleToScreen",{
             />
           </div>
           <div className="input-group">
-            <label for="screenHeight" className="input-group-text">Screen Height (in units)</label>
+            <label htmlFor="screenHeight" className="input-group-text">Screen Height (in units)</label>
             <input type="number"
                    className="form-control"
                    id="screenHeight"
@@ -52,7 +53,7 @@ namespace("sp.purview.ScaleToScreen",{
             />
           </div>
           <div className="input-group">
-            <label for="screenSquare" className="input-group-text">Grid Square Size (in units)</label>
+            <label htmlFor="screenSquare" className="input-group-text">Grid Square Size (in units)</label>
             <input type="number"
                    className="form-control"
                    id="screenSquare"

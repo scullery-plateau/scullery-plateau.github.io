@@ -31,6 +31,9 @@ namespace("sp.purview.Purview",{
     id: "sprites",
     label: "Sprites"
   }]
+  const getSpriteLabel = function(controlLayer, index, { filename, c, r, cols, rows }) {
+    return `${controlLayer} ${index}: ${filename} (${c}, ${r}, ${cols}, ${rows})`;
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
@@ -43,6 +46,7 @@ namespace("sp.purview.Purview",{
         fogOfWar: {},
         sprites: [],
         scenery: [],
+        images: {},
         controlLayer: "fogOfWar",
       };
       this.modals = Dialog.factory({
@@ -50,7 +54,7 @@ namespace("sp.purview.Purview",{
           componentClass: ColorPicker,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ color, index }) => {
-            this.update(index, color);
+            this.applyUpdates(util.assoc({}, index, color));
           },
         },
         scaleToScreen: {
@@ -189,7 +193,7 @@ namespace("sp.purview.Purview",{
         width: innerWidth/scale,
         height: innerHeight/scale
       };
-      const [ bgColor, lineWidth, frameColor, fogOfWar, moveStep ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar", "moveStep" ].map(field => stateUpdates[field] || this.state[field]);
+      const [ bgColor, lineWidth, frameColor, fogOfWar, moveStep, sprites, scenery, images ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar", "moveStep", "sprites", "scenery", "images" ].map(field => stateUpdates[field] || this.state[field]);
       playerView.update({
         dataURL,
         img: baseImg,
@@ -197,10 +201,13 @@ namespace("sp.purview.Purview",{
         gridRows, 
         gridColumns, 
         squareSize, 
-        fogOfWar
+        fogOfWar, 
+        sprites, 
+        scenery,
+        images
       });
       playerView.setBackgroundColor(bgColor);
-      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth };
+      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth, sprites, scenery, images };
       this.setState(allUpdates);
     }
     loadMapImage() {
@@ -258,9 +265,7 @@ namespace("sp.purview.Purview",{
       this.applyUpdates({ fogOfWar });
     }
     update(field, value) {
-      const updates = {};
-      updates[field] = parseFloat(value);
-      this.applyUpdates(updates);
+      this.applyUpdates(util.assoc({}, field, parseFloat(value)));
     }
     launchColorPicker(field, value) {
       this.modals.colorPicker.open({ color: value || "#999999", index: field });
@@ -317,29 +322,46 @@ namespace("sp.purview.Purview",{
         yOffset: (this.state.yOffset - (this.state.yOffset % this.state.squareSize))
       });
     }
+    selectSprite(event, controlLayer, selectedSprite) {
+      event.preventDefault();
+      this.setState({ controlLayer, selectedSprite });
+    }
     displaySprites(spriteList) {
-      return this.state[spriteList].map(({ dataURL, r, c, rows, cols }) => {
-        return <image href={ dataURL } 
-                      x={ c * this.state.squareSize } 
-                      y={ r * this.state.squareSize } 
-                      width={ cols * this.state.squareSize } 
-                      height={ rows * this.state.squareSize }/>;
+      return this.state[spriteList].map(({ filename, r, c, rows, cols }, index) => {
+        return <a href="#" onClick={(e) => this.selectSprite(e, spriteList, index)}>
+          <image title={ getSpriteLabel(spriteList, index, { filename, r, c, rows, cols }) }
+                 href={ this.state.images[filename] } 
+                 x={ c * this.state.squareSize } 
+                 y={ r * this.state.squareSize } 
+                 width={ cols * this.state.squareSize } 
+                 height={ rows * this.state.squareSize }/>
+        </a>;
       });
     }
+    selectTab(event, ctrlLayer) {
+      event.preventDefault();
+      this.setState({ controlLayer: ctrlLayer });
+    }
     addSprite() {
+      const filesToSprites = ((files, newState) => {
+        if (files.length === 0) {
+          newState.selectedSprite = newState[newState.controlLayer].length - 1;
+          this.applyUpdates(newState);
+        } else {
+          const { filename, dataURL } = files[0];
+          newState.images[filename] = dataURL;
+          newState[newState.controlLayer].push({ filename, c: 0, r: 0, cols: 1, rows: 1 });
+          filesToSprites(files.slice(1), newState);
+        }
+      })
       LoadFile(
-        false,
+        true,
         'dataURL',
-        (dataURL) => {
+        (files) => {
           const newState = util.merge(this.state);
-          const spriteList = Array.from(newState[this.state.controlLayer]);
-          spriteList = spriteList.concat([{
-            dataURL,
-            // todo - imageStats
-          }]);
-          newState.selectedSprite = spriteList.length - 1;
-          newState[this.state.controlLayer] = spriteList;
-          this.setState(newState);
+          newState.images = util.merge(newState.images);
+          newState[newState.controlLayer] = Array.from(newState[newState.controlLayer]);
+          filesToSprites(files, newState, newState.controlLayer);
         },
         (filename, error) => {
           console.log({ filename, error });
@@ -347,14 +369,21 @@ namespace("sp.purview.Purview",{
         }
       );
     }
+    copySprite() {
+      const newState = util.merge(this.state);
+      const spriteList = Array.from(newState[this.state.controlLayer]);
+      spriteList.splice(this.state.selectedSprite,0,util.merge(spriteList[this.state.selectedSprite]));
+      newState[this.state.controlLayer] = spriteList;
+      this.applyUpdates(newState);
+    }
     removeSprite() {
       const newState = util.merge(this.state);
       const spriteList = Array.from(newState[this.state.controlLayer]);
-      if (spriteList.length > 1) {
+      if (spriteList.length >= 1) {
         spriteList.splice(this.state.selectedSprite,1);
         newState.selectedSprite = Math.max(this.state.selectedSprite - 1, 0);
         newState[this.state.controlLayer] = spriteList;
-        this.setState(newState);
+        this.applyUpdates(newState);
       }
     }
     updateSprite(field, value) {
@@ -362,9 +391,9 @@ namespace("sp.purview.Purview",{
       const spriteList = Array.from(newState[this.state.controlLayer]);
       spriteList[this.state.selectedSprite][field] = value;
       newState[this.state.controlLayer] = spriteList;
-      this.setState(newState);
+      this.applyUpdates(newState);
     }
-    fromSelectedSprite(field) {
+    fromSelectedSprite(field, defaultValue) {
       const retval = this.state[this.state.controlLayer][field];
       return (retval === undefined)?defaultValue:retval;
     }
@@ -461,17 +490,18 @@ namespace("sp.purview.Purview",{
                     <div className="d-flex justify-content-around my-1">
                       <div className="input-group flex-grow-1 my-0 mx-1">
                         <label htmlFor="sprite-select" className="input-group-text">Sprite:</label>
-                        <select id="sprite-select" className="form-control" value={ this.state.selectedLayer } onChange={(e) => {
+                        <select id="sprite-select" className="form-control" value={ this.state.selectedSprite } onChange={(e) => {
                           this.setState({ selectedSprite: parseInt(e.target.value.toString()) })
                         }}>
                           {
-                            this.state.schematic.layers.map((sprite, index) => {
-                              return <option key={`sprite-option-${index}`} value={index}>{ getSpriteLabel(index,sprite) }</option>;
+                            this.state[this.state.controlLayer].map((sprite, index) => {
+                              return <option key={`sprite-option-${index}`} value={index}>{ getSpriteLabel(this.state.controlLayer, index, sprite) }</option>;
                             })
                           }
                         </select>
                       </div>
                       <button title="Add Sprite" className="btn btn-success my-0 mx-1" onClick={() => this.addSprite()}>+</button>
+                      <button title="Copy Sprite" className="btn btn-secondary my-0" onClick={() => this.copySprite()}><i className="fas fa-copy"></i></button>
                       <button title="Remove Sprite" className="btn btn-danger my-0 mx-1" onClick={() => this.removeSprite()}>-</button>
                     </div>
                     <hr/>
@@ -550,6 +580,8 @@ namespace("sp.purview.Purview",{
                     stroke="none"
                   />
                   <image href={this.state.dataURL} height={this.state.baseImg.height} width={this.state.baseImg.width}/>
+                  { this.displaySprites("scenery") }
+                  { this.displaySprites("sprites") }
                   { this.state.controlLayer === "fogOfWar" &&
                     <>
                       { !isNaN(this.state.gridRows) && !isNaN(this.state.gridColumns) && !isNaN(this.state.squareSize) &&
@@ -569,7 +601,6 @@ namespace("sp.purview.Purview",{
                       <g id={highlighterFrameId} x="0" y="0" width={this.state.squareSize * this.state.gridColumns} height={this.state.squareSize * this.state.gridRows}></g>
                     </>
                   }
-                  { (this.state.controlLayer === "scenery" || this.state.controlLayer === "sprites") && this.displaySprites(this.state.controlLayer) }
                   <rect 
                     x={this.state.svgFrame.x}
                     y={this.state.svgFrame.y}
@@ -577,7 +608,9 @@ namespace("sp.purview.Purview",{
                     height={this.state.svgFrame.height}
                     fill="none"
                     stroke={this.state.frameColor}
-                    strokeWidth={this.state.lineWidth}/>
+                    strokeWidth={this.state.lineWidth}
+                    droptarget="true"
+                    />
                 </svg>
               </div>
             </div>
