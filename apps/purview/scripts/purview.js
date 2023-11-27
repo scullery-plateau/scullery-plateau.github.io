@@ -9,15 +9,26 @@ namespace("sp.purview.Purview",{
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Point':'Point',
   "sp.common.Utilities":"util",
+  "sp.purview.Constants":"Constants",
   "sp.purview.GridConfig":"GridConfig",
   "sp.purview.PlayerView":"PlayerView",
   "sp.purview.ScaleToScreen":"ScaleToScreen",
-},({ ColorPicker, Colors, Dialog, EditMode, FileDownload, GridHighlighter, Header, LoadFile, Point, util, GridConfig, PlayerView, ScaleToScreen}) => {
+},({ ColorPicker, Colors, Dialog, EditMode, FileDownload, GridHighlighter, Header, LoadFile, Point, util, Constants, GridConfig, PlayerView, ScaleToScreen}) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const about = [
     "Purview lets you project your digital battle map onto a second display / output.",
     "Make your dungeon map experience more interactive as the players at your table move thru your dungeon on a digital display.",
     "Scale any image to fit any screen from convenient and easy to use controls."
+  ];
+  const transformOptions = [
+    ['Original',''],
+    ['Turn Left','turnLeft'],
+    ['Turn Right','turnRight'],
+    ['Turn Around','flipDown,flipOver'],
+    ['Flip Down','flipDown'],
+    ['Flip Over','flipOver'],
+    ['Flip Left','turnLeft,flipOver'],
+    ['Flip Right','turnRight,flipOver'],
   ];
   const highlighterFrameId = "highlighterFrame";
   const validateLoadFileJson = function() {};
@@ -61,7 +72,7 @@ namespace("sp.purview.Purview",{
           componentClass: ScaleToScreen,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: (response) => {
-            this.applyScreenScale(util.merge(this.state),response);
+            this.applyScreenScale(response);
           },
         },
         fileDownload: {
@@ -104,6 +115,17 @@ namespace("sp.purview.Purview",{
         }
       }];
     }
+    applyScreenScale({ 
+      scaleToScreen, 
+      screenWidth, 
+      screenHeight, 
+      screenSquare
+    }) {
+      const { innerWidth, innerHeight } = this.state.playerView.getDimensions();
+      const scale = Math.max(innerHeight/screenHeight, innerWidth/screenWidth) * screenSquare / this.state.squareSize;
+      console.log({ scaleToScreen, scale});
+      this.applyUpdates({ scaleToScreen, scale });
+    }
     loadFile() {
       LoadFile(
         false,
@@ -143,7 +165,7 @@ namespace("sp.purview.Purview",{
                 })
               });
             }, () => {
-              this.applyUpdates();
+              this.applyUpdates({ scaleToScreen: false });
             });
           });
         },
@@ -193,7 +215,7 @@ namespace("sp.purview.Purview",{
         width: innerWidth/scale,
         height: innerHeight/scale
       };
-      const [ bgColor, lineWidth, frameColor, fogOfWar, moveStep, sprites, scenery, images ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar", "moveStep", "sprites", "scenery", "images" ].map(field => stateUpdates[field] || this.state[field]);
+      const [ bgColor, lineWidth, frameColor, fogOfWar, moveStep, sprites, scenery, images, scaleToScreen ] = [ "bgColor", "lineWidth", "frameColor", "fogOfWar", "moveStep", "sprites", "scenery", "images", "scaleToScreen" ].map(field => stateUpdates[field] || this.state[field]);
       playerView.update({
         dataURL,
         img: baseImg,
@@ -207,7 +229,7 @@ namespace("sp.purview.Purview",{
         images
       });
       playerView.setBackgroundColor(bgColor);
-      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth, sprites, scenery, images };
+      const allUpdates = { dataURL, baseImg, playerView, scale, xOffset, yOffset, bgColor, lineWidth, frameColor, svg, svgFrame, gridRows, gridColumns, squareSize, fogOfWar, moveStep, gridLineColor, gridLineWidth, sprites, scenery, images, scaleToScreen };
       this.setState(allUpdates);
     }
     loadMapImage() {
@@ -327,14 +349,16 @@ namespace("sp.purview.Purview",{
       this.setState({ controlLayer, selectedSprite });
     }
     displaySprites(spriteList) {
-      return this.state[spriteList].map(({ filename, r, c, rows, cols }, index) => {
+      return this.state[spriteList].map(({ filename, r, c, rows, cols, orientation}, index) => {
         return <a href="#" onClick={(e) => this.selectSprite(e, spriteList, index)}>
           <image title={ getSpriteLabel(spriteList, index, { filename, r, c, rows, cols }) }
                  href={ this.state.images[filename] } 
                  x={ c * this.state.squareSize } 
                  y={ r * this.state.squareSize } 
                  width={ cols * this.state.squareSize } 
-                 height={ rows * this.state.squareSize }/>
+                 height={ rows * this.state.squareSize }
+                 transform={ Constants.getSpriteTransform(orientation)(this.state.squareSize, { r, c, rows, cols }) }
+                 />
         </a>;
       });
     }
@@ -351,7 +375,7 @@ namespace("sp.purview.Purview",{
         } else {
           const { filename, dataURL } = files[0];
           newState.images[filename] = dataURL;
-          newState[newState.controlLayer].push({ filename, c: 0, r: 0, cols: 1, rows: 1 });
+          newState[newState.controlLayer].push({ filename, c: 0, r: 0, cols: 1, rows: 1, orientation: '' });
           filesToSprites(files.slice(1), newState);
         }
       })
@@ -375,6 +399,7 @@ namespace("sp.purview.Purview",{
       const spriteList = Array.from(newState[this.state.controlLayer]);
       spriteList.splice(this.state.selectedSprite,0,util.merge(spriteList[this.state.selectedSprite]));
       newState[this.state.controlLayer] = spriteList;
+      newState.selectedSprite = newState.selectedSprite + 1;
       this.applyUpdates(newState);
     }
     removeSprite() {
@@ -473,8 +498,13 @@ namespace("sp.purview.Purview",{
                     </div>
                     <button 
                       className={`btn ${ this.state.scaleToScreen?'btn-danger':'btn-success' }`}
-                      disabled={ this.state.scaleToScreen }
-                      onClick={() => { this.modals.scaleToScreen.open({}) }}>{this.state.scaleToScreen?'Unlock Scale':'Scale To Screen'}</button>
+                      onClick={() => { 
+                        if (this.state.scaleToScreen) {
+                          this.setState({ scaleToScreen: false });
+                        } else {
+                          this.modals.scaleToScreen.open({});
+                        }
+                      }}>{this.state.scaleToScreen?'Unlock Scale':'Scale To Screen'}</button>
                     <hr/>
                     <div className="d-flex justify-content-around">
                       { this.buildControlField("xOffset", "X-Offset", { step: this.state.moveStep }) }
@@ -533,6 +563,19 @@ namespace("sp.purview.Purview",{
                     <div className="d-flex justify-content-around my-1">
                     { this.buildSpriteField("position-column", "Column", 'c', "gridColumns") }
                     { this.buildSpriteField("position-row", "Row", 'r', "gridRows") }
+                    </div>
+                    <hr/>
+                    <div className="d-flex justify-content-around my-1">
+                      <label htmlFor="sprite-orientation" className="input-group-text">Orientation:</label>
+                      <select id="sprite-orientation" className="form-control" value={ this.fromSelectedSprite('orientation') } onChange={(e) => {
+                          this.updateSprite('orientation', e.target.value);
+                        }}>
+                          {
+                            transformOptions.map(([label, value], index) => {
+                              return <option key={`sprite-orientation-${index}`} value={value}>{label}</option>;
+                            })
+                          }
+                        </select>
                     </div>
                   </> }
                 </div>

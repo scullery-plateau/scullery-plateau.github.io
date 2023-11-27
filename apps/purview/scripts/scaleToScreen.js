@@ -5,7 +5,10 @@ namespace("sp.purview.ScaleToScreen",{
       super(props);
       this.state = {
         scaleToScreen: true,
-        screenUnit: "in"
+        screenUnit: "in",
+        screenWidth: 16,
+        screenHeight: 9,
+        screenSquare: 1
       };
       this.close = props.close;
       props.setOnOpen((value) => this.setState(value));

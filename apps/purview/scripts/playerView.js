@@ -1,11 +1,13 @@
 namespace("sp.purview.PlayerView",{
-  'sp.common.Point':'Point'
-},({ Point }) => {
+  'sp.common.Point':'Point',
+  "sp.purview.Constants":"Constants",
+},({ Point, Constants }) => {
   const spriteTemplate = ((squareSize, images) => {
-    return (({ filename, r, c, rows, cols }) => {
-      return `<image href="${ images[filename] }" x="${ c * squareSize }" y="${ r * squareSize }" width="${ cols * squareSize }" height="${ rows * squareSize }"/>`;
+    return (({ filename, r, c, rows, cols, orientation }) => {
+      return `<image href="${ images[filename] }" x="${ c * squareSize }" y="${ r * squareSize }" width="${ cols * squareSize }" height="${ rows * squareSize }" transform="${ Constants.getSpriteTransform(orientation)(squareSize, { r, c, rows, cols }) }"/>`;
     });
   });
+  const defsTemplate = (([filename, dataURL]) => {});
   const template = function({ dataURL, frame, img, gridRows, gridColumns, squareSize, fogOfWar, scenery, sprites, images }) {
     fogOfWar = fogOfWar || {};
     scenery = scenery || [];
