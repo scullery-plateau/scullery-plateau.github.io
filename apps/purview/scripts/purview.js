@@ -338,9 +338,10 @@ namespace("sp.purview.Purview",{
         </a>;
       });
     }
-    selectTab(event, ctrlLayer) {
+    selectTab(event, controlLayer) {
       event.preventDefault();
-      this.setState({ controlLayer: ctrlLayer });
+      const selectedSprite = this.state.selectedSprite || 0;
+      this.setState({ controlLayer, selectedSprite });
     }
     addSprite() {
       const filesToSprites = ((files, newState) => {
@@ -394,8 +395,23 @@ namespace("sp.purview.Purview",{
       this.applyUpdates(newState);
     }
     fromSelectedSprite(field, defaultValue) {
-      const retval = this.state[this.state.controlLayer][field];
-      return (retval === undefined)?defaultValue:retval;
+      const sprite = this.state[this.state.controlLayer][this.state.selectedSprite];
+      return sprite?(sprite[field] || defaultValue):defaultValue;
+    }
+    buildSpriteField(fieldId, label, field, maxField) {
+      return <div className="input-group my-0 mx-1">
+        <label htmlFor={fieldId} className="input-group-text">{label}:</label>
+        <input
+          id={fieldId}
+          type="number"
+          className="form-control"
+          min={0}
+          max={ this.state[maxField] - 1 }
+          value={ this.fromSelectedSprite(field) }
+          onChange={(e) => {
+            this.updateSprite(field, Math.max(0, Math.min(this.state[maxField] - 1, parseInt(e.target.value || 0))))
+          }}/>
+      </div>;
     }
     render() {
       return (<>
@@ -419,12 +435,14 @@ namespace("sp.purview.Purview",{
         { this.state.dataURL && 
           <div className="row justify-content-center">
             <div className="col-4">
-              <div className="rpg-box card d-flex m-0">
-                <div className="card-header">
+              <div className="rpg-box card d-flex m-2 p-0">
+                <div className="card-header bg-dark">
                   <ul className="nav nav-tabs card-header-tabs">
                     { controlLayers.map(({ id, label }) => {
                       return <li className="nav-item">
-                        <a className={`nav-link ${this.state.controlLayer === id?'active':''}`} href="#" onClick={(e) => this.selectTab(e, id)}>{ label }</a>
+                        <a className={`nav-link ${this.state.controlLayer === id?'active text-light':''}`} href="#" onClick={(e) => this.selectTab(e, id)}>
+                          <em>{ label }</em>
+                        </a>
                       </li>;
                     })}
                   </ul>
@@ -507,62 +525,14 @@ namespace("sp.purview.Purview",{
                     <hr/>
                     <h5>Size:</h5>
                     <div className="d-flex justify-content-around my-1">
-                      <div className="input-group my-0 mx-1">
-                        <label htmlFor="size-columns" className="input-group-text">Columns:</label>
-                        <input
-                          id="size-columns"
-                          type="number"
-                          className="form-control"
-                          min={0}
-                          max={ this.state.gridColumns - 1 }
-                          value={ this.fromSelectedSprite('cols') }
-                          onChange={(e) => {
-                            this.updateSprite('cols', Math.max(0, Math.min(this.state.gridColumns - 1, parseInt(e.target.value || 0))))
-                          }}/>
-                      </div>
-                      <div className="input-group my-0 mx-1">
-                        <label htmlFor="size-columns" className="input-group-text">Rows:</label>
-                        <input
-                          id="size-columns"
-                          type="number"
-                          className="form-control"
-                          min={0}
-                          max={ this.state.gridRows - 1 }
-                          value={ this.fromSelectedSprite('rows') }
-                          onChange={(e) => {
-                            this.updateSprite('rows', Math.max(0, Math.min(this.state.gridRows - 1, parseInt(e.target.value || 0))))
-                          }}/>
-                      </div>
+                    { this.buildSpriteField("size-columns", "Columns", 'cols', "gridColumns") }
+                    { this.buildSpriteField("size-rows", "Rows", 'rows', "gridRows") }
                     </div>
                     <hr/>
                     <h5>Position:</h5>
                     <div className="d-flex justify-content-around my-1">
-                      <div className="input-group my-0 mx-1">
-                        <label htmlFor="position-column" className="input-group-text">Column:</label>
-                        <input
-                          id="position-column"
-                          type="number"
-                          className="form-control"
-                          min={0}
-                          max={ this.state.gridColumns - 1 }
-                          value={ this.fromSelectedSprite('c') }
-                          onChange={(e) => {
-                            this.updateSprite('c', Math.max(0, Math.min(this.state.gridColumns - 1, parseInt(e.target.value || 0))))
-                          }}/>
-                      </div>
-                      <div className="input-group my-0 mx-1">
-                        <label htmlFor="position-columns" className="input-group-text">Rows:</label>
-                        <input
-                          id="position-columns"
-                          type="number"
-                          className="form-control"
-                          min={0}
-                          max={ this.state.gridRows - 1 }
-                          value={ this.fromSelectedSprite('r') }
-                          onChange={(e) => {
-                            this.updateSprite('r', Math.max(0, Math.min(this.state.gridRows - 1, parseInt(e.target.value || 0))))
-                          }}/>
-                      </div>
+                    { this.buildSpriteField("position-column", "Column", 'c', "gridColumns") }
+                    { this.buildSpriteField("position-row", "Row", 'r', "gridRows") }
                     </div>
                   </> }
                 </div>
