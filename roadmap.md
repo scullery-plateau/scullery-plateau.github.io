@@ -2,10 +2,7 @@
 
 1. hotkeys / button controls instead of "input" tags
 1. Grid Cropper redirect
-1. scale-to-screen
 2. add grid to map
-2. layers
-3. sprites (characters) and fixtures (furnature, terrain)
 4. effects (AOE, spell effects)
 6. drag and drop
 7. scroll to zoom
@@ -36,7 +33,6 @@
     * Keyleth
     * Scanlan
     * Tary
-    * Doty
     * Lord & Lady Briarwood
   * Mighty Nein
     * Beau
@@ -58,10 +54,6 @@
     * Mer-man
     * Beast-man
   * Monsters
-    * skeletons
-    * zombies
-    * goblins
-    * bug bear
     * ogre
     * orc
     * incubus / succubus
@@ -96,7 +88,6 @@
 
 ## Cobblestone
 
-2. Highlight - bulk select
 3. reload image from tile edit screen
 4. improved / condensed paging(how??)
 
@@ -136,6 +127,10 @@
 * city builder wizard: generate a random city / town / village based on user answers from wizard
 * builds a map and an encyclopedia-style entry 
 * design / architecture
+
+## Score Card
+
+* DM quick reference for PC & NPC stats
 
 ## How To D&D?
 
