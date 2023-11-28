@@ -120,6 +120,13 @@ namespace('sp.spritely.Spritely',{
                 this.modals.imageDownload.open(this.state);
               },
             },
+            {
+              id: 'loadAsOverlay',
+              label: 'Load As Overlay',
+              callback: () => {
+                this.loadAsOverlay();
+              },
+            },
           ],
         },
         {
@@ -198,6 +205,40 @@ namespace('sp.spritely.Spritely',{
         }
       );
     }
+    loadAsOverlay() {
+      LoadFile(
+        false,
+        'text',
+        (fileContent) => {
+          const jsonData = JSON.parse(fileContent);
+          const error = Schema.validate(jsonData);
+          if (error) {
+            throw error;
+          }
+          const newState = util.merge(this.state);
+          newState.palette = Array.from(newState.palette);
+          newState.pixels = util.merge(pixels);
+          const paletteMap = Array(jsonData.palette.length);
+          jsonData.palette.forEach((color,index) => {
+            const newIndex = newState.palette.indexOf(color);
+            if (newIndex < 0) {
+              paletteMap[index] = newState.palette.length;
+              newState.palette.push(color);
+            } else {
+              paletteMap[index] = newIndex;
+            }
+          });
+          Object.entries(jsonData.pixels).forEach(([coordId, paletteIndex]) => {
+            newState.pixels[coordId] = paletteMap[paletteIndex];
+          });
+          this.setState(newState);
+        },
+        (fileName, error) => {
+          console.log({ fileName, error });
+          alert(fileName + ' failed to load. See console for error.');
+        }
+      );
+    }
     transform(transformType) {
       const size = this.state.size;
       const transformFn = getTransforms[transformType](size);
@@ -238,6 +279,7 @@ namespace('sp.spritely.Spritely',{
                 <div className="d-flex justify-content-around">
                   <button title="Load File" className="btn btn-primary text-light" onClick={() => { this.loadFile() }}><i className="far fa-folder-open"></i></button>
                   <button title="Download" className="btn btn-primary text-light" onClick={() => { this.modals.imageDownload.open(this.state) }}><i className="far fa-floppy-disk"></i></button>
+                  <button title="Load As Overlay - Load an additional image over the top of the existing image" className="btn btn-primary text-light" onClick={() => { this.loadAsOverlay() }}><i className="fas fa-photo-film"></i></button>
                   <button title="About" className="btn btn-primary text-light" onClick={() => { Dialog.alert({ title: "About Spritely ...", lines: about }) }}><i className="far fa-circle-question"></i></button>
                 </div>
               </div>
