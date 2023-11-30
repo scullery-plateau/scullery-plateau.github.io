@@ -22,6 +22,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Critical Role: Vox Machina', 'grog'],
         ['D&D / Pathfinder','half-orc-paladin','Half-Orc Paladin'],
         ['Miscellaneous','he-man','He-Man'],
+        ['D&D / Pathfinder','illithid'],
         ['Critical Role: Bells Hells', 'imogen'],
         ['Miscellaneous','link'],
         ['Critical Role: Mighty Nein', 'nott1'],
