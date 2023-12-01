@@ -15,19 +15,26 @@
 3. fix part/pattern/shading positioning issues in data
 4. gallery
   * D&D Character Sheets
-    * Dragonborn Sorcerer (silver)
-    * Drow Rogue
-    * Dwarf Cleric
-    * Half-Elf Bard
-    * High Elf Fighter
-    * High Elf Wizard
-    * Human Barbarian
-    * Human Cleric
-    * Human Druid
-    * Human Fighter
-    * Human Paladin
-    * Tiefling Warlock
-    * Wood Elf Ranger
+    * Pregen Warriors
+      * Halfling Monk
+      * Human Fighter
+      * Human Barbarian
+      * High Elf Fighter
+    * Pregen Scoundrels
+      * Half-Elf Bard
+      * Drow Rogue
+      * Wood Elf Ranger
+      * Halfling Rogue
+    * Pregen Mages
+      * Tiefling Warlock
+      * Dragonborn Sorcerer (silver)
+      * High Elf Wizard
+      * Human Druid
+    * Pregen Healers
+      * Human Paladin
+      * Dwarf Cleric
+      * Half-Org Paladin (done)
+      * Human Cleric
   * Vox Machina
     * Vax
     * Keyleth
@@ -84,7 +91,6 @@
 ## Spritely
 
 * hot keys
-* "load as overlay"
 
 ## Cobblestone
 
