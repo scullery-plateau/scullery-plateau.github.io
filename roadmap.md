@@ -41,6 +41,8 @@
     * Scanlan
     * Tary
     * Lord & Lady Briarwood
+    * Zahra
+    * Kashaw
   * Mighty Nein
     * Beau
     * Fjord
@@ -54,12 +56,46 @@
     * Chetney (gnome)
     * Letters (How?)
   * Motu (?)
-    * Man-At-Arms
-    * Teela
-    * The Sorceress
-    * Evil-lynn
-    * Mer-man
-    * Beast-man
+    * Heroes
+      * Man-At-Arms
+      * Man-E-Faces
+      * Teela
+      * King Randor
+      * Orko
+      * Moss Man
+      * The Sorceress
+      * Buzz-Off
+      * Extendar
+      * Fisto
+      * Mekaneck
+      * Ram Man
+      * Rio Blast
+      * Stratos
+    * Villians
+      * Evil-lynn
+      * Mer-man
+      * Beast-man
+      * Trap-Jaw
+      * Clawful
+      * Blade
+      * Faker
+      * Scare Glow
+      * Spikor
+      * Stinkor
+      * Tri-Klops
+      * Tuvar and Baddhra - Two-Bad (How?)
+      * Whiplash
+      * Webstor
+    * She-Ra
+      * She-Ra
+    * Horde
+      * Catra
+      * Shadow Weaver
+      * Scorpia
+    * Snake-Men (?)
+      * King Hiss
+      * Rattlor
+      * Snake Face
   * Monsters
     * ogre
     * orc
@@ -75,7 +111,6 @@
       * Air
       * Fire
       * Water
-    * Giff
     * Tabaxi
     * Tortle (?)
     * Centaur
@@ -172,4 +207,3 @@
   - Image
 - Printable (using svg pattern)
 - Rollable (w/ Yahtzee-style rolling)
-
