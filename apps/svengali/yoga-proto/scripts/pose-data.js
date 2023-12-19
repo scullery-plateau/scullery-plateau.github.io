@@ -9,11 +9,9 @@ namespace("sp.yoga-proto.PoseData",{},() => {
     topMargin: 0,
     bottomMargin: 0,
     rowCount:15,
-    maxCellCount: 5, 
-    rowDefaults: {
-      top:0,
-      height:100,
-      count:5
-    }
+    maxCellCount: 5,
+    boxWidth: 199,
+    rowHeight: 100,
+    selectedRow: 0
   }
 });
