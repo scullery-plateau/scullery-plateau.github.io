@@ -71,15 +71,16 @@ namespace("sp.yoga-proto.PoseGallery",{
       }, {});
       Object.keys(lefts).forEach((count) => {
         lefts[count] = Array(parseInt(count)).fill("").map((_, index) => {
-          return (boxWidth * (index * 2 + 1) / 2) - Math.floor(this.state.boxWidth / 2) + this.state.sideMargin;
+          const halfSpan = width / (count * 2);  
+          return (halfSpan * (index * 2 + 1)) - Math.floor(this.state.boxWidth / 2) + this.state.sideMargin;
         });
       });
-      console.log({ lefts })
+      console.log({ state: this.state });
       return <>
         <h2>Pose Gallery</h2>
         <div className="d-flex align-content-center">
           <div className="w-50 bg-primary rounded m-3 p-1">
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column align-content-center">
               <div className="d-inline-flex flex-wrap align-content-center">
                 { this.buildField("Top Margin", "topMargin") } 
                 { this.buildField("Bottom Margin", "bottomMargin") } 
@@ -110,6 +111,18 @@ namespace("sp.yoga-proto.PoseGallery",{
                 { this.buildRowField("Selected Row Cell Count", "count", {
                   max: this.state.maxCellCount
                 }) } 
+              </div>
+              <div className="d-inline-flex flex-wrap align-content-center">
+                { this.state.rows.map(({ top, count }) => {
+                const rowLefts = lefts[count];
+                return rowLefts.map((left) => {
+                  return <div className="thumbnail">
+                    <svg width="100%" height="100%" viewBox={[left,top,this.state.boxWidth,this.state.rowHeight].join(" ")}>
+                      <image href="./assets/pose-index.jpg"/>
+                    </svg>
+                  </div>;
+                })
+              })}
               </div>
             </div>
           </div>

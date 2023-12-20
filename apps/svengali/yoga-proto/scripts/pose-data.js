@@ -8,7 +8,7 @@ namespace("sp.yoga-proto.PoseData",{},() => {
     sideMargin: 0,
     topMargin: 0,
     bottomMargin: 0,
-    rowCount:15,
+    rowCount:12,
     maxCellCount: 5,
     boxWidth: 199,
     rowHeight: 100,
