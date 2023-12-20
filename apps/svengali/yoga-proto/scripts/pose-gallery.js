@@ -20,7 +20,14 @@ namespace("sp.yoga-proto.PoseGallery",{
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = applyUpdates(PoseData);
+      this.state = applyUpdates(PoseData, props);
+    }
+    componentDidMount() {
+      if (!this.state.baseImg) {
+        util.initImageObj(this.state.imgUrl,(baseImg) => {
+          this.setState({ baseImg });
+        });
+      }
     }
     update(field, value) {
       this.setState(applyUpdates(this.state,util.assoc({},field,value)));
@@ -76,69 +83,95 @@ namespace("sp.yoga-proto.PoseGallery",{
         });
       });
       console.log({ state: this.state });
+      const thumbnails = this.state.rows.reduce((outVal, { top, count }, rowIndex) => {
+        const rowLefts = lefts[count];
+        return outVal.concat(rowLefts.map((left, columnIndex) => {
+          return { top, left, rowIndex, columnIndex, count };
+        }));
+      }, []);
+      const firsts = thumbnails.reduce((outVal, { rowIndex }, index) => {
+        if ((typeof outVal[rowIndex] !== "number")) {
+          outVal[rowIndex] = index;
+        }
+        return outVal;
+      }, {});
+      console.log({ thumbnails });
+      const selectedThumbnail = Math.min(this.state.selectedThumbnail, thumbnails.length - 1);
+      const selectedImg = thumbnails[selectedThumbnail];
+      const selectedCanvasUrl = this.state.baseImg?util.drawImageInCanvas(this.state.baseImg,selectedImg.left,selectedImg.top,this.state.boxWidth,this.state.rowHeight,this.state.canvasId):undefined;
       return <>
         <h2>Pose Gallery</h2>
-        <div className="d-flex align-content-center">
-          <div className="w-50 bg-primary rounded m-3 p-1">
-            <div className="d-flex flex-column align-content-center">
-              <div className="d-inline-flex flex-wrap align-content-center">
-                { this.buildField("Top Margin", "topMargin") } 
-                { this.buildField("Bottom Margin", "bottomMargin") } 
-                { this.buildField("Side Margin", "sideMargin") } 
-                { this.buildField("Box Width", "boxWidth", { 
-                    max: boxWidth,
-                    value: Math.min(this.state.boxWidth, boxWidth)
+        { this.state.baseImg &&
+          <div className="d-flex align-content-center">
+            <div className="w-50 bg-primary rounded m-3 p-1">
+              <div className="d-flex flex-column align-content-center">
+                <div className="d-inline-flex flex-wrap align-content-center">
+                  { this.buildField("Top Margin", "topMargin") } 
+                  { this.buildField("Bottom Margin", "bottomMargin") } 
+                  { this.buildField("Side Margin", "sideMargin") } 
+                  { this.buildField("Box Width", "boxWidth", { 
+                      max: boxWidth,
+                      value: Math.min(this.state.boxWidth, boxWidth)
+                    }) } 
+                  { this.buildField("Row Height", "rowHeight", {
+                      max: rowHeight,
+                      value: Math.min(this.state.rowHeight, rowHeight)
+                    }) }
+                </div>
+                <div className="input-group p-2 flex-shrink-1">
+                  <label htmlFor="selectedRow" className="input-group-text">Selected Row</label>
+                  <select
+                    id="selectedRow"
+                    className="form-select"
+                    value={ this.state.selectedRow }
+                    onChange={(e) => this.setState({ 
+                      selectedRow: parseInt(e.target.value),
+                      selectedThumbnail: firsts[parseInt(e.target.value)]
+                    })}>
+                    { this.state.rows.map(({top, count}, index) => {
+                      return <option value={ index }>{index}: top={top}, count={count}</option>
+                    }) }
+                  </select>
+                </div>
+                <div className="d-inline-flex flex-wrap align-content-center">
+                  { this.buildRowField("Selected Row Top", "top") } 
+                  { this.buildRowField("Selected Row Cell Count", "count", {
+                    max: this.state.maxCellCount
                   }) } 
-                { this.buildField("Row Height", "rowHeight", {
-                    max: rowHeight,
-                    value: Math.min(this.state.rowHeight, rowHeight)
-                  }) }
-              </div>
-              <div className="input-group p-2 flex-shrink-1">
-                <label htmlFor="selectedRow" className="input-group-text">Selected Row</label>
-                <select
-                  id="selectedRow"
-                  className="form-select"
-                  value={ this.state.selectedRow }
-                  onChange={(e) => this.setState({ selectedRow: parseInt(e.target.value) })}>
-                  { this.state.rows.map(({top, count}, index) => {
-                    return <option value={ index }>{index}: top={top}, count={count}</option>
-                  }) }
-                </select>
-              </div>
-              <div className="d-inline-flex flex-wrap align-content-center">
-                { this.buildRowField("Selected Row Top", "top") } 
-                { this.buildRowField("Selected Row Cell Count", "count", {
-                  max: this.state.maxCellCount
-                }) } 
-              </div>
-              <div className="d-inline-flex flex-wrap align-content-center">
-                { this.state.rows.map(({ top, count }) => {
-                const rowLefts = lefts[count];
-                return rowLefts.map((left) => {
-                  return <div className="thumbnail">
-                    <svg width="100%" height="100%" viewBox={[left,top,this.state.boxWidth,this.state.rowHeight].join(" ")}>
-                      <image href="./assets/pose-index.jpg"/>
-                    </svg>
-                  </div>;
-                })
-              })}
+                </div>
+                <div className="input-group p-2 flex-shrink-1 w-50">
+                  <label htmlFor="selectedThumbnail" className="input-group-text">Selected Thumbnail</label>
+                  <input
+                    id="selectedThumbnail"
+                    type="number"
+                    className="form-control"
+                    min={0}
+                    max={thumbnails.length - 1}
+                    value={ selectedThumbnail }
+                    onChange={(e) => this.setState({ 
+                      selectedThumbnail: parseInt(e.target.value),
+                      selectedRow: thumbnails[parseInt(e.target.value)].rowIndex
+                    })}
+                    />
+                </div>
+                <div className="w-100 h-50">
+                  <a href={selectedCanvasUrl} download={`pose${selectedImg.columnIndex}x${selectedImg.rowIndex}`}>
+                    <img src={selectedCanvasUrl} width="100%" height="100%"/>
+                  </a>
+                </div>
               </div>
             </div>
+            <div className="w-50 m-3 bg-secondary rounded p-3">
+              <svg width="100%" height="80%" viewBox="0 0 995 1500">
+                <image href={this.state.imgUrl}/>
+                <rect x={this.state.sideMargin} y={this.state.topMargin} width={width} height={height} fill="none" stroke="red" strokeWidth="2"/>
+                { thumbnails.map(({ top, left }) => {
+                    return <rect x={left} y={top} width={this.state.boxWidth} height={this.state.rowHeight} fill="none" stroke="red" strokeWidth="2"/>
+                  }) }
+              </svg>
+            </div>
           </div>
-          <div className="w-50 m-3 bg-secondary rounded p-3">
-            <svg width="100%" height="80%" viewBox="0 0 995 1500">
-              <image href="./assets/pose-index.jpg"/>
-              <rect x={this.state.sideMargin} y={this.state.topMargin} width={width} height={height} fill="none" stroke="red" strokeWidth="2"/>
-              { this.state.rows.map(({ top, count }) => {
-                const rowLefts = lefts[count];
-                return rowLefts.map((left) => {
-                  return <rect x={left} y={top} width={this.state.boxWidth} height={this.state.rowHeight} fill="none" stroke="red" strokeWidth="2"/>
-                })
-              })}
-            </svg>
-          </div>
-        </div>
+        }
       </>;
     }
   }

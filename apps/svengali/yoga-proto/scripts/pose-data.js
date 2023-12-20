@@ -1,4 +1,16 @@
 namespace("sp.yoga-proto.PoseData",{},() => {
+  const categories = {
+    "warm-up":{
+      "rows":[0],
+      "names":["Cat","Cow","Melting Heart"]
+    },
+    "stretching":{},
+    "balance":{},
+    "strength":{},
+    "core":{},
+    "backbending":{},
+    "restorative/warm-down":{}
+  }
   const imgDim = {
     width: 995,
     height: 1500
@@ -12,6 +24,7 @@ namespace("sp.yoga-proto.PoseData",{},() => {
     maxCellCount: 5,
     boxWidth: 199,
     rowHeight: 100,
-    selectedRow: 0
+    selectedRow: 0,
+    selectedThumbnail: 0
   }
 });
