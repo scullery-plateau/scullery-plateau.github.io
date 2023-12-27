@@ -1,65 +1,77 @@
 namespace("sp.yoga-proto.YogaProto",{
   "sp.yoga-proto.PoseData": "PoseData",
+  "sp.yoga-proto.PoseSelector": "PoseSelector",
+  "sp.common.Colors":"Colors",
+  "sp.common.Dialog":"Dialog",
   "sp.common.Utilities":"util",
-},({ PoseData, util }) => {
-  const borderClass = "border border-success border-5"
-  const selectionKey = function(category, name) {
-    return category + ": " + name;
-  }
-  const parseSelectionKey = function(key) {
-    const [category, name] = key.split(": ");
-    return {category, name};
-  }
+},({ PoseData, Colors, Dialog, util }) => {
+  const defaultParams = {
+    poseCount: 7,
+    breathColor: "#0000ff",
+    poseColor: "#00ff00"
+  };
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = util.merge(PoseData, props, { selected:{}, collapsed: {} })
+      this.state = util.merge(PoseData, defaultParams, props.urlParams);
+      this.modals = Dialog.factory({
+        poseSelector: {
+          componentClass: PoseSelector,
+          attrs: { class: 'rpg-box text-light w-75' },
+          onClose:(selected) => {
+            this.setState({ selected });
+          }
+        }
+      });
     }
-    toggleCollapse(e, category) {
-      e.preventDefault();
-      const { collapsed } = this.state;
-      collapsed[category] = !collapsed[category];
-      this.setState({ collapsed });
-    }
-    isSelected(category, name) {
-      return this.state.selected[selectionKey(category,name)];
-    }
-    toggleSelected(e, category, name) {
-      e.preventDefault();
-      const key = selectionKey(category,name);
-      const { selected } = this.state;
-      selected[key] = ! selected[key];
-      this.setState({ selected });
+    applyWorkout() {
+
     }
     render() {
       return <>
-        <h2>Yoga Gallery</h2>
-        { Object.entries(this.state.categories).map(([category, { firstRow, maxRowWidth, names }]) => {
-          return <>
-            <div className="card mb-3">
-              <div className="card-header bg-dark text-center">
-                <a className="btn btn-dark" href="#" onClick={(e) => this.toggleCollapse(e, category)}>
-                  <h3>{category}</h3>
-                </a>
-              </div>
-              { !this.state.collapsed[category] && 
-                <div className="card-body bg-info">
-                  <div className="d-flex flex-wrap justify-content-around">
-                    { names.map((name, index) => {
-                      const col = index % maxRowWidth;
-                      const row = firstRow + Math.floor(index / maxRowWidth);
-                      return <div className={`thumbnail m-2 rounded ${this.isSelected(category,name)?borderClass:''}`}>
-                        <a href="#" onClick={(e) => this.toggleSelected(e,category,name)}>
-                          <img width="100%" height="100%" alt={name} title={name} src={`./gallery/pose${col}x${row}.png`}/>
-                        </a>
-                      </div>;
-                    })}
-                  </div>
-                </div>
-              }
+        <h2 className="text-center">Yoga Workout</h2>
+        { !this.state.selected && <div className="d-flex justify-content-center">
+            <button className="btn btn-success" onClick={() => this.modals.poseSelector.open({})}>Select Poses</button>
+          </div>}
+        { this.state.selected && !this.state.workout && <div className="d-flex justify-content-center">
+            <button className="btn btn-success" onClick={() => this.modals.applyWorkout()}>Begin Workout</button>
+          </div>}
+        { this.state.workout && this.state.workoutStep < this.state.workout.length && <div className="d-flex flex-column">
+            <div className="progress w-100 m-1">
+              <div className="progress-bar"
+                   id="poseProgress"
+                   style={{
+                    width: "0%",
+                    color: Colors.getForegroundColor(this.state.poseColor),
+                    backgroundColor: this.state.poseColor,
+                   }}
+                >Pose</div>
             </div>
-          </>;
-        })}
+            <div className="progress w-100 m-1">
+              <div className="progress-bar"
+                   id="breathProgress"
+                   style={{
+                    width: "0%",
+                    color: Colors.getForegroundColor(this.state.breathColor),
+                    backgroundColor: this.state.breathColor,
+                   }}
+                >Breathe</div>
+            </div>
+          </div>}
+        { this.state.workout && this.state.workoutStep >= this.state.workout.length && <div className="d-flex flex-columns">
+            <div className="d-flex justify-content-center">
+              <p>Your workout is complete</p>
+            </div>
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-success" onClick={() => this.setState({ workoutStep: 0})}>Repeat Workout</button>
+            </div>
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-success" onClick={() => this.setState({ workoutStep: undefined, workout: undefined })}>Reshuffle Selected Poses</button>
+            </div>
+            <div className="d-flex justify-content-center">
+              <button className="btn btn-success" onClick={() => this.setState({ workoutStep: undefined, workout: undefined, selected: undefined })}>Reselect Poses</button>
+            </div>
+          </div>}
       </>;
     }
   }

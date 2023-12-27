@@ -71,7 +71,10 @@
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <YogaProto />
+          <YogaProto urlParams={(new URL(location)).searchParams.entries().reduce((retVal, [ key, value ]) => {
+            retVal[key] = value;
+            return retVal;
+          }, {})}/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
           <Footer />
@@ -82,6 +85,5 @@
   <body class="bg-dark text-light">
     <div id="app-root" class="container"></div>
     <footer id="footer" class="text-center"></footer>
-    <canvas style="display: none;" id="canvas"></canvas>
   </body>
 </html>
