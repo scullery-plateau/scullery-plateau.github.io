@@ -40,6 +40,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Miscellaneous','skeletor'],
         ['D&D Animated','thief'],
         ['Critical Role: Vox Machina', 'tiberius'],
+        ['Miscellaneous','two-bad', "Two-Bad"],
         ['D&D Animated','venger'],
         ['Critical Role: Mighty Nein', 'veth'],
         ['Critical Role: Vox Machina', 'vex'],
