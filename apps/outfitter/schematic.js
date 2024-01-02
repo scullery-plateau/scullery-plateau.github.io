@@ -18,15 +18,17 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['Critical Role: Vox Machina', 'doty'],
         ['D&D / Pathfinder','drider'],
         ['Critical Role: Mighty Nein', 'essek'],
+        ['Masters Of The Universe','faker'],
         ['Critical Role: Bells Hells', 'ferne'],
         ['D&D / Pathfinder','giff'],
         ['D&D / Pathfinder','goblin'],
         ['Critical Role: Vox Machina', 'grog'],
         ['D&D / Pathfinder','half-orc-paladin','Half-Orc Paladin'],
-        ['Miscellaneous','he-man','He-Man'],
+        ['Masters Of The Universe','he-man','He-Man'],
         ['D&D / Pathfinder','illithid'],
         ['Critical Role: Bells Hells', 'imogen'],
         ['Miscellaneous','link'],
+        ['Masters Of The Universe','man-at-arms',"Man-At-Arms"],
         ['D&D / Pathfinder','nothic'],
         ['Critical Role: Mighty Nein', 'nott1'],
         ['Critical Role: Mighty Nein', 'nott2'],
@@ -37,10 +39,10 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         ['D&D Animated','ranger'],
         ['Critical Role: Mighty Nein', 'ruby', 'Marion Lavore'],
         ['D&D / Pathfinder','skeleton'],
-        ['Miscellaneous','skeletor'],
+        ['Masters Of The Universe','skeletor'],
         ['D&D Animated','thief'],
         ['Critical Role: Vox Machina', 'tiberius'],
-        ['Miscellaneous','two-bad', "Two-Bad"],
+        ['Masters Of The Universe','two-bad', "Two-Bad"],
         ['D&D Animated','venger'],
         ['Critical Role: Mighty Nein', 'veth'],
         ['Critical Role: Vox Machina', 'vex'],
@@ -62,7 +64,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         style:{ 
             height: '250px'
         },
-        groups:[ 'Miscellaneous', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated', 'D&D / Pathfinder' ],
+        groups:[ 'Miscellaneous', 'Masters Of The Universe', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated', 'D&D / Pathfinder' ],
         items
     };
 });
