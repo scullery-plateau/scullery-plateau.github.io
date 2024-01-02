@@ -25,7 +25,7 @@ namespace("sp.yoga-proto.YogaProto",{
       });
     }
     applyWorkout() {
-
+      //todo
     }
     render() {
       return <>
@@ -56,6 +56,11 @@ namespace("sp.yoga-proto.YogaProto",{
                     backgroundColor: this.state.breathColor,
                    }}
                 >Breathe</div>
+            </div>
+            <div>
+              {
+                // display image
+              }
             </div>
           </div>}
         { this.state.workout && this.state.workoutStep >= this.state.workout.length && <div className="d-flex flex-columns">
