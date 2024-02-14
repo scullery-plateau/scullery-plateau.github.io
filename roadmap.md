@@ -13,107 +13,6 @@
 1. add Help menu with About
 2. split layer into multiple layers (both into right and left)
 3. fix part/pattern/shading positioning issues in data
-4. gallery
-  * D&D Character Sheets
-    * Pregen Warriors
-      * Halfling Monk
-      * Human Fighter
-      * Human Barbarian
-      * High Elf Fighter
-    * Pregen Scoundrels
-      * Half-Elf Bard
-      * Drow Rogue
-      * Wood Elf Ranger
-      * Halfling Rogue
-    * Pregen Mages
-      * Tiefling Warlock
-      * Dragonborn Sorcerer (silver)
-      * High Elf Wizard
-      * Human Druid
-    * Pregen Healers
-      * Human Paladin
-      * Dwarf Cleric
-      * Half-Org Paladin (done)
-      * Human Cleric
-  * Vox Machina
-    * Vax
-    * Keyleth
-    * Scanlan
-    * Tary
-    * Lord & Lady Briarwood
-    * Zahra
-    * Kashaw
-  * Mighty Nein
-    * Beau
-    * Fjord
-    * Molly
-    * Yasha
-    * Jester
-    * Kiri
-    * The Bright Queen
-  * Bells Hells
-    * Laudna
-    * Chetney (gnome)
-    * Letters (How?)
-  * Motu (?)
-    * Heroes
-      * Man-At-Arms
-      * Man-E-Faces
-      * Teela
-      * King Randor
-      * Orko
-      * Moss Man
-      * The Sorceress
-      * Buzz-Off
-      * Extendar
-      * Fisto
-      * Mekaneck
-      * Ram Man
-      * Rio Blast
-      * Stratos
-    * Villians
-      * Evil-lynn
-      * Mer-man
-      * Beast-man
-      * Trap-Jaw
-      * Clawful
-      * Blade
-      * Faker
-      * Scare Glow
-      * Spikor
-      * Stinkor
-      * Tri-Klops
-      * Tuvar and Baddhra - Two-Bad (How?)
-      * Whiplash
-      * Webstor
-    * She-Ra
-      * She-Ra
-    * Horde
-      * Catra
-      * Shadow Weaver
-      * Scorpia
-    * Snake-Men (?)
-      * King Hiss
-      * Rattlor
-      * Snake Face
-  * Monsters
-    * ogre
-    * orc
-    * incubus / succubus
-    * rakshasa
-    * oni
-    * shadow demon
-  * races
-    * Aarokochra
-    * Asimar
-    * Genasi
-      * Earth
-      * Air
-      * Fire
-      * Water
-    * Tabaxi
-    * Tortle (?)
-    * Centaur
 
 ## Minifier
 
@@ -172,20 +71,6 @@
 ## Score Card
 
 * DM quick reference for PC & NPC stats
-
-## How To D&D?
-
-- Build Page as blog post
-  - statement of purpose
-  - glossary
-  - embedded player for Matt Colville's Running The Game on YouTube
-  - resource links
-  - site artifact resources
-    - cobblestone maps
-    - Outfitter builds for mini-images
-      - images for all monsters for adventure
-      - images for all character sheets on Wizards of the Coast site
-    - Minifier minis of Outfitter images
 
 ## Gary's Almanac
 
