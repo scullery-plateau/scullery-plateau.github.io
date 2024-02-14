@@ -37,6 +37,7 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Characters','mimic'],
         ['Tiles','one-way-door'],
         ['Characters','owlbear'],
+        ['Characters','pixie'],
         ['Tokens','red-potion'],
         ['Tiles','shallow-water'],
         ['Tiles','sigil-floor-tile'],
@@ -51,6 +52,9 @@ namespace('sp.spritely.GallerySchematic',{},() => {
         ['Tiles','wave-wall'],
         ['Tiles','wave-wall-edge'],
         ['Tiles','wave-wall-corner'],
+        ['Tiles','woodpanelfloor'],
+        ['Tiles','woodpanelwall'],
+        ['Tiles','woodpanelcorner'],
     ].map(([group,filename]) => {
         const label = makeLabel(filename);
         return { group, filename, label};
