@@ -22,7 +22,7 @@ namespace('sp.texturePackHarvester.TexturePackHarvester',{
     }
     loadTexturePackImage() {
       LoadFile(
-        true,
+        false,
         'dataURL',
         (dataURL, filename) => {
           util.initImageObj(dataURL,(baseImg) => {
