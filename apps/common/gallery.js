@@ -14,9 +14,12 @@ namespace('sp.common.Gallery',{
       }
     }];
     const buildThumbnail = function(fileName,label) {
-      return (<a className="m-2" href={`./gallery/${fileName}${downloadExtension}`} download={true} title={label}>
-        <img src={`./gallery/${fileName}${imageExtension}`} style={style} alt={label}/>
-      </a>);
+      return (<div className="d-flex flex-column justify-content-center">
+        <a className="m-2" href={`./gallery/${fileName}${downloadExtension}`} download={true} title={label}>
+          <img src={`./gallery/${fileName}${imageExtension}`} style={style} alt={label}/>
+        </a>
+        <h4 className="text-center">{ label }</h4>
+      </div>);
     };
     return <>
       <Header menuItems={menuItems} appTitle={<><a href="./index.html">{ sourceApp }</a> Gallery</>}/>
@@ -24,7 +27,7 @@ namespace('sp.common.Gallery',{
         {groups.map((group, index) => {
           return <>
             <h4 className="text-center">{ group }</h4>
-            <div class="d-flex flex-wrap justify-content-center">
+            <div className="d-flex flex-wrap justify-content-center">
               {items[group].map(({filename, label}) => buildThumbnail(filename, label))}
             </div>
             { (index < groups.length - 1) && <hr/> }
