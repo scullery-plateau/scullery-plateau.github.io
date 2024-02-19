@@ -2,7 +2,7 @@ namespace('sp.common.Gallery',{
   'sp.common.Dialog':'Dialog',
   'sp.common.Header':'Header',
 },({ Dialog, Header }) => {
-  return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, groups, items } }) {
+  return function({ schematic: { sourceApp, downloadExtension, imageExtension, style, showLabels, groups, items } }) {
     const menuItems = [{
       id: 'about',
       label: 'About',
@@ -18,7 +18,7 @@ namespace('sp.common.Gallery',{
         <a className="m-2" href={`./gallery/${fileName}${downloadExtension}`} download={true} title={label}>
           <img src={`./gallery/${fileName}${imageExtension}`} style={style} alt={label}/>
         </a>
-        <h4 className="text-center">{ label }</h4>
+        { showLabels && <h4 className="text-center">{ label }</h4> }
       </div>);
     };
     return <>
