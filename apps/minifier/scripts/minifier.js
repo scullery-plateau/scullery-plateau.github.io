@@ -64,8 +64,7 @@ namespace('sp.minifier.Minifier', {
           groupClassName: 'size-picker',
           getter: () => this.state.size,
           setter: (size) => {
-            const { minis } = state;
-            this.setState({ size, minis });
+            this.setState({ size });
           },
           options: [1, 2, 3, 4].map((v) => {
             return { label: `${v} inch`, value: v };
