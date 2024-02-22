@@ -2,18 +2,19 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
   'sp.common.Colors':'Colors',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Utilities':'util',
-},({ Colors, LoadFile, util }) => {
+  'sp.spritely.SpritelyUtil': 'SpritelyUtil'
+},({ Colors, LoadFile, util, SpritelyUtil }) => {
   const spColors = util.range(6).reduce((out,red) => {
     return util.range(6).reduce((acc,green) => {
       return util.range(6).reduce((results,blue) => {
         const [r,g,b] = [red,green,blue].map((c) => (c*3).toString(16));
         const color = ['#',r,r,g,g,b,b].join('');
-        results[color] = util.rgbFromHex(color);
+        results[color] = Colors.rgbFromHex(color);
         return results;
       }, acc);
     }, out);
   }, Colors.getAllNamedColors().reduce((out,color) => {
-    out[color] = util.rgbFromHex(color);
+    out[color] = Colors.rgbFromHex(color);
     return out;
   }, {}));
   console.log({ spColors, count: Object.keys(spColors).length })
@@ -111,7 +112,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       let rest = Array.from(data);
       while(rest.length > 0) {
         const [red, green, blue, alpha] = rest.slice(0,4);
-        const hex = util.hexFromRGB(red, green, blue);
+        const hex = Colors.hexFromRGB(red, green, blue);
         const color = { red, green, blue };
         pixels.push(hex);
         palette[hex] = color;
@@ -125,17 +126,37 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       }
       return { palette, data: rows };
     }
+    downloadSpritelyFile(event, data) {
+      event.preventDefault();
+      util.triggerJSONDownload("harvested.json","harvested.json",data);
+    }
     drawPixelsAsSVG(data,dim){
+      console.log({ data, dim });
       const pixelSize = 5
       const height = data.length;
       const width = data.reduce((out,row) => Math.max(out,row.length),0);
-      return <svg width={dim} height={dim} viewBox={`0 0 ${width * pixelSize} ${height * pixelSize}`}>
+      const spritelyData = {
+        palette:[],
+        pixels:{}
+      };
+      const svg = <svg width={dim} height={dim} viewBox={`0 0 ${width * pixelSize} ${height * pixelSize}`}>
         { data.map((row,y) => {
           return row.map((color,x) => {
+            const pixelId = SpritelyUtil.getPixelId(x,y);
+            let paletteIndex = spritelyData.palette.indexOf(color);
+            if (paletteIndex < 0) {
+              paletteIndex = spritelyData.palette.length;
+              spritelyData.palette.push(color);
+            }
+            spritelyData.pixels[pixelId] = paletteIndex;
             return <rect x={x * pixelSize} y={y * pixelSize} width={pixelSize} height={pixelSize} fill={color}/>
           })
         }) }
       </svg>;
+      return <div className="d-flex flex-column">
+        <a href="#" onClick={(e) => this.downloadSpritelyFile(e,spritelyData)}>{ svg }</a>
+        <h5>Palette Size: { spritelyData.palette.length }</h5>
+      </div>;
     }
     pixelAverage(pixels) {
       const totals = pixels.reduce((sums,pix) => {
@@ -151,7 +172,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     }
     bestPixel(pixels) {
       const colorCounts = pixels.reduce((out,p) => {
-        const hex = util.hexFromRGB(p.red,p.green,p.blue);
+        const hex = Colors.hexFromRGB(p.red,p.green,p.blue);
         if (out[hex]) {
           out[hex]++;
         } else {
@@ -164,7 +185,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       for(let j = 0; j < palette.length - 1; j++) {
         for(let k = j + 1; k < palette.length; k++) {
           const [jHex,kHex] = [j,k].map((i) => palette[i]);
-          const [jColor,kColor]= [jHex, kHex].map((hex) => util.rgbFromHex(hex));
+          const [jColor,kColor]= [jHex, kHex].map((hex) => Colors.rgbFromHex(hex));
           const diff = colors.reduce((prod,color) => {
             return prod * Math.abs(jColor[color] - kColor[color])
           },1);
@@ -187,7 +208,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       },{});
       const lowScore = Object.keys(scoreboard).sort()[0];
       const highCount = Object.keys(scoreboard[lowScore]).sort().reverse()[0];
-      return this.pixelAverage(scoreboard[lowScore][highCount].map((hex) => util.rgbFromHex(hex)));
+      return this.pixelAverage(scoreboard[lowScore][highCount].map((hex) => Colors.rgbFromHex(hex)));
     }
     condensePixels() {
       const { data, palette, spec } = this.state;
@@ -206,7 +227,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
             }, out);
           }, {});
           const rgb = this.bestPixel(Object.values(pixels))
-          const hex = util.hexFromRGB(rgb.red,rgb.green,rgb.blue);
+          const hex = Colors.hexFromRGB(rgb.red,rgb.green,rgb.blue);
           if (newPalette[hex]) {
             newPalette[hex]++;
           } else {
@@ -222,7 +243,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
       console.log("reduce palette");
       const oldCount = Object.keys(reducedPalette).length;
       const usablePalette = Object.keys(reducedPalette).reduce((out,hex) => {
-        out[hex] = util.rgbFromHex(hex);
+        out[hex] = Colors.rgbFromHex(hex);
         return out;
       }, {});
       const measurements = this.gatherMeasurements(usablePalette,usablePalette).filter((m) => m.hexA !== m.hexB).sort(measurementSorter);
@@ -289,7 +310,7 @@ namespace("sp.spritelyHarvester.SpritelyHarvester",{
     }
     loadImage() {
       LoadFile(
-        true,
+        false,
         'dataURL',
         (dataURL, filename) => {
           util.initImageObj(dataURL,(baseImg) => {
