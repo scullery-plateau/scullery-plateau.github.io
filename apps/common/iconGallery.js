@@ -60,7 +60,7 @@ namespace("sp.common.IconGallery",{
           download += "-" + this.state.bgColor;
         }
         download += ".png";
-        const {width, height} = this;
+        const {width, height} = this.state;
         const viewBox = [0, 0, width, height].join(' ');
         const content = [];
         if (this.state.bgColor) {
