@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Font Awesome Gallery</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
+
+    <script src="https://voltron42.github.io/gizmo-atheneum/structure/importnamespace/script.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin ></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script type="text/babel" src="../common/ajax.js"></script>
+    <script type="text/babel" src="../common/colors.js"></script>
+    <script type="text/babel" src="../common/colorPicker.js"></script>
+    <script type="text/babel" src="../common/dialog.js"></script>
+    <script type="text/babel" src="../common/iconGallery.js"></script>
+    <script type="text/babel" src="../common/utilities.js"></script>
+
+    <script type="text/babel">
+      (function () {
+        const { IconGallery } = imports({
+          'sp.common.IconGallery':'IconGallery'
+        });
+        const unusedNamespaces = listUnusedNamespaces();
+        if (unusedNamespaces.length > 0) {
+          console.warn({ unusedNamespaces });
+        }
+        ReactDOM.createRoot(document.getElementById('gallery'))
+          .render(<IconGallery 
+                    bgColor="#00ffff" 
+                    color="#000000" 
+                    favesKey="Scullery-Plateau.Font-Awesome.Favorites" 
+                    fileName="./icons.json"/>);
+      })();
+    </script>
+  </head>
+  <body class="bg-dark text-light">
+    <div id="gallery" class="container"></div>
+    <canvas style="display: none;" id="canvas"></canvas>
+  </body>
+</html>
