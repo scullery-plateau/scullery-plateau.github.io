@@ -225,33 +225,31 @@ namespace("sp.common.IconGallery",{
               { this.buildColorPickerButton("Color","color",{})}
               { this.buildColorPickerButton("Background Color","bgColor", {})}
             </div>
-            <div className="row justify-content-center">
-              { entries.filter(([id, svgPath]) => {
+            <div className="d-flex flex-wrap justify-content-center">
+              { entries.filter(([id]) => {
                 const term = this.state.search || "";
                 if (term.length === 0) {
                   return !this.state.filterByFavorites || this.state.favorites[id];
                 }
                 return id.includes(term) && (!this.state.filterByFavorites || this.state.favorites[id]);
-              }).map(([id,[width, height, svgPath]]) => {
+              }).map(([ id, { width, height, path } ]) => {
                 const { color, bgColor } = this.state;
-                return <div className="col-sm-5 col-md-4 col-lg-3 col-xl-3" key={id}>
-                  <div className="d-flex flex-column border border-dark text-center">
-                    <p style={{width: "6em!important"}}>{id}</p>
-                    <div className="text-center">
-                      <button
-                        className={`btn p-0 ${this.state.favorites[id]?"btn-outline-success border-5":""}`}
-                        onClick={() => this.modals.downloader.open({ id, width, height, svgPath, color, bgColor })}
-                        onDoubleClick={() => this.toggleFavorite(id)}
-                        onContextMenu={(e) => {
-                          e.preventDefault();
-                          this.toggleFavorite(id);
-                        }}>
-                        <svg width="6em" height="6em" viewBox={`0 0 ${width} ${height}`}>
-                          { this.state.bgColor && <rect x="2" y="2" width={width} height={height} fill={bgColor}/> }
-                          <path fill={color} d={svgPath}/>
-                        </svg>
-                      </button>
-                    </div>
+                return <div className="d-flex flex-column border border-light text-center m-2 p-2" key={id}>
+                  <p style={{width: "6em!important"}}>{id}</p>
+                  <div className="text-center">
+                    <button
+                      className={`btn p-0 ${this.state.favorites[id]?"btn-outline-success border-5":""}`}
+                      onClick={() => this.modals.downloader.open({ id, width, height, path, color, bgColor })}
+                      onDoubleClick={() => this.toggleFavorite(id)}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        this.toggleFavorite(id);
+                      }}>
+                      <svg width="6em" height="6em" viewBox={`0 0 ${width} ${height}`}>
+                        { this.state.bgColor && <rect x="2" y="2" width={width} height={height} fill={bgColor}/> }
+                        <path fill={color} d={path}/>
+                      </svg>
+                    </button>
                   </div>
                 </div>;
               })}
