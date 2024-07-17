@@ -19,8 +19,14 @@ namespace('sp.common.PrintJS', () => {
           rel="stylesheet"
           href="https://voltron42.github.io/flair/print/${orientation}.css"
         />
+        <script type="text/javascript">
+          function initPrint(){
+            alert("Use 'Print' menu to 'Save as PDF', then print from Adobe Acrobat Reader with the 'Actual Size' option (instead of 'Fit to page').");
+            print();
+          }
+        </script>
       </head>
-      <body>
+      <body onload="initPrint">
         ${defs}
         ${pages
           .map((page) => {
