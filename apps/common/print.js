@@ -20,13 +20,14 @@ namespace('sp.common.PrintJS', () => {
           href="https://voltron42.github.io/flair/print/${orientation}.css"
         />
         <script type="text/javascript">
-          function initPrint(){
-            alert("Use 'Print' menu to 'Save as PDF', then print from Adobe Acrobat Reader with the 'Actual Size' option (instead of 'Fit to page').");
-            print();
+          function promptPrint() {
+            if(confirm("Use 'Print' menu to 'Save as PDF', then print from Adobe Acrobat Reader with the 'Actual Size' option (instead of 'Fit to page').")){
+              print();
+            }
           }
         </script>
       </head>
-      <body onload="initPrint">
+      <body onload="setTimeout(promptPrint,500)" onclick="promptPrint()" oncontextmenu="promptPrint()">
         ${defs}
         ${pages
           .map((page) => {
