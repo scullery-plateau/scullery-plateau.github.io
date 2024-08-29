@@ -64,6 +64,7 @@ namespace('sp.outfitter.GallerySchematic',{},() => {
         style:{ 
             height: '250px'
         },
+        showLabels: true,
         groups:[ 'Miscellaneous', 'Masters Of The Universe', 'Critical Role: Vox Machina', 'Critical Role: Mighty Nein', 'Critical Role: Bells Hells', 'D&D Animated', 'D&D / Pathfinder' ],
         items
     };

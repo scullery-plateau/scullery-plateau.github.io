@@ -13,26 +13,29 @@
     <script type="text/babel" src="../common/colors.js"></script>
     <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/dialog.js"></script>
+    <script type="text/babel" src="../common/iconGallery.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
-
-    <script type="text/babel" src="./script.js"></script>
 
     <script type="text/babel">
       (function () {
-        const { Gallery } = imports({
-          'sp.game-icons.Gallery':'Gallery'
+        const { IconGallery } = imports({
+          'sp.common.IconGallery':'IconGallery'
         });
         const unusedNamespaces = listUnusedNamespaces();
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('gallery'))
-          .render(<Gallery bgColor="#00ffff" color="#000000"/>);
+          .render(<IconGallery 
+                    bgColor="#00ffff" 
+                    color="#000000" 
+                    favesKey="Scullery-Plateau.Game-Icons.Favorites" 
+                    fileName="./icons2.json"/>);
       })();
     </script>
   </head>
   <body class="bg-dark text-light">
-    <div id="gallery" class="container"></div>
+    <div id="gallery" class="container-fluid"></div>
     <canvas style="display: none;" id="canvas"></canvas>
   </body>
 </html>

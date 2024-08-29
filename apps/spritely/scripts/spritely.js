@@ -215,9 +215,9 @@ namespace('sp.spritely.Spritely',{
           if (error) {
             throw error;
           }
-          const newState = util.merge(this.state);
+          const newState = Utilities.merge(this.state);
           newState.palette = Array.from(newState.palette);
-          newState.pixels = util.merge(pixels);
+          newState.pixels = Utilities.merge(newState.pixels);
           const paletteMap = Array(jsonData.palette.length);
           jsonData.palette.forEach((color,index) => {
             const newIndex = newState.palette.indexOf(color);
