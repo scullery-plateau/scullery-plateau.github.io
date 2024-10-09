@@ -116,19 +116,24 @@ namespace("sp.pagemaster.PageMaster", {
       this.afterRender();
     }
     afterRender() {
-      if (!this.state.game) {
-        Ajax.getLocalStaticFileAsText(`./samples/lasers-and-feelings.json`,
+      if (!this.state.game && !this.state.fileError) {
+        Ajax.getLocalStaticFileAsText(`./samples/magic-and-mischief.json`,
           {
             success: ({ responseText }) => {
               try{
                 this.setState({ game: JSON.parse(responseText) });
               } catch (e) {
                 console.log({ responseText, e });
+                this.setState({ fileError: { responseText, e }})
               }
             },
             failure: (resp) => {
               console.log(resp);
-              throw resp;
+              try {
+                throw resp;
+              } finally {
+                this.setState({ fileError: { resp }})
+              }
             },
             stateChange: (state) => {
               const progress = (100 * (state.state + 1)) / (state.max + 1);

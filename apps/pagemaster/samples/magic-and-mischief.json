@@ -1,0 +1,98 @@
+{
+  "setting": {
+    "groupType": "students", 
+    "groupOrgTitle": "The Young Wizards' School for Arcane Excellence", 
+    "groupOrgLabel": "school", 
+    "groupGeneralPurpose": "You're learning to harness and hone your **Gift**.",
+    "currentTimePlace": "", 
+    "currentSituationProblem": "A **DARK CURSE** has fallen upon the Headmistresss, leaving the staff and faculty in an uproar; classes are still in session, but all the distraction makes a great opportunity for *magic and mischief!*"
+  },
+  "characters": {
+    "nameAdjective": "fun magical mystery",
+    "nameExamples": ["Hieronymus Mumple", "Jessica Starfeather"],
+    "styles": ["Clumsy","Eager","Free-Spirited","Heroic","Gifted","Serious","Shy","Orphaned"],
+    "roles": ["All-Star","Bookworm","Bully","Good-Egg","New Kid","Rascal","Weirdo"],
+    "inventory": [
+      "a school uniform (comfortable, durable, with lots of pockets)",
+      "a magical focus (amulet, ring, want, or some other item; used for casting spells)",
+      "a familiar (a small creature, maybe alive, maybe clockwork, maybe magic; good for sending messages, amongst other things)"
+    ],
+    "inventoryCount": 3, 
+    "goals": ["Become Top Boy/Girl","Create Something New","Break Free From Your Family's Legacy","Honor Your Family's Legacy","Impress Someone You Like","Prove Your Worth","Thwart Evil-doers","Solve Magical Mysteries"],
+    "goalCount": 1
+  },
+  "team": {
+    "inventory": [],
+    "inventoryCount": 0, 
+    "strengths": ["An Extensive Library","Distracted Faculty","Many Secret Passageways and Tunnels","Mostly-Friendly Ghosts","Nearby Village","Well Regarded Mageball Team"],
+    "strengthCount": 3,
+    "flaws": [
+      "**Dark Past** (terrible things once happened here)",
+      "**Dangerous Environs** (the area around the school is home to monsters ... or worse)",
+      "**Far From Home** (secluded and cut-off from most other comforts)",
+      "**Poorly Funded** (low supplies and many things old and worn-out)",
+      "**Unpleasent Rivalries** (student Houses or classes often cause trouble for others)",
+      "**Very Attentive Staff** (always on the lookout for wayward students)"
+    ],
+    "flawCount": 2
+  },
+  "dice": {
+    "high": {
+      "label": "Magic",
+      "description": "(casting spells; intuition; direct passionate action)"
+    },
+    "low": {
+      "label": "Mischief",
+      "description": "(sneakingl negotiating; lying; subtle considered action)"
+    },
+    "exact": {
+      "label": "MAGICAL MISCHIEF",
+      "description": "You get a special insight into what's going on. Ask the storyteller a question and they'll answer you honestl"
+    }
+  },
+  "storyteller": {
+    "table": {
+      "type": "threat",
+      "table1": [
+        "The Nameless One",
+        "A Fickle Godling",
+        "A Disgraced Instructor",
+        "A Rival School",
+        "The Mundanes",
+        "One of Their Parents"
+      ],
+      "table2": [
+        "Destroy / Corrupt",
+        "Steal / Capture",
+        "Possess / Control",
+        "Protect / Empower",
+        "Transform / Alter",
+        "Shame / Discredit"
+      ],
+      "table3": [
+        "Newest Teacher",
+        "Font of Dreams",
+        "Last Talisman",
+        "School Mascot",
+        "Other Realm",
+        "Very School Itself"
+      ],
+      "table4": [
+        "Put an End to Magic",
+        "Change Everything",
+        "Pierce the Veil",
+        "Reveal all Secrets",
+        "Release an Evil",
+        "Bring Peace"
+      ]
+    },
+    "samplePrompts": [
+      "The Clockwork Custodian is clattering closer to your hiding spot. What do you do?",
+      "Professor Greywand is about to read the note you tried to slip to Winona. What do you do?"
+    ],
+    "sampleQuestions": [
+      "Do any of you have experience with Fire Drakes? How? What happened?"
+    ]
+  },
+  "title": "MAGIC & MISCHIEF"
+}
