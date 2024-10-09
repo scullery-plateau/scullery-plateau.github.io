@@ -1,30 +1,33 @@
-# Mad-lad
+# Page-Master
 
-Mad-Lad is a "Mad-Libs"-style wizard app for building hacks/reskins of the One-Page TTRPG "Lasers & Feelings" (created by John Harper under the creative commons license)
+Page-Master is a "Mad-Libs"-style wizard app for building hacks/reskins of the One-Page TTRPG "Lasers & Feelings" (created by John Harper under the creative commons license)
 
-The goal of this app is to allow users to quickly and easily build reskins of the game to any setting, genre, story-type, to both be printable and playable within the Mad-Lad Player and Mad-Lad Storyteller apps.
+The goal of this app is to allow users to quickly and easily build reskins of the game to any setting, genre, story-type, to both be printable and playable within the Page-Master Player and Page-Master Storyteller apps.
 
 Lasers & Feelings already gives the storyteller (GM) a wizard-style structure for initiating a game.
 
 ## The Wizard
 1. Game Setting
    1. group role
-   2. "You are a/an/the (optional ADJECTIVE) group/team/crew/other of The starship Roundabout / The Something-Something detective agency / The School For Future Heroes and Villains / etc"
+   2. "You are a/an/the (optional ADJECTIVE) group/team/crew/other(groupType) of The starship Roundabout / The Something-Something detective agency / The School For Future Heroes and Villains / etc(groupOrgTitle)"
    3. For what general purpose?
    4. What is the current setting (time & place)?
    5. What is the current situation/problem the players are facing?
       * "Your captain/leader/boss has fallen ill / left with only a note / disappeared without a trace / turned evil, leaving you to fend for yourselves / resolve a dark curse / find them / save a missing (someone)"
 2. Characters
-   1. Character Styles
+   1. Character name 
+      1. adjective
+      2. examples
+   2. Character Styles
       1. "List at least 7 character styles"
          * (personality types / traits)
-   2. Character roles
+   3. Character roles
       1. "List at least 7 character roles"
          * (job roles / duties / talents / skills)
-   3. Character inventory
+   4. Character inventory
       1. List starting items to choose from
       2. number of items for each character to choose
-   4. Character goals
+   5. Character goals
       1. List character goals
       2. number of goals for character to choose
 3. Team
@@ -42,10 +45,12 @@ Lasers & Feelings already gives the storyteller (GM) a wizard-style structure fo
        1. high number
          1. label
          2. description
-      1. low number
+       2. low number
          1. label
          2. description
-    2.  What is it called when a player rolls their exact number?
+       3. exact number
+         1. label
+         2. description
 5.  Storyteller
     1.  Threat or Mystery?
         1. "A Threat, (threat name), wants to (action/goal) a/the (target) which will (ultimate doom)"
@@ -69,4 +74,4 @@ Lasers & Feelings already gives the storyteller (GM) a wizard-style structure fo
 * User will be able to navigate between pages even if pages are not completely filled out.
 * The game data will be downloadable as json and reloadable, even if not complete.
 * A form-fit printable will be generated upon request.
-* A completed data file will be usable in both the Mad-Lad Storyteller and Mad-Lad Player app. An incompleted data file will be rejected.
+* A completed data file will be usable in both the Page-Master Storyteller and Page-Master Player app. An incompleted data file will be rejected.

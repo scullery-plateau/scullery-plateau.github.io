@@ -1,0 +1,97 @@
+{
+  "setting": {
+    "groupType": "crew", 
+    "groupAdjective": "intrepid",
+    "groupOrgTitle": "the Interstellar Scout Ship Raptor", 
+    "groupOrgLabel": "ship", 
+    "groupGeneralPurpose": "Your mission is to explore uncharted regions of space, deal with aliens both friendly and deadly, and defend the Consortium worlds against space dangers.",
+    "currentTimePlace": "", 
+    "currentSituationProblem": "**CAPTAIN DARCY** has been overcome by the strange psychic entity known as Something Else, leaving you to fend for yourselves while he recovers in a medical pod."
+  },
+  "characters": {
+    "nameAdjective": "cool space adventure",
+    "nameExamples": ["Sparks McGee"],
+    "styles": ["Alien","Android","Dangerous","Hot-Shot","Intrepid","Savvy","Sexy"],
+    "roles": ["Doctor","Envoy","Engineer","Explorer","Pilot","Scientist","Soldier"],
+    "inventory": [
+      "a Consortium uniform (with built-in vacc-suit for space walks)",
+      "a super-sweet space-phone-camera-communicator-scanner thing (with universal translator)",
+      "a variable-beem phase pistol (set to stun, usually)"
+    ],
+    "inventoryCount": 3, 
+    "goals": ["Become Captain","Meet Sexy Aliens","Shoot Bad Guys","Find New Worlds","Solve Weird Space Mysteries","Prove Yourself","Keep Being Awesome"],
+    "goalCount": 1
+  },
+  "team": {
+    "inventory": [],
+    "inventoryCount": 0, 
+    "strengths": ["Fast","Nimble","Well-armed","Powerful Shields","Superior Sensors","Cloaking Device","Fightercraft"],
+    "strengthCount": 2,
+    "flaws": [
+      "**Fuel Hog** (always needs energy crystals)",
+      "**Only One Medical Pod** (and Captain Darcy is in it)",
+      "**Horrible Circuit Breakers** (in battle, consoles tend to explode on the bridge)",
+      "**Grim Reputation** (Captain Darcy did some bad stuff in the past)"
+    ],
+    "flawCount": 1
+  },
+  "dice": {
+    "high": {
+      "label": "LASERS",
+      "description": "(technology; science; cold rationality; calm, precise action)"
+    },
+    "low": {
+      "label": "FEELINGS",
+      "description": "(intuition; diplomacy; seduction; wild, passionate action)"
+    },
+    "exact": {
+      "label": "LASER FEELING",
+      "description": "You get a special insight into what's going on. Ask the storyteller a question and they'll answer you honestl"
+    }
+  },
+  "storyteller": {
+    "table": {
+      "type": "threat",
+      "table1": [
+        "Zorgon the Conqueror",
+        "The Hive Armada",
+        "Rogue Captain",
+        "Space Pirates",
+        "Cyber Zombies",
+        "Alien Brain Worms"
+      ],
+      "table2": [
+        "Destroy / Corrupt",
+        "Steal / Capture",
+        "Bond with",
+        "Protect / Empower",
+        "Build / Synthesize",
+        "Pacify / Occupy"
+      ],
+      "table3": [
+        "Space Pirate King/Queen",
+        "Void Crystals",
+        "Star Dreadnaught",
+        "Quantum Tunnel",
+        "Ancient Space Ruin",
+        "Alien Artifact"
+      ],
+      "table4": [
+        "Destroy a solar system",
+        "Reverse Time",
+        "Enslave a planet",
+        "Start a war / invasion",
+        "Rip a hole in reality",
+        "Fix Everything"
+      ]
+    },
+    "samplePrompts": [
+      "Zorgon charges the mega-cannons on his ship. What do you do?",
+      "Daneela pours you a glass of Arcturan whiskey and slips her arm around your waist. What do you do?"
+    ],
+    "sampleQuestions": [
+      "Have you encountered a Void Cultist before? Where? What happened?"
+    ]
+  },
+  "title": "LASERS & FEELINGS"
+}

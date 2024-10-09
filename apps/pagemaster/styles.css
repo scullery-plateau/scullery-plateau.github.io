@@ -1,0 +1,33 @@
+th[colspan="2"] {
+  text-align: center;
+}
+
+p i {
+  width: 1em;
+  text-align: center;
+  font-size: 1.75em;
+  margin-right: 0.25em;
+  margin-top: 0.25em;
+  float: left;
+}
+
+h2 {
+  text-align: center;
+}
+
+th {
+  border-bottom: 1px solid white;
+}
+
+td.even {
+  border: 1px solid white;
+}
+
+td {
+  padding-left: 0.5em;
+}
+
+div.col-4.even {
+  border-left: 1px solid white;
+  border-right: 1px solid white;
+}
