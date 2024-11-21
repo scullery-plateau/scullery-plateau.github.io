@@ -16,13 +16,10 @@ namespace('sp.outfitter.Composite',{
         result[field].push(args[field]);
         return result;
       }, out);
-    }, Object.keys(accFields).reduce((out,field) => {
-      out[field] = [];
-      return out;
-    }, {}));
+    }, Object.keys(accFields).reduce((out,field) => Object.defineProperty(out, field, []), {}));
     Object.entries(accFields).forEach(([field,accFn]) => {
       acc[field] = accFn(acc[field]);
-    })
+    });
     return acc;
   }
   const filterLayers = function(metadata, record) {

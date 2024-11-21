@@ -33,9 +33,7 @@ namespace("sp.overlander.Tile",{
       } else {
         updates[field] = value;
       }
-      Object.entries(updates).forEach(([k,v]) => {
-        baseData[k] = v;
-      });
+      Object.assign(baseData, updates);
     }
     this.copy = function() {
       const copied = new Tile(filename, imageURL, baseImage);

@@ -248,9 +248,7 @@ namespace('sp.outfitter.Outfitter', {
       if (typeof field === 'string') {
         updates[field] = newValue;
       } else if (typeof field === 'object') {
-        Object.entries(field).forEach(([k,v]) => {
-          updates[k] = v;
-        });
+        Object.assign(updates, field);
       }
       const { schematic } = util.merge(this.state);
       schematic.layers = schematic.layers.map((l) => util.merge(l));

@@ -71,10 +71,7 @@
           console.warn({ unusedNamespaces });
         }
         ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <YogaProto urlParams={(new URL(location)).searchParams.entries().reduce((retVal, [ key, value ]) => {
-            retVal[key] = value;
-            return retVal;
-          }, {})}/>
+          <YogaProto urlParams={Object.assign({}, (new URL(location)).searchParams.entries())}/>
         );
         ReactDOM.createRoot(document.getElementById('footer')).render(
           <Footer />

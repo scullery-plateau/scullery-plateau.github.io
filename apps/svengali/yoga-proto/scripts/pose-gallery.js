@@ -72,10 +72,7 @@ namespace("sp.yoga-proto.PoseGallery",{
       const width = this.state.imgDim.width - (this.state.sideMargin * 2);
       const boxWidth = width / this.state.maxCellCount;
       const rowHeight = height / this.state.rowCount;
-      const lefts = this.state.rows.reduce((outVal, { count }) => {
-        outVal[count] = true;
-        return outVal;
-      }, {});
+      const lefts = this.state.rows.reduce((outVal, { count }) => Object.defineProperty(outVal, count, true), {});
       Object.keys(lefts).forEach((count) => {
         lefts[count] = Array(parseInt(count)).fill("").map((_, index) => {
           const halfSpan = width / (count * 2);  

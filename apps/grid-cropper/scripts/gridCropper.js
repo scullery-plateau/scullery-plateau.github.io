@@ -121,7 +121,7 @@ namespace("sp.grid-cropper.GridCropper", {
               gridColumns,
               gridRows,
             });
-            Object.entries(frameCalcs[updates.viewMode](updates)).forEach(([k,v]) => { updates[k] = v; });
+            Object.assign(updates, frameCalcs[updates.viewMode](updates));
             this.setState(updates);
           });
         },
@@ -135,10 +135,10 @@ namespace("sp.grid-cropper.GridCropper", {
       const updates = util.merge(this.state, util.assoc({},field,value));
       const gridCalc = gridCalcs[field];
       if (gridCalc) {
-        Object.entries(gridCalc(updates)).forEach(([k,v]) => { updates[k] = v; });
+        Object.assign(updates, gridCalc(updates));
       }
       if (field != "squareSizeInterval") {
-        Object.entries(frameCalcs[updates.viewMode](updates)).forEach(([k,v]) => { updates[k] = v; });
+        Object.assign(updates, frameCalcs[updates.viewMode](updates));
       }
       this.setState(updates);
     }

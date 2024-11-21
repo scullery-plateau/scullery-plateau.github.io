@@ -54,8 +54,8 @@ namespace('sp.outfitter.Constants', () => {
     }, {});
     const partLabels = Object.values(partTypes).reduce((out,v) => {
       return v.reduce((acc,{ part, label })=>{
-        out[part] = label;
-        return out;
+        acc[part] = label;
+        return acc;
       },out);
     }, {});
     const getPartGroups = function() {

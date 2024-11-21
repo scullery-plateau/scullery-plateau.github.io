@@ -34,13 +34,7 @@ namespace("sp.tokenizer.TokenFrame",{
       });
     }
     updateState(update) {
-      const token = Object.entries(this.state).reduce((out,[k, v]) => {
-        out[k] = v;
-        return out;
-      }, {});
-      Object.entries(update).forEach(([k,v]) => {
-        token[k] = v;
-      });
+      const token = Object.assign(Object.assign({}, this.state), update);
       token.canvasURL = TokenCanvas.drawCanvasURL(this.canvasId, this.baseImg, token);
       this.setState(token);
     }

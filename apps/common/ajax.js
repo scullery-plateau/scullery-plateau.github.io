@@ -19,10 +19,7 @@ namespace("sp.common.Ajax",{},() => {
         success: callbacks,
       };
     }
-    callbacks = Object.entries(callbacks).reduce((out, [k, v]) => {
-      out[k] = v;
-      return out;
-    }, defaultCallbacks);
+    callbacks = Object.assign(Object.assign({}, defaultCallbacks), callbacks)
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
       if (this.readyState === 4) {

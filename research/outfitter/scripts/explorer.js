@@ -198,14 +198,8 @@ namespace('sp.outfitter.Explorer', {
     ignoreSelected() {
       const assetName = this.state.schematic.assetName;
       const partCount = util.merge(this.state.schematic.partCount);
-      const grouped = Object.entries(this.state.schematic.grouped).reduce((out,[k,v]) => {
-        out[k] = Array.from(v);
-        return out;
-      },{});
-      const ignored = Object.entries(this.state.selected).reduce((out,[k, v]) => {
-        out[k] = v;
-        return out;
-      },this.state.schematic.ignored);
+      const grouped = util.mapTransform(this.state.schematic.grouped, v => Array.from(v));
+      const ignored = Object.assign(Object.assign({}, this.state.schematic.ignored), this.state.selected);
       this.setState({ selected: {}, schematic: { assetName, ignored, partCount, grouped } });
     }
 

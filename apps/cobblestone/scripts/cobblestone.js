@@ -78,10 +78,7 @@ namespace('sp.cobblestone.Cobblestone',{
           componentClass: TileEditor,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({filename,tiles}) => {
-            const copiedTiles = Object.entries(this.state.tiles).reduce((out,[k,v]) => {
-              out[k] = util.merge(v);
-              return out;
-            }, {});
+            const copiedTiles = util.mapTransform(this.state.tiles, v => Object.assign({}, v));
             copiedTiles[filename] = util.merge(tiles);
             this.setState({ tiles: copiedTiles });
           }
