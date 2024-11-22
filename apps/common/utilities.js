@@ -11,8 +11,11 @@ namespace('sp.common.Utilities', {
       return Object.assign(acc, map);
     }, {});
   };
+  const assoc = function (map, key, value) {
+    return merge(map, Object.fromEntries([[key, value]]))
+  }
   const mapTransform = function(obj, valueFunc) {
-    return Object.entries(obj).reduce((out, [k, v]) => Object.defineProperty(out, k, valueFunc(v)), {});
+    return Object.entries(obj).reduce((out, [k, v]) => assoc(out, k, valueFunc(v)), {});
   }
   const selectKeys = function (obj, keys) {
     return Array.from(keys).reduce((acc, key) => {
@@ -22,9 +25,6 @@ namespace('sp.common.Utilities', {
   }
   const copyObj = function (obj) {
     return selectKeys(obj, Object.keys(obj));
-  }
-  const assoc = function (map, key, value) {
-    return Object.defineProperty(Object.assign({}, map), key, value);
   }
   const dissoc = function(map, keys) {
     return selectKeys(map, Object.keys(map).filter(key => keys.indexOf(key) < 0));
@@ -108,7 +108,7 @@ namespace('sp.common.Utilities', {
     document.body.removeChild(link);
   };
   const buildImmutable = function (obj) {
-    return Object.entries(obj).reduce((out, [k, v]) => Object.defineProperty(out, k, () => v), {});
+    return Object.entries(obj).reduce((out, [k, v]) => assoc(out, k, () => v), {});
   }
   const calcTrimBounds = function (
     trimToImage,

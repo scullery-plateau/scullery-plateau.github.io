@@ -1,6 +1,7 @@
 namespace('sp.outfitter.Composite',{
-  'sp.outfitter.LayerSVG':'LayerSVG'
-},({ LayerSVG }) => {
+  'sp.outfitter.LayerSVG':'LayerSVG',
+  'sp.common.Utilities': "util"
+},({ LayerSVG, util }) => {
   const accFields = {
     minX:(arr) => Math.min.apply(null,arr),
     minY:(arr) => Math.min.apply(null,arr),
@@ -16,7 +17,7 @@ namespace('sp.outfitter.Composite',{
         result[field].push(args[field]);
         return result;
       }, out);
-    }, Object.keys(accFields).reduce((out,field) => Object.defineProperty(out, field, []), {}));
+    }, Object.keys(accFields).reduce((out,field) => util.assoc(out, field, []), {}));
     Object.entries(accFields).forEach(([field,accFn]) => {
       acc[field] = accFn(acc[field]);
     });
