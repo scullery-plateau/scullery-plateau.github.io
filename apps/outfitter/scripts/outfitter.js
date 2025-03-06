@@ -97,9 +97,11 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
+          var [ width, height ] = Dataset.calcFrameFromScreen(0.25, 0.75);
+          var { viewBox, content } = this.state.metadata.drawSVG(this.state.schematic)
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
-            svgData: this.state.metadata.drawSVG(this.state.schematic)
+            svgData: { viewBox, content, width, height }
           });
         }
       },{
