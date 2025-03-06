@@ -1,5 +1,6 @@
 namespace('sp.outfitter.Outfitter', {
-  'sp.common.Ajax':'Ajax',
+  'gizmo-atheneum.namespaces.paper-doll.Dataset': 'Dataset',
+  'gizmo-atheneum.namespaces.Ajax':'Ajax',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -9,13 +10,12 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.LinkShare':'LinkShare',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
-  'sp.common.QueryParams':'QueryParams',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Dataset, Ajax, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const buttonScale = 1/3;
   const latestVersion = "0.0.1";
