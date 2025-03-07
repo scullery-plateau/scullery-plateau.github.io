@@ -1,5 +1,6 @@
 namespace('sp.outfitter.Outfitter', {
   'gizmo-atheneum.namespaces.paper-doll.Dataset': 'Dataset',
+  'gizmo-atheneum.namespaces.react.PaperDoll': 'PaperDoll',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -13,7 +14,7 @@ namespace('sp.outfitter.Outfitter', {
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Dataset, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, Shareable }) => {
+}, ({ Dataset, PaperDoll, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, Shareable }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const buttonScale = 1/3;
   const latestVersion = "0.0.1";
