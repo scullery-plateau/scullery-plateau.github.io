@@ -370,7 +370,7 @@ namespace('sp.outfitter.Outfitter', {
                       <label htmlFor="part-type" className="input-group-text">Part Type:</label>
                       <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
                         const part = e.target.value;
-                        const maxIndex = this.state.metadata.parts[part].length - 1;
+                        const maxIndex = this.state.metadata.getPart(part).length - 1;
                         const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
                         this.updateLayer({ part, index });
                       }}>
@@ -395,10 +395,10 @@ namespace('sp.outfitter.Outfitter', {
                         type="number"
                         className="form-control"
                         min={0}
-                        max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
+                        max={ this.state.metadata.getPart(this.fromSelectedLayer('part')).length - 1 }
                         value={ this.fromSelectedLayer('index') }
                         onChange={(e) => {
-                          this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value || 0))))
+                          this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.getPart(this.fromSelectedLayer('part')).length - 1,parseInt(e.target.value || 0))))
                         }}/>
                     </div>
                   </div>
@@ -430,7 +430,7 @@ namespace('sp.outfitter.Outfitter', {
                           type="range"
                           className="form-range mx-1"
                           min={-1}
-                          max={ this.state.metadata.patternCount }
+                          max={ this.state.metadata.getPatternCount() }
                           step={1}
                           style={{width: "5em"}}
                           value={ this.fromSelectedLayer('pattern',-1) }
@@ -444,7 +444,7 @@ namespace('sp.outfitter.Outfitter', {
                           type="range"
                           className="form-range mx-1"
                           min={-1}
-                          max={ this.state.metadata.shadingCount }
+                          max={ this.state.metadata.getShadingCount() }
                           step={1}
                           style={{width: "5em"}}
                           value={ this.fromSelectedLayer('shading',-1) }
@@ -529,7 +529,7 @@ namespace('sp.outfitter.Outfitter', {
                         type="range"
                         className="form-range my-0 mx-1"
                         min={-1}
-                        max={ this.state.metadata.patternCount }
+                        max={ this.state.metadata.getPatternCount() }
                         step={1}
                         style={{ width: "5em"}}
                         value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
