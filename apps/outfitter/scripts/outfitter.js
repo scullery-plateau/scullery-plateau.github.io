@@ -99,11 +99,9 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          var [ width, height ] = Dataset.calcFrameFromScreen(percentOfScreenWidth, percentOfScreenHeight);
-          var { viewBox, content } = this.state.metadata.drawSVG(this.state.schematic)
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
-            svgData: { viewBox, content, width, height }
+            svgData: this.state.metadata.drawSVG(this.state.schematic)
           });
         }
       },{
@@ -336,7 +334,6 @@ namespace('sp.outfitter.Outfitter', {
         const ColorPickerButton = (({label, field, getter, style}) => {
           return this.buildColorPickerButton(label, field, getter, style);
         })
-        var [ paperDollFrameWidth, paperDollFrameHeight ] = Dataset.calcFrameFromScreen(percentOfScreenWidth, percentOfScreenHeight);        
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="row justify-content-center">
@@ -548,8 +545,6 @@ namespace('sp.outfitter.Outfitter', {
                 <PaperDoll 
                   dataset={ this.state.metadata } 
                   schematic={ this.state.schematic }
-                  width={paperDollFrameWidth}
-                  height={paperDollFrameHeight}
                   getLayerLabel={(index,layer) => c.getLayerLabel(index,layer)}
                   callback={(layerIndex) => {
                     this.setState({ selectedLayer: layerIndex });
