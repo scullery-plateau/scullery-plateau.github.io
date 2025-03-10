@@ -19,6 +19,7 @@ namespace('sp.outfitter.Outfitter', {
   const buttonScale = 1/3;
   const latestVersion = "0.0.1";
   const defaultVersion = "0.0.1";
+  const [ percentOfScreenWidth, percentOfScreenHeight ] = [ 0.25, 0.75 ];
   const validateLoadFileJson = function(data) {}
   const about = [];
   const getDefaultSchematic = function(bodyType) {
@@ -98,7 +99,7 @@ namespace('sp.outfitter.Outfitter', {
         id: 'downloadImage',
         label: 'Download Image',
         callback: () => {
-          var [ width, height ] = Dataset.calcFrameFromScreen(0.25, 0.75);
+          var [ width, height ] = Dataset.calcFrameFromScreen(percentOfScreenWidth, percentOfScreenHeight);
           var { viewBox, content } = this.state.metadata.drawSVG(this.state.schematic)
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
@@ -335,6 +336,7 @@ namespace('sp.outfitter.Outfitter', {
         const ColorPickerButton = (({label, field, getter, style}) => {
           return this.buildColorPickerButton(label, field, getter, style);
         })
+        var [ paperDollFrameWidth, paperDollFrameHeight ] = Dataset.calcFrameFromScreen(percentOfScreenWidth, percentOfScreenHeight);        
         return <>
           <Header menuItems={this.menuItems} appTitle={'Outfitter'} />
           <div className="row justify-content-center">
@@ -492,7 +494,7 @@ namespace('sp.outfitter.Outfitter', {
                   </div>
                   <div className="d-flex justify-content-around my-0 align-items-center">
                     <div className="d-flex justify-content-around align-items-center w-50">
-                      <span class="mx-1">Rotate ( {this.fromSelectedLayer('rotate',0)} )</span>
+                      <span className="mx-1">Rotate ( {this.fromSelectedLayer('rotate',0)} )</span>
                       <button title="Rotate Left" className="btn btn-secondary mx-1" onClick={(e) => {
                         const value = this.fromSelectedLayer('rotate',0);
                         if (value > 0) {
@@ -545,8 +547,11 @@ namespace('sp.outfitter.Outfitter', {
               <div className="rpg-box m-1">
                 <PaperDoll 
                   dataset={ this.state.metadata } 
-                  schematic={ this.state.schematic } 
-                  selectLayer={(layerIndex) => {
+                  schematic={ this.state.schematic }
+                  width={paperDollFrameWidth}
+                  height={paperDollFrameHeight}
+                  getLayerLabel={(index,layer) => c.getLayerLabel(index,layer)}
+                  callback={(layerIndex) => {
                     this.setState({ selectedLayer: layerIndex });
                   }}/>
               </div>
