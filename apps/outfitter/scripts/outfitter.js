@@ -1,5 +1,6 @@
 namespace('sp.outfitter.Outfitter', {
-  'sp.common.Ajax':'Ajax',
+  'gizmo-atheneum.namespaces.paper-doll.Dataset': 'Dataset',
+  'gizmo-atheneum.namespaces.react.PaperDoll': 'PaperDoll',
   'sp.common.ColorPicker':'ColorPicker',
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
@@ -9,17 +10,16 @@ namespace('sp.outfitter.Outfitter', {
   'sp.common.LinkShare':'LinkShare',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
-  'sp.common.QueryParams':'QueryParams',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
-  'sp.outfitter.OutfitterSVG':'OutfitterSVG',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Ajax, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, QueryParams, util, c, ImageDownload, OutfitterSVG, Shareable }) => {
+}, ({ Dataset, PaperDoll, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, Shareable }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const buttonScale = 1/3;
   const latestVersion = "0.0.1";
   const defaultVersion = "0.0.1";
+  const [ percentOfScreenWidth, percentOfScreenHeight ] = [ 0.25, 0.75 ];
   const validateLoadFileJson = function(data) {}
   const about = [];
   const getDefaultSchematic = function(bodyType) {
@@ -101,7 +101,7 @@ namespace('sp.outfitter.Outfitter', {
         callback: () => {
           this.modals.imageDownload.open({
             defaultFilename: "outfitter",
-            svgData: OutfitterSVG.buildSVG(this.state.schematic,this.state.metadata)
+            svgData: this.state.metadata.drawSVG(this.state.schematic)
           });
         }
       },{
@@ -125,28 +125,16 @@ namespace('sp.outfitter.Outfitter', {
       } else {
         this.setState({schematic, progress: 1, selectedLayer: 0});
       }
-      Ajax.getLocalStaticFileAsText(`https://scullery-plateau.github.io/apps/outfitter/datasets/${bodyType}.${schematic.version}.json`,
-        {
-          success: ({ responseText }) => {
-            try{
-              const metadata = JSON.parse(responseText);
-              metadata.patternCount = Object.keys(metadata.patterns).length;
-              metadata.shadingCount = Object.keys(metadata.shadings).length;
-              EditMode.enable();
-              this.setState({ metadata, progress: undefined, selectedLayer: 0});
-            } catch (e) {
-              console.log({ responseText, e });
-            }
-          },
-          failure: (resp) => {
-            console.log(resp);
-            throw resp;
-          },
-          stateChange: (state) => {
-            const progress = (100 * (state.state + 1)) / (state.max + 1);
-            this.setState({progress})
-          }
-        });
+      Dataset.load(bodyType, schematic.version, percentOfScreenWidth, percentOfScreenHeight, (dataset) => {
+        EditMode.enable();
+        this.setState({ metadata: dataset, progress: undefined, selectedLayer: 0});
+      }, (resp) => {
+        console.log(resp);
+        throw resp;
+      }, (state) => {
+        const progress = (100 * (state.state + 1)) / (state.max + 1);
+        this.setState({progress})
+      });
     }
     loadNew(bodyType){
       this.loadMeta(bodyType,getDefaultSchematic(bodyType));
@@ -381,7 +369,7 @@ namespace('sp.outfitter.Outfitter', {
                       <label htmlFor="part-type" className="input-group-text">Part Type:</label>
                       <select className="p-2 form-control" id="part-type" value={ this.fromSelectedLayer('part') } onChange={(e) => {
                         const part = e.target.value;
-                        const maxIndex = this.state.metadata.parts[part].length - 1;
+                        const maxIndex = this.state.metadata.getPart(part).length - 1;
                         const index = Math.min(this.fromSelectedLayer('index'),maxIndex);
                         this.updateLayer({ part, index });
                       }}>
@@ -406,10 +394,10 @@ namespace('sp.outfitter.Outfitter', {
                         type="number"
                         className="form-control"
                         min={0}
-                        max={ this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1 }
+                        max={ this.state.metadata.getPart(this.fromSelectedLayer('part')).length - 1 }
                         value={ this.fromSelectedLayer('index') }
                         onChange={(e) => {
-                          this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.parts[this.fromSelectedLayer('part')].length - 1,parseInt(e.target.value || 0))))
+                          this.updateLayer('index', Math.max(0,Math.min(this.state.metadata.getPart(this.fromSelectedLayer('part')).length - 1,parseInt(e.target.value || 0))))
                         }}/>
                     </div>
                   </div>
@@ -441,7 +429,7 @@ namespace('sp.outfitter.Outfitter', {
                           type="range"
                           className="form-range mx-1"
                           min={-1}
-                          max={ this.state.metadata.patternCount }
+                          max={ this.state.metadata.getPatternCount() }
                           step={1}
                           style={{width: "5em"}}
                           value={ this.fromSelectedLayer('pattern',-1) }
@@ -455,7 +443,7 @@ namespace('sp.outfitter.Outfitter', {
                           type="range"
                           className="form-range mx-1"
                           min={-1}
-                          max={ this.state.metadata.shadingCount }
+                          max={ this.state.metadata.getShadingCount() }
                           step={1}
                           style={{width: "5em"}}
                           value={ this.fromSelectedLayer('shading',-1) }
@@ -503,7 +491,7 @@ namespace('sp.outfitter.Outfitter', {
                   </div>
                   <div className="d-flex justify-content-around my-0 align-items-center">
                     <div className="d-flex justify-content-around align-items-center w-50">
-                      <span class="mx-1">Rotate ( {this.fromSelectedLayer('rotate',0)} )</span>
+                      <span className="mx-1">Rotate ( {this.fromSelectedLayer('rotate',0)} )</span>
                       <button title="Rotate Left" className="btn btn-secondary mx-1" onClick={(e) => {
                         const value = this.fromSelectedLayer('rotate',0);
                         if (value > 0) {
@@ -524,7 +512,7 @@ namespace('sp.outfitter.Outfitter', {
                                 onChange={(e) => this.updateSchematic('bodyScale',e.target.value) }>
                           <option>default</option>
                           {
-                            OutfitterSVG.getBodyScales().map((bodyScale, index) => {
+                            Dataset.getBodyScales().map((bodyScale, index) => {
                               return <option key={`bodyScale-${index}`} value={bodyScale}>{bodyScale}</option>;
                             })
                           }
@@ -540,7 +528,7 @@ namespace('sp.outfitter.Outfitter', {
                         type="range"
                         className="form-range my-0 mx-1"
                         min={-1}
-                        max={ this.state.metadata.patternCount }
+                        max={ this.state.metadata.getPatternCount() }
                         step={1}
                         style={{ width: "5em"}}
                         value={ isNaN(this.state.schematic.bgPattern)?-1:this.state.schematic.bgPattern }
@@ -554,9 +542,13 @@ namespace('sp.outfitter.Outfitter', {
             </div>
             <div className="col-5 h-100 d-flex justify-content-center">
               <div className="rpg-box m-1">
-                <OutfitterSVG schematic={ this.state.schematic } meta={ this.state.metadata } selectLayer={(layerIndex) => {
-                  this.setState({ selectedLayer: layerIndex });
-                }}/>
+                <PaperDoll 
+                  dataset={ this.state.metadata } 
+                  schematic={ this.state.schematic }
+                  getLayerLabel={(index,layer) => c.getLayerLabel(index,layer)}
+                  callback={(layerIndex) => {
+                    this.setState({ selectedLayer: layerIndex });
+                  }}/>
               </div>
             </div>
           </div>
