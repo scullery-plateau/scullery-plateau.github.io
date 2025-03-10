@@ -125,7 +125,7 @@ namespace('sp.outfitter.Outfitter', {
       } else {
         this.setState({schematic, progress: 1, selectedLayer: 0});
       }
-      Dataset.load(bodyType, schematic.version, (dataset) => {
+      Dataset.load(bodyType, schematic.version, percentOfScreenWidth, percentOfScreenHeight, (dataset) => {
         EditMode.enable();
         this.setState({ metadata: dataset, progress: undefined, selectedLayer: 0});
       }, (resp) => {
