@@ -17,8 +17,6 @@ namespace('sp.outfitter.Outfitter', {
 }, ({ Dataset, PaperDoll, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, Shareable }) => {
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const buttonScale = 1/3;
-  const latestVersion = "0.0.1";
-  const defaultVersion = "0.0.1";
   const [ percentOfScreenWidth, percentOfScreenHeight ] = [ 0.25, 0.75 ];
   const validateLoadFileJson = function(data) {}
   const about = [];
@@ -26,7 +24,7 @@ namespace('sp.outfitter.Outfitter', {
     return {
       bodyType,
       bgColor: '#cccccc',
-      version: latestVersion,
+      version: Dataset.getLatestVersion(),
       layers: [
         { part: 'torso', index: 0, shading: 0 },
         { part: 'legs', index: 0, shading: 0 },
@@ -155,7 +153,7 @@ namespace('sp.outfitter.Outfitter', {
           } catch (e) {
             console.log(e)
           }
-          schematic.version = schematic.version || defaultVersion;
+          schematic.version = schematic.version || Dataset.getDefaultVersion();
           this.loadMeta(schematic.bodyType,schematic);
         },
         (fileName, error) => {
