@@ -1,28 +1,24 @@
 namespace('sp.svengali.Svengali',{
     'sp.common.LoadFile':'LoadFile',
     'sp.common.Dialog':'Dialog',
-    'sp.common.Header':'Header'
-},() => {
-    const sizeUnits = "mm";
-    const cardSize = { min: 64, max: 89 };
-    const pageSize = { min: 216, max: 279 };
-    const buildTemplateFn = function(columns, markdown) {
-        return eval("({" + columns.join(",") + "}) => marked.parse(`" + markdown + "`)");
-    }
+    'sp.common.Header':'Header',
+    'sp.svengali.CardDisplay':'CardDisplay'
+},({ LoadFile, Dialog, Header, CardDisplay }) => {
     return class extends React.Component {
         constructor(props){
             super(props);
-            this.state = {};
+            this.state = {
+              activeTab: 'Layout',
+              layers: [],
+              data: [],
+              schema: []
+            };
         }
-        loadDatafile() {
-
+        setActiveTab(tabName) {
+          this.setState({ activeTab: tabName });
         }
-        buildSpecField(label, fieldName, opts){
-            return util.buildNumberInputGroup(fieldName, label, opts, () => {
-                return this.state.spec[fieldName];
-            }, (value) => {
-                this.updateSpec(fieldName,parseFloat(value));
-            });
+        isTabActive(tabName) {
+          return this.state.activeTab == tabName;
         }
         buildColorPickerButton(label, fieldName) {
             return <button 
@@ -35,74 +31,41 @@ namespace('sp.svengali.Svengali',{
                 >{label}</button>
         }
         render() {
-            return <>
-                { !this.state.datatable &&
-                  <div className="d-flex justify-content-center">
-                      <button
-                        className="btn btn-success"
-                        onClick={() => {
-                            this.loadDatafile();
-                        }}>Load Data File</button>
-                  </div> }
-                { this.state.datatable &&
-                  <div className="rpg-box text-light m-1 d-flex justify-content-center">
-                    <div className="d-flex flex-column">
-                        <div className="d-flex">
-                            <select>
-                                { this.state.layers.map((layer,index) => {
-                                    return <option value={index}>{this.layerLabel(layer)}</option>
-                                }) }
-                            </select>
-                        </div>
-                        <div className="d-flex">
-                            <select>
-                                <option value="text">Text</option>
-                                <option value="image">Image</option>
-                            </select>
-                        </div>
-                        <div className="d-flex">
-                            <textarea></textarea>
-                        </div>
-                        <div className="d-flex">
-                            <select>
-                                { Object.keys(this.state.columns).map((column) => {
-                                    return <option value={column}>{column}</option>;
-                                }) }
-                            </select>
-                        </div>
-                        <div className="d-flex">
-                            { this.buildSpecField("X","x",{}) }
-                            { this.buildSpecField("Y","y",{}) }
-                        </div>
-                        <div className="d-flex">
-                            { this.buildSpecField("Width","width",{}) }
-                            { this.buildSpecField("Height","height",{}) }
-                        </div>
-                        <div className="d-flex">
-                            { this.buildSpecField("RX","rx",{}) }
-                            { this.buildSpecField("RY","ry",{}) }
-                        </div>
-                        <div className="d-flex">
-                            { this.buildColorPickerButton("Fill","fill") }
-                            { this.buildColorPickerButton("Line","line") }
-                        </div>
-                        <div className="d-flex">
-                            { this.buildSpecField("Line Width","strokeWidth",{}) }
-                        </div>
-                    </div>
-                    <div className="d-flex flex-column">
-                        <div className="d-flex">
-                            <select>
-                                { this.state.datatable.map((row) => {
-                                    return <option value={row[this.state.rowLabel]}>{row[this.state.rowLabel]}</option>
-                                }) }
-                            </select>
-                        </div>
-                        <div className="d-flex">
-                        </div>
-                      </div>
-                  </div> }
-            </>;
+            return <div>
+              <ul className="nav nav-tabs">
+                <li className="nav-item">
+                  <a className={`nav-link${this.isTabActive('Layout')?'active':''}`} href="#" onClick={() => this.setActiveTab('Layout')}>Layout</a>
+                </li>
+                <li className="nav-item">
+                  <a className={`nav-link${this.isTabActive('Data')?'active':''}`} href="#" onClick={() => this.setActiveTab('Data')}>Data</a>
+                </li>
+                <li className="nav-item">
+                  <a className={`nav-link${this.isTabActive('Schema')?'active':''}`} href="#" onClick={() => this.setActiveTab('Schema')}>Schema</a>
+                </li>
+              </ul>
+              <div className="tab-content">
+                { this.isTabActive('Layout') && <div className="row">
+                  <div className="col-5">
+                  </div>
+                  <div className="col-5">
+                    <CardDisplay layers="this.state.layers" data="this.state.data"/>
+                  </div>
+                </div> }
+                { this.isTabActive('Data') && <div className="row">
+                  <div className="col-5">
+                  </div>
+                  <div className="col-5">
+                    <CardDisplay layers="this.state.layers" data="this.state.data"/>
+                  </div>
+                </div> }
+                { this.isTabActive('Schema') && <div className="row">
+                  <div className="col-5">
+                  </div>
+                  <div className="col-5">
+                  </div>
+                </div> }
+              </div>
+            </div>;
         }
     }
 });
