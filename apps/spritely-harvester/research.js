@@ -10,15 +10,19 @@
       context.drawImage(image, 0, 0);
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
       const pixels = imageData.data;
+      const newPixels = "?".repeat(canvas.height).split("").map(_ => "?".repeat(canvas.width).split("").map(_ => {
+        return {};
+      }));
 
       for (let i = 0; i < pixels.length; i += 4) {
+        const pixelIndex = Math.floor(i/4);
+        const col = pixelIndex % canvas.width;
+        const row = Math.floor(pixelIndex/canvas.width);
         const red = pixels[i];
         const green = pixels[i + 1];
         const blue = pixels[i + 2];
-        const alpha = pixels[i + 3];
+        
 
-        // Process the pixel color data (e.g., log it, modify it, etc.)
-        console.log(`Pixel ${i / 4}: RGBA(${red}, ${green}, ${blue}, ${alpha})`);
       }
     };
   };
