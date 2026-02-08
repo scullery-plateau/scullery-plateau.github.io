@@ -1,0 +1,8 @@
+.thumbnail .frame {
+    width: 6em;
+    height: 6em;
+    border: 1px solid black;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
