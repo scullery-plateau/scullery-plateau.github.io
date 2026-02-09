@@ -44,24 +44,25 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <!-- project namespaces -->
-    <script type="text/babel" src="../common/colorPicker.js"></script>
     <script type="text/babel" src="../common/colors.js"></script>
-    <script type="text/babel" src="../common/dialog.js"></script>
     <script type="text/babel" src="../common/fileDownload.js"></script>
     <script type="text/babel" src="../common/fileLoader.js"></script>
     <script type="text/babel" src="../common/footer.js"></script>
+    <script type="text/babel" src="../common/gridUtil.js"></script>
     <script type="text/babel" src="../common/header.js"></script>
     <script type="text/babel" src="../common/menu.js"></script>
-    <script type="text/babel" src="../common/point.js"></script>
     <script type="text/babel" src="../common/utilities.js"></script>
 
     <!-- local namespaces -->
+    <script type="text/babel" src="./scripts/constants.js"></script>
+    <script type="text/babel" src="./scripts/harvester-utils.js"></script>
+    <script type="text/babel" src="./scripts/spritely-display.js"></script>
     <script type="text/babel" src="./scripts/spritely-harvester.js"></script>
 
     <!-- bind app root -->
     <script type="text/babel">
       (function () {
-        const { Svengali, Footer } = imports({
+        const { SpritelyHarvester, Footer } = imports({
           'sp.spritely-harvester.SpritelyHarvester': 'SpritelyHarvester',
           'sp.common.Footer': 'Footer',
         });

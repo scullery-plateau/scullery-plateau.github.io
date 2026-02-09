@@ -1,19 +1,24 @@
 namespace("sp.spritely-harvester.HarvesterUtils", {
-  "sp.common.CanvasUtils": "CanvasUtils",
   "sp.common.Colors": "Colors",
   "sp.common.GridUtilities": "Grid",
-  "sp.common.Utilities": "utils",
-}, ({ CanvasUtils, Colors, Grid, utils }) => {
-  const dims = [ 16, 32, 48 ]
+}, ({ Colors, Grid }) => {
+  const dims = [ 16, 32, 48 ];
   const drawImage = function(ctx, image, rows, columns) {
     const { width, height } = image;
     const offset = { y: 0, x: 0 };
+    const dim = {
+      width: columns,
+      height: rows
+    }
     if ((width/height) < (columns/rows)) {
-      offset.x = Math.floor((columns - (width*rows/height))/2);
+      dim.width = (width*rows/height);
+      offset.x = Math.floor((columns - dim.width)/2);
+
     } else if((width/height) > (columns/rows)) {
-      offset.y = Math.floor((rows - (columns*height/width))/2);
+      dim.height = (columns*height/width)
+      offset.y = Math.floor((rows - dim.height)/2);
     } 
-    ctx.drawImage(image, 0, 0, width, height, offset.x, offset.y, columns, rows);
+    ctx.drawImage(image, 0, 0, width, height, offset.x, offset.y, dim.width, dim.height);
   }
   const getImageData = function(canvas, ctx) {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -21,16 +26,19 @@ namespace("sp.spritely-harvester.HarvesterUtils", {
     const newPixels = {};
     const newPalette = {};
     for (let i = 0; i < pixels.length; i += 4) {
-      const pixelIndex = Math.floor(i/4);
-      const col = pixelIndex % canvas.width;
-      const row = Math.floor(pixelIndex/canvas.width);
-      const red = pixels[i];
-      const green = pixels[i + 1];
-      const blue = pixels[i + 2];
-      const hex = Colors.hexFromRgb(red, green, blue);
-      const coord = Grid.getCoordinateId(col, row);
-      newPixels[coord] = hex;
-      newPalette[hex] = (newPalette[hex] || []).concat([coord]);
+      const alpha = pixels[i + 3];
+      if (alpha > 0) {
+        const red = pixels[i];
+        const green = pixels[i + 1];
+        const blue = pixels[i + 2];
+        const hex = Colors.hexFromRGB(red, green, blue);
+        const pixelIndex = Math.floor(i/4);
+        const col = pixelIndex % canvas.width;
+        const row = Math.floor(pixelIndex/canvas.width);
+        const coord = Grid.getCoordinateId(col, row);
+        newPixels[coord] = hex;
+        newPalette[hex] = (newPalette[hex] || []).concat([coord]);
+      }
     }
     const colorsByCount = Object.entries(newPalette).map(([hex,coords]) => { 
       return { hex, count: coords.length }; 
@@ -42,14 +50,14 @@ namespace("sp.spritely-harvester.HarvesterUtils", {
     });
     return { pixels: newPixels, palette };
   }
-  const pixelizeImage = function(imageUrl, size, rows, columns, callback) {
+  const pixelizeImage = function(imageUrl, size, callback) {
     const image = new Image();
     image.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = columns;
-      canvas.height = rows;
+      canvas.width = size;
+      canvas.height = size;
       const context = canvas.getContext('2d');
-      drawImage(ctx, image, rows, columns);
+      drawImage(context, image, size, size);
       const spec = getImageData(canvas, context);
       spec.size = size;
       const dataURL = canvas.toDataURL();
@@ -57,47 +65,58 @@ namespace("sp.spritely-harvester.HarvesterUtils", {
     }
     image.src = imageUrl;
   }
-  const condensePalette = function(paletteWithCounts) {
-    palette = Object.keys(paletteWithCounts);
-    palette.sort();
-    const distances = {};
-    for (let i = 0; i < palette.length; i++) {
-      for (let j = i + 1; j < palette.length; j++) {
-        const rgbI = Colors.rgbFromHex(palette[i]);
-        const rgbJ = Colors.rgbFromHex(palette[j]);
-        distances[`${palette[i]}x${palette[j]}`] = ["red", "green", "blue"].reduce((sum, color) => sum + Math.pow(rgbI[color] - rgbJ[color], 2), 0);
-      }
-    }
-    const distanceValues = Object.values(distances);
-    distanceValues.sort();
-    const shortest = distanceValues[0];
-    const nearestColors = Object.entries(distances).filter(([_,distance]) => distance == shortest).reduce((acc,[pair]) => {
-      var [i, j] = pair.split("x");
-      acc[i] = (acc[i] || []).concat([pair.replace(acc[i],"").replace("x", "")]);
-      acc[j] = (acc[j] || []).concat([pair.replace(acc[j],"").replace("x", "")]);
+  const colorDistance = (rgbI,rgbJ) => ["red", "green", "blue"].reduce((sum, color) => sum + Math.pow(rgbI[color] - rgbJ[color], 2), 0);
+  const colorDistanceAvg = (rgbI,rgbJ) => ["red", "green", "blue"].reduce((sum, color) => sum + (rgbI[color] - rgbJ[color]), 0)/3;
+  const initCondense = function({ palette, pixels, size }, toPalette) {
+    const paletteWithCounts = Object.values(pixels).reduce((acc, pixel) => {
+      const hex = palette[pixel];
+      acc[hex] = (acc[hex] || 0) + 1;
       return acc;
     }, {});
-    const pairCounts = Object.values(nearestColors).map((pairs) => pairs.length);
-    pairCounts.sort();
-    const highestCount = pairCounts[pairCounts.length - 1];
-    const inverseMap = Object.entries(nearestColors).filter(([_, adjacentColors]) => adjacentColors.length == highestCount).reduce((acc, [color, adjacentColors]) => {
-      return adjacentColors.reduce((outval, adjacentColor) => {
-        outval[adjacentColor] = (outval[adjacentColor] || {});
-        outval[adjacentColor][color] = paletteWithCounts[color];
-        return outval;
-      }, acc);
+    const { mapping, newPaletteSet } = palette.reduce(({ mapping, newPaletteSet }, oldColor) => {
+      const oldRGB = Colors.rgbFromHex(oldColor);
+      const { toColor } = toPalette.reduce(({ toColor, average, distance }, newColor) => {
+        const newRGB = Colors.rgbFromHex(newColor);
+        const newDistance = colorDistance(oldRGB, newRGB);
+        const newAverage = colorDistanceAvg(oldRGB, newRGB)
+        if (isNaN(distance) || distance > newDistance || (distance == newDistance && average > newAverage)) {
+          return {
+            toColor: newColor,
+            average: newAverage,
+            distance: newDistance
+          }
+        } else {
+          return { toColor, average, distance };
+        }
+      }, {});
+      mapping[oldColor] = toColor;
+      newPaletteSet[toColor] = true;
+      return { mapping, newPaletteSet };
+    }, { mapping: {}, newPaletteSet: {} });
+    const newPalette = Object.keys(newPaletteSet);
+    const sortedOld = Array.from(palette);
+    sortedOld.sort();
+    const sortedNew = Array.from(newPalette);
+    sortedNew.sort();
+    if (sortedOld.join() == sortedNew.join()) {
+      throw "No change";
+    }
+    const indexMapping = newPalette.map((color,i) => [color,i]).reduce((acc, [color, i]) => {
+      acc[color] = i;
+      return acc;
     }, {});
-    return Object.entries(inverseMap).reduce((acc, [adjacentColor, targetMap]) => {
-      const targetColors = Object.keys(targetMap);
-      if (targetColors.length == 1) {
-        return targetColors[0];
-      } else {
-        const pixelCounts = Object.values(targetMap);
-        pixelCounts.sort();
-        const maxCount = pixelCounts[pixelCounts.length - 1];
-        return Object.entries(targetMap).filter(([_, pixelCount]) => pixelCount == pixelCounts).map(([targetColor]) => targetColor)[0];
-      }
+    const newPixels = Object.entries(pixels).reduce((acc, [coord, oldIndex]) => {
+      const oldColor = palette[oldIndex];
+      const newColor = mapping[oldColor];
+      const newIndex = indexMapping[newColor];
+      acc[coord] = newIndex;
+      return acc;
     }, {});
-  };
-  return { pixelizeImage };
+    return {
+      pixels: newPixels,
+      palette: newPalette,
+      size
+    };
+  }
+  return { pixelizeImage, initCondense };
 });

@@ -205,8 +205,23 @@ namespace('sp.common.Colors', () => {
         .join('')
     );
   };
+  const getPaletteColors = function(ranks) {
+    return ranks.reduce((outR, red) => {
+      return ranks.reduce((outRG, green) => {
+        return ranks.reduce((outRGB, blue) => {
+          return outRGB.concat([`#${red}${red}${green}${green}${blue}${blue}`]);
+        }, outRG);
+      }, outR);
+    }, []);
+  }
+  const get216PaletteColors = function() {
+    return getPaletteColors([ "0", "3", "6", "9", "C", "F" ]);
+  }
+  const get64PaletteColors = function() {
+    return getPaletteColors([ "0", "5", "A", "F"]);
+  }
   return { 
     getColorNames, getColorByName, getNameForColor, getAllNamedColors,
-    rgbFromHex, getForegroundColor, hexFromRGB
+    rgbFromHex, getForegroundColor, hexFromRGB, get216PaletteColors, get64PaletteColors
   };
 });

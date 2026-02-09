@@ -1,31 +1,40 @@
 namespace("sp.spritely-harvester.SpritelyHarvester", {
+  "sp.common.Colors": "Colors",
   'sp.common.Utilities':'util',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.Header': 'Header',
   'sp.spritely-harvester.HarvesterUtils': "HarvesterUtils",
   'sp.spritely-harvester.SpritelyDisplay': "SpritelyDisplay",
-}, ({ util, LoadFile, Header, HarvesterUtils, SpritelyDisplay }) => {
+}, ({ Colors, util, LoadFile, Header, HarvesterUtils, SpritelyDisplay }) => {
   const sizes = [16,32,48];
   const Thumbnail = function(props) {
-    <div className="thumbnail rpg-box d-flex flex-column">
+    return <div className="thumbnail rpg-box d-flex flex-column">
       <span className="align-self-center">{props.label}</span>
       <div
         className="frame align-self-center"
         style={{ backgroundImage: `url(${props.dataURL})` }}
       ></div>
-    </div>
+    </div>;
   }
   const Refinement = function(props) {
-    <div className="thumbnail rpg-box d-flex flex-column">
-      <span className="align-self-center">Refinement {props.index}</span>
-      <SpritelyDisplay spec={props.spec}></SpritelyDisplay>
-    </div>
+    return <div className="thumbnail rpg-box d-flex flex-column">
+      <span className="align-self-center">{props.spec.palette.length} Colors</span>
+      <div className="frame align-self-center">
+        <a href="#" onClick={(e) => {
+          e.preventDefault();
+          const downloadName = `${props.filename}__${props.spec.size}__${props.spec.palette.length}`
+          util.triggerJSONDownload(downloadName, "", props.spec);
+        }}>
+          <SpritelyDisplay spec={props.spec}></SpritelyDisplay>
+        </a>
+      </div>
+    </div>;
   }
   return class extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        size: 16
+        size: 16,
       };
       this.menuItems = [];
     }
@@ -34,9 +43,7 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
         false,
         'dataURL',
         (dataURL, filename) => {
-          util.initImageObj(dataURL,(baseImg) => {
-            this.setState({ original: { dataURL, baseImg }, filename:filename.split(".")[0] });
-          });
+          this.updateDim({ original: { dataURL }, filename:filename.split(".")[0] });
         },
         (filename, error) => {
           console.log({filename, error});
@@ -47,17 +54,16 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
     updateDim(updates) {
       updates = util.merge(this.state, updates);
       const me = this;
-      HarvesterUtils.pixelizeImage(updates.original.dataURL, updates.size, updates.rows, updates.columns, ({ dataURL, spec }) => {
+      HarvesterUtils.pixelizeImage(updates.original.dataURL, updates.size, ({ dataURL, spec }) => {
         updates.initial = ( updates.initial ||{} );
         updates.initial.dataURL = dataURL;
         updates.refinements = [ spec ];
+        updates.refinements.push(HarvesterUtils.initCondense(spec, Colors.get216PaletteColors()));
         me.setState(updates);
       });
     }
-    refinePalette() {
-      // todo
-    }
     render() {
+      console.log({ state: this.state });
       return <>
         <Header menuItems={this.menuItems} appTitle={'Spritely Harvester'} />
         { this.state.original ? <>
@@ -65,31 +71,16 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
           <div className="d-flex flex-column justify-content-center">
             <div className="d-flex justify-content-center">
               <div className="">
-                <label for="coreDim" className="form-label">Select Dimentions from Spritely Defaults:</label>
-                <select id="coreDim" className="form-select" onChange={(e) => {
-                  const size = e.target.value;
-                  this.updateDim({ size, rows: size, columns: size });
+                <label htmlFor="coreDim" className="form-label">Select Dimentions from Spritely Defaults:</label>
+                <select id="coreDim" className="form-select" value={this.state.size} onChange={(e) => {
+                  const size = parseInt(e.target.value);
+                  this.updateDim({ size });
                 }}>
-                  { sizes.map(size => <option value={size} selected={ size == this.state.size }>{size}</option> )}
+                  { sizes.map(size => <option value={size}>{size}</option> )}
                 </select>
               </div>
             </div>
-            <div className="d-flex justify-content-center">
-              <div className="">
-                <label for="rows" className="form-label">Rows</label>
-                <input type="number" id="rows" class="form-control" value={this.state.rows || 0} onChange={(e) => this.updateDim({ rows: e.target.value })}/>
-              </div>
-              <div className="">
-                <label for="columns" class="form-label">Columns</label>
-                <input type="number" id="columns" class="form-control"  value={this.state.columns || 0} onChange={(e) => this.updateDim({ columns: e.target.value })}/>
-              </div>
-            </div>
-            <div className="d-flex justify-content-center">
-              <div className="">
-                <button className="btn btn-primary" onClick={() => this.refinePalette()}>Refine Palette</button>
-              </div>
-            </div>
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-3 mb-3">
               <div className="col-3">
                 <Thumbnail label="Original" dataURL={this.state.original.dataURL}></Thumbnail>
               </div>
@@ -97,14 +88,14 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
                 <Thumbnail label="Initial" dataURL={this.state.initial.dataURL}></Thumbnail>
               </div>}
               { (this.state.refinements || []).map((spec, i) => <div className="col-3">
-                <Refinement spec={spec} index={i}></Refinement>
+                <Refinement spec={spec} index={i} filename={this.state.filename}></Refinement>
               </div>)}
             </div>
           </div>
-        </> : <>
+        </> : <div className="text-center mt-5 mb-5">
           <p>Click the button below to choose an image to convert to a Spritely pixel file.</p>
           <button className="btn btn-success text-center" onClick={() => this.loadImage()}>Load Image</button>
-        </>}
+        </div>}
       </>;
     }
   }
