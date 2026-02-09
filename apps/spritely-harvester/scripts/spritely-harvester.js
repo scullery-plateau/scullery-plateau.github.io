@@ -58,7 +58,12 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
         updates.initial = ( updates.initial ||{} );
         updates.initial.dataURL = dataURL;
         updates.refinements = [ spec ];
-        updates.refinements.push(HarvesterUtils.initCondense(spec, Colors.get216PaletteColors()));
+        try {
+          updates.refinements.push(HarvesterUtils.initCondense(spec, Colors.get216PaletteColors()));
+        } catch(error) {
+          console.log({ error });
+          // cannot condense, not adding condensed image
+        }
         me.setState(updates);
       });
     }

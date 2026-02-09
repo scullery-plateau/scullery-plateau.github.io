@@ -239,7 +239,7 @@ namespace("sp.common.IconGallery",{
                   <div className="text-center">
                     <button
                       className={`btn p-0 ${this.state.favorites[id]?"btn-outline-success border-5":""}`}
-                      onClick={() => this.modals.downloader.open({ id, width, height, path, color, bgColor })}
+                      onClick={() => this.modals.downloader.open({ id, width, height, svgPath: path, color, bgColor })}
                       onDoubleClick={() => this.toggleFavorite(id)}
                       onContextMenu={(e) => {
                         e.preventDefault();
