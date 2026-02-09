@@ -5,34 +5,58 @@ namespace("sp.spritely-harvester.HarvesterUtils", {
   "sp.common.Utilities": "utils",
 }, ({ CanvasUtils, Colors, Grid, utils }) => {
   const dims = [ 16, 32, 48 ]
-  const shrinkImage = function(imageUrl, dimSize, callback) {
+  const drawImage = function(ctx, image, rows, columns) {
+    const { width, height } = image;
+    const offset = { y: 0, x: 0 };
+    if ((width/height) < (columns/rows)) {
+      offset.x = Math.floor((columns - (width*rows/height))/2);
+    } else if((width/height) > (columns/rows)) {
+      offset.y = Math.floor((rows - (columns*height/width))/2);
+    } 
+    ctx.drawImage(image, 0, 0, width, height, offset.x, offset.y, columns, rows);
+  }
+  const getImageData = function(canvas, ctx) {
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const pixels = imageData.data;
+    const newPixels = {};
+    const newPalette = {};
+    for (let i = 0; i < pixels.length; i += 4) {
+      const pixelIndex = Math.floor(i/4);
+      const col = pixelIndex % canvas.width;
+      const row = Math.floor(pixelIndex/canvas.width);
+      const red = pixels[i];
+      const green = pixels[i + 1];
+      const blue = pixels[i + 2];
+      const hex = Colors.hexFromRgb(red, green, blue);
+      const coord = Grid.getCoordinateId(col, row);
+      newPixels[coord] = hex;
+      newPalette[hex] = (newPalette[hex] || []).concat([coord]);
+    }
+    const colorsByCount = Object.entries(newPalette).map(([hex,coords]) => { 
+      return { hex, count: coords.length }; 
+    });
+    colorsByCount.sort((a,b) => b.count - a.count);
+    const palette = colorsByCount.map(({ hex }) => hex);
+    Object.keys(newPixels).forEach((coord) => {
+      newPixels[coord] = palette.indexOf(newPixels[coord]);
+    });
+    return { pixels: newPixels, palette };
+  }
+  const pixelizeImage = function(imageUrl, size, rows, columns, callback) {
     const image = new Image();
     image.onload = () => {
       const canvas = document.createElement('canvas');
-      canvas.width = dimSize;
-      canvas.height = dimSize;
+      canvas.width = columns;
+      canvas.height = rows;
       const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0);
-      const imageData = context.getImageData(0, 0, dimSize, dimSize);
-      const pixels = imageData.data;
-      const newPixels = {};
-      const newPalette = {};
-      for (let i = 0; i < pixels.length; i += 4) {
-        const pixelIndex = Math.floor(i/4);
-        const col = pixelIndex % canvas.width;
-        const row = Math.floor(pixelIndex/canvas.width);
-        const red = pixels[i];
-        const green = pixels[i + 1];
-        const blue = pixels[i + 2];
-        const hex = Colors.hexFromRgb(red, green, blue);
-        const coord = Grid.getCoordinateId(col, row);
-        newPixels[coord] = hex;
-        newPalette[hex] = (newPalette[hex] || []).concat([coord]);
-      }
-      callback({ newPixels, newPalette });
-    };
-    image.src = imageSrc;
-  };
+      drawImage(ctx, image, rows, columns);
+      const spec = getImageData(canvas, context);
+      spec.size = size;
+      const dataURL = canvas.toDataURL();
+      callback({ dataURL, spec });
+    }
+    image.src = imageUrl;
+  }
   const condensePalette = function(paletteWithCounts) {
     palette = Object.keys(paletteWithCounts);
     palette.sort();
@@ -75,36 +99,5 @@ namespace("sp.spritely-harvester.HarvesterUtils", {
       }
     }, {});
   };
-  const extractPixelsFromCanvas = function(imageSrc, callback) {
-    const image = new Image();
-    image.src = imageSrc;
-    image.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const context = canvas.getContext('2d');
-      context.drawImage(image, 0, 0);
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const pixels = imageData.data;
-      const newPixels = "?".repeat(canvas.height).split("").map(_ => "?".repeat(canvas.width).split("").map(_ => {
-        return {};
-      }));
-      const newPalette = {};
-
-      for (let i = 0; i < pixels.length; i += 4) {
-        const pixelIndex = Math.floor(i/4);
-        const col = pixelIndex % canvas.width;
-        const row = Math.floor(pixelIndex/canvas.width);
-        const red = pixels[i];
-        const green = pixels[i + 1];
-        const blue = pixels[i + 2];
-        const hex = Colors.hexFromRgb(red, green, blue);
-        const coord = Grid.getCoordinateId(col, row);
-        newPixels[row][col] = hex;
-        newPalette[hex] = (newPalette[hex] || []).concat([coord]);
-      }
-      callback(newPixels, newPalette);
-    };
-  };
-  return { extractPixelsFromCanvas };
+  return { pixelizeImage };
 });

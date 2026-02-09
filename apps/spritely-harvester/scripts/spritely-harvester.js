@@ -1,8 +1,11 @@
 namespace("sp.spritely-harvester.SpritelyHarvester", {
   'sp.common.Utilities':'util',
   'sp.common.LoadFile':'LoadFile',
-  'sp.common.Header': 'Header'
-}, ({}) => {
+  'sp.common.Header': 'Header',
+  'sp.spritely-harvester.HarvesterUtils': "HarvesterUtils",
+  'sp.spritely-harvester.SpritelyDisplay': "SpritelyDisplay",
+}, ({ util, LoadFile, Header, HarvesterUtils, SpritelyDisplay }) => {
+  const sizes = [16,32,48];
   const Thumbnail = function(props) {
     <div className="thumbnail rpg-box d-flex flex-column">
       <span className="align-self-center">{props.label}</span>
@@ -12,10 +15,18 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
       ></div>
     </div>
   }
+  const Refinement = function(props) {
+    <div className="thumbnail rpg-box d-flex flex-column">
+      <span className="align-self-center">Refinement {props.index}</span>
+      <SpritelyDisplay spec={props.spec}></SpritelyDisplay>
+    </div>
+  }
   return class extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {};
+      this.state = {
+        size: 16
+      };
       this.menuItems = [];
     }
     loadImage() {
@@ -34,7 +45,14 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
       );
     }
     updateDim(updates) {
-      // todo
+      updates = util.merge(this.state, updates);
+      const me = this;
+      HarvesterUtils.pixelizeImage(updates.original.dataURL, updates.size, updates.rows, updates.columns, ({ dataURL, spec }) => {
+        updates.initial = ( updates.initial ||{} );
+        updates.initial.dataURL = dataURL;
+        updates.refinements = [ spec ];
+        me.setState(updates);
+      });
     }
     refinePalette() {
       // todo
@@ -49,12 +67,10 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
               <div className="">
                 <label for="coreDim" className="form-label">Select Dimentions from Spritely Defaults:</label>
                 <select id="coreDim" className="form-select" onChange={(e) => {
-                  const dim = e.target.value;
-                  this.updateDim({ rows: dim, columns: dim });
+                  const size = e.target.value;
+                  this.updateDim({ size, rows: size, columns: size });
                 }}>
-                  <option value="16">16</option>
-                  <option value="32">32</option>
-                  <option value="48">48</option>
+                  { sizes.map(size => <option value={size} selected={ size == this.state.size }>{size}</option> )}
                 </select>
               </div>
             </div>
@@ -80,8 +96,8 @@ namespace("sp.spritely-harvester.SpritelyHarvester", {
               { this.state.initial && <div className="col-3">
                 <Thumbnail label="Initial" dataURL={this.state.initial.dataURL}></Thumbnail>
               </div>}
-              { (this.state.refinements || []).map((refinement, i) => <div className="col-3">
-                <Thumbnail label={`Refinement ${i + 1}`} dataURL={refinement.dataURL}></Thumbnail>
+              { (this.state.refinements || []).map((spec, i) => <div className="col-3">
+                <Refinement spec={spec} index={i}></Refinement>
               </div>)}
             </div>
           </div>
