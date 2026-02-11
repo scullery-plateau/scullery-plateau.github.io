@@ -362,23 +362,31 @@ namespace('sp.spritely.Spritely',{
               </div>
             </div>
             <div className="col-7 h-100">
-              <div className="rpg-title-box m-3" title="click to paint a pixel">
+              <div className="rpg-title-box m-3">
                 <svg width="100%" height="100%" preserveAspectRatio="xMidYMin meet"
                      viewBox={`0 0 ${this.state.size * Constants.pixelDim()} ${this.state.size * Constants.pixelDim()}`}>
                   { Utilities.range(this.state.size).map((y) => {
                     return Utilities.range(this.state.size).map((x) => {
                       const pixelId = SpritelyUtil.getPixelId(x, y);
                       const pixel = this.state.pixels[pixelId];
+                      const color = this.state.palette[pixel];
                       const altColor = this.state.isTransparent?Constants.clearedPixelId():Constants.bgColorPixelId();
                       const colorId = isNaN(pixel)?`#${altColor}`:`#${SpritelyUtil.getPaletteId(pixel)}`;
                       return (
                         <a
                           key={pixelId}
                           href="#"
+                          title={`${isNaN(pixel)?"C":`Color: ${ color }; c`}lick to paint pixel, right click to select color in palette`}
                           onClick={(e) => {
                             console.log({ fn: "onClick", e });
                             e.preventDefault();
                             this.togglePixelColor(pixelId);
+                          }}
+                          onContextMenu={(e) => {
+                            e.preventDefault();
+                            if (!isNaN(pixel)) {
+                              this.setState({ selectedPaletteIndex: pixel });
+                            }
                           }}>
                           <use
                             id={pixelId}

@@ -34,9 +34,9 @@ namespace("sp.tokenizer.TokenCanvas",{
     c.height = dimObj.height;
 
     // img math
-    const imgDim = Math.max(img.width,img.height);
+    const imgDim = Math.max(img.width, img.height);
     const imgScale = token.scale * dim / imgDim;
-    const [iw, ih] = [img.width,img.height].map((d) => (d * imgScale));
+    const [iw, ih] = [img.width, img.height].map((d) => (d * imgScale));
     const [icx, icy] = [iw, ih].map((d) => (d / 2));
     const [ix, iy] = [dimObj.cx + token.xOffset - icx, dimObj.cy + token.yOffset - icy]
 
