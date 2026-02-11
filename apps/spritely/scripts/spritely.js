@@ -77,6 +77,7 @@ namespace('sp.spritely.Spritely',{
         selectedPaletteIndex: -1,
         isTransparent: true,
         bgColor: Constants.defaultColor(),
+        paletteGroupMode: false,
       };
       this.modals = Dialog.factory({
         imageDownload: {
@@ -268,6 +269,22 @@ namespace('sp.spritely.Spritely',{
         this.setState({ pixels });
       }
     }
+    deleteSelectedPaletteColor(index, palette, oldPixels) {
+      palette.splice(index, 1);
+      const pixels = Object.entries(oldPixels).reduce((out,[k,v]) => {
+        if (v < index) {
+          out[k] = v;
+        } else if (v > index) {
+          out[k] = v - 1;
+        }
+        return out;
+      }, {});
+      const selectedPaletteIndex = Math.min(
+        index,
+        palette.length - 1
+      );
+      return { palette, pixels, selectedPaletteIndex }
+    }
     render() {
       return (
         <>
@@ -307,34 +324,81 @@ namespace('sp.spritely.Spritely',{
                 </button>
               </div>
               <div className="d-flex flex-column rpg-box m-3">
-                <div className="d-flex justify-content-around">
-                  <button className="btn btn-success m-1 w-100" title="Add Color"
+                { this.state.paletteGroupMode?<>
+                  <div className="d-flex justify-content-around">
+                    <button className="btn btn-secondary m-1 w-100" title="Switch Back to Paint Mode"
+                        onClick={() => {
+                          this.setState({ paletteGroupMode: false, paletteGroup: undefined });
+                        }}>Back to Paint Mode</button>
+                  </div>
+                  <div className="d-flex justify-content-around">
+                    <button className="btn btn-secondary m-1 w-100" title="Condense Selected Colors"
+                        onClick={() => {
+                          const palette = Array.from(this.state.palette);
+                          const pixels = Utilities.merge(this.state.pixels);
+                          const paletteGroup = Utilities.merge(this.state.paletteGroup);
+                          const selectedPixels = Object.keys(paletteGroup).map(i => parseInt(i.toString()));
+                          selectedPixels.sort();
+                          selectedPixels.reverse();
+                          const selectedColors = selectedPixels.map(i => palette[i]);
+                          
+                          // 1. calculate average of selected colors
+                          const sumRGB = selectedColors.reduce((rgbSum,hex) => {
+                            const rgb = Colors.rgbFromHex(hex);
+                            ['red','green','blue'].forEach(color => {
+                              rgbSum[color] += rgb[color];
+                            })
+                            return rgbSum;
+                          },{red:0,green:0,blue:0});
+                          const avgRGB = {};
+                          ['red','green','blue'].forEach(color => {
+                            avgRGB[color] = Math.round(sumRGB[color]/selectedColors.length);
+                          });
+                          const newColor = Colors.hexFromRGB(avgRGB.red, avgRGB.green, avgRGB.blue);
+                          const newColorIndex = selectedPixels.pop();
+
+                          // 3. replace first color with average
+                          palette[newColorIndex] = newColor;
+                          
+                          // 4. reassign remaining group colors to first color
+                          delete paletteGroup[newColorIndex];
+                          Object.entries(pixels).forEach(([coord, index]) => {
+                            if (paletteGroup[index]) {
+                              pixels[coord] = newColorIndex;
+                            }
+                          });
+
+                          // 5. remove remaining colors from palette
+                          // 6. rework pixels
+                          const updates = selectedPixels.reduce(({ palette, pixels }, index) => this.deleteSelectedPaletteColor(index, palette, pixels), { palette, pixels });
+                          updates.paletteGroup = {};
+                          delete updates.selectedPaletteIndex;
+                          this.setState(updates);
+                        }}>Condense Selected Colors</button>
+                  </div>
+                </>:<>
+                  <div className="d-flex justify-content-around">
+                    <button className="btn btn-success m-1 w-100" title="Add Color"
+                        onClick={() => {
+                          const selectedPaletteIndex = this.state.palette.length;
+                          const palette = [].concat(this.state.palette, [
+                            Constants.defaultColor(),
+                          ]);
+                          this.setState({ palette, selectedPaletteIndex });
+                        }}>+</button>
+                    <button className="btn btn-danger m-1 w-100" title="Remove Color"
                       onClick={() => {
-                        const selectedPaletteIndex = this.state.palette.length;
-                        const palette = [].concat(this.state.palette, [
-                          Constants.defaultColor(),
-                        ]);
-                        this.setState({ palette, selectedPaletteIndex });
-                      }}>+</button>
-                  <button className="btn btn-danger m-1 w-100" title="Remove Color"
-                    onClick={() => {
-                      const palette = Array.from(this.state.palette);
-                      palette.splice(this.state.selectedPaletteIndex, 1);
-                      const pixels = Object.entries(this.state.pixels).reduce((out,[k,v]) => {
-                        if (v < this.state.selectedPaletteIndex) {
-                          out[k] = v;
-                        } else if (v > this.state.selectedPaletteIndex) {
-                          out[k] = v - 1;
-                        }
-                        return out;
-                      }, {});
-                      const selectedPaletteIndex = Math.min(
-                        this.state.selectedPaletteIndex,
-                        palette.length - 1
-                      );
-                      this.setState({ palette, selectedPaletteIndex, pixels });
-                    }}>-</button>
-                </div>
+                        const palette = Array.from(this.state.palette);
+                        this.setState(this.deleteSelectedPaletteColor(this.state.selectedPaletteIndex, palette, this.state.pixels));
+                      }}>-</button>
+                  </div>
+                  <div className="d-flex justify-content-around">
+                    <button className="btn btn-primary m-1 w-100" title="Group Colors to Condense"
+                        onClick={() => {
+                          this.setState({ paletteGroupMode: true, paletteGroup: {} });
+                        }}>Group Colors to Condense</button>
+                  </div>
+                </>}
                 <div className="w-100 d-flex flex-wrap justify-content-center">
                   {this.state.palette.map((color, index) => {
                     const id = SpritelyUtil.getPaletteButtonId(index);
@@ -342,22 +406,38 @@ namespace('sp.spritely.Spritely',{
                       <button
                         key={id}
                         id={id}
-                        className={`palette-color rounded-pill m-1 ${index === this.state.selectedPaletteIndex?' selected-color':''}`}
-                        title={`Color: ${ color }; click to select, double click or right click to change this color`}
+                        className={`palette-color rounded-pill m-1 ${(this.state.paletteGroupMode?this.state.paletteGroup[index]:(index === this.state.selectedPaletteIndex))?' selected-color':''}`}
+                        title={this.state.paletteGroupMode?'':`Color: ${ color }; click to select, double click or right click to change this color`}
                         style={{ color, backgroundColor: color }}
-                        onClick={() => { this.setState({ selectedPaletteIndex: index }) }}
+                        onClick={() => { 
+                          if (this.state.paletteGroupMode) {
+                            const paletteGroup = Utilities.merge(this.state.paletteGroup);
+                            if (paletteGroup[index]) {
+                              delete paletteGroup[index];
+                            } else {
+                              paletteGroup[index] = true;
+                            }
+                            this.setState({ paletteGroup });
+                          } else {
+                            this.setState({ selectedPaletteIndex: index }) 
+                          }
+                        }}
                         onDoubleClick={() => {
-                          this.modals.colorPicker.open({
-                            index,
-                            color: this.state.palette[index],
-                          });
+                          if (!this.state.paletteGroupMode) {
+                            this.modals.colorPicker.open({
+                              index,
+                              color: this.state.palette[index],
+                            });
+                          }
                         }}
                         onContextMenu={(e) => {
                           e.preventDefault();
-                          this.modals.colorPicker.open({
-                            index,
-                            color: this.state.palette[index],
-                          });
+                          if (!this.state.paletteGroupMode) {
+                            this.modals.colorPicker.open({
+                              index,
+                              color: this.state.palette[index],
+                            });
+                          }
                         }}
                       >---</button>
                     );
@@ -380,15 +460,17 @@ namespace('sp.spritely.Spritely',{
                         <a
                           key={pixelId}
                           href="#"
-                          title={`${isNaN(pixel)?"C":`Color: ${ color }; c`}lick to paint pixel, right click to select color in palette`}
+                          title={this.state.paletteGroupMode?'':`${isNaN(pixel)?"C":`Color: ${ color }; c`}lick to paint pixel$, right click to select color in palette`}
                           onClick={(e) => {
                             console.log({ fn: "onClick", e });
                             e.preventDefault();
-                            this.togglePixelColor(pixelId);
+                            if (!this.state.paletteGroupMode) {
+                              this.togglePixelColor(pixelId);
+                            }
                           }}
                           onContextMenu={(e) => {
                             e.preventDefault();
-                            if (!isNaN(pixel)) {
+                            if (!this.state.paletteGroupMode && !isNaN(pixel)) {
                               this.setState({ selectedPaletteIndex: pixel });
                             }
                           }}>
