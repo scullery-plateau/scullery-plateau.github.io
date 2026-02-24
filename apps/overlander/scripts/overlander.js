@@ -60,9 +60,9 @@ namespace('sp.overlander.Overlander',{
           componentClass: TileEditor,
           attrs: { class: 'rpg-box text-light w-75' },
           onClose: ({ tile }) => {
-          const copiedTiles = this.state.tiles.map(tile => util.merge(tile));
-          copiedTiles[tile.index] = util.merge(tile);
-          this.setState({ tiles: copiedTiles });
+            const copiedTiles = this.state.tiles.map(tile => util.merge(tile));
+            copiedTiles[tile.index] = util.merge(tile);
+            this.setState({ tiles: copiedTiles });
           }
         }
       });
@@ -158,7 +158,7 @@ namespace('sp.overlander.Overlander',{
     }
     editTile(index) {
       this.modals.tileEditor.open({
-      tile: util.merge(this.state.tiles[index])
+        tile: util.merge(this.state.tiles[index])
       });
     }
     toggleTile(x,y) {
@@ -187,21 +187,21 @@ namespace('sp.overlander.Overlander',{
         <div className="ml-2 w-100 d-flex flex-nowrap tile-buttons">
           { Object.entries(this.state.tiles).map((tile,index) => {
             return <button
-            key={`btn.tile${index}.key`}
-            id={`btn.tile${index}`}
-            className={'tile.js m-2 p-0'+ (this.state.selectedTile === index ? ' selected-tile.js' : '')}
-            title={`Tile: ${tile.filename}; click to select, double click or right click to edit`}
-            onClick={ () => this.setState({ selectedTile: index }) }
-            onDoubleClick={ () => {
-              this.editTile(index)
-            }}
-            onContextMenu={ (e) => {
-              e.preventDefault();
-              this.editTile(index);
-            }}>
-            <svg key={`btn.tile${index}.svg.key`} width="100%" height="100%" viewBox={`0 0 ${tileHeight} ${tileWidth}`}>
-              <use href={`#tile${index}`}/>
-            </svg>
+              key={`btn.tile${index}.key`}
+              id={`btn.tile${index}`}
+              className={'tile.js m-2 p-0'+ (this.state.selectedTile === index ? ' selected-tile.js' : '')}
+              title={`Tile: ${tile.filename}; click to select, double click or right click to edit`}
+              onClick={ () => this.setState({ selectedTile: index }) }
+              onDoubleClick={ () => {
+                this.editTile(index)
+              }}
+              onContextMenu={ (e) => {
+                e.preventDefault();
+                this.editTile(index);
+              }}>
+              <svg key={`btn.tile${index}.svg.key`} width="100%" height="100%" viewBox={`0 0 ${tileHeight} ${tileWidth}`}>
+                <use href={`#tile${index}`}/>
+              </svg>
             </button>;
           }) }
         </div>

@@ -18,8 +18,10 @@ namespace("sp.tokenizer.TokenCanvas",{
   }
   const applyDrawType = function(token) {
     const n = token.sideCount;
-    if (n > 2 && n < 50) {
+    if (n == 3 || (n > 4 && n < 50)) {
       token.drawType = "poly";
+    } else if (n == 4) {
+      token.drawType = "rect";
     } else {
       token.drawType = "circle";
     }
@@ -41,13 +43,15 @@ namespace("sp.tokenizer.TokenCanvas",{
     const [ix, iy] = [dimObj.cx + token.xOffset - icx, dimObj.cy + token.yOffset - icy]
 
     // default gCO is source-over
-    if (!token.isTransparent) {
+    if (!token.isTransparent && token.backgroundColor) {
       CanvasUtil.fillShape(ctx, dimObj, token);
     }
 
     CanvasUtil.drawImage(ctx, dimObj, img, ix, iy, iw, ih, token);
 
-    CanvasUtil.strokeShape(ctx, dimObj, token);
+    if (token.frameColor) {
+      CanvasUtil.strokeShape(ctx, dimObj, token);
+    }
 
     // closePath is useless here
     //ctx.closePath();

@@ -19,7 +19,6 @@ namespace("sp.overlander.Tile",{
       yOffset: 0,
       label: ""
     };
-    // todo
     this.drawDef = function() {
       // todo
       return <></>;

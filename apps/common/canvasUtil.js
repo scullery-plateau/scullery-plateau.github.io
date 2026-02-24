@@ -4,36 +4,38 @@ namespace("sp.common.CanvasUtil",{},({}) => {
     return { width, height, cx, cy, r, d, lineWidthMult };
   }
   const drawCircle = function(ctx,dimObj,{ frameWidth }) {
-      ctx.arc(dimObj.cx, dimObj.cy, dimObj.r - 1 - ( dimObj.lineWidthMult * frameWidth / 2 ), 0, Math.PI*2);
+    ctx.arc(dimObj.cx, dimObj.cy, dimObj.r - 1 - ( dimObj.lineWidthMult * frameWidth / 2 ), 0, Math.PI*2);
   }
   const drawPoly = function(ctx,dimObj,{ sideCount }) {
-      const a = (Math.PI * 2) / sideCount;
-      const first = a / 2;
-      const points = Array(sideCount)
-        .fill(0)
-        .map((e, i) => {
-          let ai = first + a * i;
-          return [
-            dimObj.cx + dimObj.r * Math.sin(ai),
-            dimObj.cy + dimObj.r * Math.cos(ai),
-          ];
-        });
-      const last = points[points.length - 1];
-      ctx.moveTo(last[0],last[1]);
-      points.forEach(([x,y]) => {
-        ctx.lineTo(x,y);
+    const a = (Math.PI * 2) / sideCount;
+    const first = a / 2;
+    const points = Array(sideCount)
+      .fill(0)
+      .map((e, i) => {
+        let ai = first + a * i;
+        return [
+          dimObj.cx + dimObj.r * Math.sin(ai),
+          dimObj.cy + dimObj.r * Math.cos(ai),
+        ];
       });
-      ctx.closePath();
+    const last = points[points.length - 1];
+    ctx.moveTo(last[0],last[1]);
+    points.forEach(([x,y]) => {
+      ctx.lineTo(x,y);
+    });
+    ctx.closePath();
   }
   const drawRect = function( ctx, { cx, cy, d }, { ratioW, ratioH } ) {
     const args = {
       width: d,
-      height: d
+      height: d,
+      ratioW: ratioW || 1,
+      ratioH: ratioH || 1
     };
-    if (ratioW < ratioH) {
-      args.width = args.height * ratioW / ratioH;
-    } else if (ratioW > ratioH) {
-      args.height = args.width * ratioH / ratioW;
+    if (args.ratioW < args.ratioH) {
+      args.width = args.height * args.ratioW / args.ratioH;
+    } else if (args.ratioW > args.ratioH) {
+      args.height = args.width * args.ratioH / args.ratioW;
     }
     args.x = cx - (args.width / 2);
     args.y = cy - (args.height / 2);
@@ -49,10 +51,12 @@ namespace("sp.common.CanvasUtil",{},({}) => {
         return drawRect(ctx,dimObj,args);
     }
     const n = args.sideCount;
-    if (n > 2 && n < 50) {
-      drawPoly(ctx,dimObj,args,n);
+    if (n == 3  || (n > 4 && n < 50)) {
+      drawPoly(ctx, dimObj, args);
+    } else if (n == 4) {
+      drawRect(ctx, dimObj, args)
     } else {
-      drawCircle(ctx,dimObj,args);
+      drawCircle(ctx, dimObj, args);
     }
   }
   const fillShape = function(ctx, dimObj, args) {

@@ -104,7 +104,7 @@ namespace("sp.tokenizer.TokenFrame",{
               />
             </div>
             <button
-              className="btn btn-light"
+              className={`btn ${ this.state.frameColor ? 'btn-light' : 'btn-outline-light' }`}
               style={{
                 backgroundColor: this.state.frameColor,
                 color: Colors.getForegroundColor(this.state.frameColor)
@@ -114,9 +114,16 @@ namespace("sp.tokenizer.TokenFrame",{
                   color: this.state.frameColor
                 });
               }}
+              onDoubleClick={ () => {
+                this.updateState({ frameColor: undefined })
+              }}
+              onContextMenu={ (e) => {
+                e.preventDefault();
+                this.updateState({ frameColor: undefined })
+              }}
               >Frame Color</button>
             <button
-              className="btn btn-light"
+              className={`btn ${ this.state.backgroundColor ? 'btn-light' : 'btn-outline-light' }`}
               style={{
                 backgroundColor: this.state.backgroundColor,
                 color: Colors.getForegroundColor(this.state.backgroundColor)
@@ -125,6 +132,13 @@ namespace("sp.tokenizer.TokenFrame",{
                 this.modals.bgColorPicker.open({
                   color: this.state.backgroundColor
                 });
+              }}
+              onDoubleClick={ () => {
+                this.updateState({ backgroundColor: undefined })
+              }}
+              onContextMenu={ (e) => {
+                e.preventDefault();
+                this.updateState({ backgroundColor: undefined })
               }}
               >Background Color</button>
             <button
