@@ -1,6 +1,7 @@
 namespace('sp.overlander.TileCanvas',{
+  'sp.common.CanvasUtil':'CanvasUtil',
   'sp.common.Utilities':'util'
-},({ util }) => {
+},({ CanvasUtil, util }) => {
   const points = [[26,2], [74,2], [98,43.3], [74,84.6], [26,84.6], [2,43.3]];
   const drawHex = function() {
     const path = new Path2D();

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+    <script src="https://gizmo-atheneum.github.io/structure/importnamespace/script.js"></script>
+    <script
+      src="https://unpkg.com/react@18/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel" src="../../common/canvasUtil.js"></script>
+    <script type="text/babel" src="../../common/Colors.js"></script>
+    <script type="text/babel" src="../../common/utilities.js"></script>
+    <script type="text/babel" src="./practice.js"></script>
+    <script type="text/babel">
+      (function() {
+        const Practice = importNamespace("Practice");
+        ReactDOM.createRoot(document.getElementById('output')).render(<Practice canvasId="canvas"/>);
+      })()
+    </script>
+  </head>
+  <body class="container bg-dark text-light text-center">
+    <div id="output" class="text-center"></div>
+    <canvas style="display: none;" id="canvas"></canvas>
+  </body>
+</html>

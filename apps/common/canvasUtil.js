@@ -6,18 +6,20 @@ namespace("sp.common.CanvasUtil",{},({}) => {
   const drawCircle = function(ctx,dimObj,{ frameWidth }) {
     ctx.arc(dimObj.cx, dimObj.cy, dimObj.r - 1 - ( dimObj.lineWidthMult * frameWidth / 2 ), 0, Math.PI*2);
   }
-  const drawPoly = function(ctx,dimObj,{ sideCount }) {
-    const a = (Math.PI * 2) / sideCount;
-    const first = a / 2;
-    const points = Array(sideCount)
-      .fill(0)
-      .map((e, i) => {
-        let ai = first + a * i;
-        return [
-          dimObj.cx + dimObj.r * Math.sin(ai),
-          dimObj.cy + dimObj.r * Math.cos(ai),
-        ];
-      });
+  const drawPoly = function(ctx,dimObj,{ sideCount, points }) {
+    if (points == undefined && !isNaN(sideCount)) {
+      const a = (Math.PI * 2) / sideCount;
+      const first = a / 2;
+      points = Array(sideCount)
+        .fill(0)
+        .map((e, i) => {
+          let ai = first + a * i;
+          return [
+            dimObj.cx + dimObj.r * Math.sin(ai),
+            dimObj.cy + dimObj.r * Math.cos(ai),
+          ];
+        });
+    }
     const last = points[points.length - 1];
     ctx.moveTo(last[0],last[1]);
     points.forEach(([x,y]) => {
