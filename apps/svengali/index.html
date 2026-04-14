@@ -40,8 +40,6 @@
       crossorigin
     ></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <!-- project namespaces -->
     <script type="text/babel" src="../common/colorPicker.js"></script>
@@ -69,12 +67,8 @@
         if (unusedNamespaces.length > 0) {
           console.warn({ unusedNamespaces });
         }
-        ReactDOM.createRoot(document.getElementById('app-root')).render(
-          <Svengali />
-        );
-        ReactDOM.createRoot(document.getElementById('footer')).render(
-          <Footer />
-        );
+        ReactDOM.createRoot(document.getElementById('app-root')).render(<Svengali />);
+        ReactDOM.createRoot(document.getElementById('footer')).render(<Footer />);
       })();
     </script>
   </head>
