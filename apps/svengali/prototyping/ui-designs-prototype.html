@@ -1,0 +1,685 @@
+<html>
+  <head>
+    <title>Scullery Plateau: Svengali — UI Design Prototype</title>
+    <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+
+    <!-- external styles -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Caudex"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/d550ee8263.js"
+      crossorigin
+    ></script>
+
+    <!-- project styles -->
+    <link rel="stylesheet" href="../../../style/rpg.css" />
+    <link rel="stylesheet" href="../../../style/font.css" />
+    <link rel="stylesheet" href="../../../style/menu.css" />
+  </head>
+  <body class="bg-dark text-light">
+    <main class="container-fluid p-3">
+      <!-- Table of Contents -->
+      <nav class="mb-4 p-3" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h3 class="mb-3">Svengali UI Design Prototype</h3>
+        <p class="text-muted mb-3">Visual demonstration of all UI layouts and components (display only)</p>
+        <div style="columns: 2; column-gap: 2rem;">
+          <div class="mb-2"><a href="#initial-dialog" class="text-info text-decoration-none">Initial Dialog</a></div>
+          <div class="mb-2"><a href="#menu-bar" class="text-info text-decoration-none">Menu Bar Structure</a></div>
+          <div class="mb-2"><a href="#main-layout" class="text-info text-decoration-none">Main Application Layout</a></div>
+          <div class="mb-2"><a href="#template-tab" class="text-info text-decoration-none">Template Tab</a></div>
+          <div class="mb-2"><a href="#data-tab" class="text-info text-decoration-none">Data Tab</a></div>
+          <div class="mb-2"><a href="#schema-tab" class="text-info text-decoration-none">Schema Tab</a></div>
+          <div class="mb-2"><a href="#image-tab" class="text-info text-decoration-none">Image Tab</a></div>
+          <div class="mb-2"><a href="#font-pool" class="text-info text-decoration-none">Font Pool Tab</a></div>
+          <div class="mb-2"><a href="#wizard" class="text-info text-decoration-none">Initialize Schema Wizard</a></div>
+          <div class="mb-2"><a href="#modals" class="text-info text-decoration-none">Modals & Guards</a></div>
+        </div>
+      </nav>
+
+      <!-- Initial Dialog -->
+      <section class="mb-4 p-3" id="initial-dialog" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-play-circle"></i> Initial Dialog</h2>
+        <p class="text-muted mb-3">Shown on first load; re-shown with warning if dismissed without selecting. Orientation is fixed for the lifetime of the session.</p>
+        
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <h5 class="mb-3">Choose Layout Orientation</h5>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="p-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">
+                <h6 class="mb-3">Portrait</h6>
+                <button class="btn btn-outline-info btn-sm">Select</button>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="p-3" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">
+                <h6 class="mb-3">Landscape</h6>
+                <button class="btn btn-outline-info btn-sm">Select</button>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-warning mt-3 mb-0" style="display: none;">
+            <i class="fas fa-exclamation-triangle"></i> Warning message — shown after first dismissed attempt only
+          </div>
+        </div>
+      </section>
+
+      <!-- Menu Bar Structure -->
+      <section class="mb-4 p-3" id="menu-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-bars"></i> Menu Bar Structure</h2>
+        <p class="text-muted mb-3">Main application toolbar with action buttons.</p>
+        
+        <div class="mb-3 p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-star"></i> Init Schema
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-arrow-down"></i> All
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-file"></i> Template
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-chart-bar"></i> Data
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-print"></i> Print
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-folder"></i> Load Template
+          </button>
+          <button class="btn btn-outline-light btn-sm">
+            <i class="fas fa-folder"></i> Load Data
+          </button>
+        </div>
+
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <h6 class="mb-3">Availability Rules</h6>
+          <table class="table table-dark table-sm table-bordered mb-0">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Enabled When</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Initialize Schema…</td>
+                <td><code>schema.fields</code> empty AND <code>data</code> empty AND <code>template.layers</code> non-empty</td>
+              </tr>
+              <tr>
+                <td>Download Data</td>
+                <td><code>data</code> non-empty</td>
+              </tr>
+              <tr>
+                <td>Print</td>
+                <td>Always enabled, but grayed-out if any column-mode <code>ImageData</code> reference is unresolved</td>
+              </tr>
+              <tr>
+                <td>Load Data</td>
+                <td><code>template.orientation</code> non-null AND <code>schema.fields</code> non-empty</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Main Application Layout -->
+      <section class="mb-4 p-3" id="main-layout" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-window-maximize"></i> Main Application Layout</h2>
+        <p class="text-muted mb-3">Overall application structure with tabs, editor panels, and card display.</p>
+        
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <div class="mb-3" style="display: flex; gap: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+            <button class="btn btn-link btn-sm text-info" style="border-bottom: 3px solid rgb(23, 162, 184);">Template</button>
+            <button class="btn btn-link btn-sm text-muted">Data</button>
+            <button class="btn btn-link btn-sm text-muted">Schema</button>
+            <button class="btn btn-link btn-sm text-muted">Image</button>
+            <button class="btn btn-link btn-sm text-muted">Font Pool</button>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <h6 class="mb-3">Left Column</h6>
+              <div class="p-2 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                <p class="small text-muted mb-2">Tab Controls</p>
+                <div class="mb-2">
+                  <label class="form-label small mb-1">Row</label>
+                  <select class="form-select form-select-sm rpg-textbox">
+                    <option>Row 1</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <label class="form-label small mb-1">Layer</label>
+                  <select class="form-select form-select-sm rpg-textbox">
+                    <option>Layer 1</option>
+                  </select>
+                </div>
+                <div class="btn-group btn-group-sm" role="group">
+                  <button type="button" class="btn btn-outline-light">+ Add</button>
+                  <button type="button" class="btn btn-outline-light">- Delete</button>
+                  <button type="button" class="btn btn-outline-light">↑</button>
+                  <button type="button" class="btn btn-outline-light">↓</button>
+                </div>
+              </div>
+              <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+                <p class="small text-muted mb-2">Layer Properties</p>
+                <div>
+                  <label class="form-label small mb-1">Name</label>
+                  <input type="text" class="form-control form-control-sm rpg-textbox" value="Hero Background">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <h6 class="mb-3">Right Column</h6>
+              <div class="p-3" style="background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+                <div style="text-align: center; color: rgba(255,255,255,0.3);">
+                  <i class="fas fa-image fa-3x mb-2"></i>
+                  <p class="small">Card Display Area</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Template Tab -->
+      <section class="mb-4 p-3" id="template-tab" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-file-invoice"></i> Template Tab</h2>
+        <p class="text-muted mb-3">Design template editor with layer properties and frame/image/text panels.</p>
+        
+        <h6 class="mb-2">Image Layer Panel</h6>
+        <div class="p-2 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">Frame Fields</p>
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">frame-x</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="0">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">frame-y</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="0">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">frame-width</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="800">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">frame-height</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="600">
+            </div>
+          </div>
+        </div>
+
+        <div class="p-2 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">Image Panel</p>
+          <div class="mb-2">
+            <label class="form-label small mb-1">data</label>
+            <div class="input-group input-group-sm">
+              <select class="form-select rpg-textbox">
+                <option>img.png</option>
+              </select>
+              <span class="input-group-text" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);"><i class="fas fa-arrows-alt-h"></i> Column</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">cx (center-x)</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="400">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">cy (center-y)</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="300">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">magnification</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="1.0">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label class="form-label small mb-1">rotation</label>
+              <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="0">
+            </div>
+          </div>
+        </div>
+
+        <h6 class="mb-2">Text Layer Panel</h6>
+        <div class="p-2 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">Text Properties</p>
+          <div class="mb-2">
+            <label class="form-label small mb-1">text</label>
+            <textarea class="form-control form-control-sm rpg-textbox" rows="3" placeholder="Enter text here"></textarea>
+          </div>
+          <div class="mb-2">
+            <label class="form-label small mb-1">font family</label>
+            <select class="form-select form-select-sm rpg-textbox">
+              <option>Georgia</option>
+              <option>Arial</option>
+              <option>Verdana</option>
+            </select>
+          </div>
+        </div>
+
+        <h6 class="mb-2">V/C Toggle States</h6>
+        <div class="p-2 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">State A: Toggle Visible</p>
+          <p class="small text-muted">Data non-empty AND compatible column exists</p>
+          <input type="text" class="form-control form-control-sm rpg-textbox">
+        </div>
+        <div class="p-2 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">State B: Add Column</p>
+          <p class="small text-muted">Data non-empty but no compatible column exists</p>
+          <button class="btn btn-outline-light btn-sm">+ Add column…</button>
+        </div>
+        <div class="p-2 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">State C: Value Mode Only</p>
+          <p class="small text-muted">Data empty AND no compatible column</p>
+          <input type="text" class="form-control form-control-sm rpg-textbox">
+        </div>
+        <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <p class="small text-muted mb-2">State D: Column Mode Active</p>
+          <p class="small text-muted">Currently in column mode</p>
+          <select class="form-select form-select-sm rpg-textbox">
+            <option>HERO_NAME</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Data Tab -->
+      <section class="mb-4 p-3" id="data-tab" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-database"></i> Data Tab</h2>
+        <p class="text-muted mb-3">Data entry form with multiple field types.</p>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="mb-3">Left Column: Row Editor</h6>
+            <div class="mb-2">
+              <label class="form-label small mb-1">Row</label>
+              <select class="form-select form-select-sm rpg-textbox">
+                <option>Row 1</option>
+                <option>Row 2</option>
+              </select>
+            </div>
+            <div class="btn-group btn-group-sm mb-3" role="group">
+              <button type="button" class="btn btn-outline-success">+ Add Row</button>
+              <button type="button" class="btn btn-outline-danger">- Delete Row</button>
+            </div>
+
+            <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+              <p class="small text-muted mb-2">Row Form</p>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Hero Name <span class="text-muted">(TextField)</span></label>
+                <input type="text" class="form-control form-control-sm rpg-textbox" placeholder="Enter name">
+              </div>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Power <span class="text-muted">(NumberField)</span></label>
+                <input type="number" class="form-control form-control-sm rpg-textbox" value="5" min="0" max="10">
+              </div>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Class <span class="text-muted">(Options)</span></label>
+                <select class="form-select form-select-sm rpg-textbox">
+                  <option>Warrior</option>
+                  <option>Mage</option>
+                  <option>Rogue</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="mb-3">Right Column: Card Display</h6>
+            <div class="p-3" style="background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.1); border-radius: 8px; min-height: 300px; display: flex; align-items: center; justify-content: center;">
+              <div style="text-align: center; color: rgba(255,255,255,0.3);">
+                <i class="fas fa-image fa-3x mb-2"></i>
+                <p class="small">Row Preview</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Schema Tab -->
+      <section class="mb-4 p-3" id="schema-tab" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-code"></i> Schema Tab</h2>
+        <p class="text-muted mb-3">Schema field configuration and management.</p>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <h6 class="mb-3">Left Column: Field Editor</h6>
+            <div class="mb-2">
+              <label class="form-label small mb-1">Field</label>
+              <select class="form-select form-select-sm rpg-textbox">
+                <option>Hero Name</option>
+                <option>Power</option>
+                <option>Class</option>
+              </select>
+            </div>
+            <div class="btn-group btn-group-sm mb-3" role="group">
+              <button type="button" class="btn btn-outline-success">+ Add</button>
+              <button type="button" class="btn btn-outline-danger">- Delete</button>
+              <button type="button" class="btn btn-outline-light">↑</button>
+              <button type="button" class="btn btn-outline-light">↓</button>
+            </div>
+
+            <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+              <p class="small text-muted mb-2">Field Editor</p>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Label</label>
+                <input type="text" class="form-control form-control-sm rpg-textbox" value="Hero Name">
+              </div>
+              <div class="mb-2">
+                <label class="form-label small mb-1">ID (auto)</label>
+                <div style="padding: 0.25rem 0.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; font-family: monospace; font-size: 0.85rem;">HERO_NAME</div>
+              </div>
+              <div class="mb-2">
+                <label class="form-label small mb-1">Type</label>
+                <select class="form-select form-select-sm rpg-textbox">
+                  <option>TextField</option>
+                  <option>NumberField</option>
+                  <option>ImageData</option>
+                  <option>Options</option>
+                  <option>Font</option>
+                  <option>Color</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h6 class="mb-3">Right Column: Field List</h6>
+            <div class="list-group">
+              <div class="list-group-item list-group-item-dark">
+                <strong>Hero Name</strong>
+                <br>
+                <small class="text-muted">COLUMN_ID: HERO_NAME<br>Type: TextField<br>min_length: 1 max_length: 40</small>
+              </div>
+              <div class="list-group-item list-group-item-dark">
+                <strong>Power</strong>
+                <br>
+                <small class="text-muted">COLUMN_ID: POWER<br>Type: NumberField<br>min: 0 max: 10 step: 1</small>
+              </div>
+              <div class="list-group-item list-group-item-dark">
+                <strong>Class</strong>
+                <br>
+                <small class="text-muted">COLUMN_ID: CLASS<br>Type: Options<br>options: [Warrior, Mage, Rogue]</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Image Tab -->
+      <section class="mb-4 p-3" id="image-tab" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-image"></i> Image Tab</h2>
+        <p class="text-muted mb-3">Image gallery management and usage tracking.</p>
+        
+        <div class="mb-3">
+          <button class="btn btn-outline-info btn-sm">
+            <i class="fas fa-upload"></i> Load Image
+          </button>
+          <button class="btn btn-outline-danger btn-sm">
+            <i class="fas fa-trash"></i> Remove Unused
+          </button>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-dark table-sm table-bordered mb-0">
+            <thead>
+              <tr>
+                <th style="width: 100px;">Thumbnail</th>
+                <th>Filename</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="text-align: center;">
+                  <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.05); border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-image fa-2x" style="color: rgba(255,255,255,0.3);"></i>
+                  </div>
+                </td>
+                <td>hero.png</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;">
+                  <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.05); border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-image fa-2x" style="color: rgba(255,255,255,0.3);"></i>
+                  </div>
+                </td>
+                <td>mage.png</td>
+              </tr>
+              <tr>
+                <td style="text-align: center;">
+                  <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.05); border-radius: 4px; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-image fa-2x" style="color: rgba(255,255,255,0.3);"></i>
+                  </div>
+                </td>
+                <td>dragon.jpg</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="alert alert-info mt-3 mb-0">
+          <i class="fas fa-info-circle"></i>
+          <strong>Usage Notes:</strong>
+          <ul class="mb-0 mt-2">
+            <li>No per-row delete buttons. Use "Remove Unused" to bulk-remove unreferenced images.</li>
+            <li>An image is "in use" if its filename appears in any value-mode Image.data field OR in any ImageData-type column in state.data rows.</li>
+            <li>Duplicate filenames on load are rejected with an inline message.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Font Pool Tab -->
+      <section class="mb-4 p-3" id="font-pool" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-font"></i> Font Pool Tab</h2>
+        <p class="text-muted mb-3">Font selection and pool management.</p>
+        
+        <div class="row">
+          <div class="col-md-8">
+            <h6 class="mb-3">All Available Fonts</h6>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1rem;">
+              <div class="p-2" style="background: rgba(255,255,255,0.05); border: 3px solid rgba(23, 162, 184); border-radius: 8px; text-align: center;">
+                <p class="mb-1"><strong>Georgia</strong></p>
+                <small class="text-muted">"The quick brown fox…"</small>
+              </div>
+              <div class="p-2" style="background: rgba(255,255,255,0.05); border: 3px solid rgba(23, 162, 184); border-radius: 8px; text-align: center;">
+                <p class="mb-1"><strong>Caudex</strong></p>
+                <small class="text-muted">"The quick brown fox…"</small>
+              </div>
+              <div class="p-2" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">
+                <p class="mb-1"><strong>Arial</strong></p>
+                <small class="text-muted">"The quick brown fox…"</small>
+              </div>
+              <div class="p-2" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">
+                <p class="mb-1"><strong>Verdana</strong></p>
+                <small class="text-muted">"The quick brown fox…"</small>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <h6 class="mb-3">Active Pool</h6>
+            <div class="list-group">
+              <div class="list-group-item list-group-item-dark">
+                <i class="fas fa-circle text-info"></i> Georgia
+              </div>
+              <div class="list-group-item list-group-item-dark">
+                <i class="fas fa-circle text-info"></i> Caudex
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-info mt-3 mb-0">
+          <strong>Legend:</strong>
+          <ul class="mb-0 mt-2">
+            <li><strong>Thick border</strong> = Font is in the active pool (selected)</li>
+            <li><strong>Thin border</strong> = Font is not in the active pool (unselected)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Initialize Schema Wizard -->
+      <section class="mb-4 p-3" id="wizard" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-wand-magic-sparkles"></i> Initialize Schema Wizard</h2>
+        <p class="text-muted mb-3">Multi-step wizard for schema initialization.</p>
+
+        <h6 class="mb-2">Screen 1: Field Selection</h6>
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <h5 class="mb-3">Initialize Schema</h5>
+
+          <p class="mb-3">Select which layer properties to expose as schema columns. All unchecked by default.</p>
+
+          <div class="p-2 mb-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+            <p class="small mb-2">Layer 1: Hero Background <span class="badge bg-info">Image</span></p>
+            <div class="ms-3">
+              <div class="form-check small mb-1">
+                <input class="form-check-input" type="checkbox" id="ch1">
+                <label class="form-check-label" for="ch1">
+                  data <span class="text-muted">(ImageData)</span>
+                </label>
+              </div>
+              <div class="form-check small mb-1">
+                <input class="form-check-input" type="checkbox" id="ch2">
+                <label class="form-check-label" for="ch2">
+                  cx <span class="text-muted">(NumberField)</span>
+                </label>
+              </div>
+              <div class="form-check small mb-1">
+                <input class="form-check-input" type="checkbox" id="ch3">
+                <label class="form-check-label" for="ch3">
+                  cy <span class="text-muted">(NumberField)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+            <p class="small mb-2">Layer 2: Title Text <span class="badge bg-info">Text</span></p>
+            <div class="ms-3">
+              <div class="form-check small mb-1">
+                <input class="form-check-input" type="checkbox" id="ch8" checked>
+                <label class="form-check-label" for="ch8">
+                  text <span class="text-muted">(TextField)</span>
+                </label>
+              </div>
+              <div class="form-check small mb-1">
+                <input class="form-check-input" type="checkbox" id="ch9">
+                <label class="form-check-label" for="ch9">
+                  font family <span class="text-muted">(Font)</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-info btn-sm">Next →</button>
+            <button class="btn btn-outline-light btn-sm">Cancel</button>
+          </div>
+        </div>
+
+        <h6 class="mb-2 mt-4">Screen 2: Schema Preview</h6>
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <h5 class="mb-3">Initialize Schema — Review</h5>
+
+          <p class="mb-3">Edit column labels below. COLUMN_IDs are derived automatically.</p>
+
+          <div class="table-responsive mb-3">
+            <table class="table table-dark table-sm table-bordered mb-0">
+              <thead>
+                <tr>
+                  <th>Label</th>
+                  <th>COLUMN_ID (auto)</th>
+                  <th>Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <input type="text" class="form-control form-control-sm rpg-textbox" value="Title Text text">
+                  </td>
+                  <td>
+                    <div style="padding: 0.5rem; font-family: monospace; font-size: 0.85rem;">TITLE_TEXT_TEXT</div>
+                    <small class="text-danger"><i class="fas fa-exclamation-triangle"></i> collision — suffix appended</small>
+                  </td>
+                  <td>TextField</td>
+                </tr>
+                <tr>
+                  <td>
+                    <input type="text" class="form-control form-control-sm rpg-textbox" value="Layer 2 text">
+                  </td>
+                  <td>
+                    <div style="padding: 0.5rem; font-family: monospace; font-size: 0.85rem;">LAYER_2_TEXT</div>
+                  </td>
+                  <td>TextField</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-info mb-3">
+            <strong>On confirm:</strong>
+            <ul class="mb-0 mt-2">
+              <li>Schema fields will be created as shown above.</li>
+              <li>A first data row will be created from the current layer values.</li>
+              <li>Each selected field will be switched to column mode.</li>
+            </ul>
+          </div>
+
+          <div>
+            <button class="btn btn-outline-light btn-sm">← Back</button>
+            <button class="btn btn-info btn-sm">Confirm</button>
+            <button class="btn btn-outline-light btn-sm">Cancel</button>
+          </div>
+        </div>
+      <!-- Modals & Guards -->
+      <section class="mb-4 p-3" id="modals" style="background: rgba(255,255,255,0.05); border-radius: 8px;">
+        <h2 class="mb-3"><i class="fas fa-exclamation-circle"></i> Modals & Guards</h2>
+        <p class="text-muted mb-3">Validation and confirmation dialogs.</p>
+
+        <h6 class="mb-2">Schema Field Deletion Guard</h6>
+        <div class="p-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+          <h5 class="mb-3">Schema Field In Use</h5>
+
+          <p class="mb-2"><strong>"Hero Image" (ImageData)</strong> is referenced by:</p>
+          <div class="list-group mb-3">
+            <div class="list-group-item list-group-item-dark">
+              Layer 1 — Image › data
+            </div>
+          </div>
+
+          <p class="mb-3"><strong>How would you like to resolve this?</strong></p>
+
+          <div class="p-2 mb-3" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+            <p class="small text-muted mb-2">Replace with another column</p>
+            <button class="btn btn-outline-light btn-sm mb-2">+ Add column…</button>
+            <p style="margin: 0.5rem 0; text-align: center; color: rgba(255,255,255,0.3);">— or —</p>
+            <select class="form-select form-select-sm rpg-textbox">
+              <option>Hero Gallery</option>
+            </select>
+          </div>
+
+          <div class="p-2" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;">
+            <p class="small text-muted mb-2">Set to a fixed value</p>
+            <select class="form-select form-select-sm rpg-textbox mb-2">
+              <option>hero.png</option>
+            </select>
+            <p style="margin: 0.5rem 0; text-align: center; color: rgba(255,255,255,0.3);">— or —</p>
+            <button class="btn btn-outline-light btn-sm">+ Load image…</button>
+          </div>
+
+          <div class="alert alert-info mt-3">
+            <i class="fas fa-info-circle"></i>
+            To resolve usages individually, click Cancel and update each layer in the Template tab before deleting this field.
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer id="footer" class="text-center mt-5 mb-3"></footer>
+  </body>
+</html>

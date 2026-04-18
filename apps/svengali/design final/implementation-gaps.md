@@ -48,7 +48,6 @@ Items not yet covered by `draft.md` or its referenced documents.
     - the object we'll be holding in state will be the object being downloaded
   - see `columnableField.md` for V/C structure
 - **Data CSV conventions** — column naming rules, how ImageData columns store filenames
-  - 
 - **Schema JSON format** — whether schema is embedded in the template file or separate
   - `schema` and `template` should be siblings in the top-level object
 
@@ -66,23 +65,22 @@ Items not yet covered by `draft.md` or its referenced documents.
 ## App Architecture
 
 - Top-level React state shape for the `Svengali` component
+  - look for patterns in other apps across Scullery-Plateau
 - Component breakdown and planned file structure (currently only `svengali.js` exists)
+  - look for patterns in other apps across Scullery-Plateau
 - Default values for new frames (initial position, size, colors)
-
+  - look for patterns in other apps across Scullery-Plateau
 ---
 
 ## TODO
 
+- have AI suggest
+  - how ImageData columns store filenames
+  - app init state
 - add instructions around using `colorPicker.js` for color fields, schema default
-- `columnableField.md`
-- `print-spec.md`
 - column naming rules
   - as is? (ensure uniqueness in UI)
   - separate schema properties for "Label" vs "COLUMN_NAME"
-- how ImageData columns store filenames
-  - have copilot suggest
-- app init state
-  - have copilot suggest
 - rules / guidelines for component breakdown
   - have copilot use these to create a separate claude.md / rules.md / skill.md
 - New Frame defaults
