@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scullery Plateau: Svengali - UI Prototype</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Svengali: Card template and data renderer for TTRPGs">
+  <meta name="keywords" content="card template, data renderer, TTRPG, tabletop RPG">
+  <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+
+  <!-- external styles -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Caudex"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+
+  <!-- project styles -->
+  <link rel="stylesheet" href="../../../style/rpg.css" />
+  <link rel="stylesheet" href="../../../style/font.css" />
+  <link rel="stylesheet" href="../../../style/menu.css" />
+
+  <!-- local styles -->
+  <link rel="stylesheet" href="../style.css" />
+
+  <style>
+    /* Prototype-specific styling */
+    .proto-card-preview {
+      border: 2px solid #ddd;
+      aspect-ratio: 3.5 / 5;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #333;
+      font-weight: bold;
+      min-height: 300px;
+    }
+
+    .proto-section-title {
+      border-bottom: 2px solid #0d6efd;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    .proto-form-group {
+      margin-bottom: 1rem;
+    }
+
+    .proto-control-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .proto-control-group button {
+      flex: 1;
+    }
+
+    .proto-layer-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: #444;
+      border-left: 3px solid #0d6efd;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    .proto-layer-item.selected {
+      background: #555;
+      border-left: 3px solid #ffc107;
+    }
+
+    .proto-font-display {
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      border: 2px solid #6c757d;
+      border-radius: 4px;
+      background: #333;
+    }
+
+    .proto-font-item {
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border: 2px solid #6c757d;
+      border-radius: 4px;
+      background: #444;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .proto-font-item:hover {
+      background: #555;
+    }
+
+    .proto-font-item.selected {
+      border-color: #28a745;
+      border-width: 4px;
+    }
+
+    .proto-font-item h3 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.1rem;
+    }
+
+    .proto-font-item p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    .proto-field-value {
+      margin-bottom: 1rem;
+    }
+
+    .proto-field-value label {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .proto-field-value input,
+    .proto-field-value select {
+      width: 100%;
+    }
+
+    .proto-column-item {
+      padding: 0.75rem;
+      margin-bottom: 0.5rem;
+      background: #444;
+      border-left: 3px solid #17a2b8;
+      border-radius: 3px;
+    }
+
+    .proto-column-item.selected {
+      background: #555;
+      border-left: 3px solid #ffc107;
+    }
+
+    .proto-table {
+      font-size: 0.9rem;
+      margin-top: 1rem;
+    }
+
+    .proto-table thead {
+      background: #444;
+    }
+
+    .proto-table tbody tr:hover {
+      background: #444;
+    }
+
+    .proto-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .proto-modal-overlay.active {
+      display: flex;
+    }
+
+    .proto-modal-content {
+      background: #222;
+      border-radius: 4px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 2rem;
+      border: 2px solid #0d6efd;
+    }
+
+    .proto-modal-content h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .proto-modal-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 2rem;
+    }
+
+    .proto-orientation-button {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .proto-tab-content {
+      display: none;
+    }
+
+    .proto-tab-content.active {
+      display: block;
+    }
+
+    .proto-data-form {
+      background: #333;
+      padding: 1.5rem;
+      border-radius: 4px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .proto-image-table-container {
+      overflow-x: auto;
+      margin-top: 1rem;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .proto-menu-item {
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.25rem;
+      background: #444;
+      cursor: pointer;
+      border-radius: 3px;
+      text-decoration: none;
+      color: #f8f9fa;
+      display: block;
+      transition: background 0.2s;
+    }
+
+    .proto-menu-item:hover {
+      background: #555;
+      color: #f8f9fa;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body class="bg-dark text-light">
+  <nav class="navbar navbar-dark bg-primary d-flex justify-content-start">
+    <span class="navbar-brand">
+      <a href="../../../index.html" class="text-light" style="text-decoration: none;">
+        ← Scullery Plateau
+      </a>
+    </span>
+    <span class="navbar-text ms-3" style="font-size: 1.2rem; font-weight: bold;">
+      Svengali
+    </span>
+  </nav>
+
+  <!-- Main Content -->
+  <div id="svengali" class="container-fluid">
+    <div class="row mt-4">
+      <!-- Left Column: Menu & Controls -->
+      <div class="col-3">
+        <div class="rpg-box m-3">
+          <!-- Menu Section -->
+          <div class="proto-section-title">File Menu</div>
+          <div class="proto-menu-item">
+            <i class="fas fa-download"></i> Download All
+          </div>
+          <div class="proto-menu-item">
+            <i class="fas fa-download"></i> Download Template (JSON)
+          </div>
+          <div class="proto-menu-item">
+            <i class="fas fa-download"></i> Download Data (CSV)
+          </div>
+          <div class="proto-menu-item">
+            <i class="fas fa-print"></i> Print
+          </div>
+          <div class="proto-menu-item">
+            <i class="fas fa-upload"></i> Load Template
+          </div>
+          <div class="proto-menu-item">
+            <i class="fas fa-upload"></i> Load Data
+          </div>
+
+          <!-- Tab Navigation -->
+          <div class="proto-section-title mt-4">Tabs</div>
+          <ul class="nav nav-tabs" role="tablist" style="border-bottom: none; flex-wrap: nowrap; overflow-x: auto;">
+            <li class="nav-item">
+              <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-template" style="font-size: 0.85rem; padding: 0.5rem;">Template</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-data" style="font-size: 0.85rem; padding: 0.5rem;">Data</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-schema" style="font-size: 0.85rem; padding: 0.5rem;">Schema</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-image" style="font-size: 0.85rem; padding: 0.5rem;">Image</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-font" style="font-size: 0.85rem; padding: 0.5rem;">Font Pool</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column: Tab Content & Preview -->
+      <div class="col-9">
+        <!-- Tab Content -->
+        <div class="tab-content">
+          <!-- Template Tab -->
+          <div id="tab-template" class="tab-pane fade show active">
+            <div class="rpg-box m-3">
+              <div class="proto-section-title">Template Editor</div>
+
+              <div class="row">
+                <div class="col-6">
+                  <!-- Row Selector -->
+                  <div class="proto-form-group">
+                    <label for="template-row-select">Current Row:</label>
+                    <select id="template-row-select" class="form-control">
+                      <option>Row 1</option>
+                      <option>Row 2</option>
+                      <option>Row 3</option>
+                    </select>
+                  </div>
+
+                  <!-- Layer Selector -->
+                  <div class="proto-form-group">
+                    <label for="template-layer-select">Layer:</label>
+                    <select id="template-layer-select" class="form-control">
+                      <option>Layer 1: Background Image</option>
+                      <option>Layer 2: Character Name</option>
+                      <option>Layer 3: Stats Box</option>
+                    </select>
+                  </div>
+
+                  <!-- Layer Controls -->
+                  <div class="proto-section-title">Layer Controls</div>
+                  <div class="proto-control-group">
+                    <button class="btn btn-success btn-sm" title="Add Layer">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" title="Delete Layer">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" title="Move to Start">
+                      <i class="fas fa-angles-left"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" title="Move Left">
+                      <i class="fas fa-angle-left"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" title="Move Right">
+                      <i class="fas fa-angle-right"></i>
+                    </button>
+                    <button class="btn btn-secondary btn-sm" title="Move to End">
+                      <i class="fas fa-angles-right"></i>
+                    </button>
+                  </div>
+
+                  <!-- Frame Properties Panel -->
+                  <div class="proto-section-title">Frame Properties</div>
+                  <div class="proto-field-value">
+                    <label for="frame-x">X Position:</label>
+                    <input type="number" id="frame-x" class="form-control" value="0" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="frame-y">Y Position:</label>
+                    <input type="number" id="frame-y" class="form-control" value="0" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="frame-width">Width:</label>
+                    <input type="number" id="frame-width" class="form-control" value="100" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="frame-height">Height:</label>
+                    <input type="number" id="frame-height" class="form-control" value="100" />
+                  </div>
+
+                  <!-- Image-Specific Properties -->
+                  <div class="proto-section-title">Image Properties</div>
+                  <div class="proto-field-value">
+                    <label for="image-data">Image Data:</label>
+                    <select id="image-data" class="form-control">
+                      <option selected>Column: HERO_IMAGE</option>
+                      <option>Value: placeholder.png</option>
+                    </select>
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="image-cx">Center X:</label>
+                    <input type="number" id="image-cx" class="form-control" value="50" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="image-cy">Center Y:</label>
+                    <input type="number" id="image-cy" class="form-control" value="50" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="image-mag">Magnification:</label>
+                    <input type="number" id="image-mag" class="form-control" value="1.0" step="0.1" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="image-rotation">Rotation (degrees):</label>
+                    <input type="number" id="image-rotation" class="form-control" value="0" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="image-bg-color">Background Color:</label>
+                    <input type="color" id="image-bg-color" class="form-control form-control-color" />
+                  </div>
+                </div>
+
+                <!-- Card Preview -->
+                <div class="col-6">
+                  <div class="proto-section-title">Card Preview</div>
+                  <div class="proto-card-preview">
+                    <div style="text-align: center;">
+                      <div style="font-size: 2rem; margin-bottom: 1rem;">
+                        <i class="fas fa-image"></i>
+                      </div>
+                      <div>Background Image</div>
+                      <small style="color: #999; display: block; margin-top: 0.5rem;">Hero Image Layer</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Data Tab -->
+          <div id="tab-data" class="tab-pane fade">
+            <div class="rpg-box m-3">
+              <div class="proto-section-title">Data Entry</div>
+
+              <div class="row">
+                <div class="col-6">
+                  <!-- Row Selector -->
+                  <div class="proto-form-group">
+                    <label for="data-row-select">Current Row:</label>
+                    <select id="data-row-select" class="form-control">
+                      <option>Row 1</option>
+                      <option>Row 2</option>
+                      <option>Row 3</option>
+                    </select>
+                  </div>
+
+                  <!-- Row Controls -->
+                  <div class="proto-section-title">Row Controls</div>
+                  <div class="proto-control-group">
+                    <button class="btn btn-success btn-sm flex-grow-1">
+                      <i class="fas fa-plus"></i> Add Row
+                    </button>
+                    <button class="btn btn-danger btn-sm flex-grow-1">
+                      <i class="fas fa-minus"></i> Delete Row
+                    </button>
+                  </div>
+
+                  <!-- Data Entry Form -->
+                  <div class="proto-section-title">Form Fields</div>
+                  <div class="proto-data-form">
+                    <div class="proto-field-value">
+                      <label for="data-hero-name">Hero Name:</label>
+                      <input type="text" id="data-hero-name" class="form-control" placeholder="Enter hero name" />
+                    </div>
+                    <div class="proto-field-value">
+                      <label for="data-hero-class">Hero Class:</label>
+                      <select id="data-hero-class" class="form-control">
+                        <option>Barbarian</option>
+                        <option>Bard</option>
+                        <option>Cleric</option>
+                        <option>Druid</option>
+                        <option>Fighter</option>
+                      </select>
+                    </div>
+                    <div class="proto-field-value">
+                      <label for="data-hero-level">Level:</label>
+                      <input type="number" id="data-hero-level" class="form-control" min="1" max="20" value="1" />
+                    </div>
+                    <div class="proto-field-value">
+                      <label for="data-hero-image">Hero Image:</label>
+                      <select id="data-hero-image" class="form-control">
+                        <option>barbarian.png</option>
+                        <option>bard.png</option>
+                        <option>cleric.png</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card Preview -->
+                <div class="col-6">
+                  <div class="proto-section-title">Card Preview</div>
+                  <div class="proto-card-preview">
+                    <div style="text-align: center;">
+                      <div style="font-size: 1.5rem; margin-bottom: 1rem;">Character Name Here</div>
+                      <div style="font-size: 0.9rem; margin-bottom: 1rem; color: #666;">Class: Barbarian | Level: 1</div>
+                      <div style="font-size: 0.8rem; color: #999;">With applied data values</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Schema Tab -->
+          <div id="tab-schema" class="tab-pane fade">
+            <div class="rpg-box m-3">
+              <div class="proto-section-title">Schema Management</div>
+
+              <div class="row">
+                <div class="col-6">
+                  <!-- Column Selector -->
+                  <div class="proto-form-group">
+                    <label for="schema-column-select">Select Column:</label>
+                    <select id="schema-column-select" class="form-control">
+                      <option>HERO_NAME</option>
+                      <option>HERO_CLASS</option>
+                      <option>HERO_LEVEL</option>
+                      <option>HERO_IMAGE</option>
+                    </select>
+                  </div>
+
+                  <!-- Column Controls -->
+                  <div class="proto-section-title">Column Controls</div>
+                  <div class="proto-control-group">
+                    <button class="btn btn-success btn-sm flex-grow-1">
+                      <i class="fas fa-plus"></i> Add
+                    </button>
+                    <button class="btn btn-danger btn-sm flex-grow-1">
+                      <i class="fas fa-minus"></i> Delete
+                    </button>
+                  </div>
+
+                  <!-- Column Type -->
+                  <div class="proto-form-group">
+                    <label for="schema-type-select">Column Type:</label>
+                    <select id="schema-type-select" class="form-control">
+                      <option>TextField</option>
+                      <option>NumberField</option>
+                      <option>Options</option>
+                      <option>ImageData</option>
+                      <option>Font</option>
+                      <option>Color</option>
+                    </select>
+                  </div>
+
+                  <!-- Type-Specific Fields -->
+                  <div class="proto-section-title">Type Properties</div>
+                  <div class="proto-field-value">
+                    <label for="schema-label">Label:</label>
+                    <input type="text" id="schema-label" class="form-control" value="Hero Name" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="schema-column-id">Column ID:</label>
+                    <input type="text" id="schema-column-id" class="form-control" value="HERO_NAME" disabled />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="schema-min-length">Min Length (TextField):</label>
+                    <input type="number" id="schema-min-length" class="form-control" value="1" />
+                  </div>
+                  <div class="proto-field-value">
+                    <label for="schema-max-length">Max Length (TextField):</label>
+                    <input type="number" id="schema-max-length" class="form-control" value="50" />
+                  </div>
+                </div>
+
+                <!-- Column List -->
+                <div class="col-6">
+                  <div class="proto-section-title">All Columns</div>
+                  <div class="proto-column-item selected">
+                    <strong>HERO_NAME</strong>
+                    <small style="display: block; color: #aaa;">Type: TextField</small>
+                    <small style="display: block; color: #aaa;">Min: 1, Max: 50</small>
+                  </div>
+                  <div class="proto-column-item">
+                    <strong>HERO_CLASS</strong>
+                    <small style="display: block; color: #aaa;">Type: Options</small>
+                    <small style="display: block; color: #aaa;">3 options available</small>
+                  </div>
+                  <div class="proto-column-item">
+                    <strong>HERO_LEVEL</strong>
+                    <small style="display: block; color: #aaa;">Type: NumberField</small>
+                    <small style="display: block; color: #aaa;">Min: 1, Max: 20</small>
+                  </div>
+                  <div class="proto-column-item">
+                    <strong>HERO_IMAGE</strong>
+                    <small style="display: block; color: #aaa;">Type: ImageData</small>
+                    <small style="display: block; color: #aaa;">References image pool</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Image Tab -->
+          <div id="tab-image" class="tab-pane fade">
+            <div class="rpg-box m-3">
+              <div class="proto-section-title">Image Management</div>
+
+              <div class="text-center mb-3">
+                <button class="btn btn-primary">
+                  <i class="fas fa-upload"></i> Load Image
+                </button>
+              </div>
+
+              <div class="proto-image-table-container">
+                <table class="table table-dark table-hover proto-table">
+                  <thead>
+                    <tr>
+                      <th>Filename</th>
+                      <th>Loaded?</th>
+                      <th>In Data?</th>
+                      <th>In Template?</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>barbarian.png</td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                    <tr>
+                      <td>bard.png</td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><i class="fas fa-times text-danger"></i></td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                    <tr>
+                      <td>cleric.png</td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><i class="fas fa-check text-success"></i></td>
+                      <td><i class="fas fa-times text-danger"></i></td>
+                      <td><button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div style="margin-top: 2rem; text-align: right;">
+                <button class="btn btn-success">Update</button>
+                <button class="btn btn-secondary">Cancel</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Font Pool Tab -->
+          <div id="tab-font" class="tab-pane fade">
+            <div class="rpg-box m-3">
+              <div class="proto-section-title">Font Pool Selection</div>
+
+              <div class="row">
+                <div class="col-8">
+                  <div style="max-height: 500px; overflow-y: auto;">
+                    <div class="proto-font-item">
+                      <h3 style="font-family: Arial;">Arial</h3>
+                      <p style="font-family: Arial;">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item selected">
+                      <h3 style="font-family: Georgia;">Georgia</h3>
+                      <p style="font-family: Georgia;">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: 'Times New Roman';">Times New Roman</h3>
+                      <p style="font-family: 'Times New Roman';">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: 'Courier New';">Courier New</h3>
+                      <p style="font-family: 'Courier New';">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: Verdana;">Verdana</h3>
+                      <p style="font-family: Verdana;">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: 'Trebuchet MS';">Trebuchet MS</h3>
+                      <p style="font-family: 'Trebuchet MS';">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: Impact;">Impact</h3>
+                      <p style="font-family: Impact;">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+
+                    <div class="proto-font-item">
+                      <h3 style="font-family: 'Comic Sans MS';">Comic Sans MS</h3>
+                      <p style="font-family: 'Comic Sans MS';">"The quick brown fox jumped over the lazy dog!"</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-4">
+                  <div class="proto-section-title">Selected Fonts</div>
+                  <div style="background: #333; padding: 1rem; border-radius: 4px; max-height: 400px; overflow-y: auto;">
+                    <div style="margin-bottom: 0.5rem;">
+                      <i class="fas fa-check text-success"></i> Georgia
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modals -->
+
+  <!-- Initial Dialog: Choose Orientation -->
+  <div class="proto-modal-overlay active" id="modal-orientation">
+    <div class="proto-modal-content">
+      <h2>Create New Template</h2>
+      <p>Choose the card orientation for your template:</p>
+      <button class="btn btn-primary btn-lg proto-orientation-button" onclick="selectOrientation('Portrait')">
+        <i class="fas fa-rectangle-portrait"></i> Portrait
+      </button>
+      <button class="btn btn-primary btn-lg proto-orientation-button" onclick="selectOrientation('Landscape')">
+        <i class="fas fa-rectangle-landscape"></i> Landscape
+      </button>
+    </div>
+  </div>
+
+  <!-- Alert Modal -->
+  <div class="proto-modal-overlay" id="modal-alert">
+    <div class="proto-modal-content" style="max-width: 400px;">
+      <h2>Alert</h2>
+      <p id="modal-alert-text">This is an alert message.</p>
+      <div class="proto-modal-buttons">
+        <button class="btn btn-primary" onclick="closeModal('alert')">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Modal -->
+  <div class="proto-modal-overlay" id="modal-confirm">
+    <div class="proto-modal-content" style="max-width: 400px;">
+      <h2>Confirm</h2>
+      <p id="modal-confirm-text">Are you sure you want to proceed?</p>
+      <div class="proto-modal-buttons">
+        <button class="btn btn-secondary" onclick="closeModal('confirm')">Cancel</button>
+        <button class="btn btn-primary" onclick="confirmAction()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Download Modal -->
+  <div class="proto-modal-overlay" id="modal-download">
+    <div class="proto-modal-content" style="max-width: 500px;">
+      <h2>Download Options</h2>
+      <p>Select what to download:</p>
+      <div style="background: #333; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <div class="proto-field-value">
+          <input type="radio" name="download-format" id="download-all" checked />
+          <label for="download-all" style="display: inline; margin-left: 0.5rem;">Download All (Template + Schema + Data)</label>
+        </div>
+        <div class="proto-field-value">
+          <input type="radio" name="download-format" id="download-template" />
+          <label for="download-template" style="display: inline; margin-left: 0.5rem;">Download Template (JSON)</label>
+        </div>
+        <div class="proto-field-value">
+          <input type="radio" name="download-format" id="download-data" />
+          <label for="download-data" style="display: inline; margin-left: 0.5rem;">Download Data (CSV)</label>
+        </div>
+      </div>
+      <div class="proto-modal-buttons">
+        <button class="btn btn-secondary" onclick="closeModal('download')">Cancel</button>
+        <button class="btn btn-success">Download</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- File Loader Modal -->
+  <div class="proto-modal-overlay" id="modal-loader">
+    <div class="proto-modal-content" style="max-width: 500px;">
+      <h2>Load File</h2>
+      <p>Select file type to load:</p>
+      <div style="background: #333; padding: 1rem; border-radius: 4px; margin-bottom: 1.5rem;">
+        <div class="proto-field-value">
+          <label for="load-file-input">Choose file:</label>
+          <input type="file" id="load-file-input" class="form-control" />
+        </div>
+      </div>
+      <div class="proto-modal-buttons">
+        <button class="btn btn-secondary" onclick="closeModal('loader')">Cancel</button>
+        <button class="btn btn-primary">Load</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Print Preview Modal -->
+  <div class="proto-modal-overlay" id="modal-print">
+    <div class="proto-modal-content" style="max-width: 700px;">
+      <h2>Print Preview</h2>
+      <p style="font-size: 0.9rem; color: #aaa;">2 of 3 cards selected</p>
+      <div style="background: white; padding: 1rem; border-radius: 4px; max-height: 300px; overflow-y: auto;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+          <div style="background: #f0f0f0; aspect-ratio: 3.5/5; display: flex; align-items: center; justify-content: center; color: #333;">
+            Card 1
+          </div>
+          <div style="background: #f0f0f0; aspect-ratio: 3.5/5; display: flex; align-items: center; justify-content: center; color: #333;">
+            Card 2
+          </div>
+        </div>
+      </div>
+      <div class="proto-modal-buttons">
+        <button class="btn btn-secondary" onclick="closeModal('print')">Cancel</button>
+        <button class="btn btn-primary" onclick="window.print()">Print</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer" class="text-center mt-5 mb-3">
+    <p style="margin: 0; color: #999; font-size: 0.9rem;">
+      Copyright &copy; <span id="footer-year">2026</span> Scullery Plateau
+      <a href="https://github.com/scullery-plateau/scullery-plateau.github.io" style="color: #0d6efd; margin-left: 1rem;">
+        GitHub Repository
+      </a>
+    </p>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Prototype Interaction Script -->
+  <script>
+    // Initialize footer year
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    // Modal management
+    function closeModal(modalName) {
+      const modal = document.getElementById(`modal-${modalName}`);
+      if (modal) {
+        modal.classList.remove('active');
+      }
+    }
+
+    function openModal(modalName) {
+      const modal = document.getElementById(`modal-${modalName}`);
+      if (modal) {
+        modal.classList.add('active');
+      }
+    }
+
+    function selectOrientation(orientation) {
+      console.log('Selected orientation:', orientation);
+      closeModal('orientation');
+      alert(`Template created with ${orientation} orientation`);
+    }
+
+    function confirmAction() {
+      console.log('Action confirmed');
+      closeModal('confirm');
+    }
+
+    // Close modal when clicking outside
+    document.querySelectorAll('.proto-modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // Prevent modal close on content click
+    document.querySelectorAll('.proto-modal-content').forEach(content => {
+      content.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    });
+  </script>
+</body>
+</html>
