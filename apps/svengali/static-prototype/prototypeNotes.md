@@ -1,0 +1,21 @@
+# Svengali prototype notes
+
+For the static prototype, I don't want to do the modals as modals. I just want to show them as individual frames on the page centered and styled as they would appear as modals but don't make them functional. Modals. 
+
+For the create new template modal the buttons should be side by side, not on top of each other. And I'd also like to have SVG of a blank card for each in the appropriate orientation. Make this a part of the button. 
+
+The menu buttons should be just the icons, not the text with the icons. The text for the icons should be in the title and ALT attributes of the nodes. The buttons themselves should be in line, not vertical and should be at the top of the page above the mainframe. The tabs for the mainframe should be in the top of the mainframe like standard tabs. I'd also like some way to properly distinguish between the inactive tabs and the rest of the page so that the users can see clearly where to click. For the static prototype page. I don't actually want the tabs to be functional.  what I want to  see is a separate versions of each main  panel with each tab active for that version of the  panel.  I also want to see two different versions of the template editor panel, one with the image properties and one with the text properties. 
+
+On the template panel, the inputs should be in line with the headers so on the same line as the label and but after. Layer controls don't need their own section header. Color buttons should be as they are in the other apps where the name of the button is the text in the button. 
+
+The card preview itself should have rounded corners. In fact, the card preview area itself should not have a background color. The background of the card should be The first layer of the SVG itself as a rounded white rectangle. The card preview should not be HTML. It should be SVG. 
+
+On the data panel, the road controls don't need their own header form field and card preview also don't need their own header. The row controls that add road delete row can just be the plus and minus icons and the buttons should be in line with the current row. They should also use the font awesome plus and minus icons instead of the plus and minus keyboard characters. The phrase is add row and delete row should be the title and alt text for those buttons. 
+
+On the schema management panel, the add and delete buttons should be the same as the add and delete buttons on the data panel. Just the icons. Alt text title text. Put them after the select column drop down. Type properties does not meet a section header. All column section header is not necessary, although it'd be nice to have the all column section. Have a dark gray background and have the column blocks themselves be a single solid color. I don't like the single collar border on the left hand side. That is not part of the general scalar plateau aesthetic and it just looks screwy. Under the type properties, column ID should not be a field since it is generated. It should instead be info text underneath the label field. 
+
+For the image management panel, let's add a column for a thumbnail. Keep the thumbnail small, roughly the same size as the delete button and make it clickable to be able to see the full image in a modal. For the table itself, instead of using the dark gray background, let's use the bootstrap info color. See how that looks 
+
+For the font pool, instead of using borders to highlight the selected fonts, let's apply the color to the entire button. Selected fonts will use bootstrap, success color. Unselected fonts will use the bootstrap info color. Let's see how that looks. 
+
+Finally, for this static prototype, let's not have any header or footer on the page. This is not a prototype of the app as a whole or a demo of the app as a whole; it is meant for establishing the layouts and style of the UI before we make it functional. When importing Bootstrap, only import the CSS, not the javascript. There should be no need for any javascript whatsoever, and there should be no need for custom styles. If you are creating custom styles, you're doing it wrong.

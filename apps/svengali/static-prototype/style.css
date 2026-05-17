@@ -1,0 +1,7 @@
+/* Prevent text wrapping on headers, tabs, buttons, labels, and table headers */
+h1, h2, h3, h4, h5, h6,
+button,
+label,
+thead {
+  white-space: nowrap;
+}

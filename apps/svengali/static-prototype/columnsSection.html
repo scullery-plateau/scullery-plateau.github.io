@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Columns Section Prototype</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="rpg-box my-3 p-3">
+      <div class="row">
+        <div class="col-md-6">
+          <label class="form-label">Columns</label>
+          <div class="border rounded p-3 overflow-auto">
+            <div class="column-item selected border-5 border-success p-2 rounded">
+              <!-- start column item list-->
+              <ul class="{{highlighted if selected}}">
+                <li>
+                  <strong>{{Column Name}}</strong>
+                  <ul>
+                    <li>ID: {{Column ID}}</li>
+                    <li>Type: {{Column Type}}</li>
+                    <li>{{Metadata field name}}: {{Metadata field value}}</li>
+                    <!-- if type is Options -->
+                    <li>
+                      <span>Options:</span>
+                      <ul>
+                        <li>{{Option 1}}</li>
+                        <li>{{Option 2}}</li>
+                        <li>{{Option 3}}</li>
+                        <!-- ... -->
+                      </ul>
+                    </li>
+                    <!-- end if -->
+                  </ul>
+                </li>
+              </ul>
+              <!-- end column item list -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

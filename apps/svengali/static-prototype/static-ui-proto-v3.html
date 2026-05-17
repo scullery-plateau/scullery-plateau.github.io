@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Svengali Static UI Prototype V3</title>
+    
+    <!-- Bootstrap 5.0.2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6.0.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Caudex:wght@400;700&family=Modern+Antiqua&display=swap" rel="stylesheet">
+    
+    <!-- Project Stylesheets -->
+    <link rel="stylesheet" href="../../../style/rpg.css">
+    <link rel="stylesheet" href="../../../style/font.css">
+    <link rel="stylesheet" href="../../../style/menu.css">
+    
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Caudex', serif;
+            padding: 20px;
+        }
+        
+        .rpg-box {
+            background-color: #2a2a2a;
+            border: 2px solid #666;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-inline-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .form-inline-label label {
+            min-width: 150px;
+            margin-right: 10px;
+            margin-bottom: 0;
+            color: #b0b0b0;
+        }
+        
+        .form-inline-label input,
+        .form-inline-label select,
+        .form-inline-label .btn {
+            flex: 1;
+            max-width: 250px;
+        }
+        
+        .rpg-textbox {
+            background-color: #1a1a1a;
+            border: 1px solid #555;
+            color: #e0e0e0;
+            padding: 8px;
+            border-radius: 2px;
+        }
+        
+        .rpg-textbox:focus {
+            background-color: #222;
+            border-color: #888;
+            color: #e0e0e0;
+            outline: none;
+        }
+        
+        .card-preview {
+            background-color: #1a1a1a;
+            border: 1px solid #555;
+            padding: 15px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 300px;
+        }
+        
+        .card-svg {
+            width: 140px;
+            height: 200px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .two-column-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .column-left {
+            min-width: 0;
+        }
+        
+        .column-right {
+            min-width: 0;
+        }
+        
+        .column-id-text {
+            font-size: 0.85rem;
+            color: #0d6efd;
+            margin-top: 3px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .icon-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+        }
+        
+        .table-info-header {
+            background-color: #0d6efd !important;
+            color: white;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #888;
+            padding: 40px 20px;
+        }
+        
+        .font-pool-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            height: 400px;
+        }
+        
+        .font-column {
+            border: 1px solid #555;
+            border-radius: 4px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .font-button {
+            width: 100%;
+            text-align: left;
+            padding: 12px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .font-button-available {
+            background-color: #0d6efd;
+            color: white;
+        }
+        
+        .font-button-selected {
+            background-color: #198754;
+            color: white;
+        }
+        
+        .modal-static {
+            background-color: #2a2a2a;
+            border: 2px solid #666;
+            border-radius: 4px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 500px;
+        }
+        
+        .menu-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .layer-controls {
+            display: flex;
+            gap: 4px;
+            margin-top: 10px;
+        }
+        
+        .divider {
+            border-top: 1px solid #555;
+            margin: 15px 0;
+        }
+        
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            color: #d0d0d0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- MENU BAR -->
+        <div class="rpg-box menu-bar">
+            <button class="btn btn-sm icon-btn btn-primary" title="New Template" alt="New Template">
+                <i class="fas fa-file-circle-plus"></i>
+            </button>
+            <button class="btn btn-sm icon-btn btn-primary" title="Open" alt="Open">
+                <i class="fas fa-file-circle-arrow-up"></i>
+            </button>
+            <button class="btn btn-sm icon-btn btn-primary" title="Save" alt="Save">
+                <i class="fas fa-floppy-disk"></i>
+            </button>
+            <button class="btn btn-sm icon-btn btn-primary" title="Download" alt="Download">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="btn btn-sm icon-btn btn-primary" title="Settings" alt="Settings">
+                <i class="fas fa-sliders"></i>
+            </button>
+            <button class="btn btn-sm icon-btn btn-primary" title="About" alt="About">
+                <i class="fas fa-circle-info"></i>
+            </button>
+        </div>
+
+        <!-- TEMPLATE EDITOR PANEL -->
+        <div class="rpg-box">
+            <h3>Template Editor (Image Variant)</h3>
+            <div class="two-column-layout">
+                <div class="column-left">
+                    <!-- Frame Properties -->
+                    <div class="form-inline-label">
+                        <label>Name:</label>
+                        <input type="text" class="form-control rpg-textbox" value="My Template">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Frame X:</label>
+                        <input type="number" class="form-control rpg-textbox" value="10">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Frame Y:</label>
+                        <input type="number" class="form-control rpg-textbox" value="20">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Frame Width:</label>
+                        <input type="number" class="form-control rpg-textbox" value="300">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Frame Height:</label>
+                        <input type="number" class="form-control rpg-textbox" value="400">
+                    </div>
+
+                    <!-- Layer Selector -->
+                    <div class="form-inline-label">
+                        <label>Layer:</label>
+                        <select class="form-select rpg-textbox">
+                            <option>Layer 1 (Image)</option>
+                            <option>Layer 2 (Text)</option>
+                        </select>
+                    </div>
+
+                    <!-- Layer Controls -->
+                    <div class="layer-controls">
+                        <button class="btn btn-sm icon-btn btn-info" title="Add Layer" alt="Add Layer">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-sm icon-btn btn-danger" title="Delete Layer" alt="Delete Layer">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <button class="btn btn-sm icon-btn btn-secondary" title="Move To Back" alt="Move To Back">
+                            <i class="fas fa-angles-left"></i>
+                        </button>
+                        <button class="btn btn-sm icon-btn btn-secondary" title="Move Back One" alt="Move Back One">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-sm icon-btn btn-secondary" title="Move Forward One" alt="Move Forward One">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button class="btn btn-sm icon-btn btn-secondary" title="Move To Front" alt="Move To Front">
+                            <i class="fas fa-angles-right"></i>
+                        </button>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <!-- Image Properties -->
+                    <div class="section-title">Layer Properties (Image)</div>
+                    <div class="form-inline-label">
+                        <label>Image Source:</label>
+                        <select class="form-select rpg-textbox">
+                            <option>hero.png</option>
+                        </select>
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Center X:</label>
+                        <input type="number" class="form-control rpg-textbox" value="150">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Center Y:</label>
+                        <input type="number" class="form-control rpg-textbox" value="200">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Magnification:</label>
+                        <input type="number" class="form-control rpg-textbox" value="1.0">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Rotation:</label>
+                        <input type="number" class="form-control rpg-textbox" value="0">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Background Color:</label>
+                        <button class="btn btn-secondary" style="width: 250px;">
+                            <i class="fas fa-palette"></i> Select Color
+                        </button>
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Frame Color:</label>
+                        <button class="btn btn-secondary" style="width: 250px;">
+                            <i class="fas fa-palette"></i> Select Color
+                        </button>
+                    </div>
+                </div>
+                <div class="column-right">
+                    <div class="card-preview">
+                        <svg class="card-svg" viewBox="0 0 140 200">
+                            <rect width="140" height="200" rx="8" fill="white" stroke="#ccc" stroke-width="1"/>
+                            <rect x="10" y="10" width="120" height="180" fill="#f0f0f0"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA PANEL -->
+        <div class="rpg-box">
+            <h3>Data Panel</h3>
+            <div class="two-column-layout">
+                <div class="column-left">
+                    <!-- Row Selector -->
+                    <div class="form-inline-label button-group" style="margin-bottom: 15px;">
+                        <label style="min-width: 100px;">Row:</label>
+                        <select class="form-select rpg-textbox" style="flex: 1; max-width: 150px;">
+                            <option>Row 1 of 3</option>
+                        </select>
+                        <button class="btn btn-sm btn-success icon-btn" title="Add Row" alt="Add Row">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger icon-btn" title="Delete Row" alt="Delete Row">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Data Form Fields -->
+                    <div class="form-inline-label">
+                        <label>Character Name:</label>
+                        <input type="text" class="form-control rpg-textbox" value="Aragorn">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Experience Points:</label>
+                        <input type="number" class="form-control rpg-textbox" value="8500">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Character Class:</label>
+                        <select class="form-select rpg-textbox">
+                            <option selected>Ranger</option>
+                            <option>Barbarian</option>
+                            <option>Bard</option>
+                            <option>Cleric</option>
+                            <option>Fighter</option>
+                            <option>Rogue</option>
+                            <option>Wizard</option>
+                        </select>
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Title Font:</label>
+                        <select class="form-select rpg-textbox">
+                            <option selected>Georgia</option>
+                        </select>
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Accent Color:</label>
+                        <button class="btn btn-secondary" style="flex: 1; max-width: 250px;">
+                            <i class="fas fa-palette"></i> Color
+                        </button>
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Character Portrait:</label>
+                        <select class="form-select rpg-textbox">
+                            <option selected>hero.png</option>
+                            <option>mage.png</option>
+                            <option>staff.png</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="column-right">
+                    <div class="card-preview">
+                        <svg class="card-svg" viewBox="0 0 140 200">
+                            <rect width="140" height="200" rx="8" fill="white" stroke="#ccc" stroke-width="1"/>
+                            <text x="70" y="30" text-anchor="middle" font-size="12" fill="black">Aragorn</text>
+                            <text x="70" y="190" text-anchor="middle" font-size="10" fill="#666">Ranger</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCHEMA PANEL -->
+        <div class="rpg-box">
+            <h3>Schema Management Panel</h3>
+            <div class="two-column-layout">
+                <div class="column-left">
+                    <!-- Column Selector -->
+                    <div class="form-inline-label button-group" style="margin-bottom: 15px;">
+                        <label style="min-width: 100px;">Column:</label>
+                        <select class="form-select rpg-textbox" style="flex: 1; max-width: 150px;">
+                            <option>Character Name</option>
+                        </select>
+                        <button class="btn btn-sm btn-success icon-btn" title="Add Column" alt="Add Column">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger icon-btn" title="Delete Column" alt="Delete Column">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+
+                    <!-- Column Editing Form -->
+                    <div class="form-inline-label">
+                        <label>Label:</label>
+                        <input type="text" class="form-control rpg-textbox" value="Character Name">
+                    </div>
+                    <div class="column-id-text">Column ID: CHARACTER_NAME</div>
+
+                    <div class="form-inline-label" style="margin-top: 10px;">
+                        <label>Type:</label>
+                        <select class="form-select rpg-textbox">
+                            <option selected>TextField</option>
+                            <option>NumberField</option>
+                            <option>Options</option>
+                            <option>Font</option>
+                            <option>Color</option>
+                            <option>ImageData</option>
+                        </select>
+                    </div>
+
+                    <!-- TextField Properties -->
+                    <div class="form-inline-label">
+                        <label>Min Length:</label>
+                        <input type="number" class="form-control rpg-textbox" value="1">
+                    </div>
+                    <div class="form-inline-label">
+                        <label>Max Length:</label>
+                        <input type="number" class="form-control rpg-textbox" value="100">
+                    </div>
+                </div>
+                <div class="column-right">
+                    <div style="border: 1px solid #555; border-radius: 4px; padding: 10px;">
+                        <strong style="color: #d0d0d0;">Columns:</strong>
+                        <ul style="margin-top: 10px; margin-bottom: 0; padding-left: 20px;">
+                            <li>Character Name (TextField)</li>
+                            <li>Experience Points (NumberField)</li>
+                            <li>Character Class (Options)</li>
+                            <li>Title Font (Font)</li>
+                            <li>Accent Color (Color)</li>
+                            <li>Character Portrait (ImageData)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IMAGE MANAGEMENT PANEL -->
+        <div class="rpg-box">
+            <h3>Image Management Panel</h3>
+
+            <!-- Top Controls -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <div class="button-group">
+                    <button class="btn btn-sm btn-primary" title="Load Image" alt="Load Image">
+                        <i class="fas fa-upload"></i> Load Image
+                    </button>
+                    <button class="btn btn-sm btn-danger" title="Delete Unused" alt="Delete Unused">
+                        <i class="fas fa-trash"></i> Delete Unused
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table class="table table-dark table-sm" style="margin-bottom: 15px;">
+                <thead>
+                    <tr class="table-info-header">
+                        <th>Filename</th>
+                        <th>Loaded?</th>
+                        <th>In Data Table?</th>
+                        <th>In Template?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>hero.png</td>
+                        <td><span class="badge bg-success">Yes</span></td>
+                        <td><span class="badge bg-success">Yes</span></td>
+                        <td><span class="badge bg-success">Yes</span></td>
+                    </tr>
+                    <tr>
+                        <td>mage.png</td>
+                        <td><span class="badge bg-success">Yes</span></td>
+                        <td><span class="badge bg-success">Yes</span></td>
+                        <td><span class="badge bg-secondary">No</span></td>
+                    </tr>
+                    <tr>
+                        <td>staff.png</td>
+                        <td><span class="badge bg-secondary">No</span></td>
+                        <td><span class="badge bg-secondary">No</span></td>
+                        <td><span class="badge bg-secondary">No</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Bottom Controls -->
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button class="btn btn-sm btn-success">
+                    <i class="fas fa-check"></i> Update
+                </button>
+                <button class="btn btn-sm btn-secondary">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <!-- FONT POOL PANEL -->
+        <div class="rpg-box">
+            <h3>Font Pool Panel</h3>
+            <div class="font-pool-container">
+                <!-- Available Fonts (Left) -->
+                <div class="font-column">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #0d6efd;">Available Fonts</div>
+                    <button class="font-button font-button-available" style="font-family: Arial;">Arial</button>
+                    <button class="font-button font-button-available" style="font-family: Verdana;">Verdana</button>
+                    <button class="font-button font-button-available" style="font-family: 'Times New Roman';">Times New Roman</button>
+                    <button class="font-button font-button-available" style="font-family: 'Courier New';">Courier New</button>
+                    <button class="font-button font-button-available" style="font-family: Georgia;">Georgia</button>
+                    <button class="font-button font-button-available" style="font-family: 'Trebuchet MS';">Trebuchet MS</button>
+                    <button class="font-button font-button-available" style="font-family: 'Comic Sans MS';">Comic Sans MS</button>
+                    <button class="font-button font-button-available" style="font-family: Impact;">Impact</button>
+                    <button class="font-button font-button-available" style="font-family: 'Palatino Linotype';">Palatino</button>
+                    <button class="font-button font-button-available" style="font-family: 'Lucida Console';">Lucida Console</button>
+                    <button class="font-button font-button-available" style="font-family: Tahoma;">Tahoma</button>
+                    <button class="font-button font-button-available" style="font-family: 'Lucida Grande';">Lucida Grande</button>
+                </div>
+
+                <!-- Selected Fonts (Right) -->
+                <div class="font-column">
+                    <div style="font-weight: bold; margin-bottom: 10px; color: #198754;">Selected Fonts</div>
+                    <button class="font-button font-button-selected" style="font-family: Georgia;">Georgia</button>
+                    <button class="font-button font-button-selected" style="font-family: 'Trebuchet MS';">Trebuchet MS</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODALS (Static Display) -->
+        <div class="section-title" style="margin-top: 40px;">Modals & Popups (Static Display)</div>
+
+        <!-- Alert Modal -->
+        <div class="modal-static">
+            <h5 style="color: #d0d0d0;">Alert Modal</h5>
+            <p style="color: #b0b0b0;">Operation completed successfully!</p>
+            <div style="text-align: right;">
+                <button class="btn btn-sm btn-primary">OK</button>
+            </div>
+        </div>
+
+        <!-- Confirm Modal -->
+        <div class="modal-static">
+            <h5 style="color: #d0d0d0;">Confirm Modal</h5>
+            <p style="color: #b0b0b0;">Are you sure you want to delete this item?</p>
+            <div style="text-align: right; display: flex; justify-content: flex-end; gap: 8px;">
+                <button class="btn btn-sm btn-secondary">Cancel</button>
+                <button class="btn btn-sm btn-danger">Delete</button>
+            </div>
+        </div>
+
+        <!-- Create Template Modal -->
+        <div class="modal-static">
+            <h5 style="color: #d0d0d0;">Create New Template</h5>
+            <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px;">
+                <div style="text-align: center;">
+                    <svg width="140" height="200" viewBox="0 0 140 200" style="border: 2px solid #666; border-radius: 4px;">
+                        <rect width="140" height="200" fill="white"/>
+                        <text x="70" y="100" text-anchor="middle" font-size="14" fill="#999">Portrait</text>
+                    </svg>
+                    <p style="margin-top: 10px; color: #b0b0b0;">Portrait (3.5:5)</p>
+                </div>
+                <div style="text-align: center;">
+                    <svg width="200" height="140" viewBox="0 0 200 140" style="border: 2px solid #666; border-radius: 4px;">
+                        <rect width="200" height="140" fill="white"/>
+                        <text x="100" y="70" text-anchor="middle" font-size="14" fill="#999">Landscape</text>
+                    </svg>
+                    <p style="margin-top: 10px; color: #b0b0b0;">Landscape (5:3.5)</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

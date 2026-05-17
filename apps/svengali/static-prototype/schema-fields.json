@@ -1,0 +1,49 @@
+{
+  "fields": [
+    {
+      "name": "Character Name",
+      "id": "CHARACTER_NAME",
+      "type": "TextField",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    {
+      "name": "Experience Points",
+      "id": "EXPERIENCE_POINTS",
+      "type": "NumberField",
+      "min": 0,
+      "max": 999999,
+      "step": 1
+    },
+    {
+      "name": "Character Class",
+      "id": "CHARACTER_CLASS",
+      "type": "Options",
+      "options": [
+        "Barbarian",
+        "Bard",
+        "Cleric",
+        "Fighter",
+        "Ranger",
+        "Rogue",
+        "Wizard"
+      ]
+    },
+    {
+      "name": "Title Font",
+      "id": "TITLE_FONT",
+      "type": "Font"
+    },
+    {
+      "name": "Accent Color",
+      "id": "ACCENT_COLOR",
+      "type": "Color",
+      "default": "#FF5733"
+    },
+    {
+      "name": "Character Portrait",
+      "id": "CHARACTER_PORTRAIT",
+      "type": "ImageData"
+    }
+  ]
+}

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scullery Plateau: Svengali - UI Prototype v1</title>
+  <meta charset="UTF-8">
+  <meta name="description" content="Svengali: Card template and data renderer for TTRPGs">
+  <meta name="keywords" content="card template, data renderer, TTRPG, tabletop RPG">
+  <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+
+  <!-- Bootstrap CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+  />
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Caudex"
+    rel="stylesheet"
+  />
+  <link
+    href="https://fonts.googleapis.com/css?family=Modern+Antiqua"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+
+  <!-- Project styles -->
+  <link rel="stylesheet" href="../../../style/rpg.css" />
+  <link rel="stylesheet" href="../../../style/font.css" />
+  <link rel="stylesheet" href="../../../style/menu.css" />
+</head>
+<body class="bg-dark text-light">
+  <!-- Menu Bar -->
+  <div class="container-fluid bg-secondary p-2">
+    <div class="d-flex gap-2">
+      <button class="btn btn-primary" title="Download All" aria-label="Download All">
+        <i class="fas fa-download"></i>
+      </button>
+      <button class="btn btn-primary" title="Download Template" aria-label="Download Template">
+        <i class="fas fa-code"></i>
+      </button>
+      <button class="btn btn-primary" title="Download Data" aria-label="Download Data">
+        <i class="fas fa-table"></i>
+      </button>
+      <button class="btn btn-primary" title="Print" aria-label="Print">
+        <i class="fas fa-print"></i>
+      </button>
+      <button class="btn btn-primary" title="Load Template" aria-label="Load Template">
+        <i class="fas fa-folder-open"></i>
+      </button>
+      <button class="btn btn-primary" title="Load Data" aria-label="Load Data">
+        <i class="fas fa-upload"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid p-4">
+    <!-- Tab Navigation -->
+    <ul class="nav nav-tabs mb-4" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="tab-template-btn" type="button" role="tab">Template</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-data-btn" type="button" role="tab">Data</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-schema-btn" type="button" role="tab">Schema</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-image-btn" type="button" role="tab">Image</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="tab-font-btn" type="button" role="tab">Font Pool</button>
+      </li>
+    </ul>
+
+    <!-- Template Tab Content -->
+    <div id="tab-template" class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Template Editor — Image Properties</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="template-name" class="form-label">Name:</label>
+            <input type="text" id="template-name" class="form-control" placeholder="Template name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Layers:</label>
+            <div class="bg-secondary p-3">
+              <div class="p-2 bg-info text-dark mb-2">Layer 1: Background</div>
+              <div class="p-2 bg-info text-dark mb-2">Layer 2: Image</div>
+              <div class="p-2 bg-info text-dark">Layer 3: Text</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Image Properties:</label>
+            <div class="bg-secondary p-3">
+              <div class="mb-2">
+                <label for="image-source" class="form-label">Source:</label>
+                <input type="text" id="image-source" class="form-control" placeholder="Image URL or ID">
+              </div>
+              <div class="mb-2">
+                <label for="image-opacity" class="form-label">Opacity:</label>
+                <input type="range" id="image-opacity" class="form-range" min="0" max="100" value="100">
+              </div>
+              <div>
+                <label class="form-label">Color:</label>
+                <button class="btn btn-info btn-sm">Color</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Card Preview:</label>
+          <svg viewBox="0 0 350 500" class="border border-info w-100" style="max-width: 300px; margin: 0 auto; display: block;">
+            <rect x="5" y="5" width="340" height="490" rx="15" fill="white" stroke="none"/>
+            <text x="175" y="250" text-anchor="middle" dominant-baseline="middle" font-size="18" fill="#333">Card Preview</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template Tab Content - Alternate (Text Properties) -->
+    <div class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Template Editor — Text Properties</h2>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="mb-3">
+            <label for="template-name-2" class="form-label">Name:</label>
+            <input type="text" id="template-name-2" class="form-control" placeholder="Template name">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Layers:</label>
+            <div class="bg-secondary p-3">
+              <div class="p-2 bg-info text-dark mb-2">Layer 1: Background</div>
+              <div class="p-2 bg-info text-dark mb-2">Layer 2: Image</div>
+              <div class="p-2 bg-info text-dark">Layer 3: Text</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Text Properties:</label>
+            <div class="bg-secondary p-3">
+              <div class="mb-2">
+                <label for="text-content" class="form-label">Content:</label>
+                <input type="text" id="text-content" class="form-control" placeholder="Text content">
+              </div>
+              <div class="mb-2">
+                <label for="text-font" class="form-label">Font:</label>
+                <select id="text-font" class="form-select">
+                  <option>Caudex</option>
+                  <option>Modern Antiqua</option>
+                </select>
+              </div>
+              <div>
+                <label class="form-label">Color:</label>
+                <button class="btn btn-info btn-sm">Color</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Card Preview:</label>
+          <svg viewBox="0 0 350 500" class="border border-info w-100" style="max-width: 300px; margin: 0 auto; display: block;">
+            <rect x="5" y="5" width="340" height="490" rx="15" fill="white" stroke="none"/>
+            <text x="175" y="250" text-anchor="middle" dominant-baseline="middle" font-size="18" fill="#333">Card Preview</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Tab Content -->
+    <div class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Data Management</h2>
+      <table class="table table-dark table-striped">
+        <thead class="bg-info text-dark">
+          <tr>
+            <th>Row</th>
+            <th>Name</th>
+            <th>Value</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><input type="text" class="form-control form-control-sm" value="Field 1"></td>
+            <td><input type="text" class="form-control form-control-sm" value="Data 1"></td>
+            <td>
+              <button class="btn btn-sm btn-info" title="Add Row" aria-label="Add Row"><i class="fas fa-plus"></i></button>
+              <button class="btn btn-sm btn-danger" title="Delete Row" aria-label="Delete Row"><i class="fas fa-minus"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><input type="text" class="form-control form-control-sm" value="Field 2"></td>
+            <td><input type="text" class="form-control form-control-sm" value="Data 2"></td>
+            <td>
+              <button class="btn btn-sm btn-info" title="Add Row" aria-label="Add Row"><i class="fas fa-plus"></i></button>
+              <button class="btn btn-sm btn-danger" title="Delete Row" aria-label="Delete Row"><i class="fas fa-minus"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Schema Tab Content -->
+    <div class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Schema Management</h2>
+      <div class="mb-3">
+        <label for="select-column" class="form-label">Select Column:</label>
+        <div class="d-flex gap-2">
+          <select id="select-column" class="form-select">
+            <option>Column 1</option>
+            <option>Column 2</option>
+            <option>Column 3</option>
+          </select>
+          <button class="btn btn-info" title="Add Column" aria-label="Add Column"><i class="fas fa-plus"></i></button>
+          <button class="btn btn-danger" title="Delete Column" aria-label="Delete Column"><i class="fas fa-minus"></i></button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Type Properties:</label>
+        <div class="bg-secondary p-3">
+          <div class="mb-2">
+            <label for="column-label" class="form-label">Label:</label>
+            <input type="text" id="column-label" class="form-control" value="Column 1">
+          </div>
+          <div class="mb-2">
+            <label for="column-type" class="form-label">Type:</label>
+            <select id="column-type" class="form-select">
+              <option>Text</option>
+              <option>Number</option>
+              <option>Boolean</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">Column ID:</label>
+            <p class="text-muted">col_1 (generated)</p>
+          </div>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">All Columns:</label>
+        <div class="bg-secondary p-3">
+          <div class="p-2 bg-info text-dark mb-2">Column 1 (Text)</div>
+          <div class="p-2 bg-info text-dark mb-2">Column 2 (Number)</div>
+          <div class="p-2 bg-info text-dark">Column 3 (Boolean)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Tab Content -->
+    <div class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Image Management</h2>
+      <table class="table table-dark table-striped">
+        <thead class="bg-info text-dark">
+          <tr>
+            <th>Thumbnail</th>
+            <th>Image Name</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="bg-secondary p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <i class="fas fa-image text-muted"></i>
+              </div>
+            </td>
+            <td>image_1.png</td>
+            <td>256x256</td>
+            <td>
+              <button class="btn btn-sm btn-danger" title="Delete Image" aria-label="Delete Image"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="bg-secondary p-2" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <i class="fas fa-image text-muted"></i>
+              </div>
+            </td>
+            <td>image_2.png</td>
+            <td>512x512</td>
+            <td>
+              <button class="btn btn-sm btn-danger" title="Delete Image" aria-label="Delete Image"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Font Pool Tab Content -->
+    <div class="rpg-box p-4 mb-4">
+      <h2 class="mb-4">Font Pool</h2>
+      <div class="mb-3">
+        <label class="form-label">Selected Font Preview:</label>
+        <div class="bg-secondary p-4 text-center">
+          <p style="font-family: 'Caudex', serif; font-size: 1.5rem;">The quick brown fox jumps over the lazy dog</p>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Available Fonts:</label>
+        <div>
+          <button class="btn btn-success w-100 mb-2">Caudex (Selected)</button>
+          <button class="btn btn-info w-100 mb-2">Modern Antiqua</button>
+          <button class="btn btn-info w-100">Georgia</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals Section -->
+    <h3 class="mt-5 mb-4">Modals & Popups (Static Display)</h3>
+
+    <!-- Modal 1: Create New Template -->
+    <div class="rpg-box p-4 mb-4">
+      <h4 class="mb-3">Create New Template</h4>
+      <p class="text-muted mb-3">Choose the card orientation for your template:</p>
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <button class="btn btn-primary w-100 p-4">
+            <div class="mb-2">
+              <svg viewBox="0 0 200 280" style="height: 60px; margin: 0 auto; display: block;">
+                <rect x="10" y="10" width="180" height="260" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <div><i class="fas fa-rectangle-portrait"></i> Portrait</div>
+          </button>
+        </div>
+        <div class="col-md-6 mb-3">
+          <button class="btn btn-primary w-100 p-4">
+            <div class="mb-2">
+              <svg viewBox="0 0 280 200" style="height: 60px; margin: 0 auto; display: block;">
+                <rect x="10" y="10" width="260" height="180" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+              </svg>
+            </div>
+            <div><i class="fas fa-rectangle-landscape"></i> Landscape</div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 2: Alert -->
+    <div class="rpg-box p-4 mb-4" style="max-width: 400px;">
+      <h4 class="mb-3">Alert</h4>
+      <p class="mb-3">This is an alert message.</p>
+      <button class="btn btn-primary">OK</button>
+    </div>
+
+    <!-- Modal 3: Confirm -->
+    <div class="rpg-box p-4 mb-4" style="max-width: 400px;">
+      <h4 class="mb-3">Confirm</h4>
+      <p class="mb-3">Are you sure you want to proceed?</p>
+      <div class="d-flex gap-2">
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-primary">OK</button>
+      </div>
+    </div>
+
+    <!-- Modal 4: Download Options -->
+    <div class="rpg-box p-4 mb-4" style="max-width: 500px;">
+      <h4 class="mb-3">Download Options</h4>
+      <p class="text-muted mb-3">Select what to download:</p>
+      <div class="bg-secondary p-3 mb-3">
+        <div class="mb-2">
+          <input type="radio" id="download-all" name="download" checked>
+          <label for="download-all" class="ms-2">Download All (Template + Schema + Data)</label>
+        </div>
+        <div class="mb-2">
+          <input type="radio" id="download-template" name="download">
+          <label for="download-template" class="ms-2">Download Template (JSON)</label>
+        </div>
+        <div>
+          <input type="radio" id="download-data" name="download">
+          <label for="download-data" class="ms-2">Download Data (CSV)</label>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-success">Download</button>
+      </div>
+    </div>
+
+    <!-- Modal 5: File Loader -->
+    <div class="rpg-box p-4 mb-4" style="max-width: 500px;">
+      <h4 class="mb-3">Load File</h4>
+      <p class="text-muted mb-3">Select file to load:</p>
+      <div class="bg-secondary p-3 mb-3">
+        <label for="load-file" class="form-label">Choose file:</label>
+        <input type="file" id="load-file" class="form-control">
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-primary">Load</button>
+      </div>
+    </div>
+
+    <!-- Modal 6: Print Preview -->
+    <div class="rpg-box p-4 mb-4" style="max-width: 700px;">
+      <h4 class="mb-3">Print Preview</h4>
+      <p class="text-muted mb-3">2 of 3 cards selected</p>
+      <div class="bg-light p-3 mb-3">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <svg viewBox="0 0 350 500" class="border border-secondary w-100">
+              <rect x="5" y="5" width="340" height="490" rx="15" fill="white" stroke="none"/>
+              <text x="175" y="250" text-anchor="middle" dominant-baseline="middle" font-size="18" fill="#333">Card 1</text>
+            </svg>
+          </div>
+          <div class="col-md-6 mb-3">
+            <svg viewBox="0 0 350 500" class="border border-secondary w-100">
+              <rect x="5" y="5" width="340" height="490" rx="15" fill="white" stroke="none"/>
+              <text x="175" y="250" text-anchor="middle" dominant-baseline="middle" font-size="18" fill="#333">Card 2</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="btn btn-primary">Print</button>
+      </div>
+    </div>
+
+    <!-- Modal 7: Full Image View -->
+    <div class="rpg-box p-4 mb-5" style="max-width: 600px;">
+      <h4 class="mb-3">Full Image View</h4>
+      <div class="bg-secondary p-4 mb-3">
+        <svg viewBox="0 0 400 300" class="w-100" style="max-width: 400px; margin: 0 auto; display: block;">
+          <rect x="10" y="10" width="380" height="280" rx="8" fill="none" stroke="currentColor" stroke-width="2"/>
+          <text x="200" y="150" text-anchor="middle" dominant-baseline="middle" font-size="18" fill="currentColor">Full Image Preview</text>
+        </svg>
+      </div>
+      <button class="btn btn-secondary">Close</button>
+    </div>
+  </div>
+</body>
+</html>
