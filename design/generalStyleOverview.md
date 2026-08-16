@@ -240,6 +240,7 @@ All major content blocks wrapped in `.rpg-box` for consistency:
 ### Gallery/Thumbnail Pattern
 Multi-item displays use consistent structure (Minifier, Tokenizer):
 ```javascript
+{% raw %}
 <div className="gallery m-3 d-flex flex-wrap justify-content-around">
   {items.map((item, index) => (
     <div className="thumbnail rpg-box d-flex flex-column">
