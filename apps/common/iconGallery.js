@@ -215,10 +215,24 @@ namespace("sp.common.IconGallery",{
               </div>
               <div className="col-6">
                 <button
-                  className={this.state.filterByFavorites?"btn btn-primary":"btn btn-outline-dark"}
+                  className={this.state.filterByFavorites?"btn btn-primary":"btn btn-outline-primary"}
                   onClick={() => {
                     this.setState({ filterByFavorites: !this.state.filterByFavorites });
                   }}>Filter By Favorites{this.state.filterByFavorites?"!":"?"}</button>
+                { this.state.filterByFavorites && <button className="btn btn-success" onClick={() => {
+                  const faves = Object.keys(this.state.favorites).reduce((acc, id) => {
+                    acc[id] = this.state.gallery[id];
+                    return acc;
+                  }, {});
+                  console.log({ faves });
+                  const json = JSON.stringify(faves, null, 2);
+                  const blob = new Blob([json], {type: "application/json"});
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  a.download = "favorites.json";
+                  a.click();
+                }}>Download Favorites Json</button> }
               </div>
             </div>
             <div className="d-flex justify-content-center">
