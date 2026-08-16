@@ -251,6 +251,7 @@ Multi-item displays use consistent structure (Minifier, Tokenizer):
     </div>
   ))}
 </div>
+{% endraw %}
 ```
 
 ### Conditional Rendering
