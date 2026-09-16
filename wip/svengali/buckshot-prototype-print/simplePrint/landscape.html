@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Landscape Test</title>
+  <style>
+    @media print {
+      @page {
+        size: landscape;
+        margin: 0;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .page {
+        width: 11in;
+        height: 8.5in;
+        page-break-after: always;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .page:last-child {
+        page-break-after: auto;
+      }
+    }
+
+    body {
+      background: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .page {
+      background: white;
+      width: 11in;
+      height: 8.5in;
+    }
+
+    svg {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <svg width="10in" height="8in" viewBox="0 0 1000 800">
+      <rect x="0" y="0" width="1000" height="800" fill="none" stroke="black" stroke-width="2" />
+      <rect x="25" y="25" width="950" height="750" fill="none" stroke="red" stroke-width="2" />
+      <text x="500" y="400" font-family="Arial" font-size="40" text-anchor="middle" dominant-baseline="middle">Landscape
+        Page 1 (8x10)</text>
+    </svg>
+  </div>
+  <div class="page">
+    <svg width="10in" height="8in" viewBox="0 0 1000 800">
+      <rect x="0" y="0" width="1000" height="800" fill="none" stroke="black" stroke-width="2" />
+      <rect x="25" y="25" width="950" height="750" fill="none" stroke="red" stroke-width="2" />
+      <text x="500" y="400" font-family="Arial" font-size="40" text-anchor="middle" dominant-baseline="middle">Landscape
+        Page 2 (8x10)</text>
+    </svg>
+  </div>
+</body>
+
+</html>

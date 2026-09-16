@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buckshot Font Swatches</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {
+        background-color: #333;
+        color: #ddd
+      }
+    </style>
+    <script>
+      const fonts = [
+        "Arial",
+        "Times New Roman",
+        "Courier New",
+        "Georgia",
+        "Verdana",
+        "Caudex",
+        "Modern Antiqua",
+        "Helvetica",
+        "Trebuchet MS",
+        "Impact",
+        "Tahoma",
+        "Palatino Linotype",
+        "Garamond",
+        "Comic Sans MS",
+        "Brush Script MT",
+        "Lucida Console",
+        "Monaco"
+      ];
+      const samples = [
+        { 
+          title: "SAW", 
+          description: "Cuts off the end of the gun, making it deal 2 damage.",
+        },
+        { 
+          title: "BATTERY", 
+          description: "Charges the defibrilator; Draw another charge card.", 
+        },
+        { 
+          title: "MAGNIFIER", 
+          description: "Lets the user view the current shell.", 
+        },
+        { 
+          title: "SODA", 
+          description: "Racks the shotgun revealing the current shell and ejecting it.", 
+        }
+      ];
+      function createSample(sample) {
+        return `
+          <div style="margin-bottom: 20px;">
+            <h2>${sample.title}</h2>
+            <p>${sample.description}</p>
+          </div>
+        `;
+      }
+      function createFontSwatch(font) {
+        const sampleHTML = samples.map(createSample).join('');
+        return `
+          <div style="font-family: '${font}'; margin-bottom: 40px;">
+            <h1>${font}</h1>
+            ${sampleHTML}
+          </div>
+          <hr style="border: 1px solid #ddd; margin: 40px 0;">
+        `;
+      }
+      function onLoad() {
+        document.getElementById('page-container').innerHTML = fonts.map(createFontSwatch).join('\n');
+      }
+    </script>
+  </head>
+  <body onload="onLoad()">
+    <div id="page-container" style="display: contents;">
+    </div>
+  </body>
+</html>

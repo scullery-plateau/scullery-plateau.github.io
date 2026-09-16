@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Ensure any custom fonts are defined here if needed, 
+       though Playwright can inject them or they can be system fonts */
+  </style>
+</head>
+<body>
+  <canvas id="c"></canvas>
+  <script>
+    window.measureFont = async (family, size, charCodes) => {
+      // Create the font string
+      const fontSpec = `${size}px "${family}"`;
+      
+      // Wait for font to be ready
+      await document.fonts.load(fontSpec);
+      
+      const canvas = document.getElementById('c');
+      const ctx = canvas.getContext('2d');
+      ctx.font = fontSpec;
+      
+      const results = {};
+      for (const code of charCodes) {
+        const char = String.fromCharCode(code);
+        const m = ctx.measureText(char);
+        
+        results[code] = {
+          char: char,
+          width: m.width,
+          actualWidth: m.actualBoundingBoxRight - m.actualBoundingBoxLeft,
+          actualHeight: m.actualBoundingBoxAscent + m.actualBoundingBoxDescent,
+          ascent: m.actualBoundingBoxAscent,
+          descent: m.actualBoundingBoxDescent
+        };
+      }
+      
+      return results;
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Buckshot IconOnly Prototype</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+
+    <!-- external styles -->
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/print/landscape.css">
+
+    <!-- external scripts -->
+    <script src="https://gizmo-atheneum.github.io/structure/importnamespace/script.js"></script>
+
+    <!-- local namespaces -->
+    <script src="./scripts/metrics.js"></script>
+    <script src="./scripts/ratios.js"></script>
+    <script src="./scripts/icons.js"></script>
+    <script src="./scripts/context.js"></script>
+    <script src="./scripts/classes.js"></script>
+    <script src="./scripts/renderer.js"></script>
+    <script src="./scripts/demo.js"></script>
+
+
+    <script>
+      function onLoad() {
+        const { Demo } = imports({
+          'sp.svengali.buckshot.Demo': 'Demo',
+        });
+        Demo.render('page-container', 'iconOnly');
+        // Signal that rendering is complete for Playwright
+        window.rendererDone = true;
+        console.log("Renderer finished and window.rendererDone set to true");
+      }
+    </script>
+  </head>
+  <body onload="onLoad()">
+    <div id="page-container"></div>
+  </body>
+</html>
+
+

@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CanvasLayout",
+  "type": "object",
+  "required": [
+    "scale",
+    "layers"
+  ],
+  "properties": {
+    "scale": {
+      "type": "object",
+      "required": [
+        "height",
+        "width"
+      ],
+      "properties": {
+        "height": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "layers": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/layer"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+        "propertyBinding": {
+      "oneOf": [
+        {
+          "type": "string",
+          "description": "A static value that ignores the data record."
+        },
+        {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1,
+          "description": "A path to a value in the data record."
+        },
+        {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1
+            },
+            "default": { "type": "string" }
+          },
+          "required": ["path", "default"],
+          "additionalProperties": false,
+          "description": "A path to a record value, with a fallback static value."
+        }
+      ]
+    },
+
+    "textAlignment": {
+      "type": "string",
+      "enum": ["left", "center", "right", "justify"]
+    },
+    "colorSpec": {
+      "type": "string",
+      "anyOf": [
+        { "pattern": "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$" },
+        {
+          "enum": [
+            "black", "silver", "gray", "white", 
+            "maroon", "red", "purple", "fuchsia", 
+            "green", "lime", "olive", "yellow", 
+            "navy", "blue", "teal", "aqua"
+          ]
+        }
+      ]
+    },
+
+        "BaseLayer": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "integer" },
+        "y": { "type": "integer" },
+        "width": { "type": "integer", "minimum": 0 },
+        "height": { "type": "integer", "minimum": 0 },
+        "backgroundColor": { "$ref": "#/$defs/colorSpec" },
+        "outlineColor": { "$ref": "#/$defs/colorSpec" },
+        "outlineWidth": { "type": "number", "minimum": 0 },
+        "outlineStyle": { "type": "string", "enum": ["solid", "dashed", "dotted"] }
+      }
+    },
+
+    "HeaderLayer": {
+      "allOf": [{ "$ref": "#/$defs/BaseLayer" }],
+      "type": "object",
+      "required": ["header"],
+      "properties": {
+        "header": {
+          "type": "object",
+          "required": ["property", "align"],
+          "properties": {
+            "property": { "$ref": "#/$defs/propertyBinding" },
+            "align": { "$ref": "#/$defs/textAlignment" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+        "IconLayer": {
+      "allOf": [{ "$ref": "#/$defs/BaseLayer" }],
+      "type": "object",
+      "required": ["icon"],
+      "properties": {
+        "icon": {
+          "type": "object",
+          "required": ["property", "fill"],
+          "properties": {
+            "property": { "$ref": "#/$defs/propertyBinding" },
+            "fill": { "$ref": "#/$defs/colorSpec" },
+            "translateX": { "$ref": "#/$defs/propertyBinding" },
+            "translateY": { "$ref": "#/$defs/propertyBinding" },
+            "scaleX": { "$ref": "#/$defs/propertyBinding" },
+            "scaleY": { "$ref": "#/$defs/propertyBinding" },
+            "rotate": { "$ref": "#/$defs/propertyBinding" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "ParagraphLayer": {
+      "allOf": [{ "$ref": "#/$defs/BaseLayer" }],
+      "type": "object",
+      "required": ["paragraph"],
+      "properties": {
+        "paragraph": {
+          "type": "object",
+          "required": ["property", "align", "wrap"],
+          "properties": {
+            "property": { "$ref": "#/$defs/propertyBinding" },
+            "align": { "$ref": "#/$defs/textAlignment" },
+            "wrap": { "type": "boolean" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "layer": {
+      "oneOf": [
+        { "$ref": "#/$defs/HeaderLayer" },
+        { "$ref": "#/$defs/IconLayer" },
+        { "$ref": "#/$defs/ParagraphLayer" }
+      ]
+    }
+  }
+}

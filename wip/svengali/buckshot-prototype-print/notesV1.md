@@ -1,0 +1,12 @@
+# Reflections on the Prototype
+
+The purpose of the buckshot prototype is to prototype out the approach to printing cards for the Svengali app. The idea behind Svengali is to be able to create cards using a layout and a data table : the layout describes how the different data elements are meant to be laid out on the card and then the data table describes each card in the set as a record in the table. 
+
+Each layout is a series of layers applied to the card in that order. Each layer has a given x and y origin coordinate along with a width and a height and some other properties. Those four numbers serve as the bounding box for that layer. To start with, we have three different types of layers: header, icon, paragraph. 
+An icon layer holds the name of an icon as listed in the buckshot/ icon.js file, The icon itself is a simple json structure containing a width, a height, and an SVG path D value. The icon is meant to be applied to the card in such a way that it fits into the bounding box of the layer.
+The header layer and the paragraph layer are both text based the difference being that the header does not wrap but the paragraph does. In both cases, the appropriate font size will need to be calculated per card to ensure that the text that is given fits within the bounding box. In the case of the paragraph layer, this will mean calculating how the text is meant to wrap and using an SVG text element containing potentially multiple t-span elements. 
+Each card will as a whole need to be rendered as SVG, and, considering how other apps in scullery plateau use SVG to render printable pages, it would make sense that all six cards on a given page would be rendered together as a single SVG. 
+Currently in the buckshot/prototype folder there is a json schema for the layout and a sample layout that could potentially be used for the buckshot cards. 
+
+What I would like to do is attempt to architect out JavaScript classes meant to parallel the layer types in the json schema such that each layer type class contains its own SVG rendering algorithm, making each layer self-contained. Therefore, the way the prototype would work would be to parse the layout data for this card set into the appropriate objects and then iterate over the data table, applying the given record to the layout object rendering algorithm to render the card, applying that to the overall page SVG. This would of course mean chunking the data table into partitions of six elements to populate each page separately. 
+
