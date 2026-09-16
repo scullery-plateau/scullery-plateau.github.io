@@ -13,7 +13,7 @@ namespace("sp.common.Ajax",{},() => {
     },
     {}
   );
-  const getLocalStaticFileAsText = function (filepath, callbacks) {
+    const getLocalStaticFileAsText = function (filepath, callbacks) {
     if (typeof callbacks == 'function') {
       callbacks = {
         success: callbacks,
@@ -23,32 +23,30 @@ namespace("sp.common.Ajax",{},() => {
       out[k] = v;
       return out;
     }, defaultCallbacks);
-    const xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState === 4) {
-        if (this.status === 200) {
-          callbacks.success({
-            requestedFile: filepath,
-            responseText:this.responseText
+    fetch(filepath)
+      .then((response) => {
+        if (response.ok) {
+          return response.text().then((responseText) => {
+            callbacks.success({
+              requestedFile: filepath,
+              responseText,
+            });
           });
         } else {
           callbacks.failure({
             requestedFile: filepath,
-            status: this.status,
-            statusText: this.statusText,
-            responseText: this.responseText,
+            status: response.status,
+            statusText: response.statusText,
           });
         }
-      } else {
-        callbacks.stateChange({
-          state: this.readyState,
-          min: 0,
-          max: 4,
+      })
+      .catch((error) => {
+        callbacks.failure({
+          requestedFile: filepath,
+          error: error.message,
         });
-      }
-    };
-    xhttp.open('GET', filepath, true);
-    xhttp.send();
+      });
   };
+
   return { getLocalStaticFileAsText }
 });

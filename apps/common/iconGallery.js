@@ -172,12 +172,12 @@ namespace("sp.common.IconGallery",{
         this.setColorFromPicker(field,undefined);
       });
     }
-    toggleFavorite(id) {
+        toggleFavorite(id) {
       const favorites = util.merge(this.state.favorites);
       if (favorites[id]) {
         delete favorites[id];
       } else {
-        favorites[id] = true;
+        favorites[id] = this.state.gallery[id];
       }
       localStorage.setItem(this.favesKey, JSON.stringify(favorites));
       this.setState({ favorites });
