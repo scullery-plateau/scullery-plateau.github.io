@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Buckshot CardBack Prototype</title>
+    <title>Buckshot IconOnly Prototype</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
 
     <!-- external styles -->
     <link rel="stylesheet" href="https://voltron42.github.io/flair/print/landscape.css">
+    <link rel="stylesheet" href="style.css">
 
     <!-- external scripts -->
     <script src="https://gizmo-atheneum.github.io/structure/importnamespace/script.js"></script>
@@ -27,7 +28,7 @@
         const { Demo } = imports({
           'sp.svengali.buckshot.Demo': 'Demo',
         });
-        Demo.render('page-container', 'cardback');
+        Demo.render('page-container', 'iconOnly');
         // Signal that rendering is complete for Playwright
         window.rendererDone = true;
         console.log("Renderer finished and window.rendererDone set to true");
@@ -38,4 +39,5 @@
     <div id="page-container"></div>
   </body>
 </html>
+
 

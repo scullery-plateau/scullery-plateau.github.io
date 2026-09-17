@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Buckshot IconOnly Prototype</title>
+    <title>Buckshot IconOnly Portrait Prototype</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
 
     <!-- external styles -->
-    <link rel="stylesheet" href="https://voltron42.github.io/flair/print/landscape.css">
+    <link rel="stylesheet" href="https://voltron42.github.io/flair/print/portrait.css">
 
     <!-- external scripts -->
     <script src="https://gizmo-atheneum.github.io/structure/importnamespace/script.js"></script>
@@ -21,22 +21,18 @@
     <script src="./scripts/renderer.js"></script>
     <script src="./scripts/demo.js"></script>
 
-
     <script>
       function onLoad() {
         const { Demo } = imports({
           'sp.svengali.buckshot.Demo': 'Demo',
         });
-        Demo.render('page-container', 'iconOnly');
+        Demo.render('page-container', 'iconOnly', 'portrait');
         // Signal that rendering is complete for Playwright
         window.rendererDone = true;
-        console.log("Renderer finished and window.rendererDone set to true");
       }
     </script>
   </head>
   <body onload="onLoad()">
-    <div id="page-container"></div>
+    <div id="page-container" style="display: contents;"></div>
   </body>
 </html>
-
-

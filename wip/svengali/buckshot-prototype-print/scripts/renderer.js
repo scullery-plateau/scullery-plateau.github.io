@@ -4,34 +4,58 @@ namespace('sp.svengali.buckshot.Renderer', {
 }, ({ Context, Classes }) => {
   const GUTTER = 24; // 0.25in
 
-  const renderPageSVG = (pageCards, layoutInstance) => {
-    // Standard Landscape Canvas area: 10" x 8"
-    // Width: 10" * 96 = 960
-    // Height: 8" * 96 = 768
-    const pageW = 960;
-    const pageH = 768;
+  const renderPageSVG = (pageCards, layoutInstance, orientation) => {
+    const isPortrait = orientation === 'portrait';
     
-    // Svengali card grid dimensions: 8.0" x 7.25"
-    const gridW = 8.0 * 96; // 768px
+    // Canvas dimensions at 96dpi
+    const pageW = isPortrait ? 768 : 960; // 8in or 10in
+    const pageH = isPortrait ? 960 : 768; // 10in or 8in
+    
+    // Base Svengali card grid (Landscape arrangement: 2 rows of 3)
+    const gridW = 8.0 * 96;  // 768px
     const gridH = 7.25 * 96; // 696px
-
-    // Center the 8x7.25 grid within the 10x8 canvas
-    const offsetX = (pageW - gridW) / 2;
-    const offsetY = (pageH - gridH) / 2;
-    
-    const cardW = 2.5 * 96; // 240px
-    const cardH = 3.5 * 96; // 336px
+    const cardW = 2.5 * 96; 
+    const cardH = 3.5 * 96;
 
     const placements = pageCards.map((cardData, i) => {
-      const x = offsetX + (i % 3) * (cardW + GUTTER);
-      const y = offsetY + Math.floor(i / 3) * (cardH + GUTTER);
+      const x = (i % 3) * (cardW + GUTTER);
+      const y = Math.floor(i / 3) * (cardH + GUTTER);
       return `<use href="#${cardData.defId}" x="${x}" y="${y}" />`;
     }).join('\n');
 
-    return `<svg viewBox="0 0 ${pageW} ${pageH}">${placements}</svg>`;
+    let content;
+    if (isPortrait) {
+      // Portrait Paper: 8.5"w x 11"h. Canvas: 8"w x 10"h.
+      // Horizontally: 8" canvas is centered (0.25" margins). Grid (7.25"w) is centered in canvas.
+      const rotatedW = gridH; // 696
+      const rotatedH = gridW; // 768
+      const offsetX = (pageW - rotatedW) / 2; // (768 - 696) / 2 = 36px
+      
+      // Vertically: To center 8" grid on 11" paper, need 1.5" top margin.
+      // CSS provides 0.25". Required SVG offset: 1.25" (120px).
+      const offsetY = 1.25 * 96; 
+      
+      content = `<g transform="translate(${gridH + offsetX}, ${offsetY}) rotate(90)">${placements}</g>`;
+    } else {
+      // Landscape Paper: 11"w x 8.5"h. Canvas: 10"w x 8"h.
+      // Horizontally: To center 8" grid on 11" paper, need 1.5" left margin.
+      // CSS provides 0.25". Required SVG offset: 1.25" (120px).
+      const offsetX = 1.25 * 96; 
+      
+      // Vertically: 8" canvas is centered on 8.5" paper (0.25" margins). Grid (7.25"h) centered in canvas.
+      const offsetY = (pageH - gridH) / 2; // (768 - 696) / 2 = 36px
+      
+      content = `<g transform="translate(${offsetX}, ${offsetY})">${placements}</g>`;
+    }
+
+    return `
+      <svg viewBox="0 0 ${pageW} ${pageH}" style="display: block;">
+        <rect width="${pageW}" height="${pageH}" fill="none" stroke="black" stroke-width="1"/>
+        ${content}
+      </svg>`;
   };
 
-  const getPrintPackage = (contextKey) => {
+  const getPrintPackage = (contextKey, orientation) => {
     const context = Context[contextKey];
     const rawCards = context.Data.CARDS;
     const layoutInstance = new Classes.SvengaliLayout(context.Layout);
@@ -41,7 +65,7 @@ namespace('sp.svengali.buckshot.Renderer', {
       return layoutInstance.renderCard(card, id);
     }).join('\n');
 
-    const defs = `<svg width="0" height="0"><defs>${symbols}</defs></svg>`;
+    const defs = `<svg width="0" height="0" style="display: none;"><defs>${symbols}</defs></svg>`;
     
     const allCardInstances = rawCards.flatMap((card, i) => {
       const count = card.count || 1;
@@ -51,12 +75,12 @@ namespace('sp.svengali.buckshot.Renderer', {
     const pages = [];
     for (let i = 0; i < allCardInstances.length; i += 6) {
       const pageCards = allCardInstances.slice(i, i + 6);
-      pages.push(renderPageSVG(pageCards, layoutInstance));
+      pages.push(renderPageSVG(pageCards, layoutInstance, orientation));
     }
 
     return {
       title: `Svengali Prototype - ${contextKey}`,
-      orientation: 'landscape',
+      orientation: orientation || 'landscape',
       defs,
       pages
     };

@@ -2,9 +2,9 @@ namespace('sp.svengali.buckshot.Demo', {
   'sp.svengali.buckshot.Renderer': 'Renderer'
 }, ({ Renderer }) => {
   return {
-    render: (containerId, contextKey) => {
+    render: (containerId, contextKey, orientation) => {
       const container = document.getElementById(containerId);
-      const pkg = Renderer.getPrintPackage(contextKey);
+      const pkg = Renderer.getPrintPackage(contextKey, orientation);
       
       const pagesHtml = pkg.pages.map(svg => `
         <div class="page">
