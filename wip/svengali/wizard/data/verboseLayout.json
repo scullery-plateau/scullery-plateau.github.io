@@ -1,0 +1,38 @@
+{
+  "orientation": "portrait",
+  "layers": [
+    { 
+      "x": 10, 
+      "y": 10, 
+      "width": 220, 
+      "height": 40, 
+      "header": { 
+        "property": ["title"], 
+        "align": "center",
+        "font": "Trebuchet MS"
+      } 
+    },
+    { 
+      "x": 10, 
+      "y": 60, 
+      "width": 220, 
+      "height": 180, 
+      "icon": { 
+        "property": ["icon"], 
+        "fill": "black" 
+      }
+    },
+    { 
+      "x": 15, 
+      "y": 250, 
+      "width": 250, 
+      "height": 100, 
+      "paragraph": { 
+        "property": ["description"], 
+        "align": "left",
+        "font": "Verdana",
+        "wrap": true 
+      }
+    }
+  ]
+}

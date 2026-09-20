@@ -1,0 +1,85 @@
+{
+  "orientation": "portrait",
+  "layers": [
+    { "x": 20, "y": 90, "width": 50, "height": 100, "icon": { "property": "solid.b", "fill": "black", "scale": { "y": 2 } } },
+    {
+      "x": 70,
+      "y": 90,
+      "width": 50,
+      "height": 100,
+      "icon": {
+        "property": "solid.u",
+        "fill": "black",
+        "scale": {
+          "y": 2
+        }
+      }
+    },
+    {
+      "x": 120,
+      "y": 90,
+      "width": 50,
+      "height": 100,
+      "icon": {
+        "property": "solid.c",
+        "fill": "black",
+        "scale": {
+          "y": 2
+        }
+      }
+    },
+    {
+      "x": 170,
+      "y": 90,
+      "width": 50,
+      "height": 100,
+      "icon": {
+        "property": "solid.k",
+        "fill": "black",
+        "scale": {
+          "y": 2
+        }
+      }
+    },
+    {
+      "x": 20,
+      "y": 200,
+      "width": 50,
+      "height": 50,
+      "icon": {
+        "property": "solid.s",
+        "fill": "black"
+      }
+    },
+    {
+      "x": 70,
+      "y": 200,
+      "width": 50,
+      "height": 50,
+      "icon": {
+        "property": "solid.h",
+        "fill": "black"
+      }
+    },
+    {
+      "x": 120,
+      "y": 200,
+      "width": 50,
+      "height": 50,
+      "icon": {
+        "property": "solid.crosshairs",
+        "fill": "black"
+      }
+    },
+    {
+      "x": 170,
+      "y": 200,
+      "width": 50,
+      "height": 50,
+      "icon": {
+        "property": "solid.t",
+        "fill": "black"
+      }
+    }
+  ]
+}

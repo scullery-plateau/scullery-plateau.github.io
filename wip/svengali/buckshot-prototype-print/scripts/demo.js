@@ -1,10 +1,13 @@
 namespace('sp.svengali.buckshot.Demo', {
-  'sp.svengali.buckshot.Renderer': 'Renderer'
-}, ({ Renderer }) => {
+  'sp.svengali.Renderer': 'Renderer',
+  'sp.svengali.buckshot.Context': 'Context',
+  'sp.svengali.buckshot.Icons': 'Icons'
+}, ({ Renderer, Context, Icons }) => {
   return {
     render: (containerId, contextKey, orientation) => {
       const container = document.getElementById(containerId);
-      const pkg = Renderer.getPrintPackage(contextKey, orientation);
+      const context = Context[contextKey];
+      const pkg = Renderer.getPrintPackage(context.Layout, context.Data, Icons, orientation);
       
       const pagesHtml = pkg.pages.map(svg => `
         <div class="page">

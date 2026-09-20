@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Svengali Icon Collection",
+  "description": "A collection of SVG paths used as icons in Svengali layouts.",
+  "type": "object",
+  "propertyNames": {
+    "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$",
+    "description": "Icon names must be namespaced using a dot (e.g., 'namespace.name') and use lowercase alphanumeric characters and hyphens."
+  },
+  "additionalProperties": {
+    "type": "object",
+    "required": [
+      "width",
+      "height",
+      "path"
+    ],
+    "properties": {
+      "width": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "The intrinsic width of the SVG coordinate system for this icon."
+      },
+      "height": {
+        "type": "integer",
+        "minimum": 0,
+        "description": "The intrinsic height of the SVG coordinate system for this icon."
+      },
+      "path": {
+        "type": "string",
+        "pattern": "^[mM]\\s?(-?\\d+\\.?\\d*[\\s,]?)+[zZlLhHvVcCsSqQtTaA\\d\\s,\\.\\-]*$",
+        "description": "Must be valid SVG path data starting with 'M' or 'm'."
+      }
+    },
+    "additionalProperties": false
+  }
+}

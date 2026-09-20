@@ -1,7 +1,6 @@
-namespace('sp.svengali.buckshot.Renderer', {
-  'sp.svengali.buckshot.Context': 'Context',
-  'sp.svengali.buckshot.Classes': 'Classes'
-}, ({ Context, Classes }) => {
+namespace('sp.svengali.Renderer', {
+  'sp.svengali.Classes': 'Classes'
+}, ({ Classes }) => {
   const GUTTER = 24; // 0.25in
 
   const renderPageSVG = (pageCards, layoutInstance, orientation) => {
@@ -55,14 +54,13 @@ namespace('sp.svengali.buckshot.Renderer', {
       </svg>`;
   };
 
-  const getPrintPackage = (contextKey, orientation) => {
-    const context = Context[contextKey];
-    const rawCards = context.Data.CARDS;
-    const layoutInstance = new Classes.SvengaliLayout(context.Layout);
+  const getPrintPackage = (layout, data, icons, orientation) => {
+    const rawCards = data.CARDS;
+    const layoutInstance = new Classes.SvengaliLayout(layout);
 
     const symbols = rawCards.map((card, i) => {
       const id = `card-def-${i}`;
-      return layoutInstance.renderCard(card, id);
+      return layoutInstance.renderCard(card, id, icons);
     }).join('\n');
 
     const defs = `<svg width="0" height="0" style="display: none;"><defs>${symbols}</defs></svg>`;
@@ -79,7 +77,7 @@ namespace('sp.svengali.buckshot.Renderer', {
     }
 
     return {
-      title: `Svengali Prototype - ${contextKey}`,
+      title: `Svengali Prototype`,
       orientation: orientation || 'landscape',
       defs,
       pages

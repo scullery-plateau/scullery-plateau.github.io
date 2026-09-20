@@ -1,5 +1,5 @@
-namespace('sp.svengali.buckshot.Ratios', {
-  'sp.svengali.buckshot.Metrics': 'Metrics'
+namespace('sp.svengali.Ratios', {
+  'sp.svengali.Metrics': 'Metrics'
 }, ({ Metrics }) => {
   return {
     METRICS: Metrics,

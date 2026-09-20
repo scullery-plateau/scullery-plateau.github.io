@@ -1,7 +1,6 @@
-namespace('sp.svengali.buckshot.Classes', {
-  'sp.svengali.buckshot.Ratios': 'Ratios',
-  'sp.svengali.buckshot.Icons': 'Icons'
-}, ({ Ratios, Icons }) => {
+namespace('sp.svengali.Classes', {
+  'sp.svengali.Ratios': 'Ratios'
+}, ({ Ratios }) => {
 
   class Layer {
     constructor(config) {
@@ -26,7 +25,7 @@ namespace('sp.svengali.buckshot.Classes', {
       return "";
     }
 
-    render(record) {
+    render(record, icons) {
       throw new Error("render() must be implemented by subclass");
     }
   }
@@ -52,7 +51,7 @@ namespace('sp.svengali.buckshot.Classes', {
       return fontSize;
     }
 
-    render(record) {
+    render(record, icons) {
       const text = this.resolve(record);
       const fontSize = this.calculateFontSize(text);
       
@@ -68,7 +67,7 @@ namespace('sp.svengali.buckshot.Classes', {
     constructor(config) {
       super({ ...config, binding: config.paragraph.property });
       this.font = config.paragraph.font || "Arial";
-      this.lineHeight = config.paragraph.lineHeight || config.lineHeight || 1.2;
+      this.lineHeight = config.paragraph.lineHeight || 1.2;
       this.align = config.paragraph.align || "left";
     }
 
@@ -109,7 +108,7 @@ namespace('sp.svengali.buckshot.Classes', {
       return fontSize;
     }
 
-    render(record) {
+    render(record, icons) {
       const text = this.resolve(record);
       const fontSize = this.calculateMaxFontSize(text);
       const lines = this.wrapText(text, fontSize);
@@ -138,9 +137,9 @@ namespace('sp.svengali.buckshot.Classes', {
       this.scaleConfig = config.icon.scale;
     }
 
-    render(record) {
+    render(record, icons) {
       const iconKey = this.resolve(record);
-      const icon = Icons[iconKey];
+      const icon = icons[iconKey];
       if (!icon) return "";
 
       const rotate = this.resolve(record, this.rotateBinding) || 0;
@@ -185,10 +184,16 @@ namespace('sp.svengali.buckshot.Classes', {
     }
   }
 
+  const POKER_WIDTH = 240;
+  const POKER_HEIGHT = 336;
+
+  class Layer {
+// ... existing code ...
   class SvengaliLayout {
     constructor(layoutConfig) {
-      this.cardWidth = layoutConfig.scale.width;
-      this.cardHeight = layoutConfig.scale.height;
+      const isLandscape = layoutConfig.orientation === 'landscape';
+      this.cardWidth = isLandscape ? POKER_HEIGHT : POKER_WIDTH;
+      this.cardHeight = isLandscape ? POKER_WIDTH : POKER_HEIGHT;
 
       this.layers = layoutConfig.layers.map(l => {
         if (l.header) {
@@ -204,8 +209,8 @@ namespace('sp.svengali.buckshot.Classes', {
       }).filter(l => l !== null);
     }
 
-    renderCard(record, id) {
-      const layerOutput = this.layers.map(l => l.render(record)).join('\n');
+    renderCard(record, id, icons) {
+      const layerOutput = this.layers.map(l => l.render(record, icons)).join('\n');
       return `
         <g id="${id}">
           <rect width="${this.cardWidth}" height="${this.cardHeight}" fill="white" stroke="black" stroke-width="2" rx="10"/>

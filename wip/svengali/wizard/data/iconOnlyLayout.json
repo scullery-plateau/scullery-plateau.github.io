@@ -1,0 +1,16 @@
+{
+  "orientation": "portrait",
+  "layers": [
+    {
+      "x": 10,
+      "y": 10,
+      "width": 220,
+      "height": 316,
+      "icon": {
+        "property": ["icon"],
+        "rotate": { "path": ["rotate"], "default": 0 },
+        "fill": "black"
+      }
+    }
+  ]
+}

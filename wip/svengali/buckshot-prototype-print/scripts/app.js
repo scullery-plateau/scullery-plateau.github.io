@@ -1,8 +1,9 @@
 namespace('sp.svengali.buckshot.App', {
   'sp.common.PrintJS': 'PrintJS',
-  'sp.svengali.buckshot.Renderer': 'Renderer',
-  'sp.svengali.buckshot.Context': 'Context'
-}, ({ PrintJS, Renderer, Context }) => {
+  'sp.svengali.Renderer': 'Renderer',
+  'sp.svengali.buckshot.Context': 'Context',
+  'sp.svengali.buckshot.Icons': 'Icons'
+}, ({ PrintJS, Renderer, Context, Icons }) => {
   const { useState } = React;
 
   const App = () => {
@@ -10,7 +11,8 @@ namespace('sp.svengali.buckshot.App', {
     const [orientation, setOrientation] = useState('landscape');
 
     const publish = () => {
-      const pkg = Renderer.getPrintPackage(selectedKey, orientation);
+      const context = Context[selectedKey];
+      const pkg = Renderer.getPrintPackage(context.Layout, context.Data, Icons, orientation);
       PrintJS.printSvgPages(pkg.title, pkg.orientation, pkg.defs, pkg.pages);
     };
 

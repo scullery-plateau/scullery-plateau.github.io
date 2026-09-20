@@ -5,7 +5,7 @@ namespace('sp.svengali.buckshot.Context', {}, () => {
         CARDS: [{ count: 6 }]
       },
       Layout: {
-        "scale": { "height": 336, "width": 240 },
+        "orientation": "portrait",
         "layers": [
           { "x": 20, "y": 90, "width": 50, "height": 100, "icon": { "property": "solid.b", "fill": "black", "scale": { "y": 2 } } },
           { "x": 70, "y": 90, "width": 50, "height": 100, "icon": { "property": "solid.u", "fill": "black", "scale": { "y": 2 } } },
@@ -21,14 +21,14 @@ namespace('sp.svengali.buckshot.Context', {}, () => {
     iconOnly: {
       Data: {
         CARDS: [
-          { icon: "solid.bolt", count: 6 },
-          { icon: "delapouite.sawed-off-shotgun", count: 6 },
-          { icon: "solid.wind", count: 3 },
-          { icon: "lorc.mine-explosion", rotate: 90, count: 3 }
+          { icon: "solid.bolt", count: 2 },
+          { icon: "delapouite.sawed-off-shotgun", count: 2 },
+          { icon: "solid.wind", count: 1 },
+          { icon: "lorc.mine-explosion", rotate: 90, count: 1 }
         ]
       },
       Layout: {
-        "scale": { "height": 336, "width": 240 },
+        "orientation": "portrait",
         "layers": [
           {
             "x": 10,
@@ -74,7 +74,7 @@ namespace('sp.svengali.buckshot.Context', {}, () => {
         ]
       },
       Layout: {
-        "scale": { "height": 336, "width": 240 },
+        "orientation": "portrait",
         "layers": [
           { 
             "x": 10, 

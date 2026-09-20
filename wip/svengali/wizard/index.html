@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Svengali Wizard</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="../../../favicon.ico">
+
+  <!-- external styles -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"/>
+  
+  <!-- external scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/8.12.0/ajv7.min.js"></script>
+  <script src="https://gizmo-atheneum.github.io/structure/importnamespace/script.js"></script>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- project namespaces -->
+  <script type="text/babel" src="../../../apps/common/fileLoader.js"></script>
+  <script type="text/babel" src="../../../apps/common/print.js"></script>
+  <script type="text/babel" src="../../../apps/common/utilities.js"></script>
+
+  <!-- local namespaces -->
+  <script src="../scripts/metrics.js"></script>
+  <script src="../scripts/ratios.js"></script>
+  <script src="../scripts/classes.js"></script>
+  <script src="../scripts/renderer.js"></script>
+  <script src="../scripts/validator.js"></script>
+  <script type="text/babel" src="./scripts/wizard.js"></script>
+
+  <script type="text/babel">
+    (function () {
+      const { Wizard } = imports({
+        'sp.svengali.wizard.Wizard': 'Wizard'
+      });
+      ReactDOM.createRoot(document.getElementById('app-root')).render(<Wizard />);
+    })();
+  </script>
+</head>
+<body class="bg-dark text-light">
+  <div id="app-root"></div>
+</body>
+</html>

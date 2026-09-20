@@ -2,28 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "CanvasLayout",
   "type": "object",
-  "required": [
-    "scale",
+    "required": [
+    "orientation",
     "layers"
   ],
   "properties": {
-    "scale": {
-      "type": "object",
-      "required": [
-        "height",
-        "width"
-      ],
-      "properties": {
-        "height": {
-          "type": "integer",
-          "minimum": 0
-        },
-        "width": {
-          "type": "integer",
-          "minimum": 0
-        }
-      },
-      "additionalProperties": false
+    "orientation": {
+      "type": "string",
+      "enum": ["portrait", "landscape"],
+      "description": "Determines the card dimensions (Portrait: 240x336, Landscape: 336x240)."
     },
     "layers": {
       "type": "array",

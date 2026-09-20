@@ -1,4 +1,4 @@
-namespace('sp.svengali.buckshot.Metrics', {}, () => {
+namespace('sp.svengali.Metrics', {}, () => {
   return {
     "Arial": {
       "avgRatio": 1.6913,
