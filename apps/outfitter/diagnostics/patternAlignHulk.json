@@ -1,0 +1,39 @@
+{
+  "bodyType": "hulk",
+  "bgColor": "#cccccc",
+  "version": "0.0.1",
+  "layers": [
+    {
+      "part": "hair",
+      "index": 0,
+      "shading": 0
+    },
+    {
+      "part": "arm",
+      "index": 21,
+      "shading": 0
+    },
+    {
+      "part": "arm",
+      "index": 21,
+      "shading": 0,
+      "flip": true
+    },
+    {
+      "part": "torso",
+      "index": 5,
+      "shading": 0
+    },
+    {
+      "part": "legs",
+      "index": 11,
+      "shading": 0
+    },
+    {
+      "part": "legs",
+      "index": 13,
+      "shading": 0
+    }
+  ],
+  "bgPattern": 2
+}
