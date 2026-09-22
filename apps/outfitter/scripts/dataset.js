@@ -4,7 +4,8 @@ namespace("sp.outfitter.Dataset", {
   "sp.common.Utilities": "util"
 }, ({ Ajax, XY, util }) => {
 
-    const baseURL = "./datasets/";
+        const baseURL = "https://scullery-plateau.github.io/apps/outfitter/datasets/";
+
 
   const latestVersion = "0.0.1";
   const defaultVersion = "0.0.1";
