@@ -1,7 +1,19 @@
-namespace('sp.outfitter.OutfitterSVG',{
-  'sp.common.Point':'XY',
-  'sp.outfitter.Constants':'c'
-},({ XY, c }) => {
+namespace("sp.outfitter.Dataset", {
+  "gizmo-atheneum.namespaces.Ajax": "Ajax",
+  "gizmo-atheneum.namespaces.Point": "XY",
+  "sp.common.Utilities": "util"
+}, ({ Ajax, XY, util }) => {
+
+    const baseURL = "./datasets/";
+
+  const latestVersion = "0.0.1";
+  const defaultVersion = "0.0.1";
+  const getLatestVersion = function() {
+    return latestVersion;
+  }
+  const getDefaultVersion = function() {
+    return defaultVersion;
+  }
   const SCALES = {
     lanky: [0.8, 1.1],
     thin: [0.8, 1.0],
@@ -55,8 +67,8 @@ namespace('sp.outfitter.OutfitterSVG',{
     }
   });
   const getPoint = function(layer,xField,yField,defaultPoint) {
-    let [defaultX, defaultY] = defaultPoint.toJSON();
-    let [xVal,yVal] = [xField,yField].map((field) => layer[field]);
+    const [defaultX, defaultY] = defaultPoint.toJSON();
+    const [xVal,yVal] = [xField,yField].map((field) => layer[field]);
     return new XY([isNaN(xVal)?defaultX:xVal,isNaN(yVal)?defaultY:yVal]);
   }
   const getBodyScaleAndHeadShift = function(schematic) {
@@ -69,15 +81,14 @@ namespace('sp.outfitter.OutfitterSVG',{
     return { bodyScale, headShift };
   }
   const getFlipMove = function(layer,headShift,bodyScale) {
-    let resize = getPoint(layer,'resizeX','resizeY',XY.identityMultiplier());
-    let flip = resize.times([layer.flip ? -1.0 : 1.0, 1.0]);
-    let move = getPoint(layer,'moveX','moveY',XY.origin());
+    const resize = getPoint(layer,'resizeX','resizeY',XY.identityMultiplier());
+    const flip = resize.times([layer.flip ? -1.0 : 1.0, 1.0]);
+    const move = getPoint(layer,'moveX','moveY',XY.origin());
     if (HEAD_PARTS[layer.part]) {
-      move = move.plus(headShift.toJSON());
+      return { flip, move: move.plus(headShift.toJSON()) };
     } else {
-      flip = flip.times(bodyScale.toJSON());
+      return { move, flip: flip.times(bodyScale.toJSON()) };
     }
-    return { flip, move };
   }
   const updateMinMax = function(part, flip, move, minmax) {
     let partMin = new XY(part.min).times(flip.toJSON()).plus(move.toJSON());
@@ -92,10 +103,10 @@ namespace('sp.outfitter.OutfitterSVG',{
     minmax.max = minmax.max.max(partMax.toJSON());
     return partMin.midpoint(partMax.toJSON());
   }
-  const getImgDim = function(minmax) {
+  const getImgDim = function(minmax, percentOfScreenWidth, percentOfScreenHeight) {
     let [minX, minY] = minmax.min.toJSON();
     let [maxX, maxY] = minmax.max.toJSON();
-    let halfWidth = Math.max(Math.abs(maxX), Math.abs(minX));
+    const halfWidth = Math.max(Math.abs(maxX), Math.abs(minX));
     minmax.min = new XY([-1 * halfWidth, minY]);
     minmax.max = new XY([halfWidth, maxY]);
     const padding = [10, 10];
@@ -105,10 +116,10 @@ namespace('sp.outfitter.OutfitterSVG',{
     [maxX, maxY] = minmax.max.toJSON();
     const width = maxX - minX;
     const height = maxY - minY;
-    let frameHeight = getScreenHeight() * 0.75;
-    let frameWidth = getScreenWidth() * 0.25;
-    [frameWidth, frameHeight] = [Math.min(frameWidth,frameHeight * width / height),Math.min(frameHeight,frameWidth * height / width)];
-    return { minX, minY, width, height, frameWidth, frameHeight};
+    let frameHeight = getScreenHeight() * percentOfScreenHeight;
+    let frameWidth = getScreenWidth() * percentOfScreenWidth;
+    [ frameWidth, frameHeight ] = [ Math.min(frameWidth, frameHeight * width / height), Math.min(frameHeight, frameWidth * height / width) ];
+    return { minX, minY, width, height, frameWidth, frameHeight };
   }
   const getPatternId = function(patternIndex) {
     return patternIndex >= 0 && `patterns-${ patternIndex >= 10 ? '' : '0' }${ patternIndex }`;
@@ -128,7 +139,29 @@ namespace('sp.outfitter.OutfitterSVG',{
     Object.keys(shading).reduce(appendDefs(meta.shadings),out);
     return out.join('');
   };
-  const buildSVG = function(schematic, meta) {
+  const versions = {
+    "fit":["0.0.1"],
+    "hulk":["0.0.1"],
+    "superman":["0.0.1"],
+    "woman":["0.0.1"]
+  };
+  const colorValidator = (color) => (typeof color === "string") // todo
+  const minMaxValidator = function(minFn, maxFn) {
+    // todo
+    // return (value, dataset, layer) => (value >= minFn(dataset,layer) && )
+  }
+  const schematicFields = "bodyType,version,bgPattern,bgColor,bodyScale,layers".split(",");
+  const layerFields = "part,index,base,detail,outline,pattern,shading,opacity,rotate,resizeX,resizeY,moveX,moveY".split(",");
+  const layerValidators = {
+    part: (part, dataset) => (part in dataset.parts),
+    index: (index, dataset, layer) => (index >= 0 && index < dataset.parts[layer.part].length),
+    base: colorValidator,
+    detail: colorValidator,
+    pattern: (pattern, dataset) => (pattern >= 0 && pattern < dataset.patternCount)
+    // todo
+  };
+    const buildSVGComponents = function(meta, schematic, options) {
+    const { percentOfScreenWidth, percentOfScreenHeight, clickName, getLayerLabel } = options || {};
     const minmax = {
       min:new XY([0, 0]),
       max:new XY([0, 0])
@@ -140,14 +173,14 @@ namespace('sp.outfitter.OutfitterSVG',{
     };
     defs.patterns[getPatternId(schematic.bgPattern)] = true;
     const { bodyScale, headShift } = getBodyScaleAndHeadShift(schematic);
-    const contents = schematic.layers.map((layer,index) => {
-      let part = meta.parts[layer.part][layer.index];
+    const svgLayers = schematic.layers.map((layer, index) => {
+      const part = meta.parts[layer.part][layer.index];
       defs.layers.push(part.defs);
       const { flip, move } = getFlipMove(layer,headShift,bodyScale);
       const [ flipX, flipY ] = flip.toJSON();
       const [ moveX, moveY ] = move.toJSON();
       const [cx, cy] = updateMinMax(part,flip,move,minmax).toJSON();
-      let group = []
+      const group = [];
       if (part.layers.base) {
         group.push(`<use href="#${ part.layers.base }" fill="${ layer.base || 'white'}" stroke="none"/>`);
       }
@@ -184,94 +217,91 @@ namespace('sp.outfitter.OutfitterSVG',{
       if (part.layers.shadow) {
         group.push(`<use href="#${part.layers.shadow }" stroke="none"/>`);
       }
-      return `<g opacity="${layer.opacity || 1.0}" transform="rotate(${layer.rotate || 0}, ${cx}, ${cy}) matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})">${group.join('')}</g>`
+      const content = `<g opacity="${layer.opacity || 1.0}" transform="rotate(${layer.rotate || 0}, ${cx}, ${cy}) matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})">${group.join('')}</g>`;
+      return clickName ? `<a href="#" onclick="${clickName}(event, ${index})"><title>${getLayerLabel(index, layer)}</title>${content}</a>` : content;
     });
-    const { minX, minY, width, height, frameWidth, frameHeight} = getImgDim(minmax);
-    let viewBox = `${minX} ${minY} ${width} ${height}`;
-    let content = [`<defs>${ buildDefs(meta,defs) }</defs>`]
+    const { minX, minY, width, height, frameWidth, frameHeight } = getImgDim(minmax, percentOfScreenWidth || 0.25, percentOfScreenHeight || 0.75);
+    const background = [];
     if (schematic.bgColor) {
-      content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="${schematic.bgColor}" stroke="none"/>`)
+      background.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="${schematic.bgColor}" stroke="none"/>`)
     }
     if (isNumber(schematic.bgPattern)) {
-      content.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#${ getPatternId(schematic.bgPattern) })" stroke="none"/>`);
+      background.push(`<rect x="${minX}" y="${minY}" width="${width}" height="${height}" fill="url(#${ getPatternId(schematic.bgPattern) })" stroke="none"/>`);
     }
-    content.push(`<g>${contents.join('')}</g>`)
-    return { width: frameWidth, height: frameHeight, viewBox, content: content.join('') };
+    return { 
+      dim: [ minX, minY, width, height ],
+      defs: buildDefs(meta,defs), 
+      frameWidth,
+      frameHeight,
+      background, 
+      svgLayers 
+    };
   }
-  const OutfitterSVG = function({ schematic, meta, selectLayer }) {
-    const minmax = {
-      min:new XY([0, 0]),
-      max:new XY([0, 0])
+  const drawSVG = function(dataset, schematic, options) {
+    const { dim, defs, background, svgLayers, frameWidth, frameHeight } = buildSVGComponents(dataset, schematic, options);
+    const viewBox = dim.join(" ");
+    const content = `<defs>${ defs }</defs><g>${ background.join('') }</g>${ svgLayers.join('') }`;
+    return {
+      viewBox,
+      content,
+      width: frameWidth,
+      height: frameHeight,
+      full: `<svg width="${frameWidth}" height="${frameHeight}" viewBox="${viewBox}">${content}</svg>`
     }
-    const defs = {
-      layers:[],
-      patterns:{},
-      shading:{}
-    }
-    defs.patterns[getPatternId(schematic.bgPattern)] = true;
-    const { bodyScale, headShift } = getBodyScaleAndHeadShift(schematic);
-    const contents = schematic.layers.map((layer,index) => {
-      let part = meta.parts[layer.part][layer.index];
-      defs.layers.push(part.defs);
-      const { flip, move } = getFlipMove(layer,headShift,bodyScale);
-      const [flipX, flipY] = flip.toJSON();
-      const [moveX, moveY] = move.toJSON();
-      const [cx, cy] = updateMinMax(part,flip,move,minmax).toJSON();
-      const patternId = getPatternId(layer.pattern);
-      if (patternId) {
-        defs.patterns[patternId] = true;
-      }
-      const shadingId = getShadingId(layer.shading);
-      if (shadingId) {
-        defs.shading[shadingId] = true;
-      }
-      return <a 
-        href="#" 
-        onClick={(e) => {
-          e.preventDefault();
-          selectLayer(index);
-        }}>
-        <g 
-          key={`group-${index}`} 
-          opacity={layer.opacity || 1.0} 
-          transform={`rotate(${layer.rotate || 0}, ${cx}, ${cy}) matrix(${flipX},0.0,0.0,${flipY},${moveX},${moveY})`}>
-          <title>{ c.getLayerLabel(index,layer) }</title>
-          { part.layers.base && <use href={ '#' + part.layers.base } fill={ layer.base || 'white'} stroke="none"/>}
-          { part.layers.detail && <use href={ '#' + part.layers.detail } fill={ layer.detail || 'white'}  stroke="none"/>}
-          { isNumber(layer.pattern) && layer.pattern >= 0 && (part.layers.base || part.layers.detail) &&
-            <>
-              { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ patternId })`} stroke="none"/>}
-              { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ patternId })`} stroke="none"/>}
-            </>}
-          { isNumber(layer.shading) && layer.shading >= 0 && (part.layers.base || part.layers.detail) &&
-            <>
-              { part.layers.base && <use href={ '#' + part.layers.base} fill={`url(#${ shadingId })`} stroke="none"/>}
-              { part.layers.detail && <use href={ '#' + part.layers.detail} fill={`url(#${ shadingId })`} stroke="none"/>}
-            </>}
-          { part.layers.outline && <use href={ '#' + part.layers.outline } fill="none" stroke={ layer.outline || 'black'} strokeWidth="1"/>}
-          { part.layers.shadow && <use href={ '#' + part.layers.shadow } stroke="none"/> }
-        </g>
-      </a>
-    });
-    const { minX, minY, width, height, frameWidth, frameHeight} = getImgDim(minmax);
-    return <svg width={ frameWidth } height={ frameHeight } viewBox={`${ minX } ${ minY } ${ width } ${ height }`}>
-      <defs dangerouslySetInnerHTML={{ __html: buildDefs(meta, defs) }}></defs>
-      { schematic.bgColor &&
-        <rect x={ minX } y={ minY } width={ width } height={ height } fill={ schematic.bgColor } stroke="none"/>
-      }
-      { isNumber(schematic.bgPattern) &&
-        <rect x={ minX } y={ minY } width={ width } height={ height } fill={
-          `url(#${ getPatternId(schematic.bgPattern) })`
-        } stroke="none"/>
-      }
-      <g>
-        { contents }
-      </g>
-    </svg>;
   }
-  OutfitterSVG.buildSVG = buildSVG;
-  OutfitterSVG.getBodyScales = function() {
+  const Dataset = function(dataset, percentOfScreenWidth, percentOfScreenHeight) {
+    this.buildSVGComponents = function(schematic, options) {
+      return buildSVGComponents(dataset, schematic, util.merge(options || {}, { percentOfScreenWidth, percentOfScreenHeight }));
+    };
+    this.drawSVG = function(schematic, options) {
+      return drawSVG(dataset, schematic, util.merge(options || {}, { percentOfScreenWidth, percentOfScreenHeight }));
+    };
+
+    this.getPart = function(part) {
+      return dataset.parts[part];
+    }
+    this.getPatternCount = function() {
+      return dataset.patternCount;
+    }
+    this.getShadingCount = function() {
+      return dataset.shadingCount;
+    }
+  };
+  const getBodyScales = function() {
     return Array.from(Object.keys(SCALES));
   }
-  return OutfitterSVG;
+  const getVersions = function() {
+    return Object.entries(versions).reduce((acc, [k,v]) => {
+      acc[k] = Array.from(v);
+      return acc;
+    }, {});
+  }
+  const load = function(bodyType, version, percentOfScreenWidth, percentOfScreenHeight, onSuccess, onFail, onStateChange) {
+    if(!(bodyType in versions)) {
+      throw `"${bodyType}" is not a valid dataset name`;
+    }
+    if(versions[bodyType].indexOf(version) < 0) {
+      throw `"${version}" is not a valid version of "${bodyType}"`;
+    }
+    const filepath = `${baseURL}${bodyType}.${version}.json`
+    Ajax.get(filepath,{
+      failure: onFail,
+      stateChange: onStateChange,
+      success: (responseText) => {
+        try {
+          const metadata = JSON.parse(responseText);
+          metadata.patternCount = Object.keys(metadata.patterns).length;
+          metadata.shadingCount = Object.keys(metadata.shadings).length;
+          onSuccess(new Dataset(metadata, percentOfScreenWidth, percentOfScreenHeight));
+        } catch (e) {
+          onFail({ 
+            requestedFile: filepath,
+            statusText: e.message,
+            responseText: responseText,
+          })
+        }
+      }
+    });
+  }
+  return { getBodyScales, getVersions, getLatestVersion, getDefaultVersion, load };
 });

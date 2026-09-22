@@ -75,8 +75,9 @@ namespace('sp.outfitter.Constants', () => {
     const getPartLabel = function(labelTypeId) {
       return partLabels[labelTypeId];
     }
-    const getLayerLabel = function(index,layer) {
-      return <>{index}: { getPartLabel(layer.part) } {layer.index}{layer.flip?" flipped":""}{layer.base?`, Base: ${layer.base}`:""}{layer.detail?`, Detail: ${layer.detail}`:""}{layer.outline?`, Outline: ${layer.outline}`:""}</>;
+        const getLayerLabel = function(index,layer) {
+      return `${index}: ${ getPartLabel(layer.part) } ${layer.index}${layer.flip?" flipped":""}${layer.base?`, Base: ${layer.base}`:""}${layer.detail?`, Detail: ${layer.detail}`:""}${layer.outline?`, Outline: ${layer.outline}`:""}`;
     }
+
     return { getPartGroups, getPartTypesByGroup, getPartTypeIndicies, getPartLabel, getLayerLabel };
 });

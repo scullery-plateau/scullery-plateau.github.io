@@ -1,20 +1,25 @@
 namespace('sp.outfitter.Outfitter', {
-  'gizmo-atheneum.namespaces.paper-doll.Dataset': 'Dataset',
-  'gizmo-atheneum.namespaces.react.PaperDoll': 'PaperDoll',
+  'sp.outfitter.Dataset': 'Dataset',
   'sp.common.ColorPicker':'ColorPicker',
+
+
   'sp.common.Colors':'Colors',
   'sp.common.Dialog':'Dialog',
   'sp.common.EditMode':'EditMode',
   'sp.common.FileDownload':'FileDownload',
   'sp.common.Header':'Header',
-  'sp.common.LinkShare':'LinkShare',
+    'sp.common.LinkShare':'LinkShare',
   'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
+  'sp.common.SVGClick':'SVGClick',
   'sp.common.Utilities':'util',
+
   'sp.outfitter.Constants':'c',
   'sp.outfitter.ImageDownload':'ImageDownload',
   'sp.outfitter.Shareable':'Shareable'
-}, ({ Dataset, PaperDoll, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, util, c, ImageDownload, Shareable }) => {
+}, ({ Dataset, ColorPicker, Colors, Dialog, EditMode, FileDownload, Header, LinkShare, LoadFile, ProgressBar, SVGClick, util, c, ImageDownload, Shareable }) => {
+
+
   Dialog.initializeModals(["alert"], { class: 'rpg-box text-light w-75' });
   const buttonScale = 1/3;
   const [ percentOfScreenWidth, percentOfScreenHeight ] = [ 0.25, 0.75 ];
@@ -105,14 +110,18 @@ namespace('sp.outfitter.Outfitter', {
       },{
         id: 'about',
         label: 'About',
-        callback: () => {
+                callback: () => {
           Dialog.alert({
             label: "Outfitter",
             lines: about
           });
         }
       }];
+      SVGClick.setup('ClickOutfitterLayer', (index) => {
+        this.setState({ selectedLayer: index });
+      });
       const schematic = Shareable.parse();
+
       if (schematic) {
         this.loadMeta(schematic.bodyType,schematic,true);
       }
@@ -538,17 +547,20 @@ namespace('sp.outfitter.Outfitter', {
                 </div>
               </div>
             </div>
-            <div className="col-5 h-100 d-flex justify-content-center">
-              <div className="rpg-box m-1">
-                <PaperDoll 
-                  dataset={ this.state.metadata } 
-                  schematic={ this.state.schematic }
-                  getLayerLabel={(index,layer) => c.getLayerLabel(index,layer)}
-                  callback={(layerIndex) => {
-                    this.setState({ selectedLayer: layerIndex });
-                  }}/>
+                                                <div className="col-5 h-100 d-flex justify-content-center">
+              <div 
+                className="rpg-box m-1" 
+                dangerouslySetInnerHTML={{ 
+                  __html: this.state.metadata.drawSVG(this.state.schematic, { 
+                    getLayerLabel: (index,layer) => c.getLayerLabel(index,layer), 
+                    clickName: "ClickOutfitterLayer" 
+                  }).full 
+                }}>
               </div>
             </div>
+
+
+
           </div>
         </>;
       }

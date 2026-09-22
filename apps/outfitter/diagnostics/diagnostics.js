@@ -1,13 +1,11 @@
 namespace('sp.outfitter.Diagnostics', {
-  'gizmo-atheneum.namespaces.paper-doll.Dataset': 'Dataset',
-  'sp.outfitter.OutfitterSVG': 'OutfitterSVG',
+  'sp.outfitter.Dataset': 'Dataset',
   'sp.common.Dialog':'Dialog',
   'sp.common.FileDownload':'FileDownload',
-  'sp.common.LoadFile':'LoadFile',
   'sp.common.ProgressBar':'ProgressBar',
   'sp.common.Utilities':'util',
   'sp.outfitter.Constants':'c'
-}, ({ Dataset, OutfitterSVG, Dialog, FileDownload, LoadFile, ProgressBar, util, c }) => {
+}, ({ Dataset, Dialog, FileDownload, ProgressBar, util, c }) => {
   const buttonScale = 1/3;
   const [ percentOfScreenWidth, percentOfScreenHeight ] = [ 0.25, 0.75 ];
 
@@ -67,12 +65,12 @@ namespace('sp.outfitter.Diagnostics', {
     // to reflect the current slider positions and diagnostic toggles.
     updatePatternInMeta(metadata) {
       const patternId = getPatternId(this.state.selectedPattern);
-      if (!metadata || !metadata.patterns || !metadata.patterns[patternId]) return metadata;
+      if (!metadata || !metadata.metadata || !metadata.metadata.patterns || !metadata.metadata.patterns[patternId]) return metadata;
 
-      const newMeta = util.merge(metadata);
-      newMeta.patterns = util.merge(metadata.patterns);
+      const newMeta = util.merge(metadata.metadata);
+      newMeta.patterns = util.merge(newMeta.patterns);
       
-      let patternDef = metadata.patterns[patternId];
+      let patternDef = newMeta.patterns[patternId];
       
       // Inject X and Y offsets into the <pattern> tag
       patternDef = patternDef.replace(/x='[^']*'/, `x='${this.state.xOffset}'`);
@@ -91,7 +89,9 @@ namespace('sp.outfitter.Diagnostics', {
       }
 
       newMeta.patterns[patternId] = patternDef;
-      return newMeta;
+      
+      // Return a temporary Dataset instance with the modified metadata
+      return new Dataset(newMeta, percentOfScreenWidth, percentOfScreenHeight);
     }
 
     render() {
@@ -122,7 +122,7 @@ namespace('sp.outfitter.Diagnostics', {
           return layer;
         });
 
-        const modifiedMeta = this.updatePatternInMeta(this.state.metadata);
+        const diagnosticMetadata = this.updatePatternInMeta(this.state.metadata);
 
         return (
           <div className="row justify-content-center mt-3">
@@ -195,12 +195,12 @@ namespace('sp.outfitter.Diagnostics', {
             </div>
             
             <div className="col-8 d-flex justify-content-center">
-              <div className="rpg-box p-3 bg-secondary" style={{ minWidth: "400px" }}>
-                <OutfitterSVG 
-                  schematic={ modifiedSchematic }
-                  meta={ modifiedMeta }
-                  selectLayer={() => {}}
-                />
+              <div 
+                className="rpg-box p-3 bg-secondary" 
+                style={{ minWidth: "400px" }}
+                dangerouslySetInnerHTML={{ 
+                  __html: diagnosticMetadata.drawSVG(modifiedSchematic).full 
+                }}>
               </div>
             </div>
           </div>
